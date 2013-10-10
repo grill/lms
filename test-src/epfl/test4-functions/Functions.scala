@@ -182,7 +182,7 @@ trait FunctionsExternalDef2 extends FunctionsCanonical with FunctionsExternalDef
             val g = (x: Exp[A]) => c
             funTable = (g,can)::funTable // ok?
             g
-          case e => 
+          case e =>
             createDefinition(funSym, DefineFun[A,B](e)(argSym))
             g
         }

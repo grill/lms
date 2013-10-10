@@ -301,6 +301,7 @@ trait ArrayProg extends ExtendedGeneratorOps {
 class TestGeneratorOps extends FileDiffSuite {
 
   val prefix = "test-out/epfl/test15-"
+  ScalaCompile.dumpGeneratedCode = false
 
   def testgenerator1 = {
     withOutFile(prefix+"generator-simple"){

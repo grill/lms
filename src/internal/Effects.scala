@@ -314,7 +314,8 @@ trait Effects extends Expressions with Blocks with Utils {
         createReflectDefinition  // if summary is not pure
 */    
     // warn if type is Any. TODO: make optional, sometimes Exp[Any] is fine
-    if (manifest[T] == manifest[Any]) printlog("warning: possible missing mtype call - toAtom with Def of type Any " + d)
+    if (Config.verbosity == 2 && manifest[T] == manifest[Any]) 
+      printlog("warning: possible missing mtype call - toAtom with Def of type Any " + d)
     
     // AKS NOTE: this was removed on 6/27/12, but it is still a problem in OptiML apps without it,
     // so I'm putting it back until we can get it resolved properly.
@@ -391,11 +392,23 @@ trait Effects extends Expressions with Blocks with Utils {
   }
   
   def reflectEffectInternal[A:Manifest](x: Def[A], u: Summary)(implicit pos: SourceContext): Exp[A] = {
+    /* 
+     * We want to handle the case where a variable is first initialized to null,
+     * and later initialized to its actual value (also see variables.scala).
+     * This is the case with local state in the DBMS system of DATA lab. There,
+     * when the var is initialized to null, the context is null, since it is
+     * _outside_ any compiled method (we do not lift everything in this
+     * system!). Initial solution was to override the case where context ==
+     * null, however this breaks test4-fac4 (reflectEffect when not needed). 
+     */
     if (context == null) {
-        val z = fresh[A]
-        val zd = Reflect(x,u,null)
         context = Nil
-        createReflectDefinition(z, zd)
+	if (mustPure(u)) super.toAtom(x)
+	else {
+        	val z = fresh[A]
+	        val zd = Reflect(x,u,null)
+	        createReflectDefinition(z, zd)
+	}
     } else if (mustPure(u)) super.toAtom(x) else {
       checkContext()
       // NOTE: reflecting mutable stuff *during mirroring* doesn't work right now.

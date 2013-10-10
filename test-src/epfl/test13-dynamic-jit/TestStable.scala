@@ -196,7 +196,7 @@ trait StableVars extends CellOps with CompileDyn with Equal with NumericOps with
 class TestStable extends FileDiffSuite {
   
   val prefix = "test-out/epfl/test13-"
-  
+  ScalaCompile.reset() 
   
   trait DSL extends VectorOps with Arith with OrderingOps with BooleanOps with LiftVariables 
     with IfThenElse with While with RangeOps with Print with Compile with NumericOps 

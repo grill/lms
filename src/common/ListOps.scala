@@ -7,6 +7,10 @@ import scala.reflect.SourceContext
 
 trait ListOps extends Variables {
 
+  object List {
+    def apply[A:Manifest](xs: Rep[A]*)(implicit pos: SourceContext) = list_new(xs)
+  }
+  
   object NewList {
     def apply[A:Manifest](xs: Rep[A]*)(implicit pos: SourceContext) = list_new(xs)
   }

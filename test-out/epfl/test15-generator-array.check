@@ -64,7 +64,7 @@ val x53 = x47 * x52
 val x54 = x53 * x48
 val x55 = x51 + x54
 val x61 = x55 < x59
-val x66 = if (x61) {
+if (x61) {
 x15 = x47
 x16 = x48
 x17 = x55
@@ -74,7 +74,7 @@ x17 = x55
 }
 x37 = x37 + 1
 }
-x68
+
 } else {
 ()
 }
@@ -83,7 +83,7 @@ val x73 = x16
 val x74 = x17
 val x71 = x38 + x11
 val x75 = Recordintintint(rows = x72, cols = x73, mults = x74)
-val x76 = x5(x71) = x75
+x5(x71) = x75
 x10 = x10 + 1
 }
 x7 = x7 + 1

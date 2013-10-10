@@ -62,7 +62,7 @@ var writes: List((Sym(31),Const(())), (Sym(32),Const(())), (Sym(34),Const(())), 
 /*****************************************
   Emitting Generated Code                  
 *******************************************/
-class staged6 extends ((Array[Double])=>(Array[Double])) {
+class staged5 extends ((Array[Double])=>(Array[Double])) {
 def apply(x0:Array[Double]): Array[Double] = {
 val x1 = x0.length
 val x2 = new Array[Double](x1)
@@ -95,7 +95,7 @@ var x71 = x59
 var x72 = x60
 var x73 = 3
 var x74 = 4
-var x76 = 3
+var x76 : Int = 3
 while (x76 < x3) {
 val x77 = x69
 val x78 = x70
@@ -120,6 +120,7 @@ x73 = x82
 x74 = x84
 x76 = x76 + 1
 }
+
 } else {
 ()
 }

@@ -6,7 +6,8 @@ import common._
 import test1._
 import test2._
 import test3._
-
+import internal.Config
+import internal.ScalaCompile
 /*
 TODO:
 +implement dfa_trans
@@ -772,7 +773,7 @@ class TestMatcherNew extends FileDiffSuite {
       def protect[A:Manifest](x: Exp[A], in: List[Rep[Any]]): Rep[A] = ResultA(x,in)
       def bare[T:Manifest](x: Exp[Any], f: String => String): Exp[T] = Bare[T](x,f)
       //def printL(in: Rep[Any]): Rep[Unit] = /*reflectEffect*/(Result(List(in))) //FIXME violate ordering
-      //override val verbosity = 1
+      Config.verbosity = 0
       object codegen extends ScalaGenArith with ScalaGenEqual with ScalaGenListOps with ScalaGenTupleOps
           with ScalaGenIfThenElseFat with ScalaGenSplitEffects with ScalaGenOrderingOps
           with ScalaGenDFAOps with ScalaGenGAOps
@@ -790,6 +791,7 @@ class TestMatcherNew extends FileDiffSuite {
       }
       
       val f = (x:Rep[Unit]) => test(x)
+      ScalaCompile.dumpGeneratedCode = false
       codegen.emitSource1(f, "Match", new java.io.PrintWriter(System.out))
       val fc = compile1(f)
       runtest()

@@ -129,7 +129,9 @@ trait Expressions extends Utils {
     def withPos(pos: List[SourceContext]) = { sourceContexts :::= pos; this }
   }
 
-  case class Variable[+T](val e: Exp[Variable[T]]) // TODO: decide whether it should stay here ... FIXME: should be invariant
+  case class Variable[+T](val e: Exp[Variable[T]]) {
+     var emitted = false;
+  } // TODO: decide whether it should stay here ... FIXME: should be invariant
 
   var nVars = 0
   def fresh[T:Manifest]: Sym[T] = Sym[T] { 

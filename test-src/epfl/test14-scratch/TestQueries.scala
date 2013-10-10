@@ -9,6 +9,7 @@ import util.OverloadHack
 
 import java.io.{PrintWriter,StringWriter,FileOutputStream}
 import scala.reflect.SourceContext
+import internal.ScalaCompile
 
 /*
 Staged SQL-like queries, inspired by "the essence of LINQ":
@@ -20,7 +21,6 @@ http://homepages.inf.ed.ac.uk/slindley/papers/essence-of-linq-draft-december2012
 trait Shallow extends Util {
   
   // people db schema
-
   case class Person(name: String, age: Int) extends Record
   case class Couple(her: String, him: String) extends Record
   case class PeopleDB(people: List[Person], couples: List[Couple]) extends Record
@@ -890,8 +890,10 @@ trait Util {
 // test cases
 class TestQueries extends FileDiffSuite {
   
+  ScalaCompile.reset()
   val prefix = "test-out/epfl/test14-"
-  
+  ScalaCompile.dumpGeneratedCode =false 
+ 
   trait DSL extends Staged with Compile {
     def test(): Unit
   }

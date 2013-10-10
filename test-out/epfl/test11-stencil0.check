@@ -1,7 +1,7 @@
 /*****************************************
   Emitting Generated Code                  
 *******************************************/
-class staged1 extends ((Array[Double])=>(Array[Double])) {
+class staged0 extends ((Array[Double])=>(Array[Double])) {
 def apply(x0:Array[Double]): Array[Double] = {
 val x1 = new Array[Double](20)
 var x3 : Int = 0

@@ -9,6 +9,7 @@ import test1._
 import test7.{Print,PrintExp,ScalaGenPrint}
 import test7.{ArrayLoops,ArrayLoopsExp,ScalaGenArrayLoops}
 
+import internal.ScalaCompile
 import util.OverloadHack
 
 import java.io.{PrintWriter,StringWriter,FileOutputStream}
@@ -43,6 +44,7 @@ class TestSpeculative extends FileDiffSuite {
       with IfThenElseExpOpt with WhileExpOptSpeculative with SplitEffectsExpFat with RangeOpsExp with PrintExp 
       with CompileScala { self => 
     Config.verbosity = 1
+    ScalaCompile.dumpGeneratedCode = false
     val codegen = new ScalaGenArrayMutation with ScalaGenArith with ScalaGenOrderingOps 
       with ScalaGenVariables with ScalaGenIfThenElseFat with ScalaGenWhileOptSpeculative with ScalaGenSplitEffects
       with ScalaGenRangeOps with ScalaGenPrint /*with LivenessOpt*/ { val IR: self.type = self }

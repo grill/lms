@@ -30,13 +30,8 @@ object ScalaCompile {
   val source = new StringWriter()
   var writer = new PrintWriter(source)
   val workingDir = System.getProperty("user.dir") + "/CompiledClasses"
-  val loader = new AbstractFileClassLoader(AbstractFile.getDirectory(workingDir), this.getClass.getClassLoader)
+  var loader: AbstractFileClassLoader = null
   lazy val comp = this.compiler
-}
-
-trait ScalaCompile extends Expressions {
-
-  val codegen: ScalaCodegen { val IR: ScalaCompile.this.type }
 
   def setupCompiler() = {
     val settings = new Settings()
@@ -61,11 +56,22 @@ trait ScalaCompile extends Expressions {
     settings.extdirs.value = ""
     //settings.verbose.value = true
     // -usejavacp needed on windows?
-
+    ScalaCompile.loader = new AbstractFileClassLoader(AbstractFile.getDirectory(workingDir), this.getClass.getClassLoader)
     ScalaCompile.reporter = new ConsoleReporter(settings, null, new PrintWriter(System.out))//writer
     ScalaCompile.compiler = new Global(settings, ScalaCompile.reporter)
   }
+  def reset() {
+	setupCompiler()
+	compileCount = 0
+	dumpGeneratedCode = false
+  }
 
+}
+
+trait ScalaCompile extends Expressions {
+
+  val codegen: ScalaCodegen { val IR: ScalaCompile.this.type }
+ 
   def initCompile = {
     // System.out.println("Initializing compiler...") // This unfortunately
     // breaks the test suite as well :-(
@@ -108,7 +114,7 @@ trait ScalaCompile extends Expressions {
 
   def compileLoadClass(src: StringWriter, className: String) = {
     if (ScalaCompile.compiler eq null)
-        setupCompiler()
+        ScalaCompile.setupCompiler()
     if (ScalaCompile.dumpGeneratedCode) println(src)
 
     ScalaCompile.compiler.settings.outputDirs.setSingleOutput(AbstractFile.getDirectory(ScalaCompile.workingDir))

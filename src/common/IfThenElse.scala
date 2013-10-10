@@ -240,10 +240,10 @@ trait ScalaGenIfThenElse extends ScalaGenEffect with BaseGenIfThenElse {
       withStream(localStream) {
         stream.println("if (" + quote(c) + ") {")
         emitBlock(a)
-        stream.println(quote(getBlockResult(a)))
+	emitBlockResult(a)
         stream.println("} else {")
         emitBlock(b)
-        stream.println(quote(getBlockResult(b)))
+	emitBlockResult(b)
         stream.print("}")
       }
       emitValDef(sym, strWriter.toString)

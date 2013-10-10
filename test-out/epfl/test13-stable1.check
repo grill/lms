@@ -1,7 +1,7 @@
 /*****************************************
   Emitting Generated Code                  
 *******************************************/
-class staged7(px3:scala.Function1[scala.collection.immutable.List[Any], scala.Function1[Int, Int]],px5:scala.virtualization.lms.epfl.test13.RCell[Int]) extends ((Int)=>(Int)) {
+class staged0(px3:scala.Function1[scala.collection.immutable.List[Any], scala.Function1[Int, Int]],px5:scala.virtualization.lms.epfl.test13.RCell[Int]) extends ((Int)=>(Int)) {
 def apply(x0:Int): Int = {
 val x1 = x0 + 1
 val x2 = x0 * 2
@@ -20,7 +20,7 @@ x7
 /*****************************************
   Emitting Generated Code                  
 *******************************************/
-class staged8(px1:Int,px2:Int) extends ((Int)=>(Int)) {
+class staged1(px1:Int,px2:Int) extends ((Int)=>(Int)) {
 def apply(x3:Int): Int = {
 val x1 = px1 // static data: 10
 val x2 = px2 // static data: 18
@@ -37,7 +37,7 @@ x5
 /*****************************************
   Emitting Generated Code                  
 *******************************************/
-class staged9(px1:Int,px2:Int) extends ((Int)=>(Int)) {
+class staged2(px1:Int,px2:Int) extends ((Int)=>(Int)) {
 def apply(x3:Int): Int = {
 val x1 = px1 // static data: 10
 val x2 = px2 // static data: 18
@@ -54,7 +54,7 @@ x5
 /*****************************************
   Emitting Generated Code                  
 *******************************************/
-class staged10(px1:Int,px2:Int) extends ((Int)=>(Int)) {
+class staged3(px1:Int,px2:Int) extends ((Int)=>(Int)) {
 def apply(x3:Int): Int = {
 val x1 = px1 // static data: 10
 val x2 = px2 // static data: 18

@@ -17,6 +17,7 @@ import scala.reflect.SourceContext
 
 class TestStencil extends FileDiffSuite {
   
+  ScalaCompile.reset()
   trait DSL extends LiftNumeric with NumericOps with ArrayOps with RangeOps 
     with BooleanOps with OrderingOps
     with LiftVariables with IfThenElse with Print {

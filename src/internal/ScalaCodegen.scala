@@ -116,7 +116,7 @@ trait ScalaNestedCodegen extends GenericNestedCodegen with ScalaCodegen {
   }
   
   def emitForwardDef(sym: Sym[Any]): Unit = {
-    stream.println("var " + quote(sym) + /*": " + remap(sym.tp) + */ " = null.asInstanceOf[" + remap(sym.tp) + "]")
+    stream.println("var " + quote(sym, true) + /*": " + remap(sym.tp) + */ " = null.asInstanceOf[" + remap(sym.tp) + "]")
   }
   
   // special case for recursive vals

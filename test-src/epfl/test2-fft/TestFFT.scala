@@ -9,7 +9,7 @@ import reflect.SourceContext
 import java.io.PrintWriter
 
 import org.scalatest._
-
+import internal.ScalaCompile
 
 trait FFT { this: Arith with Trig =>
   
@@ -112,6 +112,7 @@ trait ScalaGenFlat extends ScalaGenBase {
 class TestFFT extends FileDiffSuite {
   
   val prefix = "test-out/epfl/test2-"
+  ScalaCompile.dumpGeneratedCode = false
   
   def testFFT1 = {
     withOutFile(prefix+"fft1") {

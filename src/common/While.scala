@@ -120,7 +120,7 @@ trait ScalaGenWhile extends ScalaGenEffect with BaseGenWhile {
   override def emitNode(sym: Sym[Any], rhs: Def[Any]) = rhs match {
     case While(c,b) =>
 //<<<<<<< HEAD
-      stream.println("while ({")
+      emitValDef(sym, "while ({")
       emitBlock(c)
       stream.println(quote(getBlockResult(c)))
       stream.println("}) {")

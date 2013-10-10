@@ -7,6 +7,7 @@ import test1._
 import test7._
 import test8.{ArrayMutation,ArrayMutationExp,ScalaGenArrayMutation,OrderingOpsExpOpt}
 
+import internal.Config
 import util.OverloadHack
 import scala.reflect.SourceContext
 
@@ -27,7 +28,7 @@ class TestHMM extends FileDiffSuite {
       with EqualExpOpt with VariablesExpOpt with RangeOpsExp with StaticDataExp
       with IfThenElseExpOpt with PrintExp 
       with CompileScala { self => 
-    ////override val verbosity = 1
+    Config.verbosity = 0
     val codegen = new ScalaGenNumericOps with ScalaGenStaticData with ScalaGenOrderingOps with ScalaGenArrayOps with ScalaGenRangeOps
       with ScalaGenVariables with ScalaGenIfThenElse
       with ScalaGenPrint /*with LivenessOpt*/ { val IR: self.type = self }

@@ -37,6 +37,7 @@ class TestCrossStage extends FileDiffSuite {
       with ScalaGenPrint { 
         val IR: self.type = self 
       }
+    ScalaCompile.dumpGeneratedCode = false;
     codegen.emitSource1(test, "Test", new PrintWriter(System.out))
     println("-- running program")
     val f = compile1(test)

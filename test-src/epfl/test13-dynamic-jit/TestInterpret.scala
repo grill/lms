@@ -6,7 +6,7 @@ import internal.Config
 import common._
 import internal._
 import test1._
-import test7.{Print,PrintExp,ScalaGenPrint}
+import test7.{Print,PrintExp}
 import test7.{ArrayLoops,ArrayLoopsExp,ScalaGenArrayLoops}
 import test8._
 import test10._
@@ -145,7 +145,9 @@ class TestInterpret extends FileDiffSuite {
     case class WhileN(c: Fun, body: Fun) extends FunHolder {
       spec(new Fun {
         def exec(f: Frame) = {
-          while (c.execInt(f) != 0) { body.exec(f); () }
+          while (c.execInt(f) != 0) { 
+	     body.exec(f); 
+	  }
         }
       })
     }
@@ -505,12 +507,42 @@ class TestInterpret extends FileDiffSuite {
   trait ScalaGenInterp extends ScalaGenBase {
     val IR: InterpretStagedExp
     import IR._
-
+ 
     override def emitNode(sym: Sym[Any], rhs: Def[Any]) = rhs match {
       case RFunExec(x,f) =>  emitValDef(sym, quote(x) + ".exec(" + quote(f) + ")")
       case RFunExecInt(x,f) =>  emitValDef(sym, quote(x) + ".execInt(" + quote(f) + ")")
       case _ => super.emitNode(sym, rhs)
     }
+  }
+
+  trait ScalaGenInterp2 extends ScalaGenInterp { 
+    import IR._
+    /* Yannis: We need to override quote here because the API of LMS (or the
+     * data version of it :-)) does not output a symbol if it has type unit.
+     * However, this test uses a unified interface for its functions, which
+     * return always int. Thus, even if the function returns Unit, it casts the
+     * corresponding symbol to int and returns it! (that sucks btw, but I have
+     * to live with it). As a result, if you use the original quote you get the
+     * following:
+     *     val x40 = .asInstanceOf[Int]
+     * Solution: FOR THIS TEST ONLY override quote so that we print this symbol in all cases.  
+     */
+    override def quote(x: Exp[Any], forcePrintSymbol: Boolean): String = {
+	x match {
+	    case s@Sym(n) => "x" + n
+	    case _ => super.quote(x,forcePrintSymbol)
+	}
+    }
+    override def emitAssignment(sym: Sym[Any], lhs: String, rhs: String): Unit = 
+	stream.println("val " + lhs + " = " + rhs)
+    override def emitValDef(sym: Sym[Any], rhs: String): Unit = {
+	val extra = if ((Config.sourceinfo < 2) || sym.pos.isEmpty) "" else {
+		val context = sym.pos(0)
+		"	//" + relativePath(context.fileName) + ":" + context.line
+	}
+	stream.println("val " + quote(sym, true) + " = " + rhs + extra)
+    }
+
   }
   
   
@@ -521,34 +553,55 @@ class TestInterpret extends FileDiffSuite {
     def test(): Unit
   }
   
-  trait Impl extends DSL with VectorExp with ArithExp with OrderingOpsExpOpt with BooleanOpsExp 
+  trait AbstractImpl extends DSL with VectorExp with ArithExp with OrderingOpsExpOpt with BooleanOpsExp 
     with EqualExpOpt with IfThenElseFatExp with LoopsFatExp with WhileExp
     with RangeOpsExp with PrintExp with FatExpressions with CompileScala
     with NumericOpsExp with ArrayOpsExp with HashMapOpsExp with CastingOpsExp with StaticDataExp 
-    with InterpretStagedExp { self =>
-    Config.verbosity = 1
+    with InterpretStagedExp { self => 
+    Config.verbosity = 2
     ScalaCompile.dumpGeneratedCode = true
+  }
+
+  trait Impl extends AbstractImpl { self =>
     val codegen = new Codegen { val IR: self.type = self }
     val runner = new Runner { val p: self.type = self }
     runner.run()
   }
+
+  /* For interpret 2 */
+  trait ScalaGenPrint extends ScalaGenEffect {
+    val IR: PrintExp
+    import IR._
   
+    override def emitNode(sym: Sym[Any], rhs: Def[Any]) = rhs match {
+      case Print(s) => emitValDef(sym, "println(" + quote(s) + ")")
+      case _ => super.emitNode(sym, rhs)
+    }
+  }
+ 
+  trait Impl2 extends AbstractImpl { self =>
+    val codegen = new Codegen with ScalaGenInterp2 { val IR: self.type = self }
+    val runner = new Runner { val p: self.type = self }
+    runner.run()
+  }  
+
   trait Codegen extends ScalaGenVector with ScalaGenArith with ScalaGenOrderingOps with ScalaGenBooleanOps
     with ScalaGenVariables with ScalaGenEqual with ScalaGenIfThenElse with ScalaGenWhile
     with ScalaGenRangeOps with ScalaGenPrint 
     with ScalaGenNumericOps with ScalaGenArrayOps with ScalaGenHashMapOps with ScalaGenCastingOps with ScalaGenStaticData 
     with ScalaGenInterp with ScalaGenCellOps with ScalaGenUncheckedOps {
-    val IR: Impl
+    val IR: AbstractImpl
   }
   
   
   trait Runner {
-    val p: Impl
+    val p: AbstractImpl
     def run() = {
       p.test()
     }
   }
-  
+ 
+  ScalaCompile.reset() 
   
   def testInterpret1 = withOutFileChecked(prefix+"interpret1") {
     trait Prog extends DSL with InterpretPlain {
@@ -620,7 +673,7 @@ class TestInterpret extends FileDiffSuite {
         println(y) // expected: 65280
       }
     }
-    new Prog with Impl
+    new Prog with Impl2  
   }
 
   def testInterpret3 = withOutFileChecked(prefix+"interpret3") {

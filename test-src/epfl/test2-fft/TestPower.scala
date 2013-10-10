@@ -7,6 +7,7 @@ import test1._
 import reflect.SourceContext
 
 import java.io.PrintWriter
+import internal.ScalaCompile
 
 trait Power1 { this: Arith =>
   def power(b: Rep[Double], x: Int): Rep[Double] = 
@@ -43,6 +44,7 @@ trait ArithStr extends Arith with BaseStr {
 class TestPower extends FileDiffSuite {
   
   val prefix = "test-out/epfl/test2-"
+  ScalaCompile.dumpGeneratedCode = false
 
   def testPower = {
     withOutFile(prefix+"power") {

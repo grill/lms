@@ -3,6 +3,7 @@ package epfl
 package test4
 
 import common._
+import internal.Config
 import internal.GraphVizExport
 import test1._
 import test2._
@@ -39,6 +40,7 @@ trait FacProg2 { this: Arith with Functions with Equal with IfThenElse =>
 class TestFac extends FileDiffSuite {
   
   val prefix = "test-out/epfl/test4-"
+  Config.verbosity = 0
 
   def testFac1 = {
     withOutFile(prefix+"fac1") {

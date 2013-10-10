@@ -5,6 +5,7 @@ package test14
 import common._
 import test1._
 
+import internal.Config
 import util.OverloadHack
 
 import java.io.{PrintWriter,StringWriter,FileOutputStream}
@@ -28,6 +29,7 @@ class TestCGen extends FileDiffSuite {
 
   trait Impl extends DSL with ScalaOpsPkgExp with TupledFunctionsRecursiveExp with UncheckedOpsExp { self => 
     val codegen = new CCodeGenPkg with CGenVariables with CGenTupledFunctions with CGenUncheckedOps { val IR: self.type = self }
+    Config.verbosity = 0
     def emitAll(): Unit = {
       assert(codegen ne null) //careful about initialization order
       rec.foreach { case (k,x) =>

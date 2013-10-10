@@ -7,7 +7,7 @@ import common._
 import test1._
 import test2._
 import test3._
-
+import internal.Config
 
 trait AckProg { this: Arith with Functions with Equal with IfThenElse =>
 
@@ -46,6 +46,7 @@ trait AckProg { this: Arith with Functions with Equal with IfThenElse =>
 class TestAck extends FileDiffSuite {
   
   val prefix = "test-out/epfl/test4-"
+  Config.verbosity = 0
 
   def testAck1 = {
     withOutFile(prefix+"ack1") {
