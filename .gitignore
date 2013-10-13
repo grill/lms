@@ -8,4 +8,4 @@ target
 virtualization-lms-core.iml
 .gitingore
 #test-out
-CompiledClasses
+CompiledClasses/*
