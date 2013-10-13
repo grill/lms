@@ -147,9 +147,9 @@ trait ScalaCompile extends Expressions {
     cls
   }
 
-  def compile0[B](f: () => Exp[B])(implicit mB: Manifest[B]): () =>B = {
+  def compile0[B](f: () => Exp[B], dynamicReturnType: String = null)(implicit mB: Manifest[B]): () =>B = {
     val className = initCompile 
-    val staticData = codegen.emitSource0(f, className, ScalaCompile.writer)
+    val staticData = codegen.emitSource0(f, className, ScalaCompile.writer, dynamicReturnType)
     codegen.emitDataStructures(ScalaCompile.writer)
     val cls = compileLoadClass(ScalaCompile.source, className)
     val cons = cls.getConstructor(staticData.map(_._1.tp.erasure):_*)

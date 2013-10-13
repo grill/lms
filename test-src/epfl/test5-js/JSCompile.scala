@@ -21,7 +21,7 @@ trait JSCodegen extends GenericCodegen {
     stream.flush
   }
 
-  override def emitSource[A : Manifest](args: List[Sym[_]], body: Block[A], methName: String, out: PrintWriter, serializable: Boolean = false) = {
+  override def emitSource[A : Manifest](args: List[Sym[_]], body: Block[A], methName: String, out: PrintWriter, dynamicReturnType: String = "", serializable: Boolean = false) = {
     withStream(out) {
       stream.println("function "+methName+"("+args.map(quote).mkString(", ")+") {")
     

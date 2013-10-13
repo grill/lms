@@ -126,9 +126,9 @@ trait GenericCodegen extends BlockTraversal {
 
   def emitValDef(sym: Sym[Any], rhs: String): Unit
   
-  def emitSource0[R : Manifest](f: () => Exp[R], className: String, stream: PrintWriter): List[(Sym[Any], Any)] = {
+  def emitSource0[R : Manifest](f: () => Exp[R], className: String, stream: PrintWriter, dynamicReturnType: String = null): List[(Sym[Any], Any)] = {
     val body = reifyBlock(f())
-    emitSource(List(), body, className, stream)
+    emitSource(List(), body, className, stream, dynamicReturnType)
   }
 
   def emitSource1[T1: Manifest, R : Manifest](f: (Exp[T1]) => Exp[R], className: String, stream: PrintWriter): List[(Sym[Any], Any)] = {
@@ -409,7 +409,7 @@ trait GenericCodegen extends BlockTraversal {
    * @param className Name of the generated identifier
    * @param stream Output stream
    */
-  def emitSource[A : Manifest](args: List[Sym[_]], body: Block[A], className: String, stream: PrintWriter, serializable: Boolean = false): List[(Sym[Any], Any)] // return free static data in block
+  def emitSource[A : Manifest](args: List[Sym[_]], body: Block[A], className: String, stream: PrintWriter, dynamicReturnType: String = null, serializable: Boolean = false): List[(Sym[Any], Any)] // return free static data in block
 
   def quote(x: Exp[Any]) : String = quote(x, false)
 

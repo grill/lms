@@ -80,7 +80,7 @@ trait GraphVizDependencyGraphExport extends GenericCodegen with NestedBlockTrave
     output
   }
 
-  override def emitSource[A : Manifest](args: List[Sym[_]], body: Block[A], className: String, out: PrintWriter, serializable: Boolean = false) = {
+  override def emitSource[A : Manifest](args: List[Sym[_]], body: Block[A], className: String, out: PrintWriter, dynamicReturnType: String = null, serializable: Boolean = false) = {
 
     val sA = remap(manifest[A])
 

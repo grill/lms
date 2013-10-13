@@ -267,16 +267,16 @@ trait DynamicRecordHashMapExp extends DynamicRecordHashMap with EffectExp with H
   case class DynamicRecordHashMapGetOrElseUpdate[K:Manifest,V:Manifest](m: Exp[HashMap[K,V]], k: Exp[K], v: Block[V], h: Block[Int], e: Block[Boolean], d: Sym[DynamicRecord]) extends DynamicRecordHashMapDef[K,V,V]
   case class DynamicRecordHashMapMkString[K:Manifest,V:Manifest](m: Exp[HashMap[K,V]], v:Rep[String]) extends DynamicRecordHashMapDef[K,V,String]
 
-  override def hashmap_new[K:Manifest,V:Manifest](specializedKey: String = "", specializedValue: String = "")(implicit pos: SourceContext) = reflectEffect(DynamicRecordHashMapNew[K,V](specializedKey, specializedValue))
+  override def hashmap_new[K:Manifest,V:Manifest](specializedKey: String = "", specializedValue: String = "")(implicit pos: SourceContext) = reflectMutable(DynamicRecordHashMapNew[K,V](specializedKey, specializedValue))
   override def hashmap_apply[K:Manifest,V:Manifest](m: Exp[HashMap[K,V]], k: Exp[K])(implicit pos: SourceContext) = DynamicRecordHashMapApply(m,k)
-  override def hashmap_size[K:Manifest,V:Manifest](m: Exp[HashMap[K,V]])(implicit pos: SourceContext) = reflectEffect(DynamicRecordHashMapSize(m))
-  override def hashmap_removehead[K: Manifest, V: Manifest](m: Rep[HashMap[K,V]])(implicit pos: SourceContext) = reflectEffect(DynamicRecordHashMapRemoveHead(m))
-  def hashmap_getorelseupdate[K:Manifest,V:Manifest](m: Rep[HashMap[K,V]], k: Rep[K], v: => Exp[V], h: Exp[DynamicRecord] => Exp[Int] = null, e: (Exp[DynamicRecord],Exp[DynamicRecord])=>Exp[Boolean] = null)(implicit pos: SourceContext) = {
+  override def hashmap_size[K:Manifest,V:Manifest](m: Exp[HashMap[K,V]])(implicit pos: SourceContext) = /*reflectEffect(*/DynamicRecordHashMapSize(m)//)
+  override def hashmap_removehead[K: Manifest, V: Manifest](m: Rep[HashMap[K,V]])(implicit pos: SourceContext) = reflectWrite(m)(DynamicRecordHashMapRemoveHead(m))
+  def hashmap_getorelseupdate[K:Manifest,V:Manifest](m: Rep[HashMap[K,V]], k: Rep[K], v: => Exp[V], h: Exp[DynamicRecord] => Exp[Int] = null, e: (Exp[DynamicRecord],Exp[DynamicRecord])=>Exp[Boolean] = null)(implicit pos: SourceContext) = { 
     val b = reifyEffects(v)
     val f = reifyEffects(h(k.asInstanceOf[Rep[DynamicRecord]]))
     val ff = fresh[DynamicRecord]
     val g = reifyEffects(e(k.asInstanceOf[Rep[DynamicRecord]],ff))
-    reflectEffect(DynamicRecordHashMapGetOrElseUpdate(m,k,b,f,g,ff))
+    reflectWrite(m)(DynamicRecordHashMapGetOrElseUpdate(m,k,b,f,g,ff))
   }
   override def hashmap_mkString[K: Manifest, V: Manifest](m: Rep[HashMap[K,V]], v: Rep[String])(implicit pos: SourceContext) = reflectEffect(DynamicRecordHashMapMkString(m, v))
   
@@ -300,6 +300,34 @@ trait ScalaGenDynamicRecordHashMap extends ScalaGenBase with GenericNestedCodege
   val IR: DynamicRecordHashMapExp
   import IR._
 
+  def findInitSymbol(s: Exp[_]): Exp[_] = {
+	findDefinition(s.asInstanceOf[Sym[_]]).get match {
+		case TP(_, Reflect(v @ ReadVar(Variable(x)),_,_)) => findInitSymbol(x)
+		case TP(_, Reflect(NewVar(x),_,_)) => {
+			if (x.tp != manifest[Nothing]) findInitSymbol(x)
+			else {
+				var sym : Option[Exp[_]] = None
+				globalDefs.find { x => x match {
+					case TP(_,Reflect(Assign(Variable(v1),v2),_,_)) => {
+						if (v1 == s) {sym = Some(v2); true}
+						else false;
+					}
+					case _ => false
+				} }
+				if (sym != None) findInitSymbol(sym.get)
+				else throw new RuntimeException("findInitSymbol failed during lookup in DynamicRecords while looking for " + sym + ".")
+			}
+		} 
+		case TP(sym, Reflect(DynamicRecordHashMapNew(_,_),_,_)) => sym
+		case sy@_ => throw new RuntimeException("findInitSymbol failed during lookup in DynamicRecords while looking for " + sy + ".")
+    }
+  }
+
+  def quoteSizeSymbol(m: Exp[_]): String = {
+	    val sizeSymbol = findInitSymbol(m)
+		"__" + quote(sizeSymbol) + "Size"
+  }
+
   override def emitNode(sym: Sym[Any], rhs: Def[Any]) = rhs match {
     case m@DynamicRecordHashMapNew(spkey, spvalue) => {
         val key = if (spkey != "") spkey else remap(m.mK)
@@ -307,7 +335,7 @@ trait ScalaGenDynamicRecordHashMap extends ScalaGenBase with GenericNestedCodege
         stream.println("var " + quote(sym) + " = new Array[scala.collection.mutable.DefaultEntry[" + key + "," + value +"]](16)")
         stream.println("var __" + quote(sym) + "Size = 0")
     }
-    case DynamicRecordHashMapSize(m) => emitValDef(sym, "__" + quote(m) + "Size")
+    case DynamicRecordHashMapSize(m) => emitValDef(sym, quoteSizeSymbol(m))
     case DynamicRecordHashMapRemoveHead(m) => {
         stream.println("val " + quote(sym) + "= {")
         stream.println("var __idx = 0")
@@ -317,7 +345,7 @@ trait ScalaGenDynamicRecordHashMap extends ScalaGenBase with GenericNestedCodege
         stream.println("__elem = " + quote(m) + "(__idx)")
         stream.println("}")
         stream.println(quote(m) + "(__idx) = __elem.next")
-        stream.println("__" + quote(m) + "Size -= 1")
+        stream.println(quoteSizeSymbol(m) + " -= 1")
         stream.println("(__elem.key, __elem.value)")
         stream.println("}")
     }
@@ -361,7 +389,7 @@ trait ScalaGenDynamicRecordHashMap extends ScalaGenBase with GenericNestedCodege
         stream.println("})")
         stream.println("entry.next = " + quote(m) + "(h)")
         stream.println(quote(m) + "(h) = entry")
-        stream.println("__" + quote(m) + "Size = __" + quote(m) + "Size + 1")
+        stream.println(quoteSizeSymbol(m) + " = " + quoteSizeSymbol(m) + " + 1")
         stream.println("entry.value")
         stream.println("} else e.value")
         stream.println("}")

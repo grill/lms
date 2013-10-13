@@ -341,7 +341,7 @@ trait Effects extends Expressions with Blocks with Utils {
   }
 
   def checkIllegalSharing(z: Exp[Any], mutableAliases: List[Sym[Any]]) {
-    if (mutableAliases.nonEmpty) {
+    if (mutableAliases.nonEmpty && Config.verbosity >= 1) {
       val zd = z match { case Def(zd) => zd }
       printerr("error: illegal sharing of mutable objects " + mutableAliases.mkString(", "))
       printerr("at " + z + "=" + zd)
@@ -429,11 +429,13 @@ trait Effects extends Expressions with Blocks with Utils {
       } else {
         val z = fresh[A](List(pos))
         // make sure all writes go to allocs
-        for (w <- u.mayWrite if !isWritableSym(w)) {
-          printerr("error: write to non-mutable " + w + " -> " + findDefinition(w))
-          printerr("at " + z + "=" + zd)
-          printsrc("in " + quotePos(z))
-        }
+		if (Config.verbosity >= 1) {
+	        for (w <- u.mayWrite if !isWritableSym(w)) {
+    	      printerr("error: write to non-mutable " + w + " -> " + findDefinition(w))
+        	  printerr("at " + z + "=" + zd)
+	          printsrc("in " + quotePos(z))
+    	    }
+		}
         // prevent sharing between mutable objects / disallow mutable escape for non read-only operations
         // make sure no mutable object becomes part of mutable result (in case of allocation)
         // or is written to another mutable object (in case of write)

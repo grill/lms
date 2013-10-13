@@ -219,21 +219,23 @@ trait ScalaGenVariables extends ScalaGenEffect {
   override def emitNode(sym: Sym[Any], rhs: Def[Any]) = rhs match {
     case ReadVar(Variable(a)) => emitValDef(sym, quote(a))
     case NewVar(init) => {
-        if (sym.tp != manifest[Variable[Nothing]])
-            emitVarDef(sym.asInstanceOf[Sym[Variable[Any]]], quote(init))
+        if (sym.tp != manifest[Variable[Nothing]]) {
+			val obj = sym.asInstanceOf[Sym[Variable[Any]]]
+            emitVarDef(obj, quote(init))
+		}
     }
-    case ReadVar(null) => {}//emitVarDef(sym.asInstanceOf[Sym[Variable[Any]]], "null")
+    case ReadVar(null) => emitVarDef(sym.asInstanceOf[Sym[Variable[Any]]], "null")
     case Assign(v @ Variable(a), b) => {
         val lhsIsNull = a match {
             case Def(Reflect(NewVar(y: Exp[_]),_,_)) => 
                 if (y.tp == manifest[Nothing]) true
                 else false
-            case _ => false
+            case y@_ => false
         }
         val obj = a.asInstanceOf[Sym[Variable[Any]]]
         if (lhsIsNull && !v.emitted) {
             emitVarDef(obj, quote(b))
-	    v.emitted = true
+		    v.emitted = true
         }
         else emitAssignment(sym, quote(a), quote(b))
     }

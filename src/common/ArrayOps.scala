@@ -33,6 +33,7 @@ trait ArrayOps extends Variables {
     def toSeq = array_toseq(a)
     def zip[B: Manifest](a2: Rep[Array[B]]) = array_zip(a,a2)
     def corresponds[B: Manifest](a2: Rep[Array[B]]) = array_corresponds(a,a2)
+    def mkString(del: Rep[String] = unit("")) = array_mkString(a,del)
   }    
 
   def array_obj_new[T:Manifest](n: Rep[Int], specializedType: Rep[String] = unit("")): Rep[Array[T]]
@@ -48,6 +49,7 @@ trait ArrayOps extends Variables {
   def array_map[A:Manifest,B:Manifest](a: Rep[Array[A]], f: Rep[A] => Rep[B]): Rep[Array[B]]
   def array_toseq[A:Manifest](a: Rep[Array[A]]): Rep[Seq[A]]
   def array_zip[A:Manifest, B: Manifest](a: Rep[Array[A]], a2: Rep[Array[B]]): Rep[Array[(A,B)]]
+  def array_mkString[A: Manifest](a: Rep[Array[A]], del: Rep[String] = unit("")): Rep[String]
   // limited support for corresponds (tests equality)
   def array_corresponds[A: Manifest, B: Manifest](a: Rep[Array[A]], a2: Rep[Array[B]]): Rep[Boolean]
 }
@@ -76,6 +78,7 @@ trait ArrayOpsExp extends ArrayOps with EffectExp with VariablesExp {
   }
   case class ArrayToSeq[A:Manifest](x: Exp[Array[A]]) extends Def[Seq[A]]
   case class ArrayZip[A:Manifest, B: Manifest](x: Exp[Array[A]], x2: Exp[Array[B]]) extends Def[Array[(A,B)]]
+  case class ArrayMkString[A:Manifest](a: Exp[Array[A]], b: Exp[String] = unit("")) extends Def[String]
   case class ArrayCorresponds[A:Manifest, B: Manifest](x: Exp[Array[A]], x2: Exp[Array[B]]) extends Def[Boolean]
   
   def array_obj_new[T:Manifest](n: Exp[Int], specializedType: Rep[String] = unit("")) = reflectMutable(ArrayNew(n, specializedType))
@@ -99,6 +102,7 @@ trait ArrayOpsExp extends ArrayOps with EffectExp with VariablesExp {
   }
   def array_toseq[A:Manifest](a: Exp[Array[A]]) = ArrayToSeq(a)
   def array_zip[A:Manifest, B: Manifest](a: Exp[Array[A]], a2: Exp[Array[B]]) = reflectEffect(ArrayZip(a,a2))
+  def array_mkString[A: Manifest](a: Rep[Array[A]], del: Rep[String] = unit("")) = reflectEffect(ArrayMkString(a, del))
   def array_corresponds[A: Manifest, B: Manifest](a: Rep[Array[A]], a2: Rep[Array[B]]) = reflectEffect(ArrayCorresponds(a,a2))
   
   //////////////
@@ -270,6 +274,11 @@ trait ScalaGenArrayOps extends BaseGenArrayOps with ScalaGenBase {
       // stream.println("}")  
     case ArrayToSeq(a) => emitValDef(sym, quote(a) + ".toSeq")
     case ArrayZip(a,a2) => emitValDef(sym, quote(a) + " zip " + quote(a2)) 
+    case ArrayMkString(a, del) => 
+	if (del != unit(""))
+	  emitValDef(sym, quote(a) + ".mkString(" + quote(del) + ")")
+	else
+	  emitValDef(sym, quote(a) + ".mkString")	
     case ArrayCorresponds(a,a2) => emitValDef(sym, quote(a) + ".corresponds(" + quote(a2) + "){_==_}") 
     case _ => super.emitNode(sym, rhs)
   }
