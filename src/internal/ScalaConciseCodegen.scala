@@ -85,6 +85,7 @@ trait ScalaConciseCodegen extends ScalaNestedCodegen { self =>
           case false => printSym(s)
         }
       }
+	  case null => "null"
       case _ => throw new RuntimeException("could not quote " + x)
     }
   }

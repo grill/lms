@@ -59,7 +59,6 @@ trait SymMetaDataFixerTransform extends NestedBlockTraversal {
     val sym = s.asInstanceOf[Sym[Any]]
     ReflectionUtil.caseNameTypeValues(rhs) foreach {
       x => if(x._2 == classOf[Block[A]]) {
-        //println("Blockckckckck {===")
         val blk: Block[A] = x._3.asInstanceOf[Block[A]]
         blk.res match {
           case s:Sym[_] => if(s.inSameParentBlockAs(sym)) { s.incRefCount(1) } else { s.incRefCount(10) }
@@ -72,10 +71,12 @@ trait SymMetaDataFixerTransform extends NestedBlockTraversal {
           case _ =>
         }
       } else if (x._2 == classOf[Variable[A]]) {
-        x._3.asInstanceOf[Variable[A]].e match {
-          case s:Sym[_] => if(s.inSameParentBlockAs(sym)) { s.incRefCount(1) } else { s.incRefCount(10) }
-          case _ =>
-        }
+		if (x._3 != null) {
+	        x._3.asInstanceOf[Variable[A]].e match {
+    	      case s:Sym[_] => if(s.inSameParentBlockAs(sym)) { s.incRefCount(1) } else { s.incRefCount(10) }
+        	  case _ =>
+        	}
+		}
       } else {
         syms(x._3).foreach {
           s: Sym[Any] => if(s.inSameParentBlockAs(sym)) { s.incRefCount(1) } else { s.incRefCount(10) }

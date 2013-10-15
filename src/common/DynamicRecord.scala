@@ -38,12 +38,6 @@ object DynamicRecordsMap extends Serializable {
              out.print("var " + p1 + ": " + str + " = null.asInstanceOf[" + str + "];\n")
         }
         out.println("@transient var next: " + className + " = null ")
-        // Override hashcode 
-        //out.println("var __hashCode: Function0[Int] = null")
-        //out.println("override def hashCode = __hashCode()")
-        // Override equals
-        //out.println("var __equals: Function1[" + className /* "," + className + ",*/ + ", Boolean] = null")
-        //out.println("def equals(x: " + className + ") = __equals(x)")
         // Override clone 
         out.println("override def clone() = {")
         out.println("val __copy  = new " + className + "()")
@@ -121,6 +115,11 @@ object DynamicRecordEffectsMap {
 }
 
 trait DynamicRecord extends Base with Serializable with VariablesExp {
+
+	object NewDynamicRecord {
+    	def apply[T:Manifest](n: String, reuse: Boolean = false) = newDynamicRecord(n, reuse)    
+	}
+
 	class DynamicRecordOps(x: Rep[DynamicRecord]) {
         def get(field: Rep[Any]) = dynamicRecordGet(x, field)
 		def set(field: Rep[Any], value: Block[Any]) = dynamicRecordSet(x, field, value)
@@ -145,24 +144,25 @@ trait DynamicRecord extends Base with Serializable with VariablesExp {
 }
 
 trait DynamicRecordExp extends DynamicRecord with BaseExp with EffectExp {
-    case class NewDynamicRecord(n: String) extends Def[DynamicRecord]
+    case class NewDynamicRecordObj(n: String) extends Def[DynamicRecord]
 	case class DynamicRecordGet(x: Rep[DynamicRecord], field: Rep[Any]) extends Def[Any]
 	case class DynamicRecordSet(x: Rep[DynamicRecord], field: Rep[Any], value: Block[Any]) extends Def[Unit]
     case class DynamicRecordForEach(l: Rep[DynamicRecord], x: Sym[DynamicRecord], block: Block[Unit]) extends Def[Unit]
 
     def newDynamicRecord(name: String, reuse: Boolean = false) = 
-        if (reuse) NewDynamicRecord(name) else reflectEffect(NewDynamicRecord(name))
+        if (reuse) NewDynamicRecordObj(name) else reflectMutable(NewDynamicRecordObj(name))
 
 	def dynamicRecordGet(x: Rep[DynamicRecord], field: Rep[Any]) = {
-        val key = (x.toString, field.toString)
+/*        val key = (x.toString, field.toString)
         DynamicRecordEffectsMap.effectsMap.get(key) match {
             case Some(e) => e.asInstanceOf[Rep[_]]
-            case None => {
-                val rE = reflectEffect(DynamicRecordGet(x, field))
-                DynamicRecordEffectsMap.effectsMap += key -> rE
+            case None => {*/
+                //val rE = 
+				reflectWrite(x)(DynamicRecordGet(x, field))
+/*                DynamicRecordEffectsMap.effectsMap += key -> rE
                 rE
             }
-        }
+        }*/
     }
 
 	def dynamicRecordSet(x: Rep[DynamicRecord], field: Rep[Any], value: Block[Any]) = { 
@@ -203,7 +203,7 @@ trait ScalaGenDynamicRecord extends ScalaGenBase with GenericNestedCodegen {
  
 	override def emitNode(sym: Sym[Any], rhs: Def[Any]) =  { 
         rhs match {
-            case NewDynamicRecord(x) => emitValDef(sym, "new " + x + "()")
+            case NewDynamicRecordObj(x) => emitValDef(sym, "new " + x + "()")
 		    case DynamicRecordGet(x, field) => emitValDef(sym, quote(x) + "." + quote(field).replaceAll("\"",""))
 		    case DynamicRecordSet(x, field, value) => {
                 stream.println(quote(x) + "." + quote(field).replaceAll("\"","") + " = {")
@@ -299,30 +299,7 @@ trait DynamicRecordHashMapExp extends DynamicRecordHashMap with EffectExp with H
 trait ScalaGenDynamicRecordHashMap extends ScalaGenBase with GenericNestedCodegen with ScalaGenEffect {
   val IR: DynamicRecordHashMapExp
   import IR._
-
-  def findInitSymbol(s: Exp[_]): Exp[_] = {
-	findDefinition(s.asInstanceOf[Sym[_]]).get match {
-		case TP(_, Reflect(v @ ReadVar(Variable(x)),_,_)) => findInitSymbol(x)
-		case TP(_, Reflect(NewVar(x),_,_)) => {
-			if (x.tp != manifest[Nothing]) findInitSymbol(x)
-			else {
-				var sym : Option[Exp[_]] = None
-				globalDefs.find { x => x match {
-					case TP(_,Reflect(Assign(Variable(v1),v2),_,_)) => {
-						if (v1 == s) {sym = Some(v2); true}
-						else false;
-					}
-					case _ => false
-				} }
-				if (sym != None) findInitSymbol(sym.get)
-				else throw new RuntimeException("findInitSymbol failed during lookup in DynamicRecords while looking for " + sym + ".")
-			}
-		} 
-		case TP(sym, Reflect(DynamicRecordHashMapNew(_,_),_,_)) => sym
-		case sy@_ => throw new RuntimeException("findInitSymbol failed during lookup in DynamicRecords while looking for " + sy + ".")
-    }
-  }
-
+ 
   def quoteSizeSymbol(m: Exp[_]): String = {
 	    val sizeSymbol = findInitSymbol(m)
 		"__" + quote(sizeSymbol) + "Size"
@@ -332,7 +309,7 @@ trait ScalaGenDynamicRecordHashMap extends ScalaGenBase with GenericNestedCodege
     case m@DynamicRecordHashMapNew(spkey, spvalue) => {
         val key = if (spkey != "") spkey else remap(m.mK)
         val value = if (spvalue != "") spvalue else remap(m.mV)
-        stream.println("var " + quote(sym) + " = new Array[scala.collection.mutable.DefaultEntry[" + key + "," + value +"]](16)")
+        stream.println("var " + quote(sym) + " = new Array[" + value + "](16)")
         stream.println("var __" + quote(sym) + "Size = 0")
     }
     case DynamicRecordHashMapSize(m) => emitValDef(sym, quoteSizeSymbol(m))
@@ -346,7 +323,7 @@ trait ScalaGenDynamicRecordHashMap extends ScalaGenBase with GenericNestedCodege
         stream.println("}")
         stream.println(quote(m) + "(__idx) = __elem.next")
         stream.println(quoteSizeSymbol(m) + " -= 1")
-        stream.println("(__elem.key, __elem.value)")
+        stream.println("(__elem, __elem)")
         stream.println("}")
     }
     case DynamicRecordHashMapGetOrElseUpdate(m,k,v,h,e,d)  => {
@@ -366,7 +343,7 @@ trait ScalaGenDynamicRecordHashMap extends ScalaGenBase with GenericNestedCodege
         stream.println("     ((hc >>   8) &   0xFF00) |")
         stream.println("     ((hc <<   8) & 0xFF0000) |")
         stream.println("     ((hc << 24));")
-        stream.println("hc * 0x9e3775cd")
+        stream.println("hc = hc * 0x9e3775cd")
         stream.println("val rotation = bc % 32")
         stream.println("val improved = (hc >>> rotation) | (hc << (32 - rotation))")
         stream.println("val h = (improved >> (32 - bc)) & ones")
@@ -377,21 +354,21 @@ trait ScalaGenDynamicRecordHashMap extends ScalaGenBase with GenericNestedCodege
         stream = new PrintWriter(newSource)
         emitBlock(e)
         stream = savedStream
-        val outStream = newSource.toString.replaceAll(quote(d), "e.key")
+        val outStream = newSource.toString.replaceAll(quote(d), "e")
         stream.println(outStream)
         emitBlockResult(e)
         stream.println("}) e = e.next")
         stream.println("val " + quote(sym) + " = {")
         stream.println("if (e eq null) {")
-        stream.println("val entry = new scala.collection.mutable.DefaultEntry(" + quote(k) + ".clone, {")
+        stream.println("val entry = {")
         emitBlock(v)
         emitBlockResult(v)
-        stream.println("})")
+        stream.println("}")
         stream.println("entry.next = " + quote(m) + "(h)")
         stream.println(quote(m) + "(h) = entry")
         stream.println(quoteSizeSymbol(m) + " = " + quoteSizeSymbol(m) + " + 1")
-        stream.println("entry.value")
-        stream.println("} else e.value")
+        stream.println("entry")
+        stream.println("} else e")
         stream.println("}")
     }
     case _ => super.emitNode(sym, rhs)

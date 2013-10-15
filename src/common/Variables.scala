@@ -171,7 +171,28 @@ trait VariablesExp extends Variables with ImplicitOpsExp with VariableImplicits 
     case _ => super.copySyms(e)
   }
 
-
+  def findInitSymbol(s: Exp[_]): Exp[_] = {
+	findDefinition(s.asInstanceOf[Sym[_]]).get match {
+		case TP(_, Reflect(v @ ReadVar(Variable(x)),_,_)) => findInitSymbol(x)
+		case TP(_, Reflect(NewVar(x),_,_)) => {
+			if (x.tp != manifest[Nothing]) findInitSymbol(x)
+			else {
+				var sym : Option[Exp[_]] = None
+				globalDefs.find { x => x match {
+					case TP(_,Reflect(Assign(Variable(v1),v2),_,_)) => {
+						if (v1 == s) {sym = Some(v2); true}
+						else false;
+					}
+					case _ => false
+				} }
+				if (sym != None) findInitSymbol(sym.get)
+				else throw new RuntimeException("findInitSymbol failed (1) during lookup in DynamicRecords while looking for " + sym + ".")
+			}
+		} 
+		case TP(sym, _) => sym
+		case sy@_ => throw new RuntimeException("findInitSymbol failed (2) during lookup in DynamicRecords while looking for " + sy + ".")
+    }
+  }
 
   override def mirror[A:Manifest](e: Def[A], f: Transformer)(implicit pos: SourceContext): Exp[A] = (e match {
     case Reflect(NewVar(a), u, es) => reflectMirrored(Reflect(NewVar(f(a)), mapOver(f,u), f(es)))(mtype(manifest[A]))
@@ -224,7 +245,7 @@ trait ScalaGenVariables extends ScalaGenEffect {
             emitVarDef(obj, quote(init))
 		}
     }
-    case ReadVar(null) => emitVarDef(sym.asInstanceOf[Sym[Variable[Any]]], "null")
+    case ReadVar(null) => {} // emitVarDef(sym.asInstanceOf[Sym[Variable[Any]]], "null")
     case Assign(v @ Variable(a), b) => {
         val lhsIsNull = a match {
             case Def(Reflect(NewVar(y: Exp[_]),_,_)) => 
