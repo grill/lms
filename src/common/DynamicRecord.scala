@@ -9,6 +9,7 @@ import scala.virtualization.lms.util._
 import scala.reflect.SourceContext
 
 object DynamicRecordsMap extends Serializable {
+    // We want to be able to call the scala compiler without generating code
     var mapInitialized: Boolean = false;
     var dataPath: String = null;
     var registeredDynamicRecords: HashMap[String, List[(String, Class[_])]] = null
@@ -27,7 +28,7 @@ object DynamicRecordsMap extends Serializable {
     }
  
     def writeRecord(out: PrintWriter, className: String, attrs: List[(String, Class[_])]) {
-        out.print("class " + className + " extends Serializable with Cloneable " +/*scala.virtualization.lms.common.DynamicRecordExp*/ " {\n")
+        out.print("class " + className + " extends Serializable" +/*scala.virtualization.lms.common.DynamicRecordExp*/ " {\n")
         for ((p1,p2) <- attrs) {
              val str = {
                  if (ClassManifest.fromClass(p2) == classManifest[Array[Byte]])
@@ -35,21 +36,11 @@ object DynamicRecordsMap extends Serializable {
                  else 
                     p2.toString.replaceAll("class ","").replaceAll("int", "scala.Int").replaceAll("double","scala.Double").replaceAll("char", "Char").replaceAll("long", "scala.Long")
              }
-             out.print("var " + p1 + ": " + str + " = null.asInstanceOf[" + str + "];\n")
+             out.print("private[this] final var _" + p1 + ": " + str + " = null.asInstanceOf[" + str + "];\n")
+			 out.println("@inline final def " + p1 + " = _" + p1)
+			 out.println("@inline final def " + p1 + "_=(x:" + str + ") = _" + p1 + " = x ")
         }
         out.println("@transient var next: " + className + " = null ")
-        // Override clone 
-        out.println("override def clone() = {")
-        out.println("val __copy  = new " + className + "()")
-        out.print( (for ((p1,p2) <- attrs) yield 
-            if (ClassManifest.fromClass(p2) == classManifest[Array[Byte]]) {
-                "__copy." + p1 + " = new Array[Byte](this." + p1 + ".size)" + "\n" +
-                "Array.copy(this." + p1 + ", 0, __copy." + p1 + ", 0, this." + p1 + ".size)\n"
-            }
-            else "__copy." + p1 + " = this." + p1 + "\n" 
-        ).mkString )
-        out.println("__copy")
-        out.println("}")
         // Custom toString function
         out.print("override def toString() = {\n\"\"+")
         out.print( (for ((p1,p2) <- attrs) yield 
@@ -103,7 +94,8 @@ object DynamicRecordsMap extends Serializable {
             // Register for first use
             registeredDynamicRecords += (name -> attrs)
             // Write to file (for persistence)
-            val writer = new PrintWriter(new java.io.File(dataPath + name + ".scala"))
+			val filename = dataPath + name + ".scala"
+            val writer = new PrintWriter(new java.io.File(filename))
             writeRecord(writer, name, attrs)
             writer.close()
         }
@@ -122,8 +114,7 @@ trait DynamicRecord extends Base with Serializable with VariablesExp {
 
 	class DynamicRecordOps(x: Rep[DynamicRecord]) {
         def get(field: Rep[Any]) = dynamicRecordGet(x, field)
-		def set(field: Rep[Any], value: Block[Any]) = dynamicRecordSet(x, field, value)
-		def set(field: Rep[Any], value: => Rep[Any]) = dynamicRecordSet(x, field, value)
+		def set(field: Rep[Any], value: Rep[Any]) = dynamicRecordSet(x, field, value)
         def foreach(f: Rep[DynamicRecord] => Rep[Unit]) = dynamicRecordForEach(x,f)
     }
 	implicit def varDynamicType2dynamicRecordOps(x: Var[DynamicRecord]) = new DynamicRecordOps(readVar(x))
@@ -133,12 +124,7 @@ trait DynamicRecord extends Base with Serializable with VariablesExp {
 
     def newDynamicRecord(name: String, reuse: Boolean = false): Rep[DynamicRecord]
 	def dynamicRecordGet(x: Rep[DynamicRecord], field: Rep[Any]): Rep[Any]
-	def dynamicRecordSet(x: Rep[DynamicRecord], field: Rep[Any], value: Block[Any]): Rep[Unit]
-	def dynamicRecordSet(x: Rep[DynamicRecord], field: Rep[Any], value: => Rep[Any]): Rep[Unit] = {
-        // By using Block[T], we can avoid creating temporary val when you only copy from another
-        // record (e.g. case of projections)
-        dynamicRecordSet(x,field, reifyEffects(value))
-    }
+	def dynamicRecordSet(x: Rep[DynamicRecord], field: Rep[Any], value: Rep[Any]): Rep[Unit]
     def dynamicRecordForEach(x: Rep[DynamicRecord], f: Rep[DynamicRecord] => Rep[Unit]): Rep[Unit]
     val NullDynamicRecord = unit(null).asInstanceOf[Rep[DynamicRecord]]
 }
@@ -146,26 +132,25 @@ trait DynamicRecord extends Base with Serializable with VariablesExp {
 trait DynamicRecordExp extends DynamicRecord with BaseExp with EffectExp {
     case class NewDynamicRecordObj(n: String) extends Def[DynamicRecord]
 	case class DynamicRecordGet(x: Rep[DynamicRecord], field: Rep[Any]) extends Def[Any]
-	case class DynamicRecordSet(x: Rep[DynamicRecord], field: Rep[Any], value: Block[Any]) extends Def[Unit]
+	case class DynamicRecordSet(x: Rep[DynamicRecord], field: Rep[Any], value: Rep[Any]) extends Def[Unit]
     case class DynamicRecordForEach(l: Rep[DynamicRecord], x: Sym[DynamicRecord], block: Block[Unit]) extends Def[Unit]
 
     def newDynamicRecord(name: String, reuse: Boolean = false) = 
         if (reuse) NewDynamicRecordObj(name) else reflectMutable(NewDynamicRecordObj(name))
 
 	def dynamicRecordGet(x: Rep[DynamicRecord], field: Rep[Any]) = {
-/*        val key = (x.toString, field.toString)
+        val key = (x.toString, field.toString)
         DynamicRecordEffectsMap.effectsMap.get(key) match {
-            case Some(e) => e.asInstanceOf[Rep[_]]
-            case None => {*/
-                //val rE = 
-				reflectWrite(x)(DynamicRecordGet(x, field))
-/*                DynamicRecordEffectsMap.effectsMap += key -> rE
+            case Some(e) => e.asInstanceOf[Sym[_]]
+            case None => {
+                val rE = reflectWrite(x)(DynamicRecordGet(x, field))
+                DynamicRecordEffectsMap.effectsMap += key -> rE
                 rE
             }
-        }*/
+        }
     }
 
-	def dynamicRecordSet(x: Rep[DynamicRecord], field: Rep[Any], value: Block[Any]) = { 
+	def dynamicRecordSet(x: Rep[DynamicRecord], field: Rep[Any], value: Rep[Any]) = { 
         val key = (x.toString, field.toString)
         // Forces new gets that follow to re-read the entry.
         val e = DynamicRecordEffectsMap.effectsMap.remove(key) 
@@ -180,19 +165,16 @@ trait DynamicRecordExp extends DynamicRecord with BaseExp with EffectExp {
     
     override def syms(e: Any): List[Sym[Any]] = e match {
         case DynamicRecordForEach(a, x, body) => syms(a):::syms(body)
-        case DynamicRecordSet(a, x, body) => syms(a):::syms(body)
         case _ => super.syms(e)
     }
 
     override def boundSyms(e: Any): List[Sym[Any]] = e match {
         case DynamicRecordForEach(a, x, body) => x :: effectSyms(body)
-        case DynamicRecordSet(a, x, body) => effectSyms(x)::: effectSyms(body)
         case _ => super.boundSyms(e)
     }
 
     override def symsFreq(e: Any): List[(Sym[Any], Double)] = e match {
         case DynamicRecordForEach(a, x, body) => freqNormal(a):::freqHot(body)
-        case DynamicRecordSet(a, x, body) => freqNormal(a):::freqHot(body)
         case _ => super.symsFreq(e)
     }  
 }
@@ -205,12 +187,8 @@ trait ScalaGenDynamicRecord extends ScalaGenBase with GenericNestedCodegen {
         rhs match {
             case NewDynamicRecordObj(x) => emitValDef(sym, "new " + x + "()")
 		    case DynamicRecordGet(x, field) => emitValDef(sym, quote(x) + "." + quote(field).replaceAll("\"",""))
-		    case DynamicRecordSet(x, field, value) => {
-                stream.println(quote(x) + "." + quote(field).replaceAll("\"","") + " = {")
-                emitBlock(value)
-                emitBlockResult(value)
-                stream.println("}")
-            }
+		    case DynamicRecordSet(x, field, value) =>
+                stream.println(quote(x) + "." + quote(field).replaceAll("\"","") + " = " + quote(value))
             case DynamicRecordForEach(x, init, block) => 
                 stream.println("val x" + sym.toString.replace("Sym(","").replace(")","") + " = {")
                 stream.println("\tvar " + quote(init) + "=" + quote(x))
@@ -335,10 +313,8 @@ trait ScalaGenDynamicRecordHashMap extends ScalaGenBase with GenericNestedCodege
         stream.println("bc = bc + (bc >>> 8);")
         stream.println("bc = bc + (bc >>> 16);")
         stream.println("bc = bc & 0x3f;")
-        stream.println("var hc = {")
         emitBlock(h)
-        emitBlockResult(h)
-        stream.println("} * 0x9e3775cd")
+        stream.println("var hc = " + quote(getBlockResult(h)) + " * 0x9e3775cd")
         stream.println("hc = ((hc >>> 24)           ) |")
         stream.println("     ((hc >>   8) &   0xFF00) |")
         stream.println("     ((hc <<   8) & 0xFF0000) |")
@@ -358,17 +334,13 @@ trait ScalaGenDynamicRecordHashMap extends ScalaGenBase with GenericNestedCodege
         stream.println(outStream)
         emitBlockResult(e)
         stream.println("}) e = e.next")
-        stream.println("val " + quote(sym) + " = {")
+        stream.println("var " + quote(sym) + " = e")
         stream.println("if (e eq null) {")
-        stream.println("val entry = {")
         emitBlock(v)
-        emitBlockResult(v)
-        stream.println("}")
-        stream.println("entry.next = " + quote(m) + "(h)")
-        stream.println(quote(m) + "(h) = entry")
+        stream.println(quote(sym) + " = " + quote(getBlockResult(v)))
+        stream.println(quote(sym) + ".next = " + quote(m) + "(h)")
+        stream.println(quote(m) + "(h) = " + quote(sym))
         stream.println(quoteSizeSymbol(m) + " = " + quoteSizeSymbol(m) + " + 1")
-        stream.println("entry")
-        stream.println("} else e")
         stream.println("}")
     }
     case _ => super.emitNode(sym, rhs)

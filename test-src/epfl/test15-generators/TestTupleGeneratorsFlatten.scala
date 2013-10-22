@@ -74,6 +74,7 @@ trait TupledGeneratorFlattenProg extends K3PersistentCollectionOps with NumericO
 class TestTupledGeneratorFlatten extends FileDiffSuite {
 
   val prefix = "test-out/epfl/test15-"
+  Config.verbosity = 0
 
   def testgenerator1 = {
     withOutFile(prefix+"tupled-generator-flatten"){

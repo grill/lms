@@ -6,6 +6,7 @@ import scala.virtualization.lms.util._
 
 import scala.sys.process._
 import scala.tools.nsc._
+import scala.tools.nsc.settings._
 import scala.tools.nsc.util._
 import scala.tools.nsc.reporters._
 import scala.tools.nsc.io._
@@ -46,6 +47,7 @@ object ScalaCompile {
       case _ => System.getProperty("sun.boot.class.path")
     }
     settings.encoding.value = "UTF-8"
+	settings.processArguments(List("-optimise", "-Yinline-warnings"), true)
 
     // Create output directory if it does not exist
     val f = new java.io.File(ScalaCompile.workingDir)

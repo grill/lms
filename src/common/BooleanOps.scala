@@ -85,7 +85,7 @@ trait ScalaGenBooleanOps extends ScalaGenBase with GenericNestedCodegen {
         	stream.println("if (" + quote(lhs) + " == true) {")
 	        emitBlock(rhs)
     	    emitBlockResult(rhs)
-        	stream.println("} else false")
+        	stream.print("} else false")
       	}
       	emitValDef(sym, strWriter.toString)
     case BooleanOr(lhs,rhs) => emitValDef(sym, quote(lhs) + " || " + quote(rhs))

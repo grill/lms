@@ -1,0 +1,44 @@
+1) Inlining fix
+
+There is a problem with the inliner where multiple _explicit_ @inline
+annotations were stopping the compiler from actually inlining these methods. 
+The following change in file 
+
+	src/compiler/scala/tools/nsc/backend/opt/Inliners.scala 
+
+as documented here 
+
+	https://github.com/magarciaEPFL/scala/commit/39007f1d51affb9b56b4d4347ada26574b49960b
+
+fixes this problem
+
+-            def isApply     = concreteMethod.name == nme.apply
+-
+-            def isCountable = !(
+-                 isClosureClass(receiver)
+-              || isApply
+-              || isMonadicMethod(concreteMethod)
+-              || receiver.enclosingPackage == definitions.RuntimePackage
+-            )   // only count non-closures
+-
+       
++                   /* count only callees other than:
++                    *  (a) methods owned by anon-closure-classes;
++                    *  (b) @inline-marked methods;
++                    *  (c) `foreach`, `filter`, `withFilter`, `map`, `flatMap`;
++                    *  (d) those in RuntimePackage;
++                    *  (e) apply methods
++                    */
++                   val isCountable = !(
++                        isClosureClass(receiver)
++                     || hasInline(concreteMethod)
++                     || hasInline(inc.sym)
++                     || isMonadicMethod(concreteMethod)
++                     || (receiver.enclosingPackage == definitions.RuntimePackage)
++                     || (concreteMethod.name == nme.apply)
++                   )
+                    if (isCountable) { count += 1 };
+                    pair.doInline(bb, i)
+
+Basically move the definition of isCountable before the if check, change it to
+what is mentioned above, and remove the isApply method (unnecessary)
