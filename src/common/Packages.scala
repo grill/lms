@@ -13,14 +13,6 @@ trait LiftScala extends LiftAll with LiftVariables with LiftEquals {
 }
 
 trait ScalaOpsPkg extends Base
-/*
-<<<<<<< HEAD
-    with ImplicitOps with NumericOps with FractionalOps with OrderingOps with StringOps
-    //with RangeOps
-    with IOOps with ArrayOps with BooleanOps with PrimitiveOps with MiscOps
-    with Equal with IfThenElse with Variables with While with TupleOps with ListOps
-=======
-*/
     with Structs with ImplicitOps with NumericOps with FractionalOps with OrderingOps with StringOps
     with RangeOps with IOOps with ArrayOps with BooleanOps with PrimitiveOps with MiscOps
     with TupledFunctions with Equal with IfThenElse with Variables with While with TupleOps with ListOps
@@ -28,15 +20,6 @@ trait ScalaOpsPkg extends Base
     with DateOps with GregorianCalendarOps with SimpleDateFormatOps with UncheckedOps
 
 trait ScalaOpsPkgExp extends ScalaOpsPkg
-/*
-<<<<<<< HEAD
-    with ImplicitOpsExp with NumericOpsExp with FractionalOpsExp with OrderingOpsExp with StringOpsExp
-    //with RangeOpsExp
-    with IOOpsExp with ArrayOpsExp with BooleanOpsExp with PrimitiveOpsExp with MiscOpsExp
-    //with FunctionsExp
-    with EqualExp with IfThenElseExp with VariablesExp with WhileExp with TupleOpsExp with ListOpsExp
-=======
-*/
     with StructExp with ImplicitOpsExp with NumericOpsExp with FractionalOpsExp with OrderingOpsExp with StringOpsExp
     with RangeOpsExp with IOOpsExp with ArrayOpsExp with BooleanOpsExp with PrimitiveOpsExp with MiscOpsExp
     with TupledFunctionsRecursiveExp with EqualExp with IfThenElseExp with VariablesExp with WhileExp with TupleOpsExp with ListOpsExp
@@ -53,19 +36,12 @@ trait ScalaOpsPkgExpOpt extends ScalaOpsPkgExp
 /**
  * Code gen: each target must define a code generator package.
  */
-
+trait COpsPkg extends ScalaOpsPkg 
+trait COpsPkgExp extends ScalaOpsPkgExp 
 
 /////////
 // Scala
 trait ScalaCodeGenPkg extends ScalaGenImplicitOps with ScalaGenNumericOps with ScalaGenFractionalOps with ScalaGenOrderingOps
-/*
-<<<<<<< HEAD
-    with ScalaGenStringOps 
-    //with ScalaGenRangeOps
-    with ScalaGenIOOps with ScalaGenArrayOps with ScalaGenBooleanOps
-    with ScalaGenPrimitiveOps with ScalaGenMiscOps //with ScalaGenFunctions 
-    with ScalaGenEqual with ScalaGenIfThenElse
-=======*/
     with ScalaGenStringOps with ScalaGenRangeOps with ScalaGenIOOps with ScalaGenArrayOps with ScalaGenBooleanOps
     with ScalaGenPrimitiveOps with ScalaGenMiscOps with ScalaGenTupledFunctions with ScalaGenEqual with ScalaGenIfThenElse
     with ScalaGenVariables with ScalaGenWhile with ScalaGenTupleOps with ScalaGenListOps
@@ -82,7 +58,7 @@ trait CCodeGenPkg extends CGenDSLOps with CGenImplicitOps with CGenNumericOps wi
     with CGenPrimitiveOps with CGenMiscOps /*with CGenFunctions*/ with CGenEqual with CGenIfThenElse
     with CGenVariables with CGenWhile
     with CGenMathOps with CGenCastingOps with CGenSetOps with CGenArrayBufferOps with CGenUncheckedOps
-    { val IR: ScalaOpsPkgExp  }
+    { val IR: COpsPkgExp  }
 
 ///////
 // Cuda

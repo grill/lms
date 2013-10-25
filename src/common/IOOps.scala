@@ -225,6 +225,12 @@ trait CLikeGenIOOps extends CLikeGenBase {
   import IR._
 
   override def emitNode(sym: Sym[Any], rhs: Def[Any]) = rhs match {
+    case ObjFileApply(dir) => emitValDef(sym, "fopen(" + quote(dir) + ", \"rw\")")
+    case ObjFisApply(s) => emitValDef(sym, "new java.io.FileInputStream(" + quote(s) + ")")
+    case ObjOosApply(s,x) => quote(s)
+	case ObjFosApply(s) => quote(s)
+    case ObjOosWriteObject(s, elem) => stream.println(quote(s) + ".writeObject(" + quote(elem) + ")")
+    case ObjOosClose(s) => stream.println("fclose(" + quote(s) + ");")
     case ObjBrApply(f) => throw new GenerationFailedException("CLikeGenIOOps: Java IO operations are not supported")
     case ObjFrApply(s) => throw new GenerationFailedException("CLikeGenIOOps: Java IO operations are not supported")
     case BrReadline(b) => throw new GenerationFailedException("CLikeGenIOOps: Java IO operations are not supported")

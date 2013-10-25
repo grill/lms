@@ -26,80 +26,7 @@ object DynamicRecordsMap extends Serializable {
         dataPath = rootFolder 
         registeredDynamicRecords = new HashMap[String, List[(String, Class[_])]]
     }
- 
-    def writeRecord(out: PrintWriter, className: String, attrs: List[(String, Class[_])]) {
-        out.print("class " + className + " extends Serializable" +/*scala.virtualization.lms.common.DynamicRecordExp*/ " {\n")
-        for ((p1,p2) <- attrs) {
-             val str = {
-                 if (ClassManifest.fromClass(p2) == classManifest[Array[Byte]])
-                    "Array[Byte]"
-                 else 
-                    p2.toString.replaceAll("class ","").replaceAll("int", "scala.Int").replaceAll("double","scala.Double").replaceAll("char", "Char").replaceAll("long", "scala.Long")
-             }
-             out.print("private[this] final var _" + p1 + ": " + str + " = null.asInstanceOf[" + str + "];\n")
-			 out.println("@inline final def " + p1 + " = _" + p1)
-			 out.println("@inline final def " + p1 + "_=(x:" + str + ") = _" + p1 + " = x ")
-        }
-        out.println("@transient var next: " + className + " = null ")
-        // Custom toString function
-        out.print("override def toString() = {\n\"\"+")
-        out.print( (for ((p1,p2) <- attrs) yield 
-            if (ClassManifest.fromClass(p2) == classManifest[Array[Byte]]) "new String(" + p1 + ")" 
-            else if (p1.contains("DATE")) "{new java.util.Date(" + p1 + ")}"
-            else p1
-        ).mkString("+\"|\"+") )
-        out.print("}\n");
-        // Custom serialization/deserialization routines
-        out.println("@throws(classOf[java.io.IOException])")
-        out.println("private def writeObject(out: java.io.ObjectOutputStream): Unit = {")
-        for ((p1,p2) <- attrs) {
-            ClassManifest.fromClass(p2) match {
-                case m if m <:< classManifest[scala.Int]        => out.println("out.writeInt(" + p1 + ")")
-                case m if m <:< classManifest[scala.Double]     => out.println("out.writeDouble(" + p1 + ")")
-                case m if m <:< classManifest[scala.Char]       => out.println("out.writeChar(" + p1 + ")")
-                case m if m <:< classManifest[scala.Long]       => out.println("out.writeLong(" + p1 + ")")
-                case m if m <:< classManifest[java.lang.String] => out.println("out.writeUTF(" + p1 + ")")
-                case m if m == classManifest[Array[Byte]]       => {
-                    out.println("out.writeInt(" + p1 +".length)")
-                    out.println("out.write(" + p1 + ")")
-                }
-                case _ => out.println("out.writeObject(" + p1 + ")")
-            }
-        }
-        out.println("}")
-        out.println("@throws(classOf[java.io.IOException])")
-        out.println("private def readObject(in: java.io.ObjectInputStream): Unit = {")
-        out.println("var length: Int = 0");
-        for ((p1,p2) <- attrs) {
-            ClassManifest.fromClass(p2) match {
-                case m if m <:< classManifest[scala.Int]        => out.println(p1 + " = in.readInt()")
-                case m if m <:< classManifest[scala.Double]     => out.println(p1 + " = in.readDouble()")
-                case m if m <:< classManifest[scala.Char]       => out.println(p1 + " = in.readChar()")
-                case m if m <:< classManifest[scala.Long]       => out.println(p1 + " = in.readLong()")
-                case m if m <:< classManifest[java.lang.String] => out.println(p1 + " = in.readUTF()")
-                case m if m == classManifest[Array[Byte]]       => {
-                    out.println(p1 + " = new Array[Byte](in.readInt())")
-                    out.println("in.read(" + p1 + ", 0, " + p1 + ".length)")
-                }
-                case _ => out.println(p1 + " = in.readObject().asInstanceOf[" + p2.toString.replaceAll("class ","") + "]")
-            }
-        }
-        out.println("}")
-        out.println("}") // End of class
-        out.flush
-    }
 
-	def newDynamicRecordType(name: String, attrs: List[(String, Class[_])]) {
-        if (registeredDynamicRecords.get(name) == None) {
-            // Register for first use
-            registeredDynamicRecords += (name -> attrs)
-            // Write to file (for persistence)
-			val filename = dataPath + name + ".scala"
-            val writer = new PrintWriter(new java.io.File(filename))
-            writeRecord(writer, name, attrs)
-            writer.close()
-        }
-    }
 }
 
 object DynamicRecordEffectsMap {
@@ -204,9 +131,132 @@ trait ScalaGenDynamicRecord extends ScalaGenBase with GenericNestedCodegen {
 
     override def emitDataStructures(out: PrintWriter) {
         DynamicRecordsMap.registeredDynamicRecords.foreach(
-            rec => DynamicRecordsMap.writeRecord(out, rec._1, rec._2)
+            rec => writeRecord(out, rec._1, rec._2)
         )
         //DynamicRecordsMap.registeredDynamicRecords.clear
+    }
+
+	def writeRecord(out: PrintWriter, className: String, attrs: List[(String, Class[_])]) {
+        out.print("class " + className + " extends Serializable" +/*scala.virtualization.lms.common.DynamicRecordExp*/ " {\n")
+        for ((p1,p2) <- attrs) {
+             val str = {
+                 if (ClassManifest.fromClass(p2) == classManifest[Array[Byte]])
+                    "Array[Byte]"
+                 else 
+                    p2.toString.replaceAll("class ","").replaceAll("int", "scala.Int").replaceAll("double","scala.Double").replaceAll("char", "Char").replaceAll("long", "scala.Long")
+             }
+             out.print("private[this] final var _" + p1 + ": " + str + " = null.asInstanceOf[" + str + "];\n")
+			 out.println("@inline final def " + p1 + " = _" + p1)
+			 out.println("@inline final def " + p1 + "_=(x:" + str + ") = _" + p1 + " = x ")
+        }
+        out.println("@transient var next: " + className + " = null ")
+        // Custom toString function
+        out.print("override def toString() = {\n\"\"+")
+        out.print( (for ((p1,p2) <- attrs) yield 
+            if (ClassManifest.fromClass(p2) == classManifest[Array[Byte]]) "new String(" + p1 + ")" 
+            else if (p1.contains("DATE")) "{new java.util.Date(" + p1 + ")}"
+            else p1
+        ).mkString("+\"|\"+") )
+        out.print("}\n");
+        // Custom serialization/deserialization routines
+        out.println("@throws(classOf[java.io.IOException])")
+        out.println("private def writeObject(out: java.io.ObjectOutputStream): Unit = {")
+        for ((p1,p2) <- attrs) {
+            ClassManifest.fromClass(p2) match {
+                case m if m <:< classManifest[scala.Int]        => out.println("out.writeInt(" + p1 + ")")
+                case m if m <:< classManifest[scala.Double]     => out.println("out.writeDouble(" + p1 + ")")
+                case m if m <:< classManifest[scala.Char]       => out.println("out.writeChar(" + p1 + ")")
+                case m if m <:< classManifest[scala.Long]       => out.println("out.writeLong(" + p1 + ")")
+                case m if m <:< classManifest[java.lang.String] => out.println("out.writeUTF(" + p1 + ")")
+                case m if m == classManifest[Array[Byte]]       => {
+                    out.println("out.writeInt(" + p1 +".length)")
+                    out.println("out.write(" + p1 + ")")
+                }
+                case _ => out.println("out.writeObject(" + p1 + ")")
+            }
+        }
+        out.println("}")
+        out.println("@throws(classOf[java.io.IOException])")
+        out.println("private def readObject(in: java.io.ObjectInputStream): Unit = {")
+        out.println("var length: Int = 0");
+        for ((p1,p2) <- attrs) {
+            ClassManifest.fromClass(p2) match {
+                case m if m <:< classManifest[scala.Int]        => out.println(p1 + " = in.readInt()")
+                case m if m <:< classManifest[scala.Double]     => out.println(p1 + " = in.readDouble()")
+                case m if m <:< classManifest[scala.Char]       => out.println(p1 + " = in.readChar()")
+                case m if m <:< classManifest[scala.Long]       => out.println(p1 + " = in.readLong()")
+                case m if m <:< classManifest[java.lang.String] => out.println(p1 + " = in.readUTF()")
+                case m if m == classManifest[Array[Byte]]       => {
+                    out.println(p1 + " = new Array[Byte](in.readInt())")
+                    out.println("in.read(" + p1 + ", 0, " + p1 + ".length)")
+                }
+                case _ => out.println(p1 + " = in.readObject().asInstanceOf[" + p2.toString.replaceAll("class ","") + "]")
+            }
+        }
+        out.println("}")
+        out.println("}") // End of class
+        out.flush
+    }
+
+	def newDynamicRecordType(name: String, attrs: List[(String, Class[_])]) {
+        if (DynamicRecordsMap.registeredDynamicRecords.get(name) == None) {
+            // Register for first use
+            DynamicRecordsMap.registeredDynamicRecords += (name -> attrs)
+            // Write to file (for persistence)
+			val filename = DynamicRecordsMap.dataPath + name + ".scala"
+            val writer = new PrintWriter(new java.io.File(filename))
+            writeRecord(writer, name, attrs)
+            writer.close()
+        }
+    }
+
+}
+
+trait CGenDynamicRecord extends CGenBase with GenericNestedCodegen {
+	val IR: DynamicRecordExp
+	import IR._
+ 
+	override def emitNode(sym: Sym[Any], rhs: Def[Any]) =  { 
+		rhs match {
+    	    case NewDynamicRecordObj(x) => allocStruct(sym, x, stream)
+			case DynamicRecordGet(x, field) => emitValDef(sym, quote(x) + "->" + quote(field).replaceAll("\"",""))
+			case DynamicRecordSet(x, field, value) =>
+        	    stream.println(quote(x) + "->" + quote(field).replaceAll("\"","") + " = " + quote(value) + ";")
+	        case DynamicRecordForEach(x, init, block) => 
+    	        stream.println("val x" + sym.toString.replace("Sym(","").replace(")","") + " = {")
+        	    stream.println("\tvar " + quote(init) + "=" + quote(x))
+            	stream.println("\twhile (" + quote(init) + " != null) {")
+	            emitBlock(block)
+    	        stream.println("\t\t" + quote(init) + "=" + quote(init) + ".next")
+        	    stream.println("\t}")
+            	stream.println("}")              
+			case _ => super.emitNode(sym, rhs)
+		}
+	}
+    
+    override def emitDataStructures(out: PrintWriter) {
+        DynamicRecordsMap.registeredDynamicRecords.foreach(
+            rec => writeRecord(out, rec._1, rec._2)
+        )
+        //DynamicRecordsMap.registeredDynamicRecords.clear
+    }
+
+	def writeRecord(out: PrintWriter, className: String, attrs: List[(String, Class[_])]) {
+		out.print("struct " + className + " {\n")
+		for ((p1,p2) <- attrs) out.print(remapInternal(scala.reflect.ClassManifestFactory.fromClass(p2).toString) + " " + p1 + ";\n")
+        out.println("struct " + className + "* next;")
+		out.print("};\n")
+        out.flush
+    }
+
+	def newDynamicRecordType(name: String, attrs: List[(String, Class[_])]) {
+        if (DynamicRecordsMap.registeredDynamicRecords.get(name) == None) {
+            // Register for first use
+            DynamicRecordsMap.registeredDynamicRecords += (name -> attrs)
+			val filename = DynamicRecordsMap.dataPath + name + ".c"
+            val writer = new PrintWriter(new java.io.File(filename))
+            writeRecord(writer, name, attrs)
+        }
     }
 }
 
@@ -231,7 +281,6 @@ trait DynamicRecordHashMap extends Base with HashMapOps with Variables {
   def hashmap_getorelseupdate[K:Manifest,V:Manifest](m: Rep[HashMap[K,V]], k: Rep[K], v: => Rep[V], h: Rep[DynamicRecord] => Rep[Int] = null, e: (Rep[DynamicRecord],Rep[DynamicRecord])=>Rep[Boolean] = null)(implicit pos: SourceContext): Rep[V]
   override def hashmap_mkString[K: Manifest, V: Manifest](m: Rep[HashMap[K,V]], v: Rep[String])(implicit pos: SourceContext): Rep[String]
 }
-
 
 trait DynamicRecordHashMapExp extends DynamicRecordHashMap with EffectExp with HashMapOpsExp with DynamicRecordExp {
   abstract class DynamicRecordHashMapDef[K:Manifest,V:Manifest,R:Manifest] extends Def[R] {

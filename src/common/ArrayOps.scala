@@ -300,5 +300,17 @@ trait CLikeGenArrayOps extends BaseGenArrayOps with CLikeGenBase {
 
 trait CudaGenArrayOps extends CudaGenBase with CLikeGenArrayOps
 trait OpenCLGenArrayOps extends OpenCLGenBase with CLikeGenArrayOps
-trait CGenArrayOps extends CGenBase with CLikeGenArrayOps
+trait CGenArrayOps extends CGenBase with CLikeGenArrayOps {
+	val IR: ArrayOpsExp
+  	import IR._
 
+  	override def emitNode(sym: Sym[Any], rhs: Def[Any]) = {
+    	rhs match {
+    		case a@ArrayNew(n, sType) => {
+        		val arrType = if (quote(sType) != "\"\"") remapInternal(quote(sType).replaceAll("\"","")) else remap(a.m)
+		        emitValDef(sym, getMemoryAllocString(quote(n), arrType))
+			}
+        	case _ => super.emitNode(sym, rhs)
+		}
+	}
+}

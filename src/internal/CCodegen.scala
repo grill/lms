@@ -111,7 +111,15 @@ trait CCodegen extends CLikeCodegen {
   def emitForwardDef[A:Manifest](args: List[Manifest[_]], functionName: String, out: PrintWriter) = {
     out.println(remap(manifest[A])+" "+functionName+"("+args.map(a => remap(a)).mkString(", ")+");")
   }
-      
+     
+  def allocStruct(sym: Sym[Any], structName: String, out: PrintWriter) {
+  		out.println("struct " + structName + "* " + quote(sym) + " = (struct " + structName + "*)malloc(sizeof(struct " + structName + "));")
+  }
+
+  def getMemoryAllocString(count: String, memType: String): String = {
+  		"(" + memType + "*)malloc(" + count + " * sizeof(" + memType + "));"
+  }
+ 
   def emitSource[A:Manifest](args: List[Sym[_]], body: Block[A], functionName: String, out: PrintWriter, dynamicReturntype: String = null, serializable: Boolean = false) = {
 
     val sA = remap(manifest[A])
@@ -124,7 +132,9 @@ trait CCodegen extends CLikeCodegen {
                      "#include <stdlib.h>\n" +
                      "#include <stdbool.h>"
       )
-
+	  stream.println("\n/* DATASTRUCTURES */")
+	  emitDataStructures(stream)
+	  stream.println("/* END OF DATASTRUCTURES */\n")
 
       // TODO: static data
 
@@ -163,7 +173,7 @@ trait CCodegen extends CLikeCodegen {
     if (remap(sym.tp) == "void")
       stream.println(rhs + "; // " + quote(sym, true))
     else
-      stream.println("const " + remap(sym.tp) + " " + quote(sym) + " = " + rhs + ";")
+      stream.println(remap(sym.tp) + " " + quote(sym) + " = " + rhs + ";")
   }
 
   def emitAssignment(sym: Sym[Any], lhs:String, rhs: String): Unit = {
@@ -238,28 +248,43 @@ trait CCodegen extends CLikeCodegen {
 
     stream.println(") {")
   }
-  
-  override def remap[A](m: Manifest[A]) : String = {
-    if (m.erasure == classOf[Variable[Any]] ) {
-      remap(m.typeArguments.head)
-    }
-    else {
-      m.toString match {
+
+  def remapInternal(m: String): String = {
+	m match {
+		// Happens only if remapInternal is called immediately, without remap
+		case m if m.startsWith("Array") => remapInternal(m.substring(m.indexOf("[") + 1, m.indexOf("]"))) + "*"
         case "Int" => "int"
         case "Long" => "long"
         case "Float" => "float"
         case "Double" => "double"
         case "Boolean" => "bool"
         case "Unit" => "void"
-        case _ => throw new GenerationFailedException("CGen: remap(m) : Unknown data type (%s)".format(m.toString))
-      }
+		case "Any" => "void*"
+		case "Char" | "byte" | "Byte" => "char" // A byte is a char in C
+		case "java.lang.Character" => "char"
+		case "java.lang.String" => "const char*"
+		case "java.io.File" => "FILE*"
+		case "java.util.Scanner" => "FILE*" // A scanner is basically mapped through basic file I/O
+        case _ => {
+			System.err.println("CGen: remap(m) : Unknown data type (%s)".format(m.toString))
+			m // This cases shouldn't be happening. Throw an error and return it as is ( This is better than crashing for development)
+		}
+   }
+  }
+  
+  override def remap[A](m: Manifest[A]) : String = {
+    if (m.erasure == classOf[Variable[Any]] ) {
+      remap(m.typeArguments.head)
     }
+	else if (m.erasure.isArray) remapInternal(m.erasure.getComponentType.toString) + "*"
+    else remapInternal(m.toString)
   }
 
   /*******************************************************
    * Methods below are for emitting helper functions
    *******************************************************/
-
+  // Yannis: Should these things be here? They do not seem to be general C, but
+  // rather CUDA like programming. 
   def emitCopyInputHtoD(sym: Sym[Any], ksym: List[Sym[Any]], contents: String) : String = {
     val out = new StringBuilder
     if(isObjectType(sym.tp)) {

@@ -54,9 +54,9 @@ testGrouping <<= definedTests in Test map { tests =>
 // Compiling option 2 : Patched scala compiler as specified in ScalaCompilerPatches.txt */
 //***************************************************************************************/
 
-scalaHome := Some(file("./patched-scala/build/pack"))
+scalaHome := Some(file("patched-scala/build/pack"))
 
-unmanagedBase <<= baseDirectory { base => base / "patched-scala/build/pack" }
+//unmanagedBase <<= baseDirectory { base => base / "patched-scala/build/pack" }
 
 unmanagedJars in Compile <<= baseDirectory map { base => (base ** "*.jar").classpath }
 
