@@ -30,10 +30,10 @@ trait ScalaGenDSLOps extends ScalaGenEffect with BaseGenDSLOps {
       val strWriter = new java.io.StringWriter
       val localStream = new PrintWriter(strWriter);
       withStream(localStream) {
-        stream.println("{ ")
-        emitBlock(b)
-        stream.println(quote(getBlockResult(b)))
-        stream.print("}")
+        gen"""{ 
+             |${nestedBlock(b)}
+             |$b
+             |}"""
       }
       emitValDef(sym, strWriter.toString)
 

@@ -27,7 +27,7 @@ class TestCGen extends FileDiffSuite {
     }
   }
 
-  trait Impl extends DSL with ScalaOpsPkgExp with TupledFunctionsRecursiveExp with UncheckedOpsExp { self => 
+  trait Impl extends DSL with COpsPkgExp with TupledFunctionsRecursiveExp with UncheckedOpsExp { self => 
     val codegen = new CCodeGenPkg with CGenVariables with CGenTupledFunctions with CGenUncheckedOps { val IR: self.type = self }
     Config.verbosity = 0
     def emitAll(): Unit = {
