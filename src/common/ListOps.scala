@@ -167,37 +167,37 @@ trait ScalaGenListOps extends BaseGenListOps with ScalaGenEffect {
   import IR._
 
   override def emitNode(sym: Sym[Any], rhs: Def[Any]) = rhs match {
-    case ListNew(xs) => emitValDef(sym, "List(" + (xs map {quote}).mkString(",") + ")")
-    case ListConcat(xs,ys) => emitValDef(sym, quote(xs) + " ::: " + quote(ys))
-    case ListCons(x, xs) => emitValDef(sym, quote(x) + " :: " + quote(xs))
-    case ListHead(xs) => emitValDef(sym, quote(xs) + ".head")
-    case ListTail(xs) => emitValDef(sym, quote(xs) + ".tail")
-    case ListIsEmpty(xs) => emitValDef(sym, quote(xs) + ".isEmpty")
-    case ListFromSeq(xs) => emitValDef(sym, "List(" + quote(xs) + ": _*)")
-    case ListMkString(xs) => emitValDef(sym, quote(xs) + ".mkString")
+    case ListNew(xs) => emitValDef(sym, src"List(${(xs map {quote}).mkString(",")})")
+    case ListConcat(xs,ys) => emitValDef(sym, src"$xs ::: $ys")
+    case ListCons(x, xs) => emitValDef(sym, src"$x :: $xs")
+    case ListHead(xs) => emitValDef(sym, src"$xs.head")
+    case ListTail(xs) => emitValDef(sym, src"$xs.tail")
+    case ListIsEmpty(xs) => emitValDef(sym, src"$xs.isEmpty")
+    case ListFromSeq(xs) => emitValDef(sym, src"List($xs: _*)")
+    case ListMkString(xs) => emitValDef(sym, src"$xs.mkString")
     case ListMap(l,x,blk) => 
       val strWriter = new java.io.StringWriter
       val localStream = new PrintWriter(strWriter);
       withStream(localStream) {
-        stream.println(quote(l) + ".map { " + quote(x) + " => ")
-        emitBlock(blk)
-        stream.println(quote(getBlockResult(blk)))
-        stream.print("}")
+        gen"""$l.map { $x => 
+             |${nestedBlock(blk)}
+             |$blk
+             |}"""
       }
       emitValDef(sym, strWriter.toString)
     case ListForeach(l,x,blk) => {
-      stream.println(quote(l) + ".foreach { " + quote(x) + " => ")
-      emitBlock(blk)
-      stream.println("}")
+      gen"""$l.foreach { $x => 
+           |${nestedBlock(blk)}
+           |}"""
     }
     case ListFlatMap(l, x, b) => {
       val strWriter = new java.io.StringWriter
       val localStream = new PrintWriter(strWriter);
       withStream(localStream) {
-        stream.println(quote(l) + ".flatMap { " + quote(x) + " => ")
-        emitBlock(b)
-        stream.println(quote(getBlockResult(b)))
-        stream.print("}")
+        gen"""$l.flatMap { $x => 
+             |${nestedBlock(b)}
+             |$b
+             |}"""
       }
       emitValDef(sym, strWriter.toString)
     }
@@ -205,10 +205,10 @@ trait ScalaGenListOps extends BaseGenListOps with ScalaGenEffect {
       val strWriter = new java.io.StringWriter
       val localStream = new PrintWriter(strWriter);
       withStream(localStream) {
-        stream.println(quote(l) + ".filter { " + quote(x) + " => ")
-        emitBlock(b)
-        stream.println(quote(getBlockResult(b)))
-        stream.print("}")
+        gen"""$l.filter { $x => 
+             |${nestedBlock(b)}
+             |$b
+             |}"""
       }
       emitValDef(sym, strWriter.toString)
     }
@@ -216,17 +216,17 @@ trait ScalaGenListOps extends BaseGenListOps with ScalaGenEffect {
       val strWriter = new java.io.StringWriter
       val localStream = new PrintWriter(strWriter);
       withStream(localStream) {
-        stream.println(quote(l) + ".sortBy { " + quote(x) + " => ")
-        emitBlock(blk)
-        stream.println(quote(getBlockResult(blk)))
-        stream.print("}")
+        gen"""$l.sortBy { $x => 
+             |${nestedBlock(blk)}
+             |$blk
+             |}"""
       }
       emitValDef(sym, strWriter.toString)
     }
-    case ListPrepend(l,e) => emitValDef(sym, quote(e) + " :: " + quote(l))    
-    case ListToArray(l) => emitValDef(sym, quote(l) + ".toArray")
-    case ListToSeq(l) => emitValDef(sym, quote(l) + ".toSeq")
-    case ListContains(l, e) => emitValDef(sym, quote(l) + ".contains(" + quote(e) + ")")
+    case ListPrepend(l,e) => emitValDef(sym, src"$e :: $l")    
+    case ListToArray(l) => emitValDef(sym, src"$l.toArray")
+    case ListToSeq(l) => emitValDef(sym, src"$l.toSeq")
+    case ListContains(l, e) => emitValDef(sym, src"$l.contains($e)")
     case _ => super.emitNode(sym, rhs)
   }
 }

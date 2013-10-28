@@ -92,30 +92,30 @@ trait ScalaGenSetOps extends BaseGenSetOps with ScalaGenEffect {
   import IR._
 
   override def emitNode(sym: Sym[Any], rhs: Def[Any]) = rhs match {
-    case SetNew(xs, mA) => emitValDef(sym, "collection.mutable.HashSet[" + remap(mA) + "](" + (xs map {quote}).mkString(",") + ")")
-    case SetContains(s,i) => emitValDef(sym, quote(s) + ".contains(" + quote(i) + ")")
-    case SetAdd(s,i) => emitValDef(sym, quote(s) + ".add(" + quote(i) + ")")
-    case SetRemove(s,i) => emitValDef(sym, quote(s) + ".remove(" + quote(i) + ")")
-    case SetSize(s) => emitValDef(sym, quote(s) + ".size")
-    case SetClear(s) => emitValDef(sym, quote(s) + ".clear()")
-    case SetToSeq(s) => emitValDef(sym, quote(s) + ".toSeq")
+    case SetNew(xs, mA) => emitValDef(sym, src"collection.mutable.HashSet[$mA](" + (xs map {quote}).mkString(",") + ")")
+    case SetContains(s,i) => emitValDef(sym, src"$s.contains($i)")
+    case SetAdd(s,i) => emitValDef(sym, src"$s.add($i)")
+    case SetRemove(s,i) => emitValDef(sym, src"$s.remove($i)")
+    case SetSize(s) => emitValDef(sym, src"$s.size")
+    case SetClear(s) => emitValDef(sym, src"$s.clear()")
+    case SetToSeq(s) => emitValDef(sym, src"$s.toSeq")
     case n@SetToArray(s) => //emitValDef(sym, quote(s) + ".toArray")
       emitValDef(sym, "{ // workaround for refinedManifest problem" +
-      "\nval out = " + quote(n.array) +
-      "\nval in = " + quote(s) + ".toSeq" +
-      "\nvar i = 0" +
-      "\nwhile (i < in.length) {" +
-      "\nout(i) = in(i)" +
-      "\ni += 1" +
-      "\n}" +
-      "\nout" +
-      "\n}")
+      src"\nval out = ${n.array}" +
+      src"\nval in = $s.toSeq" +
+      src"\nvar i = 0" +
+      src"\nwhile (i < in.length) {" +
+      src"\nout(i) = in(i)" +
+      src"\ni += 1" +
+      src"\n}" +
+      src"\nout" +
+      src"\n}")
     case SetForeach(a,x,block) => 
-      emitValDef(sym, quote(a) + ".foreach{")    
-      stream.println(quote(x) + " => ")
-      emitBlock(block)
-      stream.println(quote(getBlockResult(block)))
-      stream.println("}")
+      emitValDef(sym, src"$a.foreach{")    
+      gen"""$x => 
+           |${nestedBlock(block)}
+           |$block
+           |}"""
     case _ => super.emitNode(sym, rhs)
   }
 }

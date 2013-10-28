@@ -17,8 +17,10 @@ val x778 = x767 == x777
 val x779 = x776.tsk
 val x780 = x779 == "abstract"
 val x781 = if (x778 == true) {
+
 x780
 } else false
+
 val x784 = if (x781) {
 val x661 = new Schema.Record { val ignore = () }
 val x688 = List(x661)
@@ -31,8 +33,10 @@ x784
 }
 val x786 = x785.isEmpty
 val x788 = if (x765 == true) {
+
 x786
 } else false
+
 val x791 = if (x788) {
 val x661 = new Schema.Record { val ignore = () }
 val x688 = List(x661)

@@ -80,18 +80,18 @@ trait ScalaGenBooleanOps extends ScalaGenBase with GenericNestedCodegen {
   import IR._
 
   override def emitNode(sym: Sym[Any], rhs: Def[Any]) = rhs match {
-    case BooleanNegate(b) => emitValDef(sym, "!" + quote(b))
+    case BooleanNegate(b) => emitValDef(sym, src"!$b")
     case BooleanAnd(lhs,rhs) => 
 		val strWriter = new java.io.StringWriter
 		val localStream = new PrintWriter(strWriter);
       	withStream(localStream) {
-        	stream.println("if (" + quote(lhs) + " == true) {")
-	        emitBlock(rhs)
-    	    emitBlockResult(rhs)
-        	stream.print("} else false")
+      	  gen"""if ($lhs == true) {
+      	       |${nestedBlock(rhs)}
+      	       |$rhs
+      	       |} else false"""
       	}
       	emitValDef(sym, strWriter.toString)
-    case BooleanOr(lhs,rhs) => emitValDef(sym, quote(lhs) + " || " + quote(rhs))
+    case BooleanOr(lhs,rhs) => emitValDef(sym, src"$lhs || $rhs")
     case _ => super.emitNode(sym,rhs)
   }
 }
@@ -102,7 +102,7 @@ trait CLikeGenBooleanOps extends CLikeGenBase with GenericNestedCodegen {
 
   override def emitNode(sym: Sym[Any], rhs: Def[Any]) = {
     rhs match {
-  	  case BooleanNegate(b) => emitValDef(sym, "!" + quote(b))
+  	  case BooleanNegate(b) => emitValDef(sym, src"!$b")
       case b@BooleanAnd(lhs,rhs) => {
 			emitValDef(b.c, "0")
         	stream.println("if (" + quote(lhs) + ") {")

@@ -189,38 +189,38 @@ trait ScalaGenIOOps extends ScalaGenBase {
   import IR._
   
   override def emitNode(sym: Sym[Any], rhs: Def[Any]) = rhs match {
-    case ObjFileApply(dir) => emitValDef(sym, "new java.io.File(" + quote(dir) + ")")
-    case FileGetCanonicalFile(f) => emitValDef(sym, quote(f) + ".getCanonicalFile()")
-    case FileGetPath(f) => emitValDef(sym, quote(f) + ".getPath()")
-    case FileListFiles(f) => emitValDef(sym, quote(f) + ".listFiles()")
+    case ObjFileApply(dir) => emitValDef(sym, src"new java.io.File($dir)")
+    case FileGetCanonicalFile(f) => emitValDef(sym, src"$f.getCanonicalFile()")
+    case FileGetPath(f) => emitValDef(sym, src"$f.getPath()")
+    case FileListFiles(f) => emitValDef(sym, src"$f.listFiles()")
 	case FileClose(f) => throw new GenerationFailedException("File.close is not defined for Scala Generation, only for C! Maybe you meant to close the BufferedStreams instead.")
-    case ObjBrApply(f) => emitValDef(sym, "new java.io.BufferedReader(" + quote(f) + ")")
-    case ObjBwApply(f) => emitValDef(sym, "new java.io.BufferedWriter(" + quote(f) + ")")
-    case ObjFrApply(s) => emitValDef(sym, "new java.io.FileReader(" + quote(s) + ")")
-    case ObjFwApply(s) => emitValDef(sym, "new java.io.FileWriter(" + quote(s) + ")")
+    case ObjBrApply(f) => emitValDef(sym, src"new java.io.BufferedReader($f)")
+    case ObjBwApply(f) => emitValDef(sym, src"new java.io.BufferedWriter($f)")
+    case ObjFrApply(s) => emitValDef(sym, src"new java.io.FileReader($s)")
+    case ObjFwApply(s) => emitValDef(sym, src"new java.io.FileWriter($s)")
     case ObjOosApply(s,x) => 
         if (x == Const(true)) {
-            emitValDef(sym, "new java.io.ObjectOutputStream(" + quote(s) + "){")
-            stream.println("override protected def writeStreamHeader() {")
-            stream.println("reset();")
-            stream.println("}")
-            stream.println("}")
-        } else emitValDef(sym, "new java.io.ObjectOutputStream(" + quote(s) + ")")
-    case ObjOosWriteObject(s, elem) => stream.println(quote(s) + ".writeObject(" + quote(elem) + ")")
-    case ObjOosClose(s) => stream.println(quote(s) + ".close")
-    case ObjFosApply(s) => emitValDef(sym, "new java.io.FileOutputStream(" + quote(s) + ",true)")
-    case ObjFisApply(s) => emitValDef(sym, "new java.io.FileInputStream(" + quote(s) + ")")
-    case ObjOisApply(s) => emitValDef(sym, "new java.io.ObjectInputStream(" + quote(s) + ")")
-    case ObjOisClose(s) => emitValDef(sym, quote(s) + ".close")
-    case ObjOisAvailable(s) => emitValDef(sym, quote(s) + ".available")
+            emitValDef(sym, src"new java.io.ObjectOutputStream($s){")
+            gen"""override protected def writeStreamHeader() {
+                 |reset();
+                 |}
+                 |}"""
+        } else emitValDef(sym, src"new java.io.ObjectOutputStream($s)")
+    case ObjOosWriteObject(s, elem) => gen"$s.writeObject($elem)"
+    case ObjOosClose(s) => gen"$s.close"
+    case ObjFosApply(s) => emitValDef(sym, src"new java.io.FileOutputStream($s,true)")
+    case ObjFisApply(s) => emitValDef(sym, src"new java.io.FileInputStream($s)")
+    case ObjOisApply(s) => emitValDef(sym, src"new java.io.ObjectInputStream($s)")
+    case ObjOisClose(s) => emitValDef(sym, src"$s.close")
+    case ObjOisAvailable(s) => emitValDef(sym, src"$s.available")
     case ObjOisReadObject(s, dtype) => {
-        if (dtype == null) emitValDef(sym, quote(s) + ".readObject")
-        else emitValDef(sym, quote(s) + ".readObject.asInstanceOf[" + dtype + "]") 
+        if (dtype == null) emitValDef(sym, src"$s.readObject")
+        else emitValDef(sym, src"$s.readObject.asInstanceOf[$dtype]") 
     }
-    case BwWrite(b,s) => emitValDef(sym, quote(b) + ".write(" + quote(s) + ")")
-    case BwClose(b) => emitValDef(sym, quote(b) + ".close()")
-    case BrReadline(b) => emitValDef(sym, quote(b) + ".readLine()")
-    case BrClose(b) => emitValDef(sym, quote(b) + ".close()")
+    case BwWrite(b,s) => emitValDef(sym, src"$b.write($s)")
+    case BwClose(b) => emitValDef(sym, src"$b.close()")
+    case BrReadline(b) => emitValDef(sym, src"$b.readLine()")
+    case BrClose(b) => emitValDef(sym, src"$b.close()")
     case _ => super.emitNode(sym, rhs)
   }
 }

@@ -132,9 +132,7 @@ trait CCodegen extends CLikeCodegen {
                      "#include <stdlib.h>\n" +
                      "#include <stdbool.h>"
       )
-	  stream.println("\n/* DATASTRUCTURES */")
 	  emitDataStructures(stream)
-	  stream.println("/* END OF DATASTRUCTURES */\n")
 
       // TODO: static data
 

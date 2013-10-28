@@ -141,27 +141,27 @@ trait ScalaGenHashMapOps extends BaseGenHashMapOps with ScalaGenEffect {
     case m@HashMapNew(spkey, spvalue) => {
         val key = if (spkey != "") spkey else remap(m.mK)
         val value = if (spvalue != "") spvalue else remap(m.mV)
-        emitValDef(sym, "new scala.collection.mutable.HashMap[" + key + "," + value + "]() {")
+        emitValDef(sym, src"new scala.collection.mutable.HashMap[$key,$value]() {")
         if (spkey.contains("Array[Byte]")) {
             stream.println("override def elemHashCode(key: Array[Byte]) = key(0).##")
             stream.println("override def elemEquals(key1: Array[Byte], key2: Array[Byte]) = key1.corresponds(key2){_ == _}")
         }
         stream.println("}")
     }
-    case HashMapApply(m,k) => emitValDef(sym, quote(m) + "(" + quote(k) + ")")
-    case HashMapUpdate(m,k,v)  => emitValDef(sym, quote(m) + "(" + quote(k) + ") = " + quote(v))
-    case HashMapContains(m,i) => emitValDef(sym, quote(m) + ".contains(" + quote(i) + ")")
-    case HashMapSize(m) => emitValDef(sym, quote(m) + ".size")
-    case HashMapValues(m) => emitValDef(sym, quote(m) + ".values")
-    case HashMapClear(m) => emitValDef(sym, quote(m) + ".clear()")
-    case HashMapKeySet(m) => emitValDef(sym, quote(m) + ".keySet")
-    case HashMapKeys(m) => emitValDef(sym, quote(m) + ".keys")
+    case HashMapApply(m,k) => emitValDef(sym, src"$m($k)")
+    case HashMapUpdate(m,k,v)  => emitValDef(sym, src"$m($k) = $v")
+    case HashMapContains(m,i) => emitValDef(sym, src"$m.contains($i)")
+    case HashMapSize(m) => emitValDef(sym, src"$m.size")
+    case HashMapValues(m) => emitValDef(sym, src"$m.values")
+    case HashMapClear(m) => emitValDef(sym, src"$m.clear()")
+    case HashMapKeySet(m) => emitValDef(sym, src"$m.keySet")
+    case HashMapKeys(m) => emitValDef(sym, src"$m.keys")
     case HashMapRemoveHead(m,s) => {
-        emitValDef(s, quote(m) + ".head")
-        stream.println(quote(m) + " -= " + quote(s) + "._1")
+        emitValDef(s, src"$m.head")
+        gen"$m -= $s._1"
         emitValDef(sym, quote(s))
     }
-    case HashMapRemove(m,v) => emitValDef(sym, quote(m) + "-=" + quote(v))
+    case HashMapRemove(m,v) => emitValDef(sym, src"$m-=$v")
     case HashMapMap(m,k,v)  => {
 		 emitValDef(sym, quote(m) + ".map(" + quote(k) + "=> {")
          emitBlock(v)
@@ -169,13 +169,12 @@ trait ScalaGenHashMapOps extends BaseGenHashMapOps with ScalaGenEffect {
          stream.println("})")
     }
     case HashMapGetOrElseUpdate(m,k,v)  => {
-         stream.print("val " + quote(sym) + " = ")
-         stream.println(quote(m) + ".getOrElseUpdate(" + quote(k) + ", {")
-         emitBlock(v)
-         emitBlockResult(v)
-         stream.println("})")
+         gen"""val $sym = $m.getOrElseUpdate($k, {
+              |${nestedBlock(v)}
+              |$v
+              |})"""
     }
-    case HashMapMkString(m,k) => emitValDef(sym, quote(m) + ".mkString(" + quote(k) + ")")
+    case HashMapMkString(m,k) => emitValDef(sym, src"$m.mkString($k)")
     case _ => super.emitNode(sym, rhs)
   }
 }

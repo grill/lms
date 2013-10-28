@@ -42,8 +42,10 @@ val x17 = x11.isInstanceOf[Int]
 val x16 = px16 // static data: -1
 val x18 = x16.isInstanceOf[Int]
 val x19 = if (x17 == true) {
+
 x18
 } else false
+
 val x29 = if (x19) {
 println("spec-add-int: FUN:scala.virtualization.lms.epfl.test13.TestInterpret$InterpretStagedReopt$AddN@XXX")
 val x21 = px21 // static data: FUN:scala.virtualization.lms.epfl.test13.TestInterpret$InterpretStagedReopt$AddN$$anon$25@XXX

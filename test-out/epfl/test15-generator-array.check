@@ -72,6 +72,7 @@ x17 = x55
 } else {
 ()
 }
+
 x37 = x37 + 1
 }
 
@@ -84,8 +85,10 @@ val x74 = x17
 val x71 = x38 + x11
 val x75 = Recordintintint(rows = x72, cols = x73, mults = x74)
 x5(x71) = x75
+
 x10 = x10 + 1
 }
+
 x7 = x7 + 1
 }
 val x81 = 0 * x3
