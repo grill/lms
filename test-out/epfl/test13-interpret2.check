@@ -384,8 +384,10 @@ val x119 = x118.exec(x115)
 val x120 = x117.isInstanceOf[Int]
 val x121 = x119.isInstanceOf[Int]
 val x122 = if (x120 == true) {
+
 x121
 } else false
+
 val x134 = if (x122) {
 val x123 = println("spec-add-int: AddN(LookupN(n),ConstN(-1))")
 val x2 = px2 // static data: IR:scala.virtualization.lms.epfl.test13.TestInterpret$$anonfun$testInterpret2$1$$anon$2
@@ -430,8 +432,10 @@ val x138 = x118.exec(x136)
 val x139 = x137.isInstanceOf[Int]
 val x140 = x138.isInstanceOf[Int]
 val x141 = if (x139 == true) {
+
 x140
 } else false
+
 val x153 = if (x141) {
 val x142 = println("spec-add-int: AddN(LookupN(n),ConstN(-1))")
 val x2 = px2 // static data: IR:scala.virtualization.lms.epfl.test13.TestInterpret$$anonfun$testInterpret2$1$$anon$2
@@ -645,8 +649,10 @@ val x199 = x198.exec(x195)
 val x200 = x197.isInstanceOf[Int]
 val x201 = x199.isInstanceOf[Int]
 val x202 = if (x200 == true) {
+
 x201
 } else false
+
 val x214 = if (x202) {
 val x203 = println("spec-add-int: AddN(LookupN(x),AppN(LookupN(a),LookupN(n)))")
 val x2 = px2 // static data: IR:scala.virtualization.lms.epfl.test13.TestInterpret$$anonfun$testInterpret2$1$$anon$2
@@ -691,8 +697,10 @@ val x218 = x198.exec(x216)
 val x219 = x217.isInstanceOf[Int]
 val x220 = x218.isInstanceOf[Int]
 val x221 = if (x219 == true) {
+
 x220
 } else false
+
 val x233 = if (x221) {
 val x222 = println("spec-add-int: AddN(LookupN(x),AppN(LookupN(a),LookupN(n)))")
 val x2 = px2 // static data: IR:scala.virtualization.lms.epfl.test13.TestInterpret$$anonfun$testInterpret2$1$$anon$2
