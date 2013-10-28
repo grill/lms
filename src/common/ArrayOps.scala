@@ -220,7 +220,7 @@ trait ScalaGenArrayOps extends BaseGenArrayOps with ScalaGenBase {
           "{import scala.io.Source;(Source.fromFile(\"" + symDataPath(sym) + "\").getLines.map{Integer.parseInt(_)}).toArray}"
         }
         else {
-          "Array(" + xs.mkString(",") + ")"
+          src"Array($xs)"
         }
       )
     }
