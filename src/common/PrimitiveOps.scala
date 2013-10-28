@@ -10,6 +10,7 @@ trait LiftPrimitives {
   this: PrimitiveOps =>
 
   implicit def intToRepInt(x: Int) = unit(x)  
+  implicit def longToRepLong(x: Long) = unit(x)  
   implicit def floatToRepFloat(x: Float) = unit(x)
   implicit def doubleToRepDouble(x: Double) = unit(x)
   

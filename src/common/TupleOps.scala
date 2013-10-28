@@ -2861,3 +2861,8 @@ trait ScalaGenTupleOps extends ScalaGenBase {
     case _ => super.emitNode(sym, rhs)
   }
 }
+
+trait CGenTupleOps extends CGenBase {
+  val IR: TupleOpsExp
+  import IR._
+}

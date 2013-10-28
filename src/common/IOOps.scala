@@ -19,11 +19,13 @@ trait IOOps extends Variables with OverloadHack {
   def infix_getCanonicalFile(f: Rep[File])(implicit pos: SourceContext) = file_getcanonicalfile(f)
   def infix_getPath(f: Rep[File])(implicit pos: SourceContext) = file_getpath(f)
   def infix_listFiles(f: Rep[File])(implicit pos: SourceContext) = file_listfiles(f)
+  def infix_close(f: Rep[File])(implicit pos: SourceContext, o: Overloaded1) = file_close(f) // Only for the C code gen
 
   def obj_file_apply(dir: Rep[String])(implicit pos: SourceContext): Rep[File]
   def file_getcanonicalfile(f: Rep[File])(implicit pos: SourceContext): Rep[File]
   def file_getpath(f: Rep[File])(implicit pos: SourceContext): Rep[String]
   def file_listfiles(f: Rep[File])(implicit pos: SourceContext): Rep[Array[File]]
+  def file_close(f: Rep[File])(implicit pos: SourceContext): Rep[Unit] // Only for the C code gen
   
   /**
    * BufferedReader
@@ -32,7 +34,7 @@ trait IOOps extends Variables with OverloadHack {
     def apply(f: Rep[FileReader])(implicit pos: SourceContext) = obj_br_apply(f)
   }
   def infix_readLine(b: Rep[BufferedReader])(implicit pos: SourceContext) = br_readline(b)
-  def infix_close(b: Rep[BufferedReader])(implicit pos: SourceContext) = br_close(b)
+  def infix_close(b: Rep[BufferedReader])(implicit pos: SourceContext, o: Overloaded2) = br_close(b)
 
   def obj_br_apply(f: Rep[FileReader])(implicit pos: SourceContext): Rep[BufferedReader]
   def br_readline(b: Rep[BufferedReader])(implicit pos: SourceContext): Rep[String]
@@ -121,6 +123,7 @@ trait IOOpsExp extends IOOps with DSLOpsExp {
   case class FileGetCanonicalFile(f: Exp[File]) extends Def[File]
   case class FileGetPath(f: Exp[File]) extends Def[String]
   case class FileListFiles(f: Exp[File]) extends Def[Array[File]]
+  case class FileClose(f: Exp[File]) extends Def[Unit] // Only for the C code gen
 
   case class ObjBrApply(f: Exp[FileReader]) extends Def[BufferedReader]
   case class ObjBwApply(f: Exp[FileWriter]) extends Def[BufferedWriter]
@@ -145,6 +148,7 @@ trait IOOpsExp extends IOOps with DSLOpsExp {
   def file_getcanonicalfile(f: Exp[File])(implicit pos: SourceContext) = FileGetCanonicalFile(f)
   def file_getpath(f: Exp[File])(implicit pos: SourceContext) = FileGetPath(f)
   def file_listfiles(f: Exp[File])(implicit pos: SourceContext) = FileListFiles(f)
+  def file_close(f: Exp[File])(implicit pos: SourceContext) = FileClose(f) // Only for the C code gen
   
   def obj_br_apply(f: Exp[FileReader])(implicit pos: SourceContext): Exp[BufferedReader] = reflectEffect(ObjBrApply(f))
   def obj_bw_apply(f: Exp[FileWriter])(implicit pos: SourceContext): Exp[BufferedWriter] = reflectEffect(ObjBwApply(f))
@@ -189,6 +193,7 @@ trait ScalaGenIOOps extends ScalaGenBase {
     case FileGetCanonicalFile(f) => emitValDef(sym, quote(f) + ".getCanonicalFile()")
     case FileGetPath(f) => emitValDef(sym, quote(f) + ".getPath()")
     case FileListFiles(f) => emitValDef(sym, quote(f) + ".listFiles()")
+	case FileClose(f) => throw new GenerationFailedException("File.close is not defined for Scala Generation, only for C! Maybe you meant to close the BufferedStreams instead.")
     case ObjBrApply(f) => emitValDef(sym, "new java.io.BufferedReader(" + quote(f) + ")")
     case ObjBwApply(f) => emitValDef(sym, "new java.io.BufferedWriter(" + quote(f) + ")")
     case ObjFrApply(s) => emitValDef(sym, "new java.io.FileReader(" + quote(s) + ")")
@@ -226,11 +231,9 @@ trait CLikeGenIOOps extends CLikeGenBase {
 
   override def emitNode(sym: Sym[Any], rhs: Def[Any]) = rhs match {
     case ObjFileApply(dir) => emitValDef(sym, "fopen(" + quote(dir) + ", \"rw\")")
-    case ObjFisApply(s) => emitValDef(sym, "new java.io.FileInputStream(" + quote(s) + ")")
     case ObjOosApply(s,x) => quote(s)
 	case ObjFosApply(s) => quote(s)
-    case ObjOosWriteObject(s, elem) => stream.println(quote(s) + ".writeObject(" + quote(elem) + ")")
-    case ObjOosClose(s) => stream.println("fclose(" + quote(s) + ");")
+	case FileClose(s) => stream.println("fclose(" + quote(s) + ")")
     case ObjBrApply(f) => throw new GenerationFailedException("CLikeGenIOOps: Java IO operations are not supported")
     case ObjFrApply(s) => throw new GenerationFailedException("CLikeGenIOOps: Java IO operations are not supported")
     case BrReadline(b) => throw new GenerationFailedException("CLikeGenIOOps: Java IO operations are not supported")

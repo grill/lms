@@ -31,7 +31,10 @@ trait BooleanOps extends Variables with Expressions {
 
 trait BooleanOpsExp extends BooleanOps with BaseExp with EffectExp {
   case class BooleanNegate(lhs: Exp[Boolean]) extends Def[Boolean]
-  case class BooleanAnd(lhs: Exp[Boolean], rhs: Block[Boolean]) extends Def[Boolean]
+  case class BooleanAnd(lhs: Exp[Boolean], rhs: Block[Boolean]) extends
+Def[Boolean] {
+	val c = fresh[Boolean] // used in c code generation
+  }
   case class BooleanOr(lhs: Exp[Boolean], rhs: Exp[Boolean]) extends Def[Boolean]
 
   def boolean_negate(lhs: Exp[Boolean])(implicit pos: SourceContext) : Exp[Boolean] = BooleanNegate(lhs)
@@ -93,14 +96,22 @@ trait ScalaGenBooleanOps extends ScalaGenBase with GenericNestedCodegen {
   }
 }
 
-trait CLikeGenBooleanOps extends CLikeGenBase {
+trait CLikeGenBooleanOps extends CLikeGenBase with GenericNestedCodegen {
   val IR: BooleanOpsExp
   import IR._
 
   override def emitNode(sym: Sym[Any], rhs: Def[Any]) = {
     rhs match {
-      case BooleanNegate(b) =>
-        emitValDef(sym, "!" + quote(b))
+  	  case BooleanNegate(b) => emitValDef(sym, "!" + quote(b))
+      case b@BooleanAnd(lhs,rhs) => {
+			emitValDef(b.c, "0")
+        	stream.println("if (" + quote(lhs) + ") {")
+			emitBlock(rhs)
+    	    stream.println(quote(b.c) + " = " + quote(getBlockResult(rhs)))
+        	stream.print("}")
+			emitValDef(sym, quote(b.c))
+	  }
+      case BooleanOr(lhs,rhs) => emitValDef(sym, quote(lhs) + " || " + quote(rhs)) 
       case _ => super.emitNode(sym,rhs)
     }
   }

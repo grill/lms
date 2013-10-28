@@ -277,6 +277,7 @@ trait CLikeGenVariables extends CLikeGenBase {
       rhs match {
         case ReadVar(Variable(a)) =>
           emitValDef(sym, quote(a))
+    	case ReadVar(null) => {} // emitVarDef(sym.asInstanceOf[Sym[Variable[Any]]], "null")
         case NewVar(init) =>
           emitVarDef(sym.asInstanceOf[Sym[Variable[Any]]], quote(init))
         case Assign(Variable(a), b) =>

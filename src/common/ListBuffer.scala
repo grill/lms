@@ -83,3 +83,12 @@ trait ScalaGenListBuffer extends ScalaGenBase with ScalaNestedCodegen {
 		case _ => super.emitNode(sym, rhs)
   	}
 }
+
+trait CGenListBuffer extends CGenBase with CNestedCodegen {
+	val IR: ListBufferExp
+	import IR._
+  
+	override def emitNode(sym: Sym[Any], rhs: Def[Any]) = rhs match {
+		case _ => super.emitNode(sym, rhs)
+  	}
+}

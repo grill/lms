@@ -24,3 +24,14 @@ trait ScalaGenHashCodeOps extends ScalaGenBase {
         }
     }
 }
+
+trait CGenHashCodeOps extends CGenBase {
+    val IR: HashCodeOpsExp
+	import IR._
+ 
+	override def emitNode(sym: Sym[Any], rhs: Def[Any]) =  { 
+        rhs match {
+		    case _ => super.emitNode(sym, rhs)
+        }
+    }
+}

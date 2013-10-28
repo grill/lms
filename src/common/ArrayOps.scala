@@ -4,6 +4,7 @@ package common
 import java.io.PrintWriter
 import internal._
 import scala.reflect.SourceContext
+import scala.collection.mutable.{HashMap,Set}
 
 trait ArrayOps extends Variables {
 
@@ -28,9 +29,12 @@ trait ArrayOps extends Variables {
     def update(n: Rep[Int], y: Rep[T])(implicit pos: SourceContext) = array_update(a,n,y)
     def length(implicit pos: SourceContext) = array_length(a)
     def foreach(block: Rep[T] => Rep[Unit])(implicit pos: SourceContext) = array_foreach(a, block)
+    def filter(f: Rep[T] => Rep[Boolean]) = array_filter(a, f)
+	def groupBy[B: Manifest](f: Rep[T] => Rep[B]) = array_group_by(a,f)
     def sort(implicit pos: SourceContext) = array_sort(a)
     def map[B:Manifest](f: Rep[T] => Rep[B]) = array_map(a,f)
     def toSeq = array_toseq(a)
+	def sum = array_sum(a)
     def zip[B: Manifest](a2: Rep[Array[B]]) = array_zip(a,a2)
     def corresponds[B: Manifest](a2: Rep[Array[B]]) = array_corresponds(a,a2)
     def mkString(del: Rep[String] = unit("")) = array_mkString(a,del)
@@ -43,11 +47,14 @@ trait ArrayOps extends Variables {
   def array_unsafe_update[T:Manifest](x: Rep[Array[T]], n: Rep[Int], y: Rep[T])(implicit pos: SourceContext): Rep[Unit]
   def array_length[T:Manifest](x: Rep[Array[T]])(implicit pos: SourceContext) : Rep[Int]
   def array_foreach[T:Manifest](x: Rep[Array[T]], block: Rep[T] => Rep[Unit])(implicit pos: SourceContext): Rep[Unit]
+  def array_filter[T : Manifest](l: Rep[Array[T]], f: Rep[T] => Rep[Boolean])(implicit pos: SourceContext): Rep[Array[T]]
+  def array_group_by[T : Manifest, B: Manifest](l: Rep[Array[T]], f: Rep[T] => Rep[B])(implicit pos: SourceContext): Rep[HashMap[B, Array[T]]]
   def array_copy[T:Manifest](src: Rep[Array[T]], srcPos: Rep[Int], dest: Rep[Array[T]], destPos: Rep[Int], len: Rep[Int])(implicit pos: SourceContext): Rep[Unit]
   def array_unsafe_copy[T:Manifest](src: Rep[Array[T]], srcPos: Rep[Int], dest: Rep[Array[T]], destPos: Rep[Int], len: Rep[Int])(implicit pos: SourceContext): Rep[Unit]
   def array_sort[T:Manifest](x: Rep[Array[T]])(implicit pos: SourceContext): Rep[Array[T]]
   def array_map[A:Manifest,B:Manifest](a: Rep[Array[A]], f: Rep[A] => Rep[B]): Rep[Array[B]]
   def array_toseq[A:Manifest](a: Rep[Array[A]]): Rep[Seq[A]]
+  def array_sum[A:Manifest](a: Rep[Array[A]]): Rep[A]
   def array_zip[A:Manifest, B: Manifest](a: Rep[Array[A]], a2: Rep[Array[B]]): Rep[Array[(A,B)]]
   def array_mkString[A: Manifest](a: Rep[Array[A]], del: Rep[String] = unit("")): Rep[String]
   // limited support for corresponds (tests equality)
@@ -67,6 +74,8 @@ trait ArrayOpsExp extends ArrayOps with EffectExp with VariablesExp {
     val m = manifest[T]
   }
   case class ArrayForeach[T](a: Exp[Array[T]], x: Sym[T], block: Block[Unit]) extends Def[Unit]
+  case class ArrayFilter[T : Manifest](l: Exp[Array[T]], x: Sym[T], block: Block[Boolean]) extends Def[Array[T]]
+  case class ArrayGroupBy[T: Manifest, B: Manifest](l: Exp[Array[T]], x: Sym[T], block: Block[B]) extends Def[HashMap[B, Array[T]]]
   case class ArrayCopy[T:Manifest](src: Exp[Array[T]], srcPos: Exp[Int], dest: Exp[Array[T]], destPos: Exp[Int], len: Exp[Int]) extends Def[Unit] {
     val m = manifest[T]
   }
@@ -77,6 +86,7 @@ trait ArrayOpsExp extends ArrayOps with EffectExp with VariablesExp {
     val array = NewArray[B](a.length)
   }
   case class ArrayToSeq[A:Manifest](x: Exp[Array[A]]) extends Def[Seq[A]]
+  case class ArraySum[A:Manifest](x: Exp[Array[A]]) extends Def[A]
   case class ArrayZip[A:Manifest, B: Manifest](x: Exp[Array[A]], x2: Exp[Array[B]]) extends Def[Array[(A,B)]]
   case class ArrayMkString[A:Manifest](a: Exp[Array[A]], b: Exp[String] = unit("")) extends Def[String]
   case class ArrayCorresponds[A:Manifest, B: Manifest](x: Exp[Array[A]], x2: Exp[Array[B]]) extends Def[Boolean]
@@ -92,6 +102,17 @@ trait ArrayOpsExp extends ArrayOps with EffectExp with VariablesExp {
     val b = reifyEffects(block(x))
     reflectEffect(ArrayForeach(a, x, b), summarizeEffects(b).star)
   }
+  def array_filter[T : Manifest](l: Exp[Array[T]], f: Exp[T] => Exp[Boolean])(implicit pos: SourceContext) = {
+    val a = fresh[T]
+    val b = reifyEffects(f(a))
+    reflectEffect(ArrayFilter(l, a, b), summarizeEffects(b).star)
+  }
+  def array_group_by[T : Manifest, B: Manifest](l: Exp[Array[T]], f: Exp[T] => Exp[B])(implicit pos: SourceContext) = {
+    val a = fresh[T]
+    val b = reifyEffects(f(a))
+    reflectEffect(ArrayGroupBy(l, a, b), summarizeEffects(b).star)
+  }
+
   def array_copy[T:Manifest](src: Exp[Array[T]], srcPos: Exp[Int], dest: Exp[Array[T]], destPos: Exp[Int], len: Exp[Int])(implicit pos: SourceContext) = reflectWrite(dest)(ArrayCopy(src,srcPos,dest,destPos,len))
   def array_unsafe_copy[T:Manifest](src: Exp[Array[T]], srcPos: Exp[Int], dest: Exp[Array[T]], destPos: Exp[Int], len: Exp[Int])(implicit pos: SourceContext) = ArrayCopy(src,srcPos,dest,destPos,len)
   def array_sort[T:Manifest](x: Exp[Array[T]])(implicit pos: SourceContext) = ArraySort(x)
@@ -101,6 +122,7 @@ trait ArrayOpsExp extends ArrayOps with EffectExp with VariablesExp {
     reflectEffect(ArrayMap(a, x, b), summarizeEffects(b))    
   }
   def array_toseq[A:Manifest](a: Exp[Array[A]]) = ArrayToSeq(a)
+  def array_sum[A:Manifest](a: Exp[Array[A]]) = reflectEffect(ArraySum(a))
   def array_zip[A:Manifest, B: Manifest](a: Exp[Array[A]], a2: Exp[Array[B]]) = reflectEffect(ArrayZip(a,a2))
   def array_mkString[A: Manifest](a: Rep[Array[A]], del: Rep[String] = unit("")) = reflectEffect(ArrayMkString(a, del))
   def array_corresponds[A: Manifest, B: Manifest](a: Rep[Array[A]], a2: Rep[Array[B]]) = reflectEffect(ArrayCorresponds(a,a2))
@@ -125,18 +147,21 @@ trait ArrayOpsExp extends ArrayOps with EffectExp with VariablesExp {
   override def syms(e: Any): List[Sym[Any]] = e match {
     case ArrayForeach(a, x, body) => syms(a):::syms(body)
     case ArrayMap(a, x, body) => syms(a):::syms(body)
+    case ArrayFilter(a, x, body) => syms(a):::syms(body)
     case _ => super.syms(e)
   }
 
   override def boundSyms(e: Any): List[Sym[Any]] = e match {
     case ArrayForeach(a, x, body) => x :: effectSyms(body)
     case ArrayMap(a, x, body) => x :: effectSyms(body)
+    case ArrayFilter(a, x, body) => x :: effectSyms(body)
     case _ => super.boundSyms(e)
   }
 
   override def symsFreq(e: Any): List[(Sym[Any], Double)] = e match {
     case ArrayForeach(a, x, body) => freqNormal(a):::freqHot(body)
     case ArrayMap(a, x, body) => freqNormal(a):::freqHot(body)
+    case ArrayFilter(a, x, body) => freqNormal(a):::freqHot(body)
     case _ => super.symsFreq(e)
   }
     
@@ -259,7 +284,7 @@ trait ScalaGenArrayOps extends BaseGenArrayOps with ScalaGenBase {
         stream.println("val " + quote(x) + " = in(i)")
         emitBlock(blk)
         stream.print("out(i) = ")
-	emitBlockResult(blk)
+		emitBlockResult(blk)
         stream.println("i += 1")      
         stream.println("}")
         stream.println("out")
@@ -272,6 +297,24 @@ trait ScalaGenArrayOps extends BaseGenArrayOps with ScalaGenBase {
       // emitBlock(blk)
       // stream.println(quote(getBlockResult(blk)))
       // stream.println("}")  
+	case ArrayFilter(a,x,blk) =>
+		stream.println("// FILTER")
+		emitValDef(sym, quote(a) + ".filter(" + quote(x) + "=> {")
+		emitBlock(blk)
+		emitBlockResult(blk)
+		stream.println("}") 
+		stream.println("// END OF FILTER")
+	case ArrayGroupBy(a,x,blk) =>
+		stream.println("// GROUPBY")
+		emitValDef(sym, quote(a) + ".groupBy(" + quote(x) + "=> {")
+		emitBlock(blk)
+		emitBlockResult(blk)
+		stream.println("}") 
+		stream.println("// END OF GROUPBY")
+	case ArraySum(a) => 
+		stream.println("// SUM")
+		emitValDef(sym, quote(a) + ".sum")
+		stream.println("// END OF SUM")
     case ArrayToSeq(a) => emitValDef(sym, quote(a) + ".toSeq")
     case ArrayZip(a,a2) => emitValDef(sym, quote(a) + " zip " + quote(a2)) 
     case ArrayMkString(a, del) => 
@@ -308,8 +351,11 @@ trait CGenArrayOps extends CGenBase with CLikeGenArrayOps {
     	rhs match {
     		case a@ArrayNew(n, sType) => {
         		val arrType = if (quote(sType) != "\"\"") remapInternal(quote(sType).replaceAll("\"","")) else remap(a.m)
-		        emitValDef(sym, getMemoryAllocString(quote(n), arrType))
+		        stream.println(arrType + "* " + quote(sym) + " = " + getMemoryAllocString(quote(n), arrType))
+				// Simulate length
+				stream.println("int " + quote(sym) + "Size = " + quote(n))
 			}
+        	case ArrayUpdate(x,n,y) => stream.println(quote(x) + "[" + quote(n) + "] = " + quote(y) + ";")
         	case _ => super.emitNode(sym, rhs)
 		}
 	}

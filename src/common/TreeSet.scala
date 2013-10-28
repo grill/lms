@@ -68,3 +68,12 @@ trait ScalaGenTreeSet extends ScalaGenBase with GenericNestedCodegen {
 		case _ => super.emitNode(sym, rhs)
   	}
 }
+
+trait CGenTreeSet extends CGenBase with GenericNestedCodegen {
+	val IR: TreeSetExp
+	import IR._
+  
+	override def emitNode(sym: Sym[Any], rhs: Def[Any]) = rhs match {
+		case _ => super.emitNode(sym, rhs)
+  	}
+}

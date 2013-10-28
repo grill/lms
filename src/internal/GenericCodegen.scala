@@ -137,11 +137,11 @@ trait GenericCodegen extends BlockTraversal {
     emitSource(List(s1), body, className, stream)
   }
 
-  def emitSource2[T1: Manifest, T2: Manifest, R : Manifest](f: (Exp[T1], Exp[T2]) => Exp[R], className: String, stream: PrintWriter): List[(Sym[Any], Any)] = {
+  def emitSource2[T1: Manifest, T2: Manifest, R : Manifest](f: (Exp[T1], Exp[T2]) => Exp[R], className: String, stream: PrintWriter, dynamicReturnType: String = null): List[(Sym[Any], Any)] = {
     val s1 = fresh[T1]
     val s2 = fresh[T2]
     val body = reifyBlock(f(s1, s2))
-    emitSource(List(s1, s2), body, className, stream)
+    emitSource(List(s1, s2), body, className, stream, dynamicReturnType)
   }
 
   def emitSource3[T1: Manifest, T2: Manifest, T3: Manifest, R : Manifest](f: (Exp[T1], Exp[T2], Exp[T3]) => Exp[R], className: String, stream: PrintWriter): List[(Sym[Any], Any)] = {
