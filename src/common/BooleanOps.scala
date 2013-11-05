@@ -104,11 +104,11 @@ trait CLikeGenBooleanOps extends CLikeGenBase with GenericNestedCodegen {
     rhs match {
   	  case BooleanNegate(b) => emitValDef(sym, src"!$b")
       case b@BooleanAnd(lhs,rhs) => {
-			emitValDef(b.c, "0")
+			emitValDef(b.c, quote(lhs))
         	stream.println("if (" + quote(lhs) + ") {")
 			emitBlock(rhs)
-    	    stream.println(quote(b.c) + " = " + quote(getBlockResult(rhs)))
-        	stream.print("}")
+    	    stream.println(quote(b.c) + " = " + quote(getBlockResult(rhs)) + ";")
+        	stream.println("}")
 			emitValDef(sym, quote(b.c))
 	  }
       case BooleanOr(lhs,rhs) => emitValDef(sym, quote(lhs) + " || " + quote(rhs)) 

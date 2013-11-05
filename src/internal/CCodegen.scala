@@ -130,25 +130,31 @@ trait CCodegen extends CLikeCodegen {
                      "*******************************************/\n" +
                      "#include <stdio.h>\n" +
                      "#include <stdlib.h>\n" +
-                     "#include <stdbool.h>"
+                     "#include <stdbool.h>\n" +
+					 "#include <glib.h>"
       )
-	  emitDataStructures(stream)
 
       // TODO: static data
-
-      //stream.println("class "+className+(if (staticData.isEmpty) "" else "("+staticData.map(p=>"p"+quote(p._1)+":"+p._1.tp).mkString(",")+")")+" 
-      //extends (("+args.map(a => remap(a.tp)).mkString(", ")+")=>("+sA+")) {")
-
-      stream.println(sA+" "+functionName+"("+args.map(a => remap(a.tp)+" "+quote(a)).mkString(", ")+") {")
-
-      emitBlock(body)
-
-      val y = getBlockResult(body)
+	  val sw = new StringWriter()
+	  val tempWriter = new PrintWriter(sw)
+      tempWriter.println(sA+" "+functionName+"("+args.map(a => remap(a.tp)+" "+quote(a)).mkString(", ")+") {")
+      withStream(tempWriter) { 
+	  	emitBlock(body) 
+	  }
+	  val y = getBlockResult(body)
       if (remap(y.tp) != "void")
-        stream.println("return " + quote(y) + ";")
+        tempWriter.println("return " + quote(y) + ";")
+	  tempWriter.println("}")
 
-      stream.println("}")
-      stream.println("/*****************************************\n"+
+	  var code = sw.toString
+	  sw.getBuffer().setLength(0)
+	  withStream(tempWriter) { emitFileHeader() }
+	  code = sw.toString + code
+
+	  emitDataStructures(stream)
+	  stream.println(code) 
+
+     stream.println("/*****************************************\n"+
                      "  End of C Generated Code                  \n"+
                      "*******************************************/")
     }
@@ -261,6 +267,7 @@ trait CCodegen extends CLikeCodegen {
 		case "Char" | "byte" | "Byte" => "char" // A byte is a char in C
 		case "java.lang.Character" => "char"
 		case "java.lang.String" => "const char*"
+		case "java.lang.String" | "class java.lang.String" => "const char*"
 		case "java.io.File" => "FILE*"
 		case "java.util.Scanner" => "FILE*" // A scanner is basically mapped through basic file I/O
         case _ => {
@@ -269,7 +276,7 @@ trait CCodegen extends CLikeCodegen {
 		}
    }
   }
-  
+	 
   override def remap[A](m: Manifest[A]) : String = {
     if (m.erasure == classOf[Variable[Any]] ) {
       remap(m.typeArguments.head)

@@ -16,7 +16,7 @@ trait ListBuffer extends Base with Expressions with Variables {
 	implicit def listBuffer2listBufferOps[A:Manifest](x: Rep[mutable.ListBuffer[A]]) = new ListBufferOps(x)
 	implicit def varlistBuffer2listBufferOps[A:Manifest](x: Var[mutable.ListBuffer[A]]) = new ListBufferOps(readVar(x))
 
-	def newListBuffer[A:Manifest](x: Rep[String]): Rep[mutable.ListBuffer[A]]
+	def newListBuffer[A:Manifest](x: Rep[String] = unit("")): Rep[mutable.ListBuffer[A]]
 	def listBufferAdd[A:Manifest](x: Rep[mutable.ListBuffer[A]], v: Rep[Any]): Rep[Unit]
 	def listBufferRemove[A:Manifest](x: Rep[mutable.ListBuffer[A]], v: Rep[Int]): Rep[A]
 	def listBufferSize[A:Manifest](x: Rep[mutable.ListBuffer[A]]): Rep[Int]
@@ -30,11 +30,13 @@ trait ListBufferExp extends ListBuffer with BaseExp with EffectExp with Effects 
 	case class ListBufferRemove[A:Manifest](x: Rep[mutable.ListBuffer[A]], v: Rep[Int]) extends Def[A]
 	case class ListBufferSize[A:Manifest](x: Rep[mutable.ListBuffer[A]]) extends Def[Int]
 	case class ListBufferHead[A:Manifest](x: Rep[mutable.ListBuffer[A]]) extends Def[Any]
-	case class NewListBuffer[A:Manifest](x: Rep[String]) extends Def[mutable.ListBuffer[A]]
+	case class NewListBuffer[A:Manifest](x: Rep[String]) extends Def[mutable.ListBuffer[A]] {
+		val m = manifest[A]
+	}
     case class ListmkString[A:Manifest](x: Rep[mutable.ListBuffer[A]], y: Rep[String]) extends Def[String]
     case class ListBufferForeach[A:Manifest, B:Manifest](l: Exp[mutable.ListBuffer[A]], x: Sym[A], block: Block[B]) extends Def[Unit]
 
-	def newListBuffer[A:Manifest](x: Rep[String]) = reflectEffect(NewListBuffer[A](x))
+	def newListBuffer[A:Manifest](x: Rep[String] = unit("")) = reflectEffect(NewListBuffer[A](x))
 	def listBufferAdd[A:Manifest](x: Rep[mutable.ListBuffer[A]], v: Rep[Any]): Rep[Unit] = reflectEffect(ListBufferAdd(x,v))
 	def listBufferRemove[A:Manifest](x: Rep[mutable.ListBuffer[A]], v: Rep[Int]): Rep[A] = reflectEffect(ListBufferRemove(x,v))
 	def listBufferSize[A:Manifest](x: Rep[mutable.ListBuffer[A]]) = reflectEffect(ListBufferSize(x))
@@ -67,8 +69,9 @@ trait ScalaGenListBuffer extends ScalaGenBase with ScalaNestedCodegen {
 	import IR._
   
 	override def emitNode(sym: Sym[Any], rhs: Def[Any]) = rhs match {
-		case NewListBuffer(x) =>
-			emitValDef(sym, "new scala.collection.mutable.ListBuffer[" + quote(x).replaceAll("\"","") + "]")
+		case l@NewListBuffer(x) =>
+			val t = if (x != unit("")) quote(x) else remap(l.m)
+			emitValDef(sym, "new scala.collection.mutable.ListBuffer[" + t.replaceAll("\"","") + "]")
 		case ListBufferAdd(x,v) => emitValDef(sym, quote(x) + " += " + quote(v))
 		case ListBufferRemove(x,v) => emitValDef(sym, quote(x) + ".remove(" + quote(v) + ")")
 		case ListBufferSize(x) => emitValDef(sym, quote(x) + ".size")

@@ -256,7 +256,7 @@ trait ScalaGenIfThenElseFat extends ScalaGenIfThenElse with ScalaGenFat with Bas
 
   override def emitFatNode(symList: List[Sym[Any]], rhs: FatDef) = rhs match {
     case SimpleFatIfThenElse(c,as,bs) => 
-      def quoteList[T](xs: List[Exp[T]]) = if (xs.length > 1) xs.map(x => quote(x, true)).mkString("(",",",")") else xs.map(quote).mkString(",")
+      def quoteList[T](xs: List[Exp[T]]) = if (xs.length > 1) xs.map(x => quote(x, true)).mkString("(",",",")") else xs.map(x => quote(x,true)).mkString(",")
       if (symList.length > 1) stream.println("// TODO: use vars instead of tuples to return multiple values")
       stream.println("val " + quoteList(symList) + " = if (" + quote(c) + ") {")
       emitFatBlock(as)
@@ -433,7 +433,17 @@ trait CGenIfThenElseFat extends CGenIfThenElse with CGenFat with BaseGenIfThenEl
   import IR._
 
   override def emitFatNode(symList: List[Sym[Any]], rhs: FatDef) = rhs match {
-    case SimpleFatIfThenElse(c,a,b) => sys.error("TODO: implement fat if C codegen")
+    case SimpleFatIfThenElse(c,as,bs) => 
+	  def quoteList[T](xs: List[Exp[T]]) = if (xs.length > 1) xs.map(x => quote(x, true)).mkString("(",",",")").replace("()","") else xs.map(x => quote(x,true)).mkString(",").replace("()","")
+      if (symList.length > 1) stream.println("// TODO: use vars instead of tuples to return multiple values")
+      stream.println("if (" + quote(c) + ") {")
+      emitFatBlock(as)
+      stream.println(quoteList(as.map(getBlockResult)))
+      stream.println("} else {")
+      emitFatBlock(bs)
+      stream.println(quoteList(bs.map(getBlockResult)))
+      stream.println("}")
+
     case _ => super.emitFatNode(symList, rhs)
   }
 }

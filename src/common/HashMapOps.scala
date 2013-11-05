@@ -2,13 +2,17 @@ package scala.virtualization.lms
 package common
 
 import java.io.PrintWriter
+import java.io.StringWriter
 import scala.virtualization.lms.internal._
 import scala.collection.mutable.{HashMap,Set}
 import scala.reflect.SourceContext
 
-trait HashMapOps extends Base with Variables {
+trait HashMapOps extends Base with Variables with TupleOps {
   object HashMap {
-    def apply[K:Manifest,V:Manifest](specializedKey: String = null, specializedValue:String = null)(implicit pos: SourceContext) = hashmap_new[K,V](specializedKey, specializedValue)
+    def apply[K:Manifest,V:Manifest](specializedKey: String = "", specializedValue:String = "")(implicit pos: SourceContext) = hashmap_new[K,V](specializedKey, specializedValue)
+  }
+  object CHashMap {
+    def apply[K:Manifest,V:Manifest,Z:Manifest](hf: Rep[Z => Int], ef: Rep[(K,K)=> Boolean])(implicit pos: SourceContext) = hashmap_cnew[K,V,Z](hf,ef)
   }
 
   implicit def HashMapToRepHashMapOps[K:Manifest,V:Manifest](m: HashMap[K,V]) = new hashmapOpsCls[K,V](unit(m))
@@ -22,6 +26,7 @@ trait HashMapOps extends Base with Variables {
     def size(implicit pos: SourceContext) = hashmap_size(m)
     def values(implicit pos: SourceContext) = hashmap_values(m)
     def map[B:Manifest](f: Rep[(K,V)] => Rep[B]) = hashmap_map(m,f)
+    def foreach(block: Rep[(K,V)] => Rep[Unit])(implicit pos: SourceContext) = hashmap_foreach(m, block)
     def clear()(implicit pos: SourceContext) = hashmap_clear(m)
     def keySet(implicit pos: SourceContext) = hashmap_keyset(m)
     def keys(implicit pos: SourceContext) = hashmap_keys(m)
@@ -32,6 +37,7 @@ trait HashMapOps extends Base with Variables {
   }
 
   def hashmap_new[K:Manifest,V:Manifest](specializedKey: String = "", specializedValue: String = "")(implicit pos: SourceContext) : Rep[HashMap[K,V]]
+  def hashmap_cnew[K:Manifest,V:Manifest,Z:Manifest](hf: Rep[Z => Int], ef: Rep[(K,K) => Boolean])(implicit pos: SourceContext) : Rep[HashMap[K,V]]
   def hashmap_apply[K:Manifest,V:Manifest](m: Rep[HashMap[K,V]], k: Rep[K])(implicit pos: SourceContext): Rep[V]
   def hashmap_update[K:Manifest,V:Manifest](m: Rep[HashMap[K,V]], k: Rep[K], v: Rep[V])(implicit pos: SourceContext): Rep[Unit]
   def hashmap_unsafe_update[K:Manifest,V:Manifest](m: Rep[HashMap[K,V]], k: Rep[K], v: Rep[V])(implicit pos: SourceContext): Rep[Unit]
@@ -39,6 +45,7 @@ trait HashMapOps extends Base with Variables {
   def hashmap_size[K:Manifest,V:Manifest](m: Rep[HashMap[K,V]])(implicit pos: SourceContext): Rep[Int]
   def hashmap_values[K:Manifest,V:Manifest](m: Rep[HashMap[K,V]])(implicit pos: SourceContext): Rep[Iterable[V]]
   def hashmap_map[K:Manifest,V:Manifest,B:Manifest](m: Rep[HashMap[K,V]], f: Rep[(K,V)]=>Rep[B]): Rep[HashMap[K,B]]
+  def hashmap_foreach[K:Manifest,V:Manifest](x: Rep[HashMap[K,V]], block: Rep[(K,V)] => Rep[Unit])(implicit pos: SourceContext): Rep[Unit]
   def hashmap_clear[K:Manifest,V:Manifest](m: Rep[HashMap[K,V]])(implicit pos: SourceContext): Rep[Unit]
   def hashmap_keyset[K:Manifest,V:Manifest](m: Rep[HashMap[K,V]])(implicit pos: SourceContext): Rep[Set[K]]
   def hashmap_keys[K:Manifest,V:Manifest](m: Rep[HashMap[K,V]])(implicit pos: SourceContext): Rep[Iterable[K]]
@@ -48,27 +55,33 @@ trait HashMapOps extends Base with Variables {
   def hashmap_mkString[K: Manifest, V: Manifest](m: Rep[HashMap[K,V]], v: Rep[String])(implicit pos: SourceContext): Rep[String]
 }
 
-trait HashMapOpsExp extends HashMapOps with EffectExp {
+trait HashMapOpsExp extends HashMapOps with EffectExp with TupleOpsExp with UninlinedFunctionsExp with Functions {
   abstract class HashMapDef[K:Manifest,V:Manifest,R:Manifest] extends Def[R] {
     val mK = manifest[K]
     val mV = manifest[V]
   }
   case class HashMapNew[K:Manifest,V:Manifest](specializedKey: String = "", specializedValue: String ="") extends HashMapDef[K,V,HashMap[K,V]] 
+  case class HashMapCNew[K:Manifest,V:Manifest,Z:Manifest](hf: Exp[Z => Int], ei: Exp[(K,K) => Boolean]) extends HashMapDef[K,V,HashMap[K,V]] 
   case class HashMapApply[K:Manifest,V:Manifest](m: Exp[HashMap[K,V]], k: Exp[K]) extends HashMapDef[K,V,V]
   case class HashMapUpdate[K:Manifest,V:Manifest](m: Exp[HashMap[K,V]], k: Exp[K], v: Exp[V]) extends HashMapDef[K,V,Unit]
   case class HashMapContains[K:Manifest,V:Manifest](m: Exp[HashMap[K,V]], i: Exp[K]) extends HashMapDef[K,V,Boolean]
   case class HashMapSize[K:Manifest,V:Manifest](m: Exp[HashMap[K,V]]) extends HashMapDef[K,V,Int]
   case class HashMapValues[K:Manifest,V:Manifest](m: Exp[HashMap[K,V]]) extends HashMapDef[K,V,Iterable[V]]
   case class HashMapMap[K:Manifest,V:Manifest,B:Manifest](m: Exp[HashMap[K,V]], s: Sym[(K,V)], v:Block[B]) extends HashMapDef[K,V,HashMap[K,B]]
+  case class HashMapForeach[K:Manifest, V:Manifest](a: Exp[HashMap[K,V]], x: Sym[(K,V)], block: Block[Unit], fun:Exp[(K,V)]=>Rep[Unit]) extends Def[Unit] 
   case class HashMapClear[K:Manifest,V:Manifest](m: Exp[HashMap[K,V]]) extends HashMapDef[K,V,Unit]
   case class HashMapKeySet[K:Manifest,V:Manifest](m: Exp[HashMap[K,V]]) extends HashMapDef[K,V,Set[K]]
   case class HashMapKeys[K:Manifest,V:Manifest](m: Exp[HashMap[K,V]]) extends HashMapDef[K,V,Iterable[K]]
   case class HashMapRemoveHead[K:Manifest,V:Manifest](m: Exp[HashMap[K,V]], s: Sym[V]) extends HashMapDef[K,V,(K,V)]
   case class HashMapRemove[K:Manifest,V:Manifest](m: Exp[HashMap[K,V]], v:Rep[K]) extends HashMapDef[K,V,Unit]
-  case class HashMapGetOrElseUpdate[K:Manifest,V:Manifest](m: Exp[HashMap[K,V]], k: Exp[K], v: Block[V]) extends HashMapDef[K,V,V]
+  case class HashMapGetOrElseUpdate[K:Manifest,V:Manifest](m: Exp[HashMap[K,V]],
+k: Exp[K], v: Block[V]) extends HashMapDef[K,V,V]
   case class HashMapMkString[K:Manifest,V:Manifest](m: Exp[HashMap[K,V]], v:Rep[String]) extends HashMapDef[K,V,String]
 
   def hashmap_new[K:Manifest,V:Manifest](specializedKey: String = "", specializedValue: String = "")(implicit pos: SourceContext) = reflectMutable(HashMapNew[K,V](specializedKey, specializedValue))
+  def hashmap_cnew[K:Manifest,V:Manifest,Z:Manifest](hf: Rep[Z => Int], ef: Rep[(K,K)=>Boolean])(implicit pos: SourceContext) = {
+	reflectMutable(HashMapCNew[K,V,Z](hf,ef))
+  }
   def hashmap_apply[K:Manifest,V:Manifest](m: Exp[HashMap[K,V]], k: Exp[K])(implicit pos: SourceContext) = HashMapApply(m,k)
   def hashmap_update[K:Manifest,V:Manifest](m: Exp[HashMap[K,V]], k: Exp[K], v: Exp[V])(implicit pos: SourceContext) = reflectWrite(m)(HashMapUpdate(m,k,v))
   def hashmap_unsafe_update[K:Manifest,V:Manifest](m: Exp[HashMap[K,V]], k: Exp[K], v: Exp[V])(implicit pos: SourceContext) = reflectEffect(HashMapUpdate(m,k,v))
@@ -76,10 +89,16 @@ trait HashMapOpsExp extends HashMapOps with EffectExp {
   def hashmap_size[K:Manifest,V:Manifest](m: Exp[HashMap[K,V]])(implicit pos: SourceContext) = reflectEffect(HashMapSize(m))
   def hashmap_values[K:Manifest,V:Manifest](m: Exp[HashMap[K,V]])(implicit pos: SourceContext) = HashMapValues(m)
   def hashmap_map[K:Manifest,V:Manifest,B:Manifest](m: Rep[HashMap[K,V]], f: Rep[(K,V)]=>Rep[B]) = {
-    val a = fresh[(K,V)]
+    val a = fresh[Tuple2[K,V]]
     val b = reifyEffects(f(a))
-    reflectEffect(HashMapMap(m, a, b), summarizeEffects(b).star)
+    reflectEffect(HashMapMap(m, a, b))//, summarizeEffects(b).star)
   }
+  def hashmap_foreach[K:Manifest,V:Manifest](x: Rep[HashMap[K,V]], block: Rep[(K,V)] => Rep[Unit])(implicit pos: SourceContext) = {
+    val k = fresh[(K,V)]
+    val b = reifyEffects(block(k))
+	reflectEffect(HashMapForeach(x, k, b, block), summarizeEffects(b).star)
+  }
+
   def hashmap_clear[K:Manifest,V:Manifest](m: Exp[HashMap[K,V]])(implicit pos: SourceContext) = reflectWrite(m)(HashMapClear(m))
   def hashmap_keyset[K:Manifest,V:Manifest](m: Rep[HashMap[K,V]])(implicit pos: SourceContext) = HashMapKeySet(m)
   def hashmap_keys[K:Manifest,V:Manifest](m: Rep[HashMap[K,V]])(implicit pos: SourceContext) = HashMapKeys(m)
@@ -88,9 +107,9 @@ trait HashMapOpsExp extends HashMapOps with EffectExp {
     reflectEffect(HashMapRemoveHead(m,s))
   }
   def hashmap_-=[K: Manifest, V: Manifest](m: Rep[HashMap[K,V]], v: Rep[K])(implicit pos: SourceContext) = reflectEffect(HashMapRemove(m,v))
-  def hashmap_getorelseupdate[K:Manifest,V:Manifest](m: Rep[HashMap[K,V]], k: Rep[K], v: => Exp[V])(implicit pos: SourceContext) = {
+  def hashmap_getorelseupdate[K:Manifest,V:Manifest](m: Rep[HashMap[K,V]], k: Exp[K], v: => Exp[V])(implicit pos: SourceContext) = {
     val b = reifyEffects(v)
-    reflectEffect(HashMapGetOrElseUpdate(m,k,b))//, summarizeEffects(b).star)
+    reflectEffect(HashMapGetOrElseUpdate(m,k,b), summarizeEffects(b).star)
   }
   def hashmap_mkString[K: Manifest, V: Manifest](m: Rep[HashMap[K,V]], v: Rep[String])(implicit pos: SourceContext) = reflectEffect(HashMapMkString(m, v))
   
@@ -111,17 +130,21 @@ trait HashMapOpsExp extends HashMapOps with EffectExp {
   }
   
   override def syms(e: Any): List[Sym[Any]] = e match {
-    case HashMapGetOrElseUpdate(m, k, v) => syms(m):::syms(v)
+    case HashMapMap(m, k, v) => syms(m):::syms(v)
+    case HashMapForeach(m, k, v, f) => syms(m):::syms(v)
     case _ => super.syms(e)
   }
 
   override def boundSyms(e: Any): List[Sym[Any]] = e match {
-    case HashMapGetOrElseUpdate(m, k, v) => effectSyms(m) ::: effectSyms(v)
+    case HashMapGetOrElseUpdate(m, k, v) => effectSyms(k) ::: effectSyms(m) ::: effectSyms(v)
+    case HashMapMap(m, k, v) => k :: effectSyms(v)
+    case HashMapForeach(m, k, v, f) => k :: effectSyms(v)
     case _ => super.boundSyms(e)
   }
 
   override def symsFreq(e: Any): List[(Sym[Any], Double)] = e match {
-    case HashMapGetOrElseUpdate(m, k, v) => freqNormal(m) ::: freqHot(v)
+    case HashMapMap(m, k, v) => freqNormal(m) ::: freqHot(v)
+    case HashMapForeach(m, k, v, f) => freqNormal(m) ::: freqHot(v)
     case _ => super.symsFreq(e)
   }  
 
@@ -141,11 +164,11 @@ trait ScalaGenHashMapOps extends BaseGenHashMapOps with ScalaGenEffect {
     case m@HashMapNew(spkey, spvalue) => {
         val key = if (spkey != "") spkey else remap(m.mK)
         val value = if (spvalue != "") spvalue else remap(m.mV)
-        emitValDef(sym, src"new scala.collection.mutable.HashMap[$key,$value]() {")
-        if (spkey.contains("Array[Byte]")) {
+        emitValDef(sym, "new scala.collection.mutable.HashMap[" + key + "," + value + "]() {")
+        /*if (key.contains("Array[Byte]")) {
             stream.println("override def elemHashCode(key: Array[Byte]) = key(0).##")
             stream.println("override def elemEquals(key1: Array[Byte], key2: Array[Byte]) = key1.corresponds(key2){_ == _}")
-        }
+        }*/
         stream.println("}")
     }
     case HashMapApply(m,k) => emitValDef(sym, src"$m($k)")
@@ -165,14 +188,20 @@ trait ScalaGenHashMapOps extends BaseGenHashMapOps with ScalaGenEffect {
     case HashMapMap(m,k,v)  => {
 		 emitValDef(sym, quote(m) + ".map(" + quote(k) + "=> {")
          emitBlock(v)
-         emitBlockResult(v)
+	     emitBlockResult(v)
+         stream.println("})")
+    }
+    case HashMapForeach(m,k,v,f)  => {
+		 emitValDef(sym, quote(m) + ".foreach(" + quote(k) + "=> {")
+         emitBlock(v)
+	     emitBlockResult(v)
          stream.println("})")
     }
     case HashMapGetOrElseUpdate(m,k,v)  => {
-         gen"""val $sym = $m.getOrElseUpdate($k, {
-              |${nestedBlock(v)}
-              |$v
-              |})"""
+	 	emitValDef(sym, quote(m) + ".getOrElseUpdate(" + quote(k) + ",{")
+        emitBlock(v)
+	    emitBlockResult(v)
+        stream.println("})")
     }
     case HashMapMkString(m,k) => emitValDef(sym, src"$m.mkString($k)")
     case _ => super.emitNode(sym, rhs)
@@ -182,6 +211,39 @@ trait ScalaGenHashMapOps extends BaseGenHashMapOps with ScalaGenEffect {
 trait CLikeGenHashMapOps extends BaseGenHashMapOps with CLikeCodegen {
   val IR: HashMapOpsExp
   import IR._
+
+  def remapToAddress[A:Manifest](m: Exp[A]) : String = {
+	if (isPrimitiveType(m.tp)) "&" + quote(m)
+	else quote(m) 
+  }
+
+  override def emitNode(sym: Sym[Any], rhs: Def[Any]) = rhs match {
+    case HashMapCNew(hf,ef) => {
+		stream.print("GHashTable *" + quote(sym) + " = g_hash_table_new(")
+		quote(hf)
+		stream.print("&x" + hf.toString.replace("Sym(","").replace(")",""))
+		stream.print(",")
+		quote(ef)
+		stream.print("&x" + ef.toString.replace("Sym(","").replace(")",""))
+		stream.println(");")
+    }
+    case HashMapUpdate(m,k,v) => 
+		stream.println("g_hash_table_insert(" + quote(m) + "," + remapToAddress(k) + "," + quote(v) + ");")
+	case h@HashMapForeach(m,k,v,f) => 
+		val x = createUninlinedFunc1(f)
+		stream.println("g_hash_table_foreach(" + quote(m) + ", &" + quote(x) + ", NULL);")
+	case h@HashMapGetOrElseUpdate(m,k,v) => {
+		// Simulate this with a lookup and update if it returns NULL
+		emitValDef(sym, "g_hash_table_lookup(" + quote(m) + "," + quote(k) + ")")
+		stream.println("if (" + quote(sym) + "== NULL) {")
+		emitBlock(v)
+		stream.println("g_hash_table_insert(" + quote(m) + "," + quote(k) + "," + quote(getBlockResult(v)) + ");")
+		stream.println(quote(sym) + " = " + quote(getBlockResult(v)) + ";")
+		stream.println("}")
+	}
+    case _ => super.emitNode(sym, rhs)
+  }
+
 }
 
 trait CudaGenHashMapOps extends CudaGenEffect with CLikeGenHashMapOps

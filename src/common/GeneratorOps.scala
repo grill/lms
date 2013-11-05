@@ -2,8 +2,9 @@ package scala.virtualization.lms
 package common
 
 import java.io.PrintWriter
-
 import scala.virtualization.lms.common._
+import scala.collection.mutable
+import scala.collection.mutable.Set
 import scala.reflect.SourceContext
 import scala.collection.mutable.Map
 
@@ -11,13 +12,11 @@ trait MapOps extends Base {
   type MapType[K,V]
 
   def newMapType[K: Manifest, V: Manifest](): Rep[MapType[K, V]]
-  def lookupOrDefault[K, V: Manifest](x: Rep[MapType[K, V]], key: Rep[K], defaultVal: Rep[V]): Rep[V]
+  def lookupOrDefault[K: Manifest, V: Manifest](x: Rep[MapType[K, V]], key: Rep[K], defaultVal: Rep[V]): Rep[V]
   def updateValue[K, V](x: Rep[MapType[K, V]], key: Rep[K], value: Rep[V]): Rep[Unit]
 }
 
-trait GeneratorOps extends Base with Variables with LiftVariables
-  with IfThenElse with Equal with TupleOps with ListOps with MapOps {
-
+trait GeneratorOps extends Base with Variables with LiftVariables with IfThenElse with Equal with TupleOps with ListOps with MapOps with ObjectOps with StringOps with HashMapOps with ListBuffer with HashMultiMapOps with SetOps with LiftNumeric with NumericOps with ArrayOps {
   def materializeGenerator[T:Manifest,U:Manifest](gen: Generator[U]): Rep[T]
   def dematerializeGenerator[T:Manifest,U:Manifest](genCon: Rep[T]): Generator[U]
 
@@ -113,6 +112,33 @@ trait GeneratorOps extends Base with Variables with LiftVariables
       grps
     }
 
+	def groupByMultipleAggregates[K2:Manifest, V2:Manifest](newMapFun: () => Rep[scala.collection.mutable.HashMap[K2, Array[V2]]], numAggs: Rep[Int], group: Rep[(K, V)] => Rep[K2], fn: (Rep[V], Rep[V2]) => Rep[V2]*): Rep[scala.collection.mutable.HashMap[K2, Array[V2]]] = {
+      val grps = newMapFun()//HashMap[K2,Array[V2]]()
+      self.apply {
+        x:Rep[(K,V)] => {
+        	val key: Rep[K2] = group(x)
+			val aggs = grps.getOrElseUpdate(key, NewArray[V2](numAggs))//fn.length))// lookupOrDefault[K2,Array[V2]](grps,key,init))
+			fn.foldLeft(0) { (cnt,aggfn) => {
+	        	val value = aggfn(x._2,aggs(cnt))
+				aggs(cnt) = value
+				cnt+1
+			} }
+			unit()
+        }
+      }
+      grps
+    }
+
+    def mkString(delimiter: Rep[String] = unit("")): Rep[String] = {
+	  var res = string_new(unit(""))
+	  self.apply {
+		x:Rep[(K,V)] => res = res + infix_ToString(x)//.ToString
+		if (delimiter != unit("")) res = res + delimiter
+	  }
+	  res
+	}
+
+
     /*def slice[K2: Manifest](kp: Rep[K2], idx: Rep[List[Int]]): TupleGenerator[K, V] = {
       self.filter{
         kv:Rep[(K,V)] => {
@@ -173,6 +199,15 @@ trait GeneratorOps extends Base with Variables with LiftVariables
       res
     }
 
+	def sum(implicit num: Numeric[T]): Rep[T] = {
+      var res = unit(num.zero)
+      self.apply {
+        x:Rep[T] => res = numeric_plus(x, readVar(res))
+      }
+      readVar(res)
+    }
+
+
     def foldLong(init: Rep[Long], g: Rep[T] => (Rep[Long] => Rep[Long])): Rep[Long] = {
       var res = init
       self.apply {
@@ -192,7 +227,8 @@ trait GeneratorOps extends Base with Variables with LiftVariables
       }
       resList
     }
-  }
+
+	  }
 
   case class EmptyGen[T:Manifest]() extends Generator[T]{
     def apply(f: Rep[T] => Rep[Unit]) = {}
@@ -213,8 +249,7 @@ trait GeneratorOps extends Base with Variables with LiftVariables
   }
 }
 
-trait GeneratorOpsExp extends GeneratorOps with EffectExp with VariablesExp
-  with IfThenElseExp with EqualExp with TupleOpsExp with ListOpsExp {
+trait GeneratorOpsExp extends GeneratorOps with EffectExp with VariablesExp with IfThenElseExp with EqualExp with TupleOpsExp with ListOpsExp with ObjectOpsExp with StringOpsExp with HashMapOpsExp with ListBufferExp with HashMultiMapOpsExp with SetOpsExp with ArrayOpsExp {
 
   case class GeneratorContainer[T: Manifest,U:Manifest](gen: Generator[U]) extends Def[T]
   case class TupleGeneratorContainer[T: Manifest,U:Manifest,V:Manifest](gen: TupleGenerator[U,V]) extends Def[T]
@@ -240,13 +275,13 @@ trait ScalaGenGeneratorOps extends ScalaGenVariables
   val IR: GeneratorOpsExp
   import IR._
 
-  /*override def emitNode(sym: Sym[Any], rhs: Def[Any]) = rhs match {
+  override def emitNode(sym: Sym[Any], rhs: Def[Any]) = rhs match {
     // currently, we shoud explicitly call toList method on a generator, in order to convert it again to list
 
-    // case TupleGeneratorContainer(gen) => val genList = gen.toList; emitNode(sym, Def.unapply(genList).get)
-    // case GeneratorContainer(gen) => ...
+    case TupleGeneratorContainer(gen) => val genList = gen.toList; emitNode(sym, Def.unapply(genList).get)
+    case GeneratorContainer(gen) => 
     case _ => super.emitNode(sym, rhs)
-  }*/
+  }
 
 }
 

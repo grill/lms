@@ -166,7 +166,8 @@ trait CGenRangeOps extends CGenEffect with BaseGenRangeOps {
     case Until(start, end) =>
       throw new GenerationFailedException("CGenRangeOps: Range vector is not supported")
     case RangeForeach(start, end, i, body) =>
-      gen"""for(int $i=$start; $i < $end; $i++) {
+	  stream.println(remap(i.tp) + " " + quote(i) + ";") // Some compilers don't like the initialization inside for
+      gen"""for($i=$start; $i < $end; $i++) {
            |${nestedBlock(body)}
            |}"""
 

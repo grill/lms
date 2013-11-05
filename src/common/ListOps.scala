@@ -56,7 +56,9 @@ trait ListOps extends Variables {
 }
 
 trait ListOpsExp extends ListOps with EffectExp with VariablesExp {
-  case class ListNew[A:Manifest](xs: Seq[Rep[A]]) extends Def[List[A]]
+  case class ListNew[A:Manifest](xs: Seq[Rep[A]]) extends Def[List[A]] {
+  	val m = manifest[A]
+  }
   case class ListFromSeq[A:Manifest](xs: Rep[Seq[A]]) extends Def[List[A]]
   case class ListMap[A:Manifest,B:Manifest](l: Exp[List[A]], x: Sym[A], block: Block[B]) extends Def[List[B]]
   case class ListForeach[A:Manifest](l: Exp[List[A]], x: Sym[A], block: Block[Unit]) extends Def[Unit]
@@ -167,7 +169,7 @@ trait ScalaGenListOps extends BaseGenListOps with ScalaGenEffect {
   import IR._
 
   override def emitNode(sym: Sym[Any], rhs: Def[Any]) = rhs match {
-    case ListNew(xs) => emitValDef(sym, src"List(${(xs map {quote}).mkString(",")})")
+    case l@ListNew(xs) => emitValDef(sym, src"List[${l.m}](${(xs map {quote}).mkString(",")})")
     case ListConcat(xs,ys) => emitValDef(sym, src"$xs ::: $ys")
     case ListCons(x, xs) => emitValDef(sym, src"$x :: $xs")
     case ListHead(xs) => emitValDef(sym, src"$xs.head")

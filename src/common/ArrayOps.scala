@@ -29,10 +29,10 @@ trait ArrayOps extends Variables {
     def update(n: Rep[Int], y: Rep[T])(implicit pos: SourceContext) = array_update(a,n,y)
     def length(implicit pos: SourceContext) = array_length(a)
     def foreach(block: Rep[T] => Rep[Unit])(implicit pos: SourceContext) = array_foreach(a, block)
-    def filter(f: Rep[T] => Rep[Boolean]) = array_filter(a, f)
-	def groupBy[B: Manifest](f: Rep[T] => Rep[B]) = array_group_by(a,f)
+    //def filter(f: Rep[T] => Rep[Boolean]) = array_filter(a, f)
+	// def groupBy[B: Manifest](f: Rep[T] => Rep[B]) = array_group_by(a,f)
     def sort(implicit pos: SourceContext) = array_sort(a)
-    def map[B:Manifest](f: Rep[T] => Rep[B]) = array_map(a,f)
+    // def map[B:Manifest](f: Rep[T] => Rep[B]) = array_map(a,f)
     def toSeq = array_toseq(a)
 	def sum = array_sum(a)
     def zip[B: Manifest](a2: Rep[Array[B]]) = array_zip(a,a2)
@@ -148,6 +148,7 @@ trait ArrayOpsExp extends ArrayOps with EffectExp with VariablesExp {
     case ArrayForeach(a, x, body) => syms(a):::syms(body)
     case ArrayMap(a, x, body) => syms(a):::syms(body)
     case ArrayFilter(a, x, body) => syms(a):::syms(body)
+    case ArrayGroupBy(a, x, body) => syms(a):::syms(body)
     case _ => super.syms(e)
   }
 
@@ -155,6 +156,7 @@ trait ArrayOpsExp extends ArrayOps with EffectExp with VariablesExp {
     case ArrayForeach(a, x, body) => x :: effectSyms(body)
     case ArrayMap(a, x, body) => x :: effectSyms(body)
     case ArrayFilter(a, x, body) => x :: effectSyms(body)
+    case ArrayGroupBy(a, x, body) => x::effectSyms(body)
     case _ => super.boundSyms(e)
   }
 
@@ -162,6 +164,7 @@ trait ArrayOpsExp extends ArrayOps with EffectExp with VariablesExp {
     case ArrayForeach(a, x, body) => freqNormal(a):::freqHot(body)
     case ArrayMap(a, x, body) => freqNormal(a):::freqHot(body)
     case ArrayFilter(a, x, body) => freqNormal(a):::freqHot(body)
+    case ArrayGroupBy(a, x, body) => freqNormal(a):::freqHot(body)
     case _ => super.symsFreq(e)
   }
 
@@ -301,14 +304,14 @@ trait ScalaGenArrayOps extends BaseGenArrayOps with ScalaGenBase {
 		emitValDef(sym, quote(a) + ".filter(" + quote(x) + "=> {")
 		emitBlock(blk)
 		emitBlockResult(blk)
-		stream.println("}") 
+		stream.println("})") 
 		stream.println("// END OF FILTER")
 	case ArrayGroupBy(a,x,blk) =>
 		stream.println("// GROUPBY")
 		emitValDef(sym, quote(a) + ".groupBy(" + quote(x) + "=> {")
 		emitBlock(blk)
 		emitBlockResult(blk)
-		stream.println("}") 
+		stream.println("})") 
 		stream.println("// END OF GROUPBY")
 	case ArraySum(a) => 
 		stream.println("// SUM")
@@ -352,9 +355,11 @@ trait CGenArrayOps extends CGenBase with CLikeGenArrayOps {
         		val arrType = if (quote(sType) != "\"\"") remapInternal(quote(sType).replaceAll("\"","")) else remap(a.m)
 		        stream.println(arrType + "* " + quote(sym) + " = " + getMemoryAllocString(quote(n), arrType))
 				// Simulate length
-				stream.println("int " + quote(sym) + "Size = " + quote(n))
+				stream.println("int " + quote(sym) + "Size = " + quote(n) + ";")
 			}
+			case ArrayApply(x,n) => emitValDef(sym, quote(x) + "[" + quote(n) + "]")
         	case ArrayUpdate(x,n,y) => stream.println(quote(x) + "[" + quote(n) + "] = " + quote(y) + ";")
+    		case ArrayMkString(a, del) => stream.println("TODO: IMPLEMENT ARRAY MKSTRING")
         	case _ => super.emitNode(sym, rhs)
 		}
 	}

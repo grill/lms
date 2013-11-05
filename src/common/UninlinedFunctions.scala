@@ -1,6 +1,8 @@
 package scala.virtualization.lms
 package common
 
+import java.io.PrintWriter
+import java.io.StringWriter
 import scala.virtualization.lms.internal.{GenericNestedCodegen, GenerationFailedException}
 import scala.virtualization.lms.util.ClosureCompare
 
@@ -166,6 +168,115 @@ trait ScalaGenUninlinedFunctions extends ScalaGenEffect {
             // Now print function
             stream.println("def apply(" + argsToStr(syms, argTypes) + "): " + retType + " = {")
             printUninlinedFuncBody(reifyEffects(fun(e1,e2)))
+            emitEnabled = true
+        }
+    }
+    case UninlinedFuncApply0(fun) =>
+      emitValDef(sym, quote(fun) + "()")
+    case UninlinedFuncApply1(fun, arg) =>
+      emitValDef(sym, quote(fun) + "(" + quote(arg) + ")")
+    case UninlinedFuncApply2(fun, arg, arg2) =>
+      emitValDef(sym, quote(fun) + "(" + quote(arg) + ", " + quote(arg2) + ")")
+
+    case _ => super.emitNode(sym, rhs)
+  }
+}
+
+trait CGenUninlinedFunctions extends CGenEffect {
+  val IR: UninlinedFunctionsExp
+  import IR._
+  
+  var emitEnabled: Boolean = false
+
+  private def printState(si: () => Exp[Unit]) {
+    // Print state if si is set
+    if (si != null) {
+        val state = reifyEffects(si())
+        emitBlock(state)
+    }
+  }
+
+  private def argsToStr(e: List[Sym[Any]], argTypes: List[String]) = {
+    val z = e zip argTypes
+    z.map(x => {
+        if (quote(x._1) != "") x._2 + " " + quote(x._1)
+        else x._2 + " x" + x._1.toString.replace("Sym(","").replace(")","")
+    }).mkString(",")
+  }
+
+  private def printUninlinedFuncBody[T:Manifest](b: Block[T]) = {
+	val sw = new StringWriter()
+	val pw = new PrintWriter(sw)
+	withStream(pw) {
+    	emitBlock(b)
+	    stream.println("return " + quote(getBlockResult(b)) + ";")
+    	stream.println("}")
+	    stream.println()
+	}
+	sw.toString
+  }
+
+  private def getArgTypes(syms: List[Sym[Any]], args: String*) = {
+    val z = syms zip args.toList
+    z.map(x => if (x._2 != "") x._2 else remap(x._1.tp))
+  }
+
+  private def getReturnType(res: Sym[Any], dRet: String) = if (dRet != "") dRet else remap(res.tp)
+
+  override def emitFileHeader() = {
+    emitEnabled = true
+    functionList0.foreach(func => traverseStm(findDefinition(func).get))
+    functionList1.foreach(func => traverseStm(findDefinition(func).get))
+    functionList2.foreach(func => traverseStm(findDefinition(func).get))
+    emitEnabled = false
+    functionList0.clear
+    functionList1.clear
+    functionList2.clear
+  }
+
+  override def emitNode(sym: Sym[Any], rhs: Def[Any]) = rhs match {
+    case UninlinedFunc0(fun, res, dRet, si) => {
+        if (emitEnabled) {
+            val retType = getReturnType(res, dRet)
+            stream.println("object " + quote(sym)
+                           + " extends (()=>" + retType +") {")
+            emitEnabled = false
+            printState(si)
+            // Now print function
+            stream.println("def apply(): " + retType + " = {")
+            printUninlinedFuncBody(reifyEffects(fun()))
+            emitEnabled = true
+        }
+    }
+    case UninlinedFunc1(fun, e, res, argType, dRet, si) => {
+        if (emitEnabled) {
+            val syms = List(e)
+            val argTypes = getArgTypes(syms, argType)
+            val retType = getReturnType(res, dRet)
+            emitEnabled = false
+            printState(si)
+            // Now print function
+			val argStr = argsToStr(syms, argTypes)
+            val header = retType + " " + quote(sym) + "(" + argStr + ") {\n"
+            var str = header + printUninlinedFuncBody(reifyEffects(fun(e)))
+			if (e.tp == manifest[Tuple2[Any,Any]]) {
+				str = str.replace(quote(e) + "._1", "key").replace(quote(e) + "._2", "value")
+				str = str.replace(argStr,"void* key, void* value")
+			}
+			stream.println(str)
+            emitEnabled = true
+        }
+    }
+    case UninlinedFunc2(fun, e1, e2, res, argType, argType2, dRet, si) => {
+        if (emitEnabled) {
+            val syms = List(e1,e2)
+            val argTypes = getArgTypes(syms,argType,argType2)
+            val retType = getReturnType(res, dRet)
+            emitEnabled = false
+            printState(si)
+            // Now print function
+            stream.println(retType + " " + quote(sym) + "(" + argsToStr(syms, argTypes) + ") {")
+            stream.println(printUninlinedFuncBody(reifyEffects(fun(e1,e2))))
             emitEnabled = true
         }
     }

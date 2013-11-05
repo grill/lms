@@ -2865,4 +2865,7 @@ trait ScalaGenTupleOps extends ScalaGenBase {
 trait CGenTupleOps extends CGenBase {
   val IR: TupleOpsExp
   import IR._
+  override def emitNode(sym: Sym[Any], rhs: Def[Any]) = rhs match {
+    case _ => super.emitNode(sym, rhs)
+  }
 }

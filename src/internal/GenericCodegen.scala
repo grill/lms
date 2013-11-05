@@ -456,6 +456,7 @@ trait GenericCodegen extends BlockTraversal {
       case e: Exp[_] => quote(e)
       case m: Manifest[_] => remap(m)
       case s: String => s
+	  case null => "null"
       case _ => throw new RuntimeException(s"Could not quote or remap $arg")
     }
 
