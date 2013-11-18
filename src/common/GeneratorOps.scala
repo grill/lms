@@ -12,7 +12,7 @@ trait MapOps extends Base {
   type MapType[K,V]
 
   def newMapType[K: Manifest, V: Manifest](): Rep[MapType[K, V]]
-  def lookupOrDefault[K: Manifest, V: Manifest](x: Rep[MapType[K, V]], key: Rep[K], defaultVal: Rep[V]): Rep[V]
+  def lookupOrDefault[K, V: Manifest](x: Rep[MapType[K, V]], key: Rep[K], defaultVal: Rep[V]): Rep[V]
   def updateValue[K, V](x: Rep[MapType[K, V]], key: Rep[K], value: Rep[V]): Rep[Unit]
 }
 

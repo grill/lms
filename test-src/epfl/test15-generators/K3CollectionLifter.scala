@@ -59,7 +59,7 @@ trait K3PersistentCollectionOps extends Variables with K3PersistentCollectionGen
 
 }
 
-trait K3PersistentCollectionExp extends K3PersistentCollectionOps with GeneratorOpsExp with BaseExp with EffectExp with VariablesExp {
+trait K3PersistentCollectionExp extends K3PersistentCollectionOps with GeneratorOpsExp with BaseExp with EffectExp with VariablesExp with FunctionsExp {
 
   case class NewK3PersistentCollection[K, V](mK: Manifest[K], mV: Manifest[V], name: Exp[String], elems: Exp[Map[K, V]],
     sndIdx: Exp[Option[Map[String, Index[K, V]]]]) extends Def[K3PersistentCollection[K, V]]
