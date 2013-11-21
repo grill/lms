@@ -79,17 +79,17 @@ class TestStencil extends FileDiffSuite {
 
     // some arithemetic rewrites
     override def numeric_plus[T:Numeric:Manifest](lhs: Exp[T], rhs: Exp[T])(implicit pos: SourceContext): Exp[T] = ((lhs,rhs) match {
-      case (Def(NumericPlus(x:Exp[Int],Const(y:Int))), Const(z:Int)) => numeric_plus(x, unit(y+z)) // (x+y)+z --> x+(y+z)
-      case (Def(NumericMinus(x:Exp[Int],Const(y:Int))), Const(z:Int)) => numeric_minus(x, unit(y-z)) // (x-y)+z --> x-(y-z)
-      case (x: Exp[Int], Const(z:Int)) if z < 0 => numeric_minus(x, unit(-z))
-      case (x: Exp[Int], Const(0)) => x
+      case (Def(NumericPlus(x:Exp[Int] @unchecked,Const(y:Int))), Const(z:Int)) => numeric_plus(x, unit(y+z)) // (x+y)+z --> x+(y+z)
+      case (Def(NumericMinus(x:Exp[Int] @unchecked,Const(y:Int))), Const(z:Int)) => numeric_minus(x, unit(y-z)) // (x-y)+z --> x-(y-z)
+      case (x: Exp[Int] @unchecked, Const(z:Int)) if z < 0 => numeric_minus(x, unit(-z))
+      case (x: Exp[Int] @unchecked, Const(0)) => x
       case _ => super.numeric_plus(lhs,rhs)
     }).asInstanceOf[Exp[T]]
     override def numeric_minus[T:Numeric:Manifest](lhs: Exp[T], rhs: Exp[T])(implicit pos: SourceContext): Exp[T] = ((lhs,rhs) match {
-      case (Def(NumericMinus(x:Exp[Int],Const(y:Int))), Const(z:Int)) => numeric_minus(x, unit(y+z)) // (x-y)-z --> x-(y+z)
-      case (Def(NumericPlus(x:Exp[Int],Const(y:Int))), Const(z:Int)) => numeric_plus(x, unit(y-z)) // (x+y)-z --> x+(y-z)
-      case (x: Exp[Int], Const(z:Int)) if z < 0 => numeric_plus(x, unit(-z))
-      case (x: Exp[Int], Const(0)) => x
+      case (Def(NumericMinus(x:Exp[Int] @unchecked,Const(y:Int))), Const(z:Int)) => numeric_minus(x, unit(y+z)) // (x-y)-z --> x-(y+z)
+      case (Def(NumericPlus(x:Exp[Int] @unchecked,Const(y:Int))), Const(z:Int)) => numeric_plus(x, unit(y-z)) // (x+y)-z --> x+(y-z)
+      case (x: Exp[Int] @unchecked, Const(z:Int)) if z < 0 => numeric_plus(x, unit(-z))
+      case (x: Exp[Int] @unchecked, Const(0)) => x
       case _ => super.numeric_minus(lhs,rhs)
     }).asInstanceOf[Exp[T]]
 

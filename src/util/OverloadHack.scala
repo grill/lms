@@ -26,9 +26,9 @@ trait OverloadHack extends Serializable {
   class Overloaded20 extends Serializable
   class Overloaded21 extends Serializable
   class Overloaded22 extends Serializable
-  class Overloaded23 extends Serializable 
+  class Overloaded23 extends Serializable
   class Overloaded24 extends Serializable
-  
+
   implicit val overloaded1 = new Overloaded1
   implicit val overloaded2 = new Overloaded2
   implicit val overloaded3 = new Overloaded3
@@ -47,10 +47,10 @@ trait OverloadHack extends Serializable {
   implicit val overloaded16 = new Overloaded16
   implicit val overloaded17 = new Overloaded17
   implicit val overloaded18 = new Overloaded18
-  implicit val overloaded19 = new Overloaded19  
+  implicit val overloaded19 = new Overloaded19
   implicit val overloaded20 = new Overloaded20
-  implicit val overloaded21 = new Overloaded21  
-  implicit val overloaded22 = new Overloaded22  
+  implicit val overloaded21 = new Overloaded21
+  implicit val overloaded22 = new Overloaded22
   implicit val overloaded23 = new Overloaded23
   implicit val overloaded24 = new Overloaded24
 }

@@ -68,7 +68,7 @@ class TestTransform extends FileDiffSuite {
           codegen.emitBlock(z)
         }
       } catch {
-        case ex =>
+        case ex : Exception =>
         println("error: " + ex)
       }
       println("-- done")

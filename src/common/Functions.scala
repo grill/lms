@@ -9,7 +9,7 @@ import scala.virtualization.lms.util.ClosureCompare
 import scala.reflect.SourceContext
 
 trait Functions extends Base {
- 
+
   def doLambda[A:Manifest,B:Manifest](fun: Rep[A] => Rep[B])(implicit pos: SourceContext): Rep[A => B]
   implicit def fun[A:Manifest,B:Manifest](f: Rep[A] => Rep[B]): Rep[A=>B] = doLambda(f)
 
@@ -153,20 +153,20 @@ trait TupledFunctionsExp extends TupledFunctions with FunctionsExp with TupleOps
       case _ if mA == implicitly[Manifest[Unit]] =>
         UnboxedTuple[A](List())
       case _ if tupledManifestOf(mA, 2) =>
-        x match { case t : Rep[(a1,a2)] =>
+        x match { case t : Rep[(a1,a2)] @unchecked =>
           UnboxedTuple[A](List(
             tuple2_get1(t)(mA.typeArguments(0).asInstanceOf[Manifest[a1]], pos),
             tuple2_get2(t)(mA.typeArguments(1).asInstanceOf[Manifest[a2]], pos)))
         }
       case _ if tupledManifestOf(mA, 3) =>
-        x match { case t : Rep[(a1,a2,a3)] =>
+        x match { case t : Rep[(a1,a2,a3)] @unchecked =>
           UnboxedTuple[A](List(
             tuple3_get1(t)(mA.typeArguments(0).asInstanceOf[Manifest[a1]], pos),
             tuple3_get2(t)(mA.typeArguments(1).asInstanceOf[Manifest[a2]], pos),
             tuple3_get3(t)(mA.typeArguments(2).asInstanceOf[Manifest[a3]], pos)))
         }
       case _ if tupledManifestOf(mA, 4) =>
-        x match { case t : Rep[(a1,a2,a3,a4)] =>
+        x match { case t : Rep[(a1,a2,a3,a4)] @unchecked =>
           UnboxedTuple[A](List(
             tuple4_get1(t)(mA.typeArguments(0).asInstanceOf[Manifest[a1]], pos),
             tuple4_get2(t)(mA.typeArguments(1).asInstanceOf[Manifest[a2]], pos),
@@ -174,7 +174,7 @@ trait TupledFunctionsExp extends TupledFunctions with FunctionsExp with TupleOps
             tuple4_get4(t)(mA.typeArguments(3).asInstanceOf[Manifest[a4]], pos)))
         }
       case _ if tupledManifestOf(mA, 5) =>
-        x match { case t : Rep[(a1,a2,a3,a4,a5)] =>
+        x match { case t : Rep[(a1,a2,a3,a4,a5)] @unchecked =>
           UnboxedTuple[A](List(
             tuple5_get1(t)(mA.typeArguments(0).asInstanceOf[Manifest[a1]], pos),
             tuple5_get2(t)(mA.typeArguments(1).asInstanceOf[Manifest[a2]], pos),

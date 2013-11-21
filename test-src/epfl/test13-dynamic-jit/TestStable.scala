@@ -77,7 +77,7 @@ trait CompileDynExp extends CompileDyn with BaseExp with StaticDataExp with Unch
   def freesyms(x:Any): List[Sym[Any]] = { // switch to syms again ...
     val fields = x.getClass.getDeclaredFields
     fields.foreach(_.setAccessible(true))
-    val res = fields.map(_.get(x)).collect{case x: Sym[Any] => x}.toList
+    val res = fields.map(_.get(x)).collect{case x: Sym[_] => x}.toList
     //println("free vars: " + res)
     res
   }

@@ -66,7 +66,7 @@ trait NestedBlockTransformer extends internal.FatBlockTraversal {
   var subst: scala.collection.immutable.Map[Sym[_], Exp[_]] = Map.empty
 
   def transformExp[A](e: Exp[A]): Exp[A] = e match {
-    case s: Sym[A] =>
+    case s: Sym[A] @unchecked =>
       val e2 = subst.getOrElse(s,e).asInstanceOf[Exp[A]]
       if (e2 == e) e2 else transformExp(e2)
     case _ => e
@@ -132,7 +132,7 @@ trait MirrorBlockTransformer extends internal.FatBlockTraversal {
   var subst: scala.collection.immutable.Map[Sym[_], Exp[_]] = Map.empty
 
   def transformExp[A](e: Exp[A]): Exp[A] = e match {
-    case s: Sym[A] =>
+    case s: Sym[A] @unchecked =>
       val e2 = subst.getOrElse(s,e).asInstanceOf[Exp[A]]
       if (e2 == e) e2 else transformExp(e2)
     case _ => e
@@ -384,7 +384,7 @@ class TestMisc extends FileDiffSuite {
         codegen.emitBlock(z)
       }
     } catch {
-      case ex =>
+      case ex : Exception =>
       println("error: " + ex)
     }
     println("-- done")
@@ -457,7 +457,7 @@ class TestMisc extends FileDiffSuite {
       println("// note how the last else branch lost sharing of common subexpressions")
       println("// this is because NestedBlockTransformer does not go through findOrCreateDefinition")
     } catch {
-      case ex =>
+      case ex : Exception =>
       println("error: " + ex)
     }
     println("-- done")
@@ -533,7 +533,7 @@ class TestMisc extends FileDiffSuite {
       println("// but we have created new identifiers for everything.")
       println("// we cannot detect convergence of transformation this way.")
     } catch {
-      case ex =>
+      case ex : Exception =>
       println("error: " + ex)
     }
     println("-- done")
@@ -608,7 +608,7 @@ class TestMisc extends FileDiffSuite {
       println("// not resetting graph inbetween runs and smarter pruning of statements based on their inputs.")
       println("// still lots of new symbols.")
     } catch {
-      case ex =>
+      case ex : Exception =>
       println("error: " + ex)
     }
     println("-- done")
