@@ -10,7 +10,7 @@ import java.io.PrintWriter
 import internal.ScalaCompile
 
 trait Power1 { this: Arith =>
-  def power(b: Rep[Double], x: Int): Rep[Double] = 
+  def power(b: Rep[Double], x: Int): Rep[Double] =
     if (x == 0) 1.0 else b * power(b, x - 1)
 }
 
@@ -42,13 +42,13 @@ trait ArithStr extends Arith with BaseStr {
 
 
 class TestPower extends FileDiffSuite {
-  
+
   val prefix = "test-out/epfl/test2-"
   ScalaCompile.dumpGeneratedCode = false
 
-  def testPower = {
+  it("testPower") {
     withOutFile(prefix+"power") {
-/*    
+/*
     println {
       val o = new TestPower with ArithRepDirect
       import o._
@@ -60,7 +60,7 @@ class TestPower extends FileDiffSuite {
       import o._
       power(2,4)
     }
-    
+
     println {
       val o = new TestPower with ArithRepString
       import o._
@@ -136,7 +136,7 @@ class TestPower extends FileDiffSuite {
 
 
     {
-      val o = new Power1 with ArithExpOpt with CompileScala { self => 
+      val o = new Power1 with ArithExpOpt with CompileScala { self =>
         val codegen = new ScalaGenFlat with ScalaGenArith { val IR: self.type = self }
       }
       import o._

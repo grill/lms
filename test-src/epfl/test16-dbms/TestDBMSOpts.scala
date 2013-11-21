@@ -10,9 +10,9 @@ import scala.reflect.SourceContext
 
 
 class TestDBMSOpts extends FileDiffSuite {
-  val prefix = "test-out/epfl/test16-" 
+  val prefix = "test-out/epfl/test16-"
 
-  def testDBMSOpt2 = {
+  it("testDBMSOpt2") {
     withOutFile(prefix + "DBMSOpt2") {
       val prog = new ScalaOpsPkgExp with LiftVariables with LiftNumeric with LiftString with ScalaCompile { self =>
 	val codegen = new ScalaCodeGenPkg { val IR: self.type = self; }
@@ -41,7 +41,7 @@ class TestDBMSOpts extends FileDiffSuite {
     }
   }
 
-  def testDBMSOpt1 = {
+  it("testDBMSOpt1") {
     withOutFile(prefix+"DBMSOpt1") {
       val prog = new ScalaOpsPkgExp with LiftVariables with ScalaCompile { self =>
 	val codegen = new ScalaCodeGenPkg { val IR: self.type = self; }

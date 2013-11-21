@@ -35,8 +35,8 @@ trait SimpleBlockTransformer extends internal.FatBlockTraversal {
     focusExactScope(block) { levelScope =>
       //val newScope = levelScope flatMap transformStm
       //Block(newScope) // block with exactly those stms. we don't currently support that.
-      levelScope foreach { stm => 
-        val stms2 = transformStm(stm); 
+      levelScope foreach { stm =>
+        val stms2 = transformStm(stm);
         val stms3 = stms2 diff globalDefs // skip those already in the graph
         reflectSubGraph(stms3) // may fail if we're redefining a symbol that already exists
       }
@@ -45,16 +45,16 @@ trait SimpleBlockTransformer extends internal.FatBlockTraversal {
   }
 
   def transformStm(stm: Stm): List[Stm] = stm match { // override this to implement custom traversal
-    case TP(s,d) => 
+    case TP(s,d) =>
       val trans = new AbstractTransformer {
         val IR: SimpleBlockTransformer.this.IR.type = SimpleBlockTransformer.this.IR
-        def apply[A](x: Exp[A]) = x 
+        def apply[A](x: Exp[A]) = x
         override def apply[A:Manifest](x: Block[A]) = transformBlock(x)
       }
       List(TP(s, mirrorDef(d, trans)(mtype(s.tp),mpos(s.pos))))
     // blocks(d) map transformBlock
   }
-  
+
   // problem: transform (s,d) to (s,d1) and (s,d2) in two different branches
 }
 
@@ -64,7 +64,7 @@ trait NestedBlockTransformer extends internal.FatBlockTraversal {
   import IR._
 
   var subst: scala.collection.immutable.Map[Sym[_], Exp[_]] = Map.empty
-  
+
   def transformExp[A](e: Exp[A]): Exp[A] = e match {
     case s: Sym[A] =>
       val e2 = subst.getOrElse(s,e).asInstanceOf[Exp[A]]
@@ -83,8 +83,8 @@ trait NestedBlockTransformer extends internal.FatBlockTraversal {
       //val newScope = levelScope flatMap transformStm
       //Block(newScope) // block with exactly those stms. we don't currently support that.
       val saveSubst = subst
-      levelScope foreach { stm => 
-        val stms2 = transformStm(stm); 
+      levelScope foreach { stm =>
+        val stms2 = transformStm(stm);
         val stms3 = stms2 diff globalDefs // skip those already in the graph
         var changedSubst = false
         val stms4 = stms3 map { s =>
@@ -93,7 +93,7 @@ trait NestedBlockTransformer extends internal.FatBlockTraversal {
           if (conflict) {
             println("*** conflict " + s)
             s match {
-              case TP(sym, rhs) => 
+              case TP(sym, rhs) =>
                 val sym1 = fresh(mtype(sym.tp))
                 assert(!subst.contains(sym))
                 subst += (sym -> sym1) // TODO: if we are changing subst we may need to re-transform following elems in stm3!!
@@ -111,7 +111,7 @@ trait NestedBlockTransformer extends internal.FatBlockTraversal {
   }
 
   def transformStm(stm: Stm): List[Stm] = stm match { // override this to implement custom traversal
-    case TP(s,d) => 
+    case TP(s,d) =>
       val trans = new AbstractTransformer {
         val IR: NestedBlockTransformer.this.IR.type = NestedBlockTransformer.this.IR
         def apply[A](x: Exp[A]) = transformExp(x)
@@ -120,7 +120,7 @@ trait NestedBlockTransformer extends internal.FatBlockTraversal {
       List(TP(s, mirrorDef(d, trans)(mtype(s.tp),mpos(s.pos))))
     // blocks(d) map transformBlock
   }
-  
+
   // problem: transform (s,d) to (s,d1) and (s,d2) in two different branches
 }
 
@@ -137,7 +137,7 @@ trait MirrorBlockTransformer extends internal.FatBlockTraversal {
       if (e2 == e) e2 else transformExp(e2)
     case _ => e
   }
-  
+
   def transformBlock[A](block: Block[A]): Block[A] = {
     implicit val m = block.tp
     reifyEffects {
@@ -163,9 +163,9 @@ trait MirrorBlockTransformer extends internal.FatBlockTraversal {
       traverseBlockFocused(block)
     }
   }*/
-  
+
   override def traverseStm(stm: Stm): Unit = stm match {
-    case TP(sym, rhs) => 
+    case TP(sym, rhs) =>
       val sym2 = transformExp(sym)
       assert(sym == sym2)
       if (sym2 == sym) {
@@ -174,9 +174,9 @@ trait MirrorBlockTransformer extends internal.FatBlockTraversal {
         subst = subst + (sym -> replace)
       }
   }
-  
+
   def transformStm(stm: Stm): Exp[Any] = stm match { // override this to implement custom traversal
-    case TP(s,d) => 
+    case TP(s,d) =>
       val trans = new AbstractTransformer {
         val IR: MirrorBlockTransformer.this.IR.type = MirrorBlockTransformer.this.IR
         def apply[A](x: Exp[A]) = transformExp(x)
@@ -193,7 +193,7 @@ trait MirrorRetainBlockTransformer extends MirrorBlockTransformer {
   import IR._
 
   override def traverseStm(stm: Stm): Unit = stm match {
-    case TP(sym, rhs) => 
+    case TP(sym, rhs) =>
       val sym2 = transformExp(sym)
       assert(sym == sym2)
       if (sym2 == sym) {
@@ -204,9 +204,9 @@ trait MirrorRetainBlockTransformer extends MirrorBlockTransformer {
         }
       }
   }
-  
+
   override def transformStm(stm: Stm): Exp[Any] = stm match { // override this to implement custom traversal
-    case TP(s,d) => 
+    case TP(s,d) =>
       // we want to skip those statements that don't have symbols that need substitution
       // however we need to recurse into any blocks
       if (!syms(d).exists(subst contains _) && blocks(d).isEmpty) {
@@ -228,16 +228,16 @@ trait MirrorRetainBlockTransformer extends MirrorBlockTransformer {
 
 /*
 trait FWXTransform extends BaseFatExp with EffectExp with IfThenElseFatExp with LoopsFatExp { self =>
-  
+
   // we need to apply the current substitution to each Def we create:
   // Foo(x) atPhase(t) { bar(x) }   <--- x in bar(x)  will refer to a sym that may have been replaced itself
-  
+
   var subst: Map[Sym[_], Exp[_]] = xform.subst
 
   override implicit def toAtom[A:Manifest](d: Def[A]): Exp[A] = { // override createDefinition instead?
     val in = syms(d)
     val actual = in map (s => subst.getOrElse(s,s))
-    
+
     if (in != actual) {
       println("toAtom transform "+d+" " + in + " -> " + actual)
       val t = new SubstTransformer
@@ -255,29 +255,29 @@ trait FWXTransform extends BaseFatExp with EffectExp with IfThenElseFatExp with 
 
 
 class TestMisc extends FileDiffSuite {
-  
+
   val prefix = "test-out/epfl/test10-"
-  
-  trait DSL extends VectorOps with Arith with OrderingOps with BooleanOps with LiftVariables 
+
+  trait DSL extends VectorOps with Arith with OrderingOps with BooleanOps with LiftVariables
     with IfThenElse with While with RangeOps with Print {
     def test(x: Rep[Int]): Rep[Unit]
   }
-  
-  trait Impl extends DSL with VectorExp with ArithExp with OrderingOpsExpOpt with BooleanOpsExp 
-    with EqualExpOpt with ArrayMutationExp with IfThenElseFatExp with LoopsFatExp with WhileExpOptSpeculative 
+
+  trait Impl extends DSL with VectorExp with ArithExp with OrderingOpsExpOpt with BooleanOpsExp
+    with EqualExpOpt with ArrayMutationExp with IfThenElseFatExp with LoopsFatExp with WhileExpOptSpeculative
     with RangeOpsExp with PrintExp with FatExpressions {
     //override val verbosity = 1
   }
-  
-  trait Codegen extends ScalaGenVector with ScalaGenArrayMutation with ScalaGenArith with ScalaGenOrderingOps 
-    with ScalaGenVariables with ScalaGenEqual with ScalaGenIfThenElse with ScalaGenWhileOptSpeculative 
+
+  trait Codegen extends ScalaGenVector with ScalaGenArrayMutation with ScalaGenArith with ScalaGenOrderingOps
+    with ScalaGenVariables with ScalaGenEqual with ScalaGenIfThenElse with ScalaGenWhileOptSpeculative
     with ScalaGenRangeOps with ScalaGenPrint {
     val IR: Impl
-  }  
-  
-  
+  }
+
+
   // test simple block transform
-  def testMisc1 = withOutFileChecked(prefix+"misc1") {
+  it("testMisc1") { withOutFileChecked(prefix+"misc1") {
     trait Prog extends DSL with Impl {
       def test(x: Rep[Int]) = {
         val z = vzeros(100)
@@ -290,18 +290,18 @@ class TestMisc extends FileDiffSuite {
     val p = new Prog with Impl
     val x = p.fresh[Int]
     val y = p.reifyEffects(p.test(x))
-    
+
     val codegen = new Codegen { val IR: p.type = p }
-    
+
     val graph = p.globalDefs
     println("-- full graph")
     graph foreach println
-    
+
     println("-- before transformation")
     codegen.withStream(new PrintWriter(System.out)) {
       codegen.emitBlock(y)
     }
-    
+
     p.globalDefs = Nil // reset graph, transformer will build anew
     p.globalDefsCache = Map.empty
     val trans = new SimpleBlockTransformer { // a + b --> b + a
@@ -316,17 +316,17 @@ class TestMisc extends FileDiffSuite {
       }
     }
     val z = trans.transformBlock(y)
-    
+
     println("-- after transformation")
     codegen.withStream(new PrintWriter(System.out)) {
       codegen.emitBlock(z)
     }
     println("-- done")
-  }
+  }}
 
   // test simple block transform -- failure case when transforming
   // different occurences of same stm in different ways
-  def testMisc2 = withOutFileChecked(prefix+"misc2") {
+  it("testMisc2") { withOutFileChecked(prefix+"misc2") {
     trait Prog extends DSL with Impl {
       def test(x: Rep[Int]) = {
         val a = vzeros(100) // will be moved into branches
@@ -342,18 +342,18 @@ class TestMisc extends FileDiffSuite {
     val p = new Prog with Impl
     val x = p.fresh[Int]
     val y = p.reifyEffects(p.test(x))
-    
+
     val codegen = new Codegen { val IR: p.type = p }
-    
+
     val graph = p.globalDefs
     println("-- full graph")
     graph foreach println
-    
+
     println("-- before transformation")
     codegen.withStream(new PrintWriter(System.out)) {
       codegen.emitBlock(y)
     }
-    
+
     p.globalDefs = Nil // reset graph, transformer will build anew
     p.globalDefsCache = Map.empty
     val trans = new SimpleBlockTransformer { // a + b --> b + a, but only in then-branches of an if-then-else
@@ -378,7 +378,7 @@ class TestMisc extends FileDiffSuite {
     }
     try {
       val z = trans.transformBlock(y)
-    
+
       println("-- after transformation")
       codegen.withStream(new PrintWriter(System.out)) {
         codegen.emitBlock(z)
@@ -388,10 +388,10 @@ class TestMisc extends FileDiffSuite {
       println("error: " + ex)
     }
     println("-- done")
-  }
+  }}
 
   // test better block transform -- fixing above case
-  def testMisc3 = withOutFileChecked(prefix+"misc3") {
+  it("testMisc3") { withOutFileChecked(prefix+"misc3") {
     trait Prog extends DSL with Impl {
       def test(x: Rep[Int]) = {
         val a = vzeros(100) // will be moved into branches
@@ -412,18 +412,18 @@ class TestMisc extends FileDiffSuite {
     val p = new Prog with Impl
     val x = p.fresh[Int]
     val y = p.reifyEffects(p.test(x))
-    
+
     val codegen = new Codegen { val IR: p.type = p }
-    
+
     val graph = p.globalDefs
     println("-- full graph")
     graph foreach println
-    
+
     println("-- before transformation")
     codegen.withStream(new PrintWriter(System.out)) {
       codegen.emitBlock(y)
     }
-    
+
     p.globalDefs = Nil // reset graph, transformer will build anew
     p.globalDefsCache = Map.empty
     val trans = new NestedBlockTransformer { // a + b --> b + a, but only in then-branches of an if-then-else
@@ -449,7 +449,7 @@ class TestMisc extends FileDiffSuite {
     }
     try {
       val z = trans.transformBlock(y)
-    
+
       println("-- after transformation")
       codegen.withStream(new PrintWriter(System.out)) {
         codegen.emitBlock(z)
@@ -461,11 +461,10 @@ class TestMisc extends FileDiffSuite {
       println("error: " + ex)
     }
     println("-- done")
-  }
-
+  }}
 
   // test mirror block transform -- regain sharing info but mirroring all statements
-  def testMisc4 = withOutFileChecked(prefix+"misc4") {
+  it("testMisc4") { withOutFileChecked(prefix+"misc4") {
     trait Prog extends DSL with Impl {
       def test(x: Rep[Int]) = {
         val a = vzeros(100) // will be moved into branches
@@ -486,18 +485,18 @@ class TestMisc extends FileDiffSuite {
     val p = new Prog with Impl
     val x = p.fresh[Int]
     val y = p.reifyEffects(p.test(x))
-    
+
     val codegen = new Codegen { val IR: p.type = p }
-    
+
     val graph = p.globalDefs
     println("-- full graph")
     graph foreach println
-    
+
     println("-- before transformation")
     codegen.withStream(new PrintWriter(System.out)) {
       codegen.emitBlock(y)
     }
-    
+
     p.globalDefs = Nil // reset graph, transformer will build anew
     p.globalDefsCache = Map.empty
     val trans = new MirrorBlockTransformer { // a + b --> b + a, but only in then-branches of an if-then-else
@@ -525,7 +524,7 @@ class TestMisc extends FileDiffSuite {
     }
     try {
       val z = trans.transformBlock(y)
-    
+
       println("-- after transformation")
       codegen.withStream(new PrintWriter(System.out)) {
         codegen.emitBlock(z)
@@ -538,10 +537,10 @@ class TestMisc extends FileDiffSuite {
       println("error: " + ex)
     }
     println("-- done")
-  }
+  }}
 
   // test mirror block transform -- regain sharing info but mirroring all statements
-  def testMisc5 = withOutFileChecked(prefix+"misc5") {
+  it("testMisc5") { withOutFileChecked(prefix+"misc5") {
     trait Prog extends DSL with Impl {
       def test(x: Rep[Int]) = {
         val a = vzeros(100) // will be moved into branches
@@ -562,18 +561,18 @@ class TestMisc extends FileDiffSuite {
     val p = new Prog with Impl
     val x = p.fresh[Int]
     val y = p.reifyEffects(p.test(x))
-    
+
     val codegen = new Codegen { val IR: p.type = p }
-    
+
     val graph = p.globalDefs
     println("-- full graph")
     graph foreach println
-    
+
     println("-- before transformation")
     codegen.withStream(new PrintWriter(System.out)) {
       codegen.emitBlock(y)
     }
-    
+
     //p.globalDefs = Nil don't reset graph to get better sharing ... // reset graph, transformer will build anew
     val trans = new MirrorRetainBlockTransformer { // a + b --> b + a, but only in then-branches of an if-then-else
       val IR: p.type = p
@@ -600,7 +599,7 @@ class TestMisc extends FileDiffSuite {
     }
     try {
       val z = trans.transformBlock(y)
-    
+
       println("-- after transformation")
       codegen.withStream(new PrintWriter(System.out)) {
         codegen.emitBlock(z)
@@ -613,6 +612,5 @@ class TestMisc extends FileDiffSuite {
       println("error: " + ex)
     }
     println("-- done")
-  }
-
+  }}
 }

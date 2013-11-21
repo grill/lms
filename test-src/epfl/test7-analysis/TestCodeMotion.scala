@@ -12,7 +12,7 @@ import java.io.{PrintWriter,StringWriter,FileOutputStream}
 
 
 trait NestLambdaProg1 extends Arith with Functions with Print { // also used by TestLambdaLift
-  
+
   def test(x: Rep[Unit]) = {
     val f = doLambda { x: Rep[Double] =>
       val g = doLambda { y: Rep[Double] =>
@@ -23,24 +23,24 @@ trait NestLambdaProg1 extends Arith with Functions with Print { // also used by 
     }
     f
   }
-  
+
 }
 
 trait NestCondProg2 extends Arith with Functions with IfThenElse with Print {
-  
+
   /* Previously this program exhibited behavior that is likely undesired in many
   cases. The definition of f was moved *into* g and into the conditional.
   The doLambda in the else branch would not be hoisted out of g either.
-  
+
   Although there are situations where this particular kind of code motion
   is an improvement (namely, if the probability of y == true is very low
   and the else branch would be cheap).
   */
-  
-  
+
+
   def test(x: Rep[Unit]) = {
     val f = doLambda { x: Rep[Double] => 2 * x }
-    
+
     val g = doLambda { y: Rep[Boolean] =>
       print("yo")
       if (y)
@@ -50,15 +50,15 @@ trait NestCondProg2 extends Arith with Functions with IfThenElse with Print {
     }
     g
   }
-  
+
 }
 
 
 trait NestCondProg3 extends Arith with Functions with IfThenElse with Print {
-  
+
   def test(x: Rep[Unit]) = {
     val f = if (unit(true)) doLambda { x: Rep[Double] => 2 * x } else doLambda { x: Rep[Double] => 4 * x }
-    
+
     val g = doLambda { y: Rep[Boolean] =>
       print("yo")
       if (y) {
@@ -71,11 +71,11 @@ trait NestCondProg3 extends Arith with Functions with IfThenElse with Print {
     }
     g
   }
-  
+
 }
 
 trait NestCondProg4 extends Arith with Functions with IfThenElse with Print {
-  
+
   def test(x: Rep[Unit]) = {
     val g = doLambda { y: Rep[Double] =>
       if (unit(true)) {
@@ -87,12 +87,12 @@ trait NestCondProg4 extends Arith with Functions with IfThenElse with Print {
     }
     g
   }
-  
+
 }
 
 
 trait NestCondProg5 extends Arith with Functions with IfThenElse with Print {
-  
+
   def test(x: Rep[Unit]) = {
     if (unit(true)) {
       // should place 7 + 9 here
@@ -102,7 +102,7 @@ trait NestCondProg5 extends Arith with Functions with IfThenElse with Print {
     } else {
     }
   }
-  
+
 }
 
 
@@ -115,20 +115,20 @@ trait NestCondProg5 extends Arith with Functions with IfThenElse with Print {
       print(z)
     } else {
     }
-    doLambda { y: Rep[Boolean] => 
+    doLambda { y: Rep[Boolean] =>
       print(x)
     }
   }
-  
+
 }*/
 
 
 trait NestCondProg7 extends Arith with OrderingOps with Functions with IfThenElse with Print {
 
-  def test(x: Rep[Unit]) = {    
-    doLambda { y: Rep[Double] => 
+  def test(x: Rep[Unit]) = {
+    doLambda { y: Rep[Double] =>
       if (y < 100) {
-        val z = y + unit(9.0) // should stay inside conditional: 
+        val z = y + unit(9.0) // should stay inside conditional:
                               // apparently z was moved up because it is also used in the lambda (z+u)
         doLambda { u: Rep[Double] =>
           z + u
@@ -137,18 +137,18 @@ trait NestCondProg7 extends Arith with OrderingOps with Functions with IfThenEls
       }
     }
   }
-  
+
 }
 
 /*
 seems to be another incarnation of test6
 
 trait NestCondProg8 extends Arith with OrderingOps with Functions with IfThenElse with Print {
-  
+
   // FIXME
 
-  def test(x: Rep[Unit]) = {    
-    doLambda { y: Rep[Double] => 
+  def test(x: Rep[Unit]) = {
+    doLambda { y: Rep[Double] =>
       if (y < 100) {
         val z = y + unit(9.0) // should stay inside conditional
         z + unit(1.0)
@@ -158,16 +158,16 @@ trait NestCondProg8 extends Arith with OrderingOps with Functions with IfThenEls
       }
     }
   }
-  
+
 }
 */
 
 
 class TestCodemotion extends FileDiffSuite {
-  
+
   val prefix = "test-out/epfl/test7-"
-  
-  def testCodemotion1 = {
+
+  it("testCodemotion1") {
     // test loop hoisting (should use loops but lambdas will do for now)
     withOutFile(prefix+"codemotion1") {
       new NestLambdaProg1 with ArithExp with FunctionsExp with PrintExp { self =>
@@ -178,7 +178,7 @@ class TestCodemotion extends FileDiffSuite {
     assertFileEqualsCheck(prefix+"codemotion1")
   }
 
-  def testCodemotion2 = {
+  it("testCodemotion2") {
     // test loop hoisting (should use loops but lambdas will do for now)
     withOutFile(prefix+"codemotion2") {
       new NestCondProg2 with ArithExp with FunctionsExp with IfThenElseExp with PrintExp { self =>
@@ -189,7 +189,7 @@ class TestCodemotion extends FileDiffSuite {
     assertFileEqualsCheck(prefix+"codemotion2")
   }
 
-  def testCodemotion3 = {
+  it("testCodemotion3") {
     // test loop hoisting (should use loops but lambdas will do for now)
     withOutFile(prefix+"codemotion3") {
       new NestCondProg3 with ArithExp with FunctionsExp with IfThenElseExp with PrintExp { self =>
@@ -200,7 +200,7 @@ class TestCodemotion extends FileDiffSuite {
     assertFileEqualsCheck(prefix+"codemotion3")
   }
 
-  def testCodemotion4 = {
+  it("testCodemotion4") {
     // test loop hoisting (should use loops but lambdas will do for now)
     withOutFile(prefix+"codemotion4") {
       new NestCondProg4 with ArithExp with FunctionsExp with IfThenElseExp with PrintExp { self =>
@@ -211,7 +211,7 @@ class TestCodemotion extends FileDiffSuite {
     assertFileEqualsCheck(prefix+"codemotion4")
   }
 
-  def testCodemotion5 = {
+  it("testCodemotion5") {
     // test loop hoisting (should use loops but lambdas will do for now)
     withOutFile(prefix+"codemotion5") {
       new NestCondProg5 with ArithExp with FunctionsExp with IfThenElseExp with PrintExp { self =>
@@ -222,7 +222,7 @@ class TestCodemotion extends FileDiffSuite {
     assertFileEqualsCheck(prefix+"codemotion5")
   }
 
- /* def testCodemotion6 = {
+ /* it("testCodemotion6") {
     // test loop hoisting (should use loops but lambdas will do for now)
     withOutFile(prefix+"codemotion6") {
       new NestCondProg6 with ArithExp with FunctionsExp with IfThenElseExp with PrintExp { self =>
@@ -234,7 +234,7 @@ class TestCodemotion extends FileDiffSuite {
     assertFileEqualsCheck(prefix+"codemotion6")
   }*/
 
-  def testCodemotion7 = {
+  it("testCodemotion7") {
     // test loop hoisting (should use loops but lambdas will do for now)
     withOutFile(prefix+"codemotion7") {
       new NestCondProg7 with ArithExp with OrderingOpsExp with FunctionsExp with IfThenElseExp with PrintExp { self =>

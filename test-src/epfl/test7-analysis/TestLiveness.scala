@@ -17,14 +17,14 @@ trait Liveness extends internal.GenericNestedCodegen {
   var defuse: List[(Sym[Any],Sym[Any])] = Nil
 
   override def traverseBlockFocused[A](result: Block[A]): Unit = {
-    focusExactScope(result) { levelScope => 
-      
+    focusExactScope(result) { levelScope =>
+
       // TODO: what is the intended behavior for uses in innerScope?
       // this will likely depend on the node, i.e. ifThenElse vs. loop
 
       // a possible first step: handle only straightline code and mark
-      // everything used by innerScope as escaping (plus the result) 
-      
+      // everything used by innerScope as escaping (plus the result)
+
       def usesOf(s: Sym[Any]): List[TP[Any]] = levelScope.flatMap {
         case TP(s1, Reify(rhs1,_,_)) => // reify nodes are eliminated, so we need to find all uses of the reified thing
           if (syms(rhs1).contains(s)) usesOf(s1) else Nil
@@ -45,7 +45,7 @@ trait Liveness extends internal.GenericNestedCodegen {
           case _ =>
             // remove everything only used here from defuse
             // output dealloc for stuff that goes away
-          
+
             val livebefore = defuse.map(_._1).distinct
             defuse = defuse.filterNot(_._2 == sym)
             val liveafter = defuse.map(_._1).distinct
@@ -65,7 +65,7 @@ trait Liveness extends internal.GenericNestedCodegen {
 trait ScalaGenArraysLiveOpt extends ScalaGenArrays with Liveness {
   val IR: ArraysExp
   import IR._
-  
+
   def canKill(e: Exp[Any], u: Sym[Any]) = {
     !defuse.exists(p => p._1 == e && p._2 != u)
   }
@@ -76,11 +76,11 @@ trait ScalaGenArraysLiveOpt extends ScalaGenArrays with Liveness {
       true
     } else false
   }
-  
+
   override def emitNode(sym: Sym[Any], rhs: Def[Any]) = rhs match {
-    case ArrayZero(n) =>  
+    case ArrayZero(n) =>
       emitValDef(sym, "new Array[Int](" + quote(n) + ")")
-    case ArrayUpdate(a,x,v) =>  
+    case ArrayUpdate(a,x,v) =>
       if (tryKill(a, sym))
         emitValDef(sym, quote(a))
       else
@@ -91,7 +91,7 @@ trait ScalaGenArraysLiveOpt extends ScalaGenArrays with Liveness {
         emitValDef(sym, quote(a))
       else if (canKill(b, sym))
         emitValDef(sym, quote(b))
-      else 
+      else
         emitValDef(sym, "new Array[Int](" + quote(a) + ".length)")
       stream.println("arrayPlus("+ quote(sym) + "," + quote(a) + "," + quote(b) + ")")
     case _ => super.emitNode(sym, rhs)
@@ -101,11 +101,11 @@ trait ScalaGenArraysLiveOpt extends ScalaGenArrays with Liveness {
 
 
 
-// trait NestLambdaProg extends Arith with Functions with Print 
+// trait NestLambdaProg extends Arith with Functions with Print
 // --> from TestCodeMotion.scala
 
 trait LiveProg extends Arith with Arrays with Print {
-  
+
   def test(x: Rep[Unit]) = {
     val a = zeroes(100) // allocation
 
@@ -119,15 +119,15 @@ trait LiveProg extends Arith with Arrays with Print {
 
     print(e) // dealloc the other one
   }
-  
+
 }
 
 
 class TestLiveness extends FileDiffSuite {
-  
+
   val prefix = "test-out/epfl/test7-"
-  
-  def testLiveness1 = {
+
+  it("testLiveness1") {
     withOutFile(prefix+"liveness1") {
       new LiveProg with ArithExp with ArraysExp with PrintExp { self =>
         val codegen = new ScalaGenArith with ScalaGenArrays with ScalaGenPrint with Liveness { val IR: self.type = self }
@@ -137,7 +137,7 @@ class TestLiveness extends FileDiffSuite {
     assertFileEqualsCheck(prefix+"liveness1")
   }
 
-  def testLiveness2 = {
+  it("testLiveness2") {
     withOutFile(prefix+"liveness2") {
       new LiveProg with ArithExp with ArraysExp with PrintExp { self =>
         val codegen = new ScalaGenArith with ScalaGenArraysLiveOpt with ScalaGenPrint with Liveness { val IR: self.type = self }
@@ -146,5 +146,5 @@ class TestLiveness extends FileDiffSuite {
     }
     assertFileEqualsCheck(prefix+"liveness2")
   }
- 
+
 }

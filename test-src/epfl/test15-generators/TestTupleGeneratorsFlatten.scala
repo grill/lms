@@ -31,7 +31,7 @@ trait TupledGeneratorFlattenProg extends K3PersistentCollectionOps with NumericO
       }
       )(y);
 
-      make_tuple2((v._1), v._2) 
+      make_tuple2((v._1), v._2)
     }
     ).map((y:Rep[Tuple2[(Double),Long]]) => {
       val v = ({
@@ -48,24 +48,24 @@ trait TupledGeneratorFlattenProg extends K3PersistentCollectionOps with NumericO
               ((var___sum_ret__1),(unit(1L)))
             };
 
-            newSingletonK3IntermediateCollection[(Long), Long](Tuple2((v._1),v._2)) 
+            newSingletonK3IntermediateCollection[(Long), Long](Tuple2((v._1),v._2))
           }
           .map((y:Rep[Tuple2[(Long),Long]]) => {
             val v: Rep[Tuple3[Double,Long,Long]] = ({
               (x:Rep[Tuple2[(Long), Long]]) => {
-                (var_A_PRICE,x._1,var___map_ret__1 * x._2) 
+                (var_A_PRICE,x._1,var___map_ret__1 * x._2)
               }
             }
             )(y);
 
-            make_tuple2(make_tuple2(v._1,v._2), v._3) 
+            make_tuple2(make_tuple2(v._1,v._2), v._3)
           }
-          ) 
+          )
         }
       }
       )(y);
 
-      v 
+      v
     }
     )).flatten[Tuple2[Double,Long], Long].toList
   }
@@ -76,7 +76,7 @@ class TestTupledGeneratorFlatten extends FileDiffSuite {
   val prefix = "test-out/epfl/test15-"
   Config.verbosity = 0
 
-  def testgenerator1 = {
+  it("testgenerator1") {
     withOutFile(prefix+"tupled-generator-flatten"){
        new TupledGeneratorFlattenProg with GeneratorOpsExp with NumericOpsExp
         with OrderingOpsExp with PrimitiveOpsExp with EqualExp

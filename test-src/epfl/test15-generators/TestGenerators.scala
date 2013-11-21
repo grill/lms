@@ -303,7 +303,7 @@ class TestGeneratorOps extends FileDiffSuite {
   val prefix = "test-out/epfl/test15-"
   ScalaCompile.dumpGeneratedCode = false
 
-  def testgenerator1 = {
+  it("testgenerator1") {
     withOutFile(prefix+"generator-simple"){
        new GeneratorProg with GeneratorOpsExp with NumericOpsExp
         with OrderingOpsExp with PrimitiveOpsExp with EqualExp with BooleanOpsExp
@@ -385,7 +385,7 @@ class TestGeneratorOps extends FileDiffSuite {
   }
 
 
-  def testgenerator2 = {
+  it("testgenerator2") {
     withOutFile(prefix+"generator-array"){
        new ArrayProg with GeneratorOpsExp with NumericOpsExp
         with OrderingOpsExp with PrimitiveOpsExp with EqualExp with BooleanOpsExp

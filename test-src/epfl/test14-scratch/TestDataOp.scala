@@ -12,9 +12,9 @@ import java.io.{PrintWriter,StringWriter,FileOutputStream}
 
 
 class TestDataOp extends FileDiffSuite {
-  
+
   val prefix = "test-out/epfl/test14-"
-  
+
   trait DSL extends ScalaOpsPkg with TupledFunctions with UncheckedOps with LiftPrimitives with LiftString with LiftVariables {
     // keep track of top level functions
     case class TopLevel[A,B](name: String, mA: Manifest[A], mB:Manifest[B], f: Rep[A] => Rep[B])
@@ -123,10 +123,10 @@ class TestDataOp extends FileDiffSuite {
 
   }
 
-  trait Impl extends DSL with COpsPkgExp with TupledFunctionsRecursiveExp with UncheckedOpsExp { self => 
-    val codegen = new CCodeGenPkg with CGenVariables with CGenTupledFunctions with CGenUncheckedOps { 
-      val IR: self.type = self 
-      override def remap[A](a: Manifest[A]) = 
+  trait Impl extends DSL with COpsPkgExp with TupledFunctionsRecursiveExp with UncheckedOpsExp { self =>
+    val codegen = new CCodeGenPkg with CGenVariables with CGenTupledFunctions with CGenUncheckedOps {
+      val IR: self.type = self
+      override def remap[A](a: Manifest[A]) =
         if (a == manifest[Array[Int]]) "int*"
         else super.remap(a)
       override def emitNode(sym: Sym[Any], rhs: Def[Any]) = rhs match {
@@ -153,15 +153,15 @@ class TestDataOp extends FileDiffSuite {
     emitAll()
   }
 
-  
-  def testDataOp1 = {
+
+  it("testDataOp1") {
     withOutFile(prefix+"dataop1") {
       trait Prog extends DSL {
         toplevel("main") { x: Rep[Int] =>
 
           val table = ColBasedTable("table",Schema("field1","field2","field3"))
 
-          val plan = 
+          val plan =
             PrintOp(
               MapOp(rec => Record("foo" -> rec("field2"), "bar" -> 2 * rec("field1")))(
                 ScanOp(table)))
@@ -176,14 +176,14 @@ class TestDataOp extends FileDiffSuite {
     assertFileEqualsCheck(prefix+"dataop1")
   }
 
-  def testDataOp2 = {
+  it("testDataOp2") {
     withOutFile(prefix+"dataop2") {
       trait Prog extends DSL {
         toplevel("main") { x: Rep[Int] =>
 
           val table = RowBasedTable("table",Schema("field1","field2","field3"))
 
-          val plan = 
+          val plan =
             PrintOp(
               MapOp(rec => Record("foo" -> rec("field2"), "bar" -> 2 * rec("field1")))(
                 FilterOp(rec => rec("field2") > 0)(

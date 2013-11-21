@@ -7,12 +7,12 @@ import test2._
 
 
 trait ParsersProg extends Parsers { this: Matching with Extractors =>
-  
+
   def toElem(c: Char): Elem
-  
+
   def acceptChar(c: Char) = acceptElem(toElem(c))
   def acceptString(s: String) = acceptElems(s.toList.map(toElem))
-  
+
   val scala = acceptString("scala")
   val rules = acceptString("rules")
   val rocks = acceptString("rocks")
@@ -22,14 +22,14 @@ trait ParsersProg extends Parsers { this: Matching with Extractors =>
   val phrase2 = seq(scala, seq(blank, rocks))
 
   val head = alt(phrase1, phrase2)
-  
+
 }
 
 class TestParsers extends FileDiffSuite {
-  
+
   val prefix = "test-out/epfl/test3-"
-  
-  def testParse1 = {
+
+  it("testParse1") {
     withOutFile(prefix+"parse1") {
       object ParsersProgExp extends ParsersProg with Matching with Extractors
         with MatchingExtractorsExpOpt with FunctionsExpUnfoldAll with FlatResult // with ControlOpt
@@ -51,9 +51,9 @@ class TestParsers extends FileDiffSuite {
     assertFileEqualsCheck(prefix+"parse1-dot")
   }
 
-  def testParse2 = {
+  it("testParse2") {
     withOutFile(prefix+"parse2") {
-      object ParsersProgExp extends ParsersProg with Matching with Extractors 
+      object ParsersProgExp extends ParsersProg with Matching with Extractors
         with MatchingExtractorsExpOpt with FunctionsExpUnfoldAll with FlatResult // with ControlOpt
         {
           type Elem = Char

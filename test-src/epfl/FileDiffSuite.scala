@@ -5,8 +5,8 @@ import java.io.{PrintStream,File,FileInputStream,FileOutputStream,ByteArrayOutpu
 import org.scalatest._
 
 
-trait FileDiffSuite extends Suite {
-  
+trait FileDiffSuite extends FunSpec {
+
   def withOutFile(name: String)(func: => Unit): Unit = {
     val file = new File(name)
     file.getParentFile.mkdirs()
@@ -31,7 +31,7 @@ trait FileDiffSuite extends Suite {
       System.setErr(oldStdErr)
     }
   }
-  
+
   def readFile(name: String): String = {
     val source = scala.io.Source.fromFile(name)
     val lines = source.getLines.mkString("\n")

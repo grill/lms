@@ -13,9 +13,9 @@ import java.io.{PrintWriter,StringWriter,FileOutputStream}
 
 
 class TestCGen extends FileDiffSuite {
-  
+
   val prefix = "test-out/epfl/test14-"
-  
+
   trait DSL extends ScalaOpsPkg with TupledFunctions with UncheckedOps with LiftPrimitives with LiftString with LiftVariables {
     // keep track of top level functions
     case class TopLevel[A,B](name: String, mA: Manifest[A], mB:Manifest[B], f: Rep[A] => Rep[B])
@@ -27,7 +27,7 @@ class TestCGen extends FileDiffSuite {
     }
   }
 
-  trait Impl extends DSL with COpsPkgExp with TupledFunctionsRecursiveExp with UncheckedOpsExp { self => 
+  trait Impl extends DSL with COpsPkgExp with TupledFunctionsRecursiveExp with UncheckedOpsExp { self =>
     val codegen = new CCodeGenPkg with CGenVariables with CGenTupledFunctions with CGenUncheckedOps { val IR: self.type = self }
     Config.verbosity = 0
     def emitAll(): Unit = {
@@ -42,8 +42,8 @@ class TestCGen extends FileDiffSuite {
     emitAll()
   }
 
-  
-  def testCGen1 = {
+
+  it("testCGen1") {
     withOutFile(prefix+"cgen1") {
       trait Prog extends DSL {
         toplevel("main") { x: Rep[Int] =>
@@ -65,7 +65,7 @@ class TestCGen extends FileDiffSuite {
 
   // the generated code will contain nested functions; it needs to be
   // compiled with gcc -fnested-functions
-  def testCGen2 = {
+  it("testCGen2") {
     withOutFile(prefix+"cgen2") {
       trait Prog extends DSL {
         toplevel("main") { x: Rep[Int] =>
@@ -85,7 +85,7 @@ class TestCGen extends FileDiffSuite {
   }
 
 
-  def testCGen3 = {
+  it("testCGen3") {
     withOutFile(prefix+"cgen3") {
       trait Prog extends DSL {
         val main = toplevel("main") { x: Rep[Int] =>

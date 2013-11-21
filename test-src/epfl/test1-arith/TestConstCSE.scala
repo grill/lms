@@ -10,16 +10,16 @@ import scala.reflect.SourceContext
 
 
 class TestConstCSE extends FileDiffSuite {
-  
+
   val prefix = "test-out/epfl/test1-"
-  
+
   /**
    * This test targets checking resolved bug for equality check
-   * on Const values. For more information, have a look at 
+   * on Const values. For more information, have a look at
    * "equals" method implementation (and its comments) for Const
    * class inside Expressions trait.
    */
-  def testBugConstCSE1 = {
+  it("testBugConstCSE1") {
     withOutFile(prefix+"constcse1") {
       trait Prog extends ScalaOpsPkg {
         def test1(test_param: Rep[Boolean], acc: Rep[Long]): Rep[Long] = {

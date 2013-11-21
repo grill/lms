@@ -38,12 +38,12 @@ trait TupledGeneratorProg extends K3PersistentCollectionOps with NumericOps
 
             an331*bn331
           }
-          )) 
+          ))
         }
       }
       )(y);
 
-      make_tuple2((v._1), v._2) 
+      make_tuple2((v._1), v._2)
     }
     ).fold(unit(0.0), {
       (x:Rep[Tuple2[((Double)), Double]]) => {
@@ -80,12 +80,12 @@ trait TupledGeneratorProg extends K3PersistentCollectionOps with NumericOps
 
             val var___map_ret__23:Rep[Double] = x._2 /* Rep[Double] => Rep[Double] */;
 
-            ((var_B0_PRICE),(var___map_ret__23)) 
+            ((var_B0_PRICE),(var___map_ret__23))
           }
         }
         )(y);
 
-        make_tuple2((v._1), v._2) 
+        make_tuple2((v._1), v._2)
       }
       ).map((y:Rep[Tuple2[(Double),Double]]) => {
         val v: Rep[Tuple3[Double,Double,Double]] = ({
@@ -101,14 +101,14 @@ trait TupledGeneratorProg extends K3PersistentCollectionOps with NumericOps
 
               an318*bn318
             }
-            )) 
+            ))
           }
         }
         )(make_tuple2(unit(0.13),unit(75.32)));
 
-        make_tuple2(make_tuple2(v._1,v._2), v._3) 
+        make_tuple2(make_tuple2(v._1,v._2), v._3)
       }
-      ) 
+      )
     }
   }
   )(make_tuple2(unit(3.14),unit(200L))).fold(unit(0.0), {
@@ -129,7 +129,7 @@ trait TupledGeneratorProg extends K3PersistentCollectionOps with NumericOps
   }
   );
 
-  v 
+  v
   }
 }
 
@@ -137,7 +137,7 @@ class TestTupledGeneratorOps extends FileDiffSuite {
 
   val prefix = "test-out/epfl/test15-"
 
-  def testgenerator1 = {
+  it("testgenerator1") {
     withOutFile(prefix+"tupled-generator-simple"){
        new TupledGeneratorProg with GeneratorOpsExp with NumericOpsExp
         with OrderingOpsExp with PrimitiveOpsExp with EqualExp

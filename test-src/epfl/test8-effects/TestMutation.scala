@@ -18,26 +18,26 @@ import java.io.{PrintWriter,StringWriter,FileOutputStream}
 */
 
 trait ArrayMutation extends ArrayLoops {
-  
+
   def infix_update[T:Manifest](a: Rep[Array[T]], i: Rep[Int], x: Rep[T]): Rep[Unit]
 
   def infix_mutable[T:Manifest](a: Rep[Array[T]]): Rep[Array[T]]
   def infix_clone[T:Manifest](a: Rep[Array[T]]): Rep[Array[T]]
-  
+
 }
 
 
 trait ArrayMutationExp extends ArrayMutation with ArrayLoopsExp {
-  
+
   case class ArrayUpdate[T](a: Rep[Array[T]], i: Rep[Int], x: Rep[T]) extends Def[Unit]
   case class ArrayMutable[T](a: Rep[Array[T]]) extends Def[Array[T]]
   case class ArrayClone[T](a: Rep[Array[T]]) extends Def[Array[T]]
-  
+
   def infix_update[T:Manifest](a: Rep[Array[T]], i: Rep[Int], x: Rep[T]) = reflectWrite(a)(ArrayUpdate(a,i,x))
 
   def infix_mutable[T:Manifest](a: Rep[Array[T]]) = reflectMutable(ArrayMutable(a))
   def infix_clone[T:Manifest](a: Rep[Array[T]]) = ArrayClone(a)
-  
+
   override def aliasSyms(e: Any): List[Sym[Any]] = e match {
     case SimpleLoop(s,i, ArrayElem(y)) => Nil
     case SimpleLoop(s,i, ReduceElem(y)) => syms(y) // could also return zero value
@@ -88,21 +88,21 @@ trait ArrayMutationExp extends ArrayMutation with ArrayLoopsExp {
     case ArrayMutable(a) => syms(a)
     case ArrayClone(a) => syms(a)
     case _ => super.copySyms(e)
-  }  
-  
-  
+  }
+
+
 }
 
 trait ScalaGenArrayMutation extends ScalaGenArrayLoops {
   val IR: ArrayMutationExp
   import IR._
-  
+
   override def emitNode(sym: Sym[Any], rhs: Def[Any]) = rhs match {
-    case ArrayUpdate(a,i,x) => 
+    case ArrayUpdate(a,i,x) =>
       emitValDef(sym, quote(a) + ".update(" + quote(i) + ", " + quote(x) + ")")
-    case ArrayMutable(a) =>  
+    case ArrayMutable(a) =>
       emitValDef(sym, quote(a) + ".clone // mutable")
-    case ArrayClone(a) =>  
+    case ArrayClone(a) =>
       emitValDef(sym, quote(a) + ".clone")
     case _ => super.emitNode(sym, rhs)
   }
@@ -113,9 +113,9 @@ trait ScalaGenArrayMutation extends ScalaGenArrayLoops {
 
 
 class TestMutation extends FileDiffSuite {
-  
+
   val prefix = "test-out/epfl/test8-"
-  
+
   trait DSL extends ArrayMutation with Arith with OrderingOps with Variables with IfThenElse with While with RangeOps with Print {
     def zeros(l: Rep[Int]) = array(l) { i => 0 }
     def mzeros(l: Rep[Int]) = zeros(l).mutable
@@ -123,16 +123,16 @@ class TestMutation extends FileDiffSuite {
 
     def test(x: Rep[Int]): Rep[Unit]
   }
-  trait Impl extends DSL with ArrayMutationExp with ArithExp with OrderingOpsExp with VariablesExp 
-      with IfThenElseExp with WhileExp with RangeOpsExp with PrintExp { self => 
+  trait Impl extends DSL with ArrayMutationExp with ArithExp with OrderingOpsExp with VariablesExp
+      with IfThenElseExp with WhileExp with RangeOpsExp with PrintExp { self =>
     Config.verbosity = 2
-    val codegen = new ScalaGenArrayMutation with ScalaGenArith with ScalaGenOrderingOps 
-      with ScalaGenVariables with ScalaGenIfThenElse with ScalaGenWhile with ScalaGenRangeOps 
+    val codegen = new ScalaGenArrayMutation with ScalaGenArith with ScalaGenOrderingOps
+      with ScalaGenVariables with ScalaGenIfThenElse with ScalaGenWhile with ScalaGenRangeOps
       with ScalaGenPrint { val IR: self.type = self }
     codegen.emitSource1(test, "Test", new PrintWriter(System.out))
   }
-  
-  def testMutation1 = {
+
+  it("testMutation1") {
     withOutFile(prefix+"mutation1") {
      // a write operation must unambigously identify the object being mutated
       trait Prog extends DSL {
@@ -140,7 +140,7 @@ class TestMutation extends FileDiffSuite {
           val vector1 = mzeros(100)
           val vector2 = mzeros(100)
           val a = if (x > 7) vector1 else vector2
-          
+
           a.update(40,40) // error: not clear which object is mutated (vector1 or vector2)
 
           print(a.at(50))
@@ -151,7 +151,7 @@ class TestMutation extends FileDiffSuite {
     assertFileEqualsCheck(prefix+"mutation1")
   }
 
-  def testMutation1b = {
+  it("testMutation1b") {
     withOutFile(prefix+"mutation1b") {
      // a write operation must unambigously identify the object being mutated
       trait Prog extends DSL {
@@ -159,7 +159,7 @@ class TestMutation extends FileDiffSuite {
           val vector1 = mzeros(100)
           val vector2 = mzeros(100)
           val a = if (x > 7) vector1 else vector2
-          
+
           val a2 = a.mutable
           a2.update(40,40) // ok: we have made a copy
 
@@ -171,7 +171,7 @@ class TestMutation extends FileDiffSuite {
     assertFileEqualsCheck(prefix+"mutation1b")
   }
 
-  def testMutation2 = {
+  it("testMutation2") {
     withOutFile(prefix+"mutation2") {
       // an operation that might read from mutable data v will be serialized with all writes to v
       trait Prog extends DSL {
@@ -179,12 +179,12 @@ class TestMutation extends FileDiffSuite {
           val vector1 = mzeros(100)
           val vector2 = mzeros(100)
           val a = if (x > 7) vector1 else vector2
-          
+
           val x0 = a.at(10)
-          
+
           vector1.update(10,10) // must come after x0
           vector2.update(10,20) // must come after x0
-          
+
           val x1 = a.at(10) // must come after both writes, no cse with x0
 
           print(x1-x0) // minus should not have effect dep
@@ -196,7 +196,7 @@ class TestMutation extends FileDiffSuite {
   }
 
 
-  def testMutation3 = {
+  it("testMutation3") {
     withOutFile(prefix+"mutation3") {
       // vars may not reference mutable objects
       trait Prog extends DSL with LiftVariables {
@@ -210,13 +210,13 @@ class TestMutation extends FileDiffSuite {
             a = b // error: here we learn that reads on a would need to be serialized with b but it's too late...
           }
         }
-      }      
+      }
       new Prog with Impl
     }
     assertFileEqualsCheck(prefix+"mutation3")
   }
 
-  def testMutation3b = {
+  it("testMutation3b") {
     withOutFile(prefix+"mutation3b") {
       // vars may not reference mutable objects
       trait Prog extends DSL with LiftVariables {
@@ -230,13 +230,13 @@ class TestMutation extends FileDiffSuite {
             a = b.clone // ok: making a copy
           }
         }
-      }      
+      }
       new Prog with Impl
     }
     assertFileEqualsCheck(prefix+"mutation3b")
   }
 
-  def testMutation4 = {
+  it("testMutation4") {
     withOutFile(prefix+"mutation4") {
       // mutable objects cannot be nested
       trait Prog extends DSL {
@@ -247,13 +247,13 @@ class TestMutation extends FileDiffSuite {
           val x1 = b1.at(5).at(50)
           print(x1)
         }
-      }      
+      }
       new Prog with Impl
     }
     assertFileEqualsCheck(prefix+"mutation4")
   }
 
-  def testMutation4b = {
+  it("testMutation4b") {
     withOutFile(prefix+"mutation4b") {
       // mutable objects cannot be nested
       trait Prog extends DSL {
@@ -265,13 +265,13 @@ class TestMutation extends FileDiffSuite {
           val x1 = b2.at(5).at(50)
           print(x1)
         }
-      }      
+      }
       new Prog with Impl
     }
     assertFileEqualsCheck(prefix+"mutation4b")
   }
 
-  def testMutation4c = {
+  it("testMutation4c") {
     withOutFile(prefix+"mutation4c") {
       // mutable objects cannot be nested
       trait Prog extends DSL {
@@ -282,14 +282,14 @@ class TestMutation extends FileDiffSuite {
           val x1 = b1.at(5).at(50)
           print(x1)
         }
-      }      
+      }
       new Prog with Impl
     }
     assertFileEqualsCheck(prefix+"mutation4c")
   }
 
 
-  def testMutation5 = {
+  it("testMutation5") {
     withOutFile(prefix+"mutation5") {
       // mutable objects cannot be nested
       trait Prog extends DSL {
@@ -301,19 +301,19 @@ class TestMutation extends FileDiffSuite {
           val c = mzeros(20)
           b1.update(4,a) // ok: insert immutable array
           b1.update(5,c) // error: cannot insert mutable array
-          
+
           c.update(50,50)
           val x1 = b1.at(5).at(50)
           print(x1)
         }
       }
-      
+
       new Prog with Impl
     }
     assertFileEqualsCheck(prefix+"mutation5")
   }
 
-  def testMutation6 = {
+  it("testMutation6") {
     withOutFile(prefix+"mutation6") {
       // mutate nested object (within an immutable one)
       trait Prog extends DSL {
@@ -326,19 +326,19 @@ class TestMutation extends FileDiffSuite {
           val x1 = c.at(5).at(50)
 
           a.update(50,50)
-          
+
           val x2 = c.at(5).at(50) // no cse, must serialize with update to a
-          
+
           print(x2-x1)
         }
       }
-      
+
       new Prog with Impl
     }
     assertFileEqualsCheck(prefix+"mutation6")
   }
 
-  def testMutation7 = {
+  it("testMutation7") {
     withOutFile(prefix+"mutation7") {
       // local variables of primitive type
       trait Prog extends DSL with LiftVariables {
@@ -353,7 +353,7 @@ class TestMutation extends FileDiffSuite {
           print(c)
         }
       }
-      
+
       new Prog with Impl
     }
     assertFileEqualsCheck(prefix+"mutation7")

@@ -38,11 +38,11 @@ trait FacProg2 { this: Arith with Functions with Equal with IfThenElse =>
 
 
 class TestFac extends FileDiffSuite {
-  
+
   val prefix = "test-out/epfl/test4-"
   Config.verbosity = 0
 
-  def testFac1 = {
+  it("testFac1") {
     withOutFile(prefix+"fac1") {
       object FacProgExp extends FacProg with Matching with Extractors
         with ArithExpOpt with MatchingExtractorsExpOpt
@@ -59,7 +59,7 @@ class TestFac extends FileDiffSuite {
     assertFileEqualsCheck(prefix+"fac1-dot")
   }
 
-  def testFac2 = {
+  it("testFac2") {
     withOutFile(prefix+"fac2") {
       object FacProgExp extends FacProg with Matching with Extractors
         with ArithExpOpt with MatchingExtractorsExpOpt
@@ -78,11 +78,11 @@ class TestFac extends FileDiffSuite {
     assertFileEqualsCheck(prefix+"fac2-dot")
   }
 
-  def testFac3 = {
+  it("testFac3") {
     withOutFile(prefix+"fac3") {
       object FacProgExp extends FacProg with Matching with Extractors
         with ArithExpOpt with MatchingExtractorsExpOpt
-        with FunctionExpUnfoldRecursion 
+        with FunctionExpUnfoldRecursion
         with FunctionsExternalDef0
       import FacProgExp._
 
@@ -96,11 +96,11 @@ class TestFac extends FileDiffSuite {
     assertFileEqualsCheck(prefix+"fac3-dot")
   }
 
-  def testFac4 = {
+  it("testFac4") {
     withOutFile(prefix+"fac4") {
       object FacProgExp extends FacProg2
         with ArithExpOpt with EqualExp with IfThenElseExp
-        with FunctionExpUnfoldRecursion 
+        with FunctionExpUnfoldRecursion
         with FunctionsExternalDef2
       import FacProgExp._
 
@@ -113,36 +113,36 @@ class TestFac extends FileDiffSuite {
     assertFileEqualsCheck(prefix+"fac4")
     assertFileEqualsCheck(prefix+"fac4-dot")
   }
-  
-  def testFac5 = {
+
+  it("testFac5") {
     withOutFile(prefix+"fac5") {
       object FacProgExp extends FacProg2
-        with ArithExpOpt with EqualExp with IfThenElseExp 
-        with FunctionExpUnfoldRecursion 
+        with ArithExpOpt with EqualExp with IfThenElseExp
+        with FunctionExpUnfoldRecursion
         with FunctionsExternalDef2
       import FacProgExp._
 
       val f = (x:Rep[Double]) => fac(x) + fac(2*x)
       println(globalDefs.mkString("\n"))
       println(f)
-      val p = new ScalaGenArith with ScalaGenEqual with 
+      val p = new ScalaGenArith with ScalaGenEqual with
         ScalaGenIfThenElse with ScalaGenFunctionsExternal { val IR: FacProgExp.type = FacProgExp }
       p.emitSource1(f, "Fac", new java.io.PrintWriter(System.out))
     }
     assertFileEqualsCheck(prefix+"fac5")
   }
 
-  def testFac6 = {
+  it("testFac6") {
     withOutFile(prefix+"fac6") {
       object FacProgExp extends FacProg2
-        with ArithExpOpt with EqualExp with IfThenElseExp 
+        with ArithExpOpt with EqualExp with IfThenElseExp
         with FunctionsRecursiveExp
       import FacProgExp._
 
       val f = (x:Rep[Double]) => fac(x) + fac(2*x)
       println(globalDefs.mkString("\n"))
       println(f)
-      val p = new ScalaGenArith with ScalaGenEqual with 
+      val p = new ScalaGenArith with ScalaGenEqual with
         ScalaGenIfThenElse with ScalaGenFunctions { val IR: FacProgExp.type = FacProgExp }
       p.emitSource1(f, "Fac", new java.io.PrintWriter(System.out))
     }

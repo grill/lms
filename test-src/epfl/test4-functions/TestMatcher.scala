@@ -7,7 +7,7 @@ import test3._
 
 
 trait ListMatch extends Extractors {
-  
+
   object :!: {
     def apply[A:Manifest](x: Rep[A], xs: Rep[List[A]]) = construct(classOf[::[A]], (::.apply[A] _).tupled, tuple(x, xs))
 //    def unapply[A](x: Rep[::[A]]) = deconstruct2(classOf[::[A]], ::.unapply[A], x) // doesn't work: hd is private in :: !
@@ -18,9 +18,9 @@ trait ListMatch extends Extractors {
 
 
 trait MatcherProg { this: Matching with ListMatch =>
-  
+
   type Input = List[Char]
-  
+
   def find(p: Input, s: Rep[Input]) = loop(p,s,p,s)
 
   def loop(p0: Input, s0: Rep[Input], pr: Input, sr: Rep[Input]): Rep[Boolean] = p0 match {
@@ -38,7 +38,7 @@ trait MatcherProg { this: Matching with ListMatch =>
       } end
     case _ => unit(true)
   }
-    
+
   def next(p: Input, s: Rep[Input]): Rep[Boolean] = s switch {
     case s:!:(ss: Rep[Input]) => loop(p,ss,p,ss)
   } orElse {
@@ -53,10 +53,10 @@ trait MatcherProg { this: Matching with ListMatch =>
 
 
 class TestMatcher extends FileDiffSuite {
-  
+
   val prefix = "test-out/epfl/test4-"
-  
-  def testMatcher1 = {
+
+  it("testMatcher1") {
     withOutFile(prefix+"matcher1") {
       object MatcherProgExp extends MatcherProg with Matching with Extractors with ListMatch
         with MatchingExtractorsExpOpt
