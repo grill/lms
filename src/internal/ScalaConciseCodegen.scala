@@ -10,7 +10,7 @@ import scala.reflect.SourceContext
  * which inlines expressions that are possible to inline,
  * instead of creating a new val-def for each of them, leading
  * to a more compact and concise code.
- * 
+ *
  * @author Mohammad Dashti (mohammad.dashti@epfl.ch)
  */
 trait ScalaConciseCodegen extends ScalaNestedCodegen { self =>
@@ -34,7 +34,7 @@ trait ScalaConciseCodegen extends ScalaNestedCodegen { self =>
       case _ => stream.println("val " + quote(sym) + " = " + rhs + extra)
     }
   }
-  
+
   override def emitAssignment(sym: Sym[Any], lhs: String, rhs: String): Unit = {
     // if(isVoidType(sym.tp)) {
       stream.println(lhs + " = " + rhs)
@@ -42,10 +42,8 @@ trait ScalaConciseCodegen extends ScalaNestedCodegen { self =>
     //   emitValDef(sym, lhs + " = " + rhs)
     // }
   }
-  
-  override def emitForwardDef(sym: Sym[Any]): Unit = {
-    if(!isVoidType(sym.tp)) { stream.println("var " + quote(sym, true) + /*": " + remap(sym.tp) +*/ " = null.asInstanceOf[" + remap(sym.tp) + "]") }
-  }
+
+  override def emitForwardDef(sym: Sym[Any]): Unit = if(!isVoidType(sym.tp)) super.emitForwardDef(sym)
 
   override def traverseStm(stm: Stm) = stm match {
     case TP(sym, rhs) => if(!sym.possibleToInline && sym.refCount > 0 /*for eliminating read-only effect-ful statements*/) emitNode(sym,rhs)
@@ -59,7 +57,7 @@ trait ScalaConciseCodegen extends ScalaNestedCodegen { self =>
           case Some(d: Def[Any]) => {
             val strWriter: java.io.StringWriter = new java.io.StringWriter;
             val stream = new PrintWriter(strWriter);
-            withStream(stream) { 
+            withStream(stream) {
               emitNode(s, d)
             }
             strWriter.toString
@@ -79,7 +77,7 @@ trait ScalaConciseCodegen extends ScalaNestedCodegen { self =>
       case Const(z) => z.toString
       case s@Sym(n) => if (forcePrintSymbol) {
         printSym(s)
-      } else { 
+      } else {
         isVoidType(s.tp) match {
           case true => "(" + /*"x" + n +*/ ")"
           case false => printSym(s)

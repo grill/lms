@@ -39,19 +39,19 @@ trait ScalaCodegen extends GenericCodegen {
       emitBlock(transformedBody)
       if (sA != "Unit") stream.println(quote(getBlockResult(transformedBody)))
       stream.println("}")
-    
+
       stream.println("}")
       stream.println("/*****************************************\n"+
                      "  End of Generated Code                  \n"+
                      "*******************************************/")
     }
-    
+
     staticData
   }
 
   override def emitKernelHeader(syms: List[Sym[Any]], vals: List[Sym[Any]], vars: List[Sym[Any]], resultType: String, resultIsVar: Boolean, external: Boolean): Unit = {
     val kernelName = syms.map(quote).mkString("")
-    
+
     stream.println("package generated." + this.toString)
     stream.println("object kernel_" + kernelName + " {")
     stream.print("def apply(")
@@ -96,29 +96,46 @@ trait ScalaCodegen extends GenericCodegen {
     else
         stream.println(rhs + extra)
   }
-  
+
   def emitVarDef(sym: Sym[Variable[Any]], rhs: String): Unit = {
 //    stream.println("var " + quote(sym) + ": " + remap(sym.tp) + " = " + rhs)
     stream.println("var " + quote(sym) + " = " + rhs)
   }
-  
+
   def emitAssignment(sym: Sym[Any], lhs: String, rhs: String): Unit = emitValDef(sym, lhs + " = " + rhs)
 }
 
 trait ScalaNestedCodegen extends GenericNestedCodegen with ScalaCodegen {
   val IR: Expressions with Effects
   import IR._
-  
+
   // emit forward decls for recursive vals
   override def traverseStmsInBlock[A](stms: List[Stm]): Unit = {
     recursive foreach emitForwardDef
     super.traverseStmsInBlock(stms)
   }
-  
+
+  // To avoid boxing of primitive types, we provide appropriate "zero" values.
+  // Ideally, we would generate code of the form: var x$0: Int = _
+  // but this isn't valid Scala (2.10.3): local variables must be initialized.
   def emitForwardDef(sym: Sym[Any]): Unit = {
-    stream.println("var " + quote(sym, true) + /*": " + remap(sym.tp) + */ " = null.asInstanceOf[" + remap(sym.tp) + "]")
+    def zero[T](m:Manifest[T]):T = (m.toString match {
+      case "Boolean" => false
+      case "Byte"    => 0.toByte
+      case "Char"    => 0.toChar
+      case "Short"   => 0.toShort
+      case "Int"     => 0
+      case "Long"    => 0L
+      case "Float"   => 0.0f
+      case "Double"  => 0.0
+      case "Unit"    => ()
+      case _         => null
+    }).asInstanceOf[T]
+
+    stream.println("var " + quote(sym) + ": " + remap(sym.tp) + " = " + quote(Const(zero(sym.tp))))
+    //stream.println("var " + quote(sym, true) + /*": " + remap(sym.tp) + */ " = null.asInstanceOf[" + remap(sym.tp) + "]")
   }
-  
+
   // special case for recursive vals
   override def emitValDef(sym: Sym[Any], rhs: String): Unit = {
     if (recursive contains sym)
@@ -126,14 +143,12 @@ trait ScalaNestedCodegen extends GenericNestedCodegen with ScalaCodegen {
     else
       super.emitValDef(sym,rhs)
   }
-  
 }
-
 
 trait ScalaFatCodegen extends GenericFatCodegen with ScalaCodegen {
   val IR: Expressions with Effects with FatExpressions
   import IR._
-  
+
   def emitKernelExtra(syms: List[Sym[Any]]): Unit = {
     val kernelName = syms.map(quote).mkString("")
     stream.println("final class activation_" + kernelName + " {")
@@ -142,9 +157,7 @@ trait ScalaFatCodegen extends GenericFatCodegen with ScalaCodegen {
     }
     stream.println("}")
   }
-  
+
   override def emitFatNodeKernelExtra(syms: List[Sym[Any]], rhs: FatDef): Unit = emitKernelExtra(syms)
   override def emitNodeKernelExtra(syms: List[Sym[Any]], rhs: Def[Any]): Unit = emitKernelExtra(syms)
-
-
 }
