@@ -119,20 +119,19 @@ trait ScalaNestedCodegen extends GenericNestedCodegen with ScalaCodegen {
   // Ideally, we would generate code of the form: var x$0: Int = _
   // but this isn't valid Scala (2.10.3): local variables must be initialized.
   def emitForwardDef(sym: Sym[Any]): Unit = {
-    def zero[T](m:Manifest[T]):T = (m.toString match {
-      case "Boolean" => false
-      case "Byte"    => 0.toByte
-      case "Char"    => 0.toChar
-      case "Short"   => 0.toShort
-      case "Int"     => 0
-      case "Long"    => 0L
-      case "Float"   => 0.0f
-      case "Double"  => 0.0
-      case "Unit"    => ()
-      case _         => null
-    }).asInstanceOf[T]
-
-    stream.println("var " + quote(sym) + ": " + remap(sym.tp) + " = " + quote(Const(zero(sym.tp))))
+    def zero[T](tp:Manifest[T]) = tp.toString match {
+      case "Boolean" => "false"
+      case "Byte"    => "0.toByte"
+      case "Char"    => "0.toChar"
+      case "Short"   => "0.toShort"
+      case "Int"     => "0"
+      case "Long"    => "0L"
+      case "Float"   => "0.0f"
+      case "Double"  => "0.0"
+      case "Unit"    => "()"
+      case _         => "null.asInstanceOf["+remap(tp)+"]"
+    }
+    stream.println("var " + quote(sym, true) + /*": " + remap(sym.tp) + */ " = " + zero(sym.tp))
     //stream.println("var " + quote(sym, true) + /*": " + remap(sym.tp) + */ " = null.asInstanceOf[" + remap(sym.tp) + "]")
   }
 

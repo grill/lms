@@ -255,7 +255,27 @@ trait ScalaGenIfThenElseFat extends ScalaGenIfThenElse with ScalaGenFat with Bas
   import IR._
 
   override def emitFatNode(symList: List[Sym[Any]], rhs: FatDef) = rhs match {
-    case SimpleFatIfThenElse(c,as,bs) => 
+    case SimpleFatIfThenElse(c,as,bs) =>
+    /*
+    // TODO: integrate this
+    // Sandro change to distribute branches over struct elements (thereby avoiding reconstructing)
+    // struct objects at function boundaries and breaking them later
+      def emitRetAssignments[T](vars: List[Sym[Any]], retVals: List[Exp[T]]) =
+        (vars zip retVals) foreach { case (v, rv) => emitAssignment(v, quote(v), quote(rv)) }
+
+      if (symList.length > 1) {
+        symList foreach emitForwardDef
+        stream.println("if (" + quote(c) + ") {")
+      } else stream.println("val " + symList.map(quote).mkString + " = if (" + quote(c) + ") {")
+      emitFatBlock(as)
+      if (symList.length > 1) emitRetAssignments(symList, as.map(getBlockResult))
+      else stream.println(as.map(a => quote(getBlockResult(a))).mkString)
+      stream.println("} else {")
+      emitFatBlock(bs)
+      if (symList.length > 1) emitRetAssignments(symList, bs.map(getBlockResult))
+      else stream.println(bs.map(b => quote(getBlockResult(b))).mkString)
+      stream.println("}")
+    */
       def quoteList[T](xs: List[Exp[T]]) = if (xs.length > 1) xs.map(x => quote(x, true)).mkString("(",",",")") else xs.map(x => quote(x,true)).mkString(",")
       if (symList.length > 1) stream.println("// TODO: use vars instead of tuples to return multiple values")
       stream.println("val " + quoteList(symList) + " = if (" + quote(c) + ") {")
