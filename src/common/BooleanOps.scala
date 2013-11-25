@@ -12,8 +12,14 @@ trait LiftBoolean {
 }
 
 trait BooleanOps extends Variables with Expressions {
+  class BooleanOpsCls(lhs:Rep[Boolean]) {
+    def &&(rhs: => Rep[Boolean])(implicit pos: SourceContext) = boolean_and(lhs,rhs)
+  }
+
+  implicit def boolean2BooleanOpsCls(x: Rep[Boolean]): BooleanOpsCls = new BooleanOpsCls(x)
+
   def infix_unary_!(x: Rep[Boolean])(implicit pos: SourceContext) = boolean_negate(x)
-  def infix_&&(lhs: Rep[Boolean], rhs: => Rep[Boolean])(implicit pos: SourceContext) = boolean_and(lhs,rhs)
+  //def infix_&&(lhs: Rep[Boolean], rhs: => Rep[Boolean])(implicit pos: SourceContext) = boolean_and(lhs,rhs)
   def infix_&&(lhs: Boolean, rhs: => Rep[Boolean])(implicit pos: SourceContext): Exp[Boolean] = {
     if (lhs == true) rhs.asInstanceOf[Exp[Boolean]]
     else Const(false)
