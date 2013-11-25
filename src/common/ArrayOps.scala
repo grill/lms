@@ -30,14 +30,17 @@ trait ArrayOps extends Variables {
     def length(implicit pos: SourceContext) = array_length(a)
     def foreach(block: Rep[T] => Rep[Unit])(implicit pos: SourceContext) = array_foreach(a, block)
     //def filter(f: Rep[T] => Rep[Boolean]) = array_filter(a, f)
-	// def groupBy[B: Manifest](f: Rep[T] => Rep[B]) = array_group_by(a,f)
+	  // def groupBy[B: Manifest](f: Rep[T] => Rep[B]) = array_group_by(a,f)
     def sort(implicit pos: SourceContext) = array_sort(a)
     // def map[B:Manifest](f: Rep[T] => Rep[B]) = array_map(a,f)
     def toSeq = array_toseq(a)
-	def sum = array_sum(a)
+	  def sum = array_sum(a)
     def zip[B: Manifest](a2: Rep[Array[B]]) = array_zip(a,a2)
     def corresponds[B: Manifest](a2: Rep[Array[B]]) = array_corresponds(a,a2)
     def mkString(del: Rep[String] = unit("")) = array_mkString(a,del)
+    //this operation can be used, whenever an array is accepted as
+    //a function parameter and initially it's assumed to be immutable
+    def mutable = array_mutable(a)
   }    
 
   def array_obj_new[T:Manifest](n: Rep[Int], specializedType: Rep[String] = unit("")): Rep[Array[T]]
@@ -59,6 +62,7 @@ trait ArrayOps extends Variables {
   def array_mkString[A: Manifest](a: Rep[Array[A]], del: Rep[String] = unit("")): Rep[String]
   // limited support for corresponds (tests equality)
   def array_corresponds[A: Manifest, B: Manifest](a: Rep[Array[A]], a2: Rep[Array[B]]): Rep[Boolean]
+  def array_mutable[A: Manifest](a: Rep[Array[A]]): Rep[Array[A]]
 }
 
 trait ArrayOpsExp extends ArrayOps with EffectExp with VariablesExp {
@@ -90,6 +94,7 @@ trait ArrayOpsExp extends ArrayOps with EffectExp with VariablesExp {
   case class ArrayZip[A:Manifest, B: Manifest](x: Exp[Array[A]], x2: Exp[Array[B]]) extends Def[Array[(A,B)]]
   case class ArrayMkString[A:Manifest](a: Exp[Array[A]], b: Exp[String] = unit("")) extends Def[String]
   case class ArrayCorresponds[A:Manifest, B: Manifest](x: Exp[Array[A]], x2: Exp[Array[B]]) extends Def[Boolean]
+  case class ArrayMutable[A:Manifest](a: Exp[Array[A]]) extends Def[Array[A]]
   
   def array_obj_new[T:Manifest](n: Exp[Int], specializedType: Rep[String] = unit("")) = reflectMutable(ArrayNew(n, specializedType))
   def array_obj_fromseq[T:Manifest](xs: Seq[T]) = /*reflectMutable(*/ ArrayFromSeq(xs) /*)*/
@@ -122,10 +127,11 @@ trait ArrayOpsExp extends ArrayOps with EffectExp with VariablesExp {
     reflectEffect(ArrayMap(a, x, b), summarizeEffects(b))
   }
   def array_toseq[A:Manifest](a: Exp[Array[A]]) = ArrayToSeq(a)
-  def array_sum[A:Manifest](a: Exp[Array[A]]) = reflectEffect(ArraySum(a))
-  def array_zip[A:Manifest, B: Manifest](a: Exp[Array[A]], a2: Exp[Array[B]]) = reflectEffect(ArrayZip(a,a2))
-  def array_mkString[A: Manifest](a: Rep[Array[A]], del: Rep[String] = unit("")) = reflectEffect(ArrayMkString(a, del))
-  def array_corresponds[A: Manifest, B: Manifest](a: Rep[Array[A]], a2: Rep[Array[B]]) = reflectEffect(ArrayCorresponds(a,a2))
+  def array_sum[A:Manifest](a: Exp[Array[A]]) = ArraySum(a)
+  def array_zip[A:Manifest, B: Manifest](a: Exp[Array[A]], a2: Exp[Array[B]]) = ArrayZip(a,a2)
+  def array_mkString[A: Manifest](a: Rep[Array[A]], del: Rep[String] = unit("")) = ArrayMkString(a, del)
+  def array_corresponds[A: Manifest, B: Manifest](a: Rep[Array[A]], a2: Rep[Array[B]]) = ArrayCorresponds(a,a2)
+  def array_mutable[A: Manifest](a: Rep[Array[A]]) = reflectMutable(ArrayMutable(a))
   
   //////////////
   // mirroring
@@ -141,6 +147,7 @@ trait ArrayOpsExp extends ArrayOps with EffectExp with VariablesExp {
     case Reflect(e@ArraySort(x), u, es) => reflectMirrored(Reflect(ArraySort(f(x))(e.m), mapOver(f,u), f(es)))(mtype(manifest[A]))
     case Reflect(ArrayUpdate(l,i,r), u, es) => reflectMirrored(Reflect(ArrayUpdate(f(l),f(i),f(r)), mapOver(f,u), f(es)))(mtype(manifest[A]))
     case Reflect(e@ArrayCopy(a,ap,d,dp,l), u, es) => reflectMirrored(Reflect(ArrayCopy(f(a),f(ap),f(d),f(dp),f(l))(e.m), mapOver(f,u), f(es)))(mtype(manifest[A]))
+    case Reflect(e@ArrayMutable(a), u, es) => reflectMirrored(Reflect(ArrayMutable(f(a)), mapOver(f,u), f(es)))(mtype(manifest[A]))
     case _ => super.mirror(e,f)
   }).asInstanceOf[Exp[A]] // why??
 
@@ -325,6 +332,7 @@ trait ScalaGenArrayOps extends BaseGenArrayOps with ScalaGenBase {
       else
         emitValDef(sym, src"$a.mkString")	
     case ArrayCorresponds(a,a2) => emitValDef(sym, src"$a.corresponds($a2){_==_}") 
+    case ArrayMutable(x) => emitValDef(sym, src"$x //array made mutable")
     case _ => super.emitNode(sym, rhs)
   }
 }
@@ -338,6 +346,7 @@ trait CLikeGenArrayOps extends BaseGenArrayOps with CLikeGenBase {
         case ArrayLength(x) => emitValDef(sym, src"$x.length")
         case ArrayApply(x,n) => emitValDef(sym, src"$x.apply($n)")
         case ArrayUpdate(x,n,y) => stream.println(src"$x.update($n,$y);")
+        case ArrayMutable(x) => emitValDef(sym, src"$x //array made mutable")
         case _ => super.emitNode(sym, rhs)
       }
     }
