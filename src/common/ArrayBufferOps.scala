@@ -22,6 +22,7 @@ trait ArrayBufferOps extends Base {
     def append(l: Rep[ArrayBuffer[A]], e: Rep[A])(implicit pos: SourceContext) = arraybuffer_append(l,e)
     def toArray(implicit pos: SourceContext) = arraybuffer_toarray(l)
     def toSeq(implicit pos: SourceContext) = arraybuffer_toseq(l)
+    def size(implicit pos: SourceContext) = arraybuffer_size(l)
   }
   
   def infix_+=[A:Manifest](l: Rep[ArrayBuffer[A]], e: Rep[A])(implicit pos: SourceContext) = arraybuffer_append(l, e)
@@ -40,6 +41,7 @@ trait ArrayBufferOps extends Base {
   def arraybuffer_new[A:Manifest](xs: Seq[Rep[A]])(implicit pos: SourceContext): Rep[ArrayBuffer[A]]
   def arraybuffer_toarray[A:Manifest](x: Rep[ArrayBuffer[A]])(implicit pos: SourceContext): Rep[Array[A]]
   def arraybuffer_toseq[A:Manifest](x: Rep[ArrayBuffer[A]])(implicit pos: SourceContext): Rep[Seq[A]]
+  def arraybuffer_size[A:Manifest](x: Rep[ArrayBuffer[A]])(implicit pos: SourceContext): Rep[Int]
 }
 
 trait ArrayBufferOpsExp extends ArrayBufferOps with EffectExp {
@@ -50,12 +52,14 @@ trait ArrayBufferOpsExp extends ArrayBufferOps with EffectExp {
   case class ArrayBufferAppend[A:Manifest](l: Exp[ArrayBuffer[A]], e: Exp[A]) extends Def[Unit]
   case class ArrayBufferToArray[A:Manifest](x: Exp[ArrayBuffer[A]]) extends Def[Array[A]]
   case class ArrayBufferToSeq[A:Manifest](x: Exp[ArrayBuffer[A]]) extends Def[Seq[A]]
+  case class ArrayBufferSize[A:Manifest](x: Exp[ArrayBuffer[A]]) extends Def[Int]
 
   def arraybuffer_new[A:Manifest](xs: Seq[Exp[A]])(implicit pos: SourceContext) = reflectMutable(ArrayBufferNew(xs))
   def arraybuffer_mkstring[A:Manifest](l: Exp[ArrayBuffer[A]], sep: Exp[String])(implicit pos: SourceContext) = ArrayBufferMkString(l, sep)
   def arraybuffer_append[A:Manifest](l: Exp[ArrayBuffer[A]], e: Exp[A])(implicit pos: SourceContext) = reflectWrite(l)(ArrayBufferAppend(l, e))
   def arraybuffer_toarray[A:Manifest](x: Exp[ArrayBuffer[A]])(implicit pos: SourceContext) = ArrayBufferToArray(x)
   def arraybuffer_toseq[A:Manifest](x: Exp[ArrayBuffer[A]])(implicit pos: SourceContext) = ArrayBufferToSeq(x)
+  def arraybuffer_size[A:Manifest](x: Exp[ArrayBuffer[A]])(implicit pos: SourceContext) = ArrayBufferSize(x)
 
   //////////////
   // mirroring
@@ -63,6 +67,7 @@ trait ArrayBufferOpsExp extends ArrayBufferOps with EffectExp {
   override def mirrorDef[A:Manifest](e: Def[A], f: Transformer)(implicit pos: SourceContext): Def[A] = (e match {
     case ArrayBufferMkString(l,r) => ArrayBufferMkString(f(l),f(r))
     case ArrayBufferAppend(l,r) => ArrayBufferAppend(f(l),f(r))
+    case ArrayBufferSize(l) => ArrayBufferSize(f(l))
     case _ => super.mirrorDef(e,f)
   }).asInstanceOf[Def[A]] // why??
   
@@ -90,6 +95,7 @@ trait ScalaGenArrayBufferOps extends BaseGenArrayBufferOps with ScalaGenEffect {
     case ArrayBufferAppend(l, e) => emitValDef(sym, src"$l += $e")
     case ArrayBufferToArray(x) => emitValDef(sym, src"$x.toArray")
     case ArrayBufferToSeq(x) => emitValDef(sym, src"$x.toSeq")
+    case ArrayBufferSize(x) => emitValDef(sym, src"$x.size")
     case _ => super.emitNode(sym, rhs)
   }
 }
