@@ -22,6 +22,12 @@ trait GenericCodegen extends BlockTraversal {
    * List of transformers that should be applied before code generation
    */
   var transformers: List[AbstractTransformer] = List[AbstractTransformer]()
+
+  //we need a map for static fields, in order to distinguish between
+  //static fields that are required only once, and the ones required
+  //for every instance of method call
+  // (unique identifier) -> (expression)
+  val staticFields: collection.mutable.Map[String, String] = new collection.mutable.HashMap[String, String]()
   
   def performTransformations[A:Manifest](body: Block[A]): Block[A] = {
     var transformedBody = body

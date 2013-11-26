@@ -50,9 +50,17 @@ trait ScalaGenSimpleDateFormat extends ScalaGenBase {
   import IR._
 
   override def emitNode(sym: Sym[Any], rhs: Def[Any]) = rhs match {
-    case NewSimpleDateFormat(fmt) => emitValDef(sym, "new java.text.SimpleDateFormat(%s)".format(quote(fmt)))
-    case SdfFormat(x, d) => emitValDef(sym, "%s.format(%s)".format(quote(x),quote(d)));
-    case SdfParse(x, s) => emitValDef(sym, "%s.parse(%s)".format(quote(x),quote(s)));
+    case NewSimpleDateFormat(fmt) => fmt match {
+      case Const(theFormat) => staticFields += ("SimpleDateFormatOps."+sym.id -> "val %s = new java.text.SimpleDateFormat(\"%s\")".format("sdf"+sym.id, theFormat))
+      case _ => emitValDef(sym, "new java.text.SimpleDateFormat(%s)".format(quote(fmt)))
+    }
+    case SdfFormat(x, d) => emitValDef(sym, "%s.format(%s)".format(quoteSimpleDateFormat(x),quote(d)));
+    case SdfParse(x, s) => emitValDef(sym, "%s.parse(%s)".format(quoteSimpleDateFormat(x),quote(s)));
     case _ => super.emitNode(sym, rhs)
+  }
+
+  def quoteSimpleDateFormat(x: Exp[SimpleDateFormat]) = Def.unapply(x) match {
+    case Some(NewSimpleDateFormat(Const(theFormat))) => "sdf"+x.asInstanceOf[Sym[_]].id
+    case _ => quote(x)
   }
 }

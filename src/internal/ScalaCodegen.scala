@@ -39,7 +39,10 @@ trait ScalaCodegen extends GenericCodegen {
       emitBlock(transformedBody)
       if (sA != "Unit") stream.println(quote(getBlockResult(transformedBody)))
       stream.println("}")
-
+      staticFields.map { case (key, staticFldDef) =>
+        stream.println("  " + staticFldDef)
+      }
+      staticFields.clear
       stream.println("}")
       stream.println("/*****************************************\n"+
                      "  End of Generated Code                  \n"+
