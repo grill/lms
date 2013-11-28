@@ -35,6 +35,11 @@ trait ScalaConciseCodegen extends ScalaNestedCodegen { self =>
     }
   }
 
+  override def emitVarDef(sym: Sym[Variable[Any]], rhs: String): Unit = {
+//    stream.println("var " + quote(sym) + ": " + remap(sym.tp) + " = " + rhs)
+    stream.println("var " + quote(sym) + ":" + remap(sym.tp) + " = " + rhs)
+  }
+
   override def emitAssignment(sym: Sym[Any], lhs: String, rhs: String): Unit = {
     // if(isVoidType(sym.tp)) {
       stream.println(lhs + " = " + rhs)

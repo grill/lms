@@ -60,7 +60,10 @@ trait ScalaGenSimpleDateFormat extends ScalaGenBase {
   }
 
   def quoteSimpleDateFormat(x: Exp[SimpleDateFormat]) = Def.unapply(x) match {
-    case Some(NewSimpleDateFormat(Const(theFormat))) => "sdf"+x.asInstanceOf[Sym[_]].id
+    case Some(NewSimpleDateFormat(Const(theFormat))) => 
+      val sym = x.asInstanceOf[Sym[_]]
+      staticFields += ("SimpleDateFormatOps."+sym.id -> "val %s = new java.text.SimpleDateFormat(\"%s\")".format("sdf"+sym.id, theFormat))
+      "sdf"+sym.id
     case _ => quote(x)
   }
 }
