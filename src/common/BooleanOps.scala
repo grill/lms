@@ -91,7 +91,7 @@ trait ScalaGenBooleanOps extends ScalaGenBase with GenericNestedCodegen {
 		val strWriter = new java.io.StringWriter
 		val localStream = new PrintWriter(strWriter);
       	withStream(localStream) {
-      	  gen"""if ($lhs == true) {
+      	  gen"""if ($lhs) {
       	       |${nestedBlock(rhs)}
       	       |$rhs
       	       |} else false"""
