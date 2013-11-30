@@ -28,7 +28,7 @@ trait ScalaOpsPkgExp extends ScalaOpsPkg
 
 trait ScalaOpsPkgExpOpt extends ScalaOpsPkgExp
     with StructExpOptCommon with NumericOpsExpOpt
-    with ArrayOpsExpOpt with ListOpsExpOpt
+    with ArrayOpsExpOpt with ListOpsExpOpt with PrimitiveOpsExpOpt
     with EqualExpOpt with IfThenElseExpOpt with VariablesExpOpt with WhileExpOpt
     with DateExpOpt with GregorianCalendarExpOpt with SimpleDateFormatExpOpt with ObjectOpsExpOpt
 

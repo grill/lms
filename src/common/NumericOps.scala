@@ -65,7 +65,7 @@ trait NumericOpsExp extends NumericOps with VariablesExp with BaseFatExp {
 }
 
 
-trait NumericOpsExpOpt extends NumericOpsExp {
+trait NumericOpsExpOpt extends NumericOpsExp with PrimitiveOpsExp {
   
   override def numeric_plus[T:Numeric:Manifest](lhs: Exp[T], rhs: Exp[T])(implicit pos: SourceContext): Exp[T] = (lhs,rhs) match {
     case (Const(x), Const(y)) => Const(implicitly[Numeric[T]].plus(x,y))
@@ -88,6 +88,7 @@ trait NumericOpsExpOpt extends NumericOpsExp {
   override def numeric_divide[T:Numeric:Manifest](lhs: Exp[T], rhs: Exp[T])(implicit pos: SourceContext): Exp[T] = (lhs,rhs) match {
     // CAVEAT: Numeric doesn't have .div, Fractional has
     case (Const(x), Const(y)) => Const(implicitly[Numeric[T]].asInstanceOf[Fractional[T]].div(x,y))
+    case (s@Sym(_),Const(2)) if (s.tp.equals(manifest[Int]) || s.tp.equals(manifest[Long])) => infix_>>(s.asInstanceOf[Rep[Long]],Const(1)).asInstanceOf[Exp[T]]
     case _ => super.numeric_divide(lhs,rhs)
   }
 }

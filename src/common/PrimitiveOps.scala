@@ -225,6 +225,14 @@ trait PrimitiveOpsExp extends PrimitiveOps with BaseExp {
   }).asInstanceOf[Exp[A]]
 }
 
+trait PrimitiveOpsExpOpt extends PrimitiveOpsExp {
+  override def int_mod(lhs: Exp[Int], rhs: Exp[Int])(implicit pos: SourceContext) = (lhs,rhs) match {
+    case (Const(x), Const(y)) => Const(x % y)
+    case (s@Sym(_),Const(2)) => infix_&(s,Const(1))
+    case _ => super.int_mod(lhs,rhs)
+  }
+}
+
 trait ScalaGenPrimitiveOps extends ScalaGenBase {
   val IR: PrimitiveOpsExp
   import IR._
