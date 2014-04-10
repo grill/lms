@@ -84,11 +84,6 @@ trait ScalaCodegen extends GenericCodegen {
     stream.println("}}")
   }
 
-  def relativePath(fileName: String): String = {
-    val i = fileName.lastIndexOf('/')
-    fileName.substring(i + 1)
-  }
-
   def emitValDef(sym: Sym[Any], rhs: String): Unit = {
     val extra = if ((Config.sourceinfo < 2) || sym.pos.isEmpty) "" else {
       val context = sym.pos(0)

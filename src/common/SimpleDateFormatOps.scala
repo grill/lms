@@ -5,6 +5,7 @@ import scala.virtualization.lms.common._
 import scala.reflect.SourceContext
 import java.util.Date
 import java.text.SimpleDateFormat
+import scala.virtualization.lms.internal.GenerationFailedException
 
 /**
  * Lifter Classes for SimpleDateFormat
@@ -67,3 +68,19 @@ trait ScalaGenSimpleDateFormat extends ScalaGenBase {
     case _ => quote(x)
   }
 }
+
+trait CLikeGenSimpleDateFormat extends CLikeGenBase {
+  val IR: SimpleDateFormatExp
+  import IR._
+
+  override def emitNode(sym: Sym[Any], rhs: Def[Any]) = rhs match {
+    case NewSimpleDateFormat(fmt) => throw new GenerationFailedException("CLikeGenSimpleDateFormat: SimpleDateFormatOps is not supported")
+    case SdfFormat(x, d) => throw new GenerationFailedException("CLikeGenSimpleDateFormat: SimpleDateFormatOps is not supported")
+    case SdfParse(x, s) => throw new GenerationFailedException("CLikeGenSimpleDateFormat: SimpleDateFormatOps is not supported")
+    case _ => super.emitNode(sym, rhs)
+  }
+}
+
+trait CudaGenSimpleDateFormat extends CudaGenBase with CLikeGenSimpleDateFormat
+trait OpenCLGenSimpleDateFormat extends OpenCLGenBase with CLikeGenSimpleDateFormat
+trait CGenSimpleDateFormat extends CGenBase with CLikeGenSimpleDateFormat

@@ -10,6 +10,11 @@ trait GenericCodegen extends BlockTraversal {
   val IR: Expressions
   import IR._
 
+  def relativePath(fileName: String): String = {
+    val i = fileName.lastIndexOf('/')
+    fileName.substring(i + 1)
+  }
+
   // TODO: should some of the methods be moved into more specific subclasses?
   
   def kernelFileExt = ""
