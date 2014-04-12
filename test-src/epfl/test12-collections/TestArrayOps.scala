@@ -1,4 +1,4 @@
-package scala.virtualization.lms
+/*package scala.virtualization.lms
 package epfl
 package test12
 
@@ -31,3 +31,4 @@ class TestArrayOps extends FileDiffSuite {
   }
 
 }
+*/

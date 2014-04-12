@@ -1,4 +1,4 @@
-package scala.virtualization.lms
+/*package scala.virtualization.lms
 package epfl
 package test15
 
@@ -36,9 +36,9 @@ trait TupledGeneratorFlattenProg extends K3PersistentCollectionOps with NumericO
     ).map((y:Rep[Tuple2[(Double),Long]]) => {
       val v = ({
         (x:Rep[Tuple2[(Double), Long]]) => {
-          val var_A_PRICE:Rep[Double] = x._1 /* Rep[Double] => Rep[Double] */;
+          val var_A_PRICE:Rep[Double] = x._1; // Rep[Double] => Rep[Double]
 
-          val var___map_ret__1:Rep[Long] = x._2 /* Rep[Long] => Rep[Long] */;
+          val var___map_ret__1:Rep[Long] = x._2; // Rep[Long] => Rep[Long]
           {
             val v = {
 
@@ -103,3 +103,4 @@ class TestTupledGeneratorFlatten extends FileDiffSuite {
     assertFileEqualsCheck(prefix+"tupled-generator-flatten")
   }
 }
+*/

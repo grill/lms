@@ -1,4 +1,4 @@
-package scala.virtualization.lms
+/*package scala.virtualization.lms
 package epfl
 package test3
 
@@ -61,46 +61,46 @@ trait Matching extends Base {
   }
 }
 
-/*
-trait MatchingExtractorsRepString {
-  type Rep[+T] = String
-  
-  var context: List[String] = Nil
-  
-  def construct[A,B](c: Class[A], f: B => A, x: Rep[B]): Rep[A] = "new " + c.getName + "(" + x + ")"
-  def deconstruct[A,B](c: Class[A], f: A => Option[B], x: Rep[A]): Option[Rep[B]] = {
-    val s = c.getName + ".unapply(" + x + ")"
-    context = context ::: List(s)
-    Some(s)
-  }
-  def tuple[A,B](x: Rep[A], y: Rep[B]): Rep[(A,B)] = "(" + x + "," + y + ")"
-  def fst[A,B](x: Rep[(A,B)]): Rep[A] = x + "._1"
-  def snd[A,B](x: Rep[(A,B)]): Rep[B] = x + "._2"
-  
-  def unit[A](x: A): Rep[A] = x.toString
-  def test[A](x: Rep[A], y: A) = {
-    val s = "assert(" + x + " == " + y + ")"
-    context = context ::: List(s)
-    true
-  }
-  
-  def evalMatch[A,B](x: Rep[A], alts: List[PartialFunction[Rep[A],Rep[B]]]) = {
-    
-    def doApply(f: PartialFunction[Rep[A],Rep[B]]) = {
-      
-      val save = context
-      context = Nil
-      
-      val result = f(x)
-      val effects = context
-      context = save
-      result + " <- " + effects
-    }
 
-    alts.map(doApply).mkString("\n- orElse -\n")
-  }
-}
-*/
+// trait MatchingExtractorsRepString {
+//   type Rep[+T] = String
+  
+//   var context: List[String] = Nil
+  
+//   def construct[A,B](c: Class[A], f: B => A, x: Rep[B]): Rep[A] = "new " + c.getName + "(" + x + ")"
+//   def deconstruct[A,B](c: Class[A], f: A => Option[B], x: Rep[A]): Option[Rep[B]] = {
+//     val s = c.getName + ".unapply(" + x + ")"
+//     context = context ::: List(s)
+//     Some(s)
+//   }
+//   def tuple[A,B](x: Rep[A], y: Rep[B]): Rep[(A,B)] = "(" + x + "," + y + ")"
+//   def fst[A,B](x: Rep[(A,B)]): Rep[A] = x + "._1"
+//   def snd[A,B](x: Rep[(A,B)]): Rep[B] = x + "._2"
+  
+//   def unit[A](x: A): Rep[A] = x.toString
+//   def test[A](x: Rep[A], y: A) = {
+//     val s = "assert(" + x + " == " + y + ")"
+//     context = context ::: List(s)
+//     true
+//   }
+  
+//   def evalMatch[A,B](x: Rep[A], alts: List[PartialFunction[Rep[A],Rep[B]]]) = {
+    
+//     def doApply(f: PartialFunction[Rep[A],Rep[B]]) = {
+      
+//       val save = context
+//       context = Nil
+      
+//       val result = f(x)
+//       val effects = context
+//       context = save
+//       result + " <- " + effects
+//     }
+
+//     alts.map(doApply).mkString("\n- orElse -\n")
+//   }
+// }
+
 
 trait MatchingExtractorsExp extends FunctionsExp with Effects with Control {
 
@@ -165,20 +165,20 @@ trait MatchingExtractorsExpOpt extends MatchingExtractorsExp {
     case _ => super.test(x, y)
   }
 
-/*  
-  override def andAlso[A](x: Rep[A], effects: List[Rep[Any]]): Rep[A] = effects match {
-    case Nil => x
-    case _ => super.andAlso(x, effects)
-  }
-*/
-/*
-  override def orElse[A](xs: List[Rep[A]]): Rep[A] = xs match {
-    case List(x) => x
-    case _ => super.orElse(xs)
-  }
-*/
-}
+  
+  // override def andAlso[A](x: Rep[A], effects: List[Rep[Any]]): Rep[A] = effects match {
+  //   case Nil => x
+  //   case _ => super.andAlso(x, effects)
+  // }
 
+
+  // override def orElse[A](xs: List[Rep[A]]): Rep[A] = xs match {
+  //   case List(x) => x
+  //   case _ => super.orElse(xs)
+  // }
+
+}
+*/
 
 /*
 trait MatchingExtractorsExpOpt2 extends MatchingExtractorsExpOpt {

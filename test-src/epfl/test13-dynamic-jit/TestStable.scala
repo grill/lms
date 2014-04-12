@@ -1,4 +1,4 @@
-package scala.virtualization.lms
+/*package scala.virtualization.lms
 package epfl
 package test13
 
@@ -117,15 +117,15 @@ trait CompileDynExp extends CompileDyn with BaseExp with StaticDataExp with Unch
 
     unchecked(staticData(callback),".apply("+fvIds.map(i=>"x"+i)+")","// compile dynamic: fv = ",fv)
 
-    /*unchecked("{import ",IR,"._;\n",
-      fvIds.map(i => "val s"+i+" = findDefinition(Sym("+i+")).map(infix_lhs(_).head).getOrElse(Sym("+i+"));\n").mkString, // XX codegen uses identity hash map ...
-      IR,".reset;",IR,".nVars="+maxid+"\n",                                                      // FIXME: reset harmful ???
-      "compile{(x:",atyp,") => \n",
-      fvIds.map(i => "createDefinition(s"+i+",StaticData(x"+i+"));\n").mkString,
-      "val y = ",f2,".asInstanceOf[",ftyp,"](",g("x"),")\n",
-      "println(\"freeVars/globalDefs for function of type "+f.getClass.getName+": "+fv+"\")\n",
-      "println(globalDefs)\n",
-      "y}}","//",fv) // last comment item necessary for dependency*/
+    // unchecked("{import ",IR,"._;\n",
+    //   fvIds.map(i => "val s"+i+" = findDefinition(Sym("+i+")).map(infix_lhs(_).head).getOrElse(Sym("+i+"));\n").mkString, // XX codegen uses identity hash map ...
+    //   IR,".reset;",IR,".nVars="+maxid+"\n",                                                      // FIXME: reset harmful ???
+    //   "compile{(x:",atyp,") => \n",
+    //   fvIds.map(i => "createDefinition(s"+i+",StaticData(x"+i+"));\n").mkString,
+    //   "val y = ",f2,".asInstanceOf[",ftyp,"](",g("x"),")\n",
+    //   "println(\"freeVars/globalDefs for function of type "+f.getClass.getName+": "+fv+"\")\n",
+    //   "println(globalDefs)\n",
+    //   "y}}","//",fv) // last comment item necessary for dependency
 
   }
 }
@@ -325,3 +325,4 @@ class TestStable extends FileDiffSuite {
   }}
 
 }
+*/

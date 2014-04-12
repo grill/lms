@@ -247,7 +247,7 @@ trait MatcherNewProg { this: Matching with ListMatch with Equal =>
 
 }
 */
-
+/*
 trait MatcherNewProgTrivialA {
 
   type IO = Unit
@@ -551,7 +551,7 @@ trait MatcherNewProgB extends Util { this: Arith with Functions with Equal with 
         advance { a2 =>
           guard(a2 == 'X') {
             advance { b =>
-              guard(b == /*a2*/'B') { //cannot reach back: *finite* automaton!
+              guard(b == 'B') { //cannot reach back: *finite* automaton!
                 success()
     }}}}}} ++
     advance { _ => findAAB() } // in parallel...
@@ -693,7 +693,7 @@ trait MatcherNewProg extends DFAOps with GAOps with NFAtoDFA with GAtoDA with Ut
     gor(gtrans { a1 =>
       gguard (a1 == 'A') {
         gtrans { a2 =>
-          gguard (a2 == a1/*'A'*/) {
+          gguard (a2 == a1) {
             gtrans { a3 =>
               gguard (a3 == 'B', true) {
                 //gstop()
@@ -764,7 +764,7 @@ class TestMatcherNew extends FileDiffSuite {
     with BooleanOpsExp with IfThenElseExpOpt with IfThenElseFatExp with ListOpsExp
     with SplitEffectsExpFat // temporary!
     //with FunctionExpUnfoldRecursion
-    with FunctionsExternalDef1 /* was 2 */
+    with FunctionsExternalDef1 // was 2
     with CompileScala { q =>
       case class Result(in: List[Exp[Any]]) extends Def[Unit] //FIXME
       case class ResultA[A](x: Exp[A], in: List[Exp[Any]]) extends Def[A] //FIXME
@@ -772,7 +772,7 @@ class TestMatcherNew extends FileDiffSuite {
       def collectall(in: List[Rep[Any]]): Rep[Unit] = Result(in)
       def protect[A:Manifest](x: Exp[A], in: List[Rep[Any]]): Rep[A] = ResultA(x,in)
       def bare[T:Manifest](x: Exp[Any], f: String => String): Exp[T] = Bare[T](x,f)
-      //def printL(in: Rep[Any]): Rep[Unit] = /*reflectEffect*/(Result(List(in))) //FIXME violate ordering
+      //def printL(in: Rep[Any]): Rep[Unit] = //reflectEffect(Result(List(in))) //FIXME violate ordering
       Config.verbosity = 0
       object codegen extends ScalaGenArith with ScalaGenEqual with ScalaGenListOps with ScalaGenTupleOps
           with ScalaGenIfThenElseFat with ScalaGenSplitEffects with ScalaGenOrderingOps
@@ -881,7 +881,7 @@ class TestMatcherNew extends FileDiffSuite {
           gor(gtrans { a1 =>
             gguard (a1 == 'A') {
               gtrans { a2 =>
-                gguard (a2 == a1/*'A'*/) {
+                gguard (a2 == a1) {
                   gtrans { a3 =>
                     gguard (a3 == 'B', true) {
                       //gstop()
@@ -910,9 +910,9 @@ class TestMatcherNew extends FileDiffSuite {
           star(a => unit(true))(gtrans { a1 =>
             gguard (a1 == 'A') {
               gtrans { a2 =>
-                gguard (a2 == a1/*'A'*/) {
+                gguard (a2 == a1) {
                   gtrans { a3 =>
-                    gguard (a3 == 'B'/*, true*/) {
+                    gguard (a3 == 'B') {
                       //gstop()
                       gtrans(unit(List(1))) { a4 => gstop() }
           }}}}}})
@@ -991,7 +991,7 @@ class TestMatcherNew extends FileDiffSuite {
       def test(x: Rep[Unit]): DIO = {
 
         val nums = pcount(8)
-        val even = pcount(8) /*until (_ == 5.0)*/ filter (n => iseven(n))
+        val even = pcount(8) filter (n => iseven(n))
 
         val pairs = nums zip even
 
@@ -1002,7 +1002,7 @@ class TestMatcherNew extends FileDiffSuite {
     }
     new Prog with Impl
   }}
-
+*/
 
 /*
   val req = "PUT /file HTTP/1.1\r\n"+
@@ -1029,6 +1029,5 @@ class TestMatcherNew extends FileDiffSuite {
 
   def parse = buffers into (chars into (parseHeader andThen parseBody))
 
-*/
-
 }
+*/

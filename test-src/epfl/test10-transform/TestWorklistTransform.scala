@@ -1,4 +1,4 @@
-package scala.virtualization.lms
+/*package scala.virtualization.lms
 package epfl
 package test10
 
@@ -100,7 +100,7 @@ trait VectorExpTrans1 extends FWTransform1 with VectorExp with ArrayLoopsExp wit
   }
 
 
-/*
+
   override def vlength[T:Manifest](a: Rep[Vector[T]]) = a match {
     case Def(VectorFromArray(b)) => b.length
     case _ => super.vlength(a)
@@ -120,7 +120,7 @@ trait VectorExpTrans1 extends FWTransform1 with VectorExp with ArrayLoopsExp wit
     case VectorToArray(a) => vtoarray(f(a))
     case _ => super.mirror(e,f)
   }).asInstanceOf[Exp[A]] // gadt fail
-*/
+
 
   def vfromarray[A:Manifest](x: Exp[Array[A]]): Exp[Vector[A]] = struct(ClassTag[Vector[A]]("Vector"), "data" -> x, "length" -> x.length)
   def vtoarray[A:Manifest](x: Exp[Vector[A]]): Exp[Array[A]] = field[Array[A]](x, "data")
@@ -215,3 +215,4 @@ class TestForward1 extends FileDiffSuite {
   }}
 
 }
+*/

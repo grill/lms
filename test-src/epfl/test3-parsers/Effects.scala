@@ -6,7 +6,7 @@ import common._
 import test1._
 import test2._
 
-
+/*
 trait Effects extends Base {
   
   type State
@@ -34,12 +34,12 @@ trait Effects extends Base {
   }
   
   
-}
+}*/
 
 
-trait Effects2 extends Effects {
+/* trait Effects2 extends Effects {
 
-/*  
+ 
     abstract class State
     
     case Object
@@ -59,14 +59,14 @@ trait Effects2 extends Effects {
 
     case class ReifiedEffects[A](x: Rep[A], y: Rep[Effect]) extends Exp[Effectful[A]]
     case class Pure[A](x: Rep[A]) extends Exp[Effectful[A]]
-*/  
-}
+ 
+}*/ 
 
 
 
 
 
-trait Control extends Effects with BaseExp {
+/*trait Control extends Effects with BaseExp {
   
   case class OrElse[A:Manifest](x: List[Rep[Effectful[A]]]) extends Def[A]
   
@@ -91,7 +91,7 @@ trait Control extends Effects with BaseExp {
     case Nil => Pure(x)
     case _ => Reify(x, y)
   }
-}
+}*/
 
 /*
 trait ControlOpt extends Control {

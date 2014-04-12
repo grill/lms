@@ -1,4 +1,4 @@
-package scala.virtualization.lms
+/*package scala.virtualization.lms
 package epfl
 package test9
 
@@ -226,3 +226,4 @@ class TestCPS extends FileDiffSuite {
   }
 
 }
+*/

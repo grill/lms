@@ -1,4 +1,4 @@
-package scala.virtualization.lms
+/*package scala.virtualization.lms
 package epfl
 package test4
 
@@ -150,3 +150,4 @@ class TestFac extends FileDiffSuite {
   }
 }
 
+*/

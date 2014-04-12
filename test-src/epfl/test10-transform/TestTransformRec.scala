@@ -1,4 +1,4 @@
-package scala.virtualization.lms
+/* package scala.virtualization.lms
 package epfl
 package test10
 
@@ -141,3 +141,4 @@ class TestTransformRec extends FileDiffSuite {
     new Prog with Impl
   }}
 }
+*/
