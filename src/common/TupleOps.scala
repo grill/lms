@@ -1,10 +1,19 @@
 package scala.virtualization.lms
 package common
 
-import java.io.PrintWriter
+import scala.virtualization.lms.common._
+import scala.virtualization.lms.internal.GenericCodegen
 import scala.reflect.SourceContext
 
+import java.io.PrintWriter
+
+/**
+ * Taken char-for-char from the delite-develop branch of lms
+ */
+
 trait TupleOps extends Base {
+  val tuple_elems: Seq[String]
+
   implicit def make_tuple2[A1:Manifest,A2:Manifest](t: (Rep[A1], Rep[A2]))(implicit pos: SourceContext) : Rep[(A1,A2)]
   implicit def make_tuple3[A1:Manifest,A2:Manifest,A3:Manifest](t: (Rep[A1], Rep[A2], Rep[A3]))(implicit pos: SourceContext) : Rep[(A1,A2,A3)]
   implicit def make_tuple4[A1:Manifest,A2:Manifest,A3:Manifest,A4:Manifest](t: (Rep[A1], Rep[A2], Rep[A3], Rep[A4]))(implicit pos: SourceContext) : Rep[(A1,A2,A3,A4)]
@@ -35,7 +44,7 @@ trait TupleOps extends Base {
     ((tuple4_get1(t),tuple4_get2(t),tuple4_get3(t),tuple4_get4(t)))
   implicit def t5[A1:Manifest,A2:Manifest,A3:Manifest,A4:Manifest,A5:Manifest](t: Rep[(A1,A2,A3,A4,A5)])(implicit pos: SourceContext) =
     ((tuple5_get1(t),tuple5_get2(t),tuple5_get3(t),tuple5_get4(t),tuple5_get5(t)))
-  implicit def t6[A1:Manifest,A2:Manifest,A3:Manifest,A4:Manifest,A5:Manifest,A6:Manifest](t: Rep[(A1,A2,A3,A4,A5,A6)])(implicit pos: SourceContext) =
+    implicit def t6[A1:Manifest,A2:Manifest,A3:Manifest,A4:Manifest,A5:Manifest,A6:Manifest](t: Rep[(A1,A2,A3,A4,A5,A6)])(implicit pos: SourceContext) =
     ((tuple6_get1(t),tuple6_get2(t),tuple6_get3(t),tuple6_get4(t),tuple6_get5(t),tuple6_get6(t)))
   implicit def t7[A1:Manifest,A2:Manifest,A3:Manifest,A4:Manifest,A5:Manifest,A6:Manifest,A7:Manifest](t: Rep[(A1,A2,A3,A4,A5,A6,A7)])(implicit pos: SourceContext) =
     ((tuple7_get1(t),tuple7_get2(t),tuple7_get3(t),tuple7_get4(t),tuple7_get5(t),tuple7_get6(t),tuple7_get7(t)))
@@ -349,31 +358,55 @@ trait TupleOps extends Base {
   implicit def repProductToProductOps(x: Rep[Product]) = new ProductOps(x)
   def product_apply(x: Rep[Product], i: Rep[Int]): Rep[Any]
   def listToTuple(y: List[Rep[Any]]): Rep[Product]
+
+  def hashTuple2(t: Rep[(_,_)]): Rep[Int]
+  def hashTuple3(t: Rep[(_,_,_)]): Rep[Int]
+  def hashTuple4(t: Rep[(_,_,_,_)]): Rep[Int]
+  def hashTuple5(t: Rep[(_,_,_,_,_)]): Rep[Int]
+  def hashTuple6(t: Rep[(_,_,_,_,_,_)]): Rep[Int]
+  def hashTuple7(t: Rep[(_,_,_,_,_,_,_)]): Rep[Int]
+  def hashTuple8(t: Rep[(_,_,_,_,_,_,_,_)]): Rep[Int]
+  def hashTuple9(t: Rep[(_,_,_,_,_,_,_,_,_)]): Rep[Int]
+  def hashTuple10(t: Rep[(_,_,_,_,_,_,_,_,_,_)]): Rep[Int]
+  def hashTuple11(t: Rep[(_,_,_,_,_,_,_,_,_,_,_)]): Rep[Int]
+  def hashTuple12(t: Rep[(_,_,_,_,_,_,_,_,_,_,_,_)]): Rep[Int]
+  def hashTuple13(t: Rep[(_,_,_,_,_,_,_,_,_,_,_,_,_)]): Rep[Int]
+  def hashTuple14(t: Rep[(_,_,_,_,_,_,_,_,_,_,_,_,_,_)]): Rep[Int]
+  def hashTuple15(t: Rep[(_,_,_,_,_,_,_,_,_,_,_,_,_,_,_)]): Rep[Int]
+  def hashTuple16(t: Rep[(_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_)]): Rep[Int]
+  def hashTuple17(t: Rep[(_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_)]): Rep[Int]
+  def hashTuple18(t: Rep[(_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_)]): Rep[Int]
+  def hashTuple19(t: Rep[(_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_)]): Rep[Int]
+  def hashTuple20(t: Rep[(_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_)]): Rep[Int]
+  def hashTuple21(t: Rep[(_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_)]): Rep[Int]
+  def hashTuple22(t: Rep[(_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_)]): Rep[Int]
+
+  def compareTuple2(t1: Rep[(_,_)], t2: Rep[(_,_)]): Rep[Boolean]
+  def compareTuple3(t1: Rep[(_,_,_)], t2: Rep[(_,_,_)]): Rep[Boolean]
+  def compareTuple4(t1: Rep[(_,_,_,_)], t2: Rep[(_,_,_,_)]): Rep[Boolean]
+  def compareTuple5(t1: Rep[(_,_,_,_,_)], t2: Rep[(_,_,_,_,_)]): Rep[Boolean]
+  def compareTuple6(t1: Rep[(_,_,_,_,_,_)], t2: Rep[(_,_,_,_,_,_)]): Rep[Boolean]
+  def compareTuple7(t1: Rep[(_,_,_,_,_,_,_)], t2: Rep[(_,_,_,_,_,_,_)]): Rep[Boolean]
+  def compareTuple8(t1: Rep[(_,_,_,_,_,_,_,_)], t2: Rep[(_,_,_,_,_,_,_,_)]): Rep[Boolean]
+  def compareTuple9(t1: Rep[(_,_,_,_,_,_,_,_,_)], t2: Rep[(_,_,_,_,_,_,_,_,_)]): Rep[Boolean]
+  def compareTuple10(t1: Rep[(_,_,_,_,_,_,_,_,_,_)], t2: Rep[(_,_,_,_,_,_,_,_,_,_)]): Rep[Boolean]
+  def compareTuple11(t1: Rep[(_,_,_,_,_,_,_,_,_,_,_)], t2: Rep[(_,_,_,_,_,_,_,_,_,_,_)]): Rep[Boolean]
+  def compareTuple12(t1: Rep[(_,_,_,_,_,_,_,_,_,_,_,_)], t2: Rep[(_,_,_,_,_,_,_,_,_,_,_,_)]): Rep[Boolean]
+  def compareTuple13(t1: Rep[(_,_,_,_,_,_,_,_,_,_,_,_,_)], t2: Rep[(_,_,_,_,_,_,_,_,_,_,_,_,_)]): Rep[Boolean]
+  def compareTuple14(t1: Rep[(_,_,_,_,_,_,_,_,_,_,_,_,_,_)], t2: Rep[(_,_,_,_,_,_,_,_,_,_,_,_,_,_)]): Rep[Boolean]
+  def compareTuple15(t1: Rep[(_,_,_,_,_,_,_,_,_,_,_,_,_,_,_)], t2: Rep[(_,_,_,_,_,_,_,_,_,_,_,_,_,_,_)]): Rep[Boolean]
+  def compareTuple16(t1: Rep[(_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_)], t2: Rep[(_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_)]): Rep[Boolean]
+  def compareTuple17(t1: Rep[(_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_)], t2: Rep[(_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_)]): Rep[Boolean]
+  def compareTuple18(t1: Rep[(_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_)], t2: Rep[(_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_)]): Rep[Boolean]
+  def compareTuple19(t1: Rep[(_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_)], t2: Rep[(_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_)]): Rep[Boolean]
+  def compareTuple20(t1: Rep[(_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_)], t2: Rep[(_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_)]): Rep[Boolean]
+  def compareTuple21(t1: Rep[(_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_)], t2: Rep[(_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_)]): Rep[Boolean]
+  def compareTuple22(t1: Rep[(_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_)], t2: Rep[(_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_)]): Rep[Boolean]
 }
 
-trait TupleOpsExp extends TupleOps with EffectExp {
+object TupleOpsGenType { var isCGen: scala.Boolean = false }
 
-  implicit def make_tuple2[A1:Manifest,A2:Manifest](t: (Exp[A1],Exp[A2]))(implicit pos: SourceContext) : Exp[(A1,A2)] = ETuple2(t._1, t._2)
-  implicit def make_tuple3[A1:Manifest,A2:Manifest,A3:Manifest](t: (Exp[A1],Exp[A2],Exp[A3]))(implicit pos: SourceContext) : Exp[(A1,A2,A3)] = ETuple3(t._1, t._2, t._3)
-  implicit def make_tuple4[A1:Manifest,A2:Manifest,A3:Manifest,A4:Manifest](t: (Exp[A1],Exp[A2],Exp[A3],Exp[A4]))(implicit pos: SourceContext) : Exp[(A1,A2,A3,A4)] = ETuple4(t._1, t._2, t._3, t._4)
-  implicit def make_tuple5[A1:Manifest,A2:Manifest,A3:Manifest,A4:Manifest,A5:Manifest](t: (Exp[A1],Exp[A2],Exp[A3],Exp[A4],Exp[A5]))(implicit pos: SourceContext) : Exp[(A1,A2,A3,A4,A5)] = ETuple5(t._1, t._2, t._3, t._4, t._5)
-  implicit def make_tuple6[A1:Manifest,A2:Manifest,A3:Manifest,A4:Manifest,A5:Manifest,A6:Manifest](t: (Exp[A1],Exp[A2],Exp[A3],Exp[A4],Exp[A5],Exp[A6]))(implicit pos: SourceContext) : Exp[(A1,A2,A3,A4,A5,A6)] = ETuple6(t._1, t._2, t._3, t._4, t._5, t._6)
-  implicit def make_tuple7[A1:Manifest,A2:Manifest,A3:Manifest,A4:Manifest,A5:Manifest,A6:Manifest,A7:Manifest](t: (Exp[A1],Exp[A2],Exp[A3],Exp[A4],Exp[A5],Exp[A6],Exp[A7]))(implicit pos: SourceContext) : Exp[(A1,A2,A3,A4,A5,A6,A7)] = ETuple7(t._1, t._2, t._3, t._4, t._5, t._6, t._7)
-  implicit def make_tuple8[A1:Manifest,A2:Manifest,A3:Manifest,A4:Manifest,A5:Manifest,A6:Manifest,A7:Manifest,A8:Manifest](t: (Exp[A1],Exp[A2],Exp[A3],Exp[A4],Exp[A5],Exp[A6],Exp[A7],Exp[A8]))(implicit pos: SourceContext) : Exp[(A1,A2,A3,A4,A5,A6,A7,A8)] = ETuple8(t._1, t._2, t._3, t._4, t._5, t._6, t._7, t._8)
-  implicit def make_tuple9[A1:Manifest,A2:Manifest,A3:Manifest,A4:Manifest,A5:Manifest,A6:Manifest,A7:Manifest,A8:Manifest,A9:Manifest](t: (Exp[A1],Exp[A2],Exp[A3],Exp[A4],Exp[A5],Exp[A6],Exp[A7],Exp[A8],Exp[A9]))(implicit pos: SourceContext) : Exp[(A1,A2,A3,A4,A5,A6,A7,A8,A9)] = ETuple9(t._1, t._2, t._3, t._4, t._5, t._6, t._7, t._8, t._9)
-  implicit def make_tuple10[A1:Manifest,A2:Manifest,A3:Manifest,A4:Manifest,A5:Manifest,A6:Manifest,A7:Manifest,A8:Manifest,A9:Manifest,A10:Manifest](t: (Exp[A1],Exp[A2],Exp[A3],Exp[A4],Exp[A5],Exp[A6],Exp[A7],Exp[A8],Exp[A9],Exp[A10]))(implicit pos: SourceContext) : Exp[(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10)] = ETuple10(t._1, t._2, t._3, t._4, t._5, t._6, t._7, t._8, t._9, t._10)
-  implicit def make_tuple11[A1:Manifest,A2:Manifest,A3:Manifest,A4:Manifest,A5:Manifest,A6:Manifest,A7:Manifest,A8:Manifest,A9:Manifest,A10:Manifest,A11:Manifest](t: (Exp[A1],Exp[A2],Exp[A3],Exp[A4],Exp[A5],Exp[A6],Exp[A7],Exp[A8],Exp[A9],Exp[A10],Exp[A11]))(implicit pos: SourceContext) : Exp[(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10,A11)] = ETuple11(t._1, t._2, t._3, t._4, t._5, t._6, t._7, t._8, t._9, t._10, t._11)
-  implicit def make_tuple12[A1:Manifest,A2:Manifest,A3:Manifest,A4:Manifest,A5:Manifest,A6:Manifest,A7:Manifest,A8:Manifest,A9:Manifest,A10:Manifest,A11:Manifest,A12:Manifest](t: (Exp[A1],Exp[A2],Exp[A3],Exp[A4],Exp[A5],Exp[A6],Exp[A7],Exp[A8],Exp[A9],Exp[A10],Exp[A11],Exp[A12]))(implicit pos: SourceContext) : Exp[(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10,A11,A12)] = ETuple12(t._1, t._2, t._3, t._4, t._5, t._6, t._7, t._8, t._9, t._10, t._11, t._12)
-  implicit def make_tuple13[A1:Manifest,A2:Manifest,A3:Manifest,A4:Manifest,A5:Manifest,A6:Manifest,A7:Manifest,A8:Manifest,A9:Manifest,A10:Manifest,A11:Manifest,A12:Manifest,A13:Manifest](t: (Exp[A1],Exp[A2],Exp[A3],Exp[A4],Exp[A5],Exp[A6],Exp[A7],Exp[A8],Exp[A9],Exp[A10],Exp[A11],Exp[A12],Exp[A13]))(implicit pos: SourceContext) : Exp[(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10,A11,A12,A13)] = ETuple13(t._1, t._2, t._3, t._4, t._5, t._6, t._7, t._8, t._9, t._10, t._11, t._12, t._13)
-  implicit def make_tuple14[A1:Manifest,A2:Manifest,A3:Manifest,A4:Manifest,A5:Manifest,A6:Manifest,A7:Manifest,A8:Manifest,A9:Manifest,A10:Manifest,A11:Manifest,A12:Manifest,A13:Manifest,A14:Manifest](t: (Exp[A1],Exp[A2],Exp[A3],Exp[A4],Exp[A5],Exp[A6],Exp[A7],Exp[A8],Exp[A9],Exp[A10],Exp[A11],Exp[A12],Exp[A13],Exp[A14]))(implicit pos: SourceContext) : Exp[(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10,A11,A12,A13,A14)] = ETuple14(t._1, t._2, t._3, t._4, t._5, t._6, t._7, t._8, t._9, t._10, t._11, t._12, t._13, t._14)
-  implicit def make_tuple15[A1:Manifest,A2:Manifest,A3:Manifest,A4:Manifest,A5:Manifest,A6:Manifest,A7:Manifest,A8:Manifest,A9:Manifest,A10:Manifest,A11:Manifest,A12:Manifest,A13:Manifest,A14:Manifest,A15:Manifest](t: (Exp[A1],Exp[A2],Exp[A3],Exp[A4],Exp[A5],Exp[A6],Exp[A7],Exp[A8],Exp[A9],Exp[A10],Exp[A11],Exp[A12],Exp[A13],Exp[A14],Exp[A15]))(implicit pos: SourceContext) : Exp[(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10,A11,A12,A13,A14,A15)] = ETuple15(t._1, t._2, t._3, t._4, t._5, t._6, t._7, t._8, t._9, t._10, t._11, t._12, t._13, t._14, t._15)
-  implicit def make_tuple16[A1:Manifest,A2:Manifest,A3:Manifest,A4:Manifest,A5:Manifest,A6:Manifest,A7:Manifest,A8:Manifest,A9:Manifest,A10:Manifest,A11:Manifest,A12:Manifest,A13:Manifest,A14:Manifest,A15:Manifest,A16:Manifest](t: (Exp[A1],Exp[A2],Exp[A3],Exp[A4],Exp[A5],Exp[A6],Exp[A7],Exp[A8],Exp[A9],Exp[A10],Exp[A11],Exp[A12],Exp[A13],Exp[A14],Exp[A15],Exp[A16]))(implicit pos: SourceContext) : Exp[(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10,A11,A12,A13,A14,A15,A16)] = ETuple16(t._1, t._2, t._3, t._4, t._5, t._6, t._7, t._8, t._9, t._10, t._11, t._12, t._13, t._14, t._15, t._16)
-  implicit def make_tuple17[A1:Manifest,A2:Manifest,A3:Manifest,A4:Manifest,A5:Manifest,A6:Manifest,A7:Manifest,A8:Manifest,A9:Manifest,A10:Manifest,A11:Manifest,A12:Manifest,A13:Manifest,A14:Manifest,A15:Manifest,A16:Manifest,A17:Manifest](t: (Exp[A1],Exp[A2],Exp[A3],Exp[A4],Exp[A5],Exp[A6],Exp[A7],Exp[A8],Exp[A9],Exp[A10],Exp[A11],Exp[A12],Exp[A13],Exp[A14],Exp[A15],Exp[A16],Exp[A17]))(implicit pos: SourceContext) : Exp[(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10,A11,A12,A13,A14,A15,A16,A17)] = ETuple17(t._1, t._2, t._3, t._4, t._5, t._6, t._7, t._8, t._9, t._10, t._11, t._12, t._13, t._14, t._15, t._16, t._17)
-  implicit def make_tuple18[A1:Manifest,A2:Manifest,A3:Manifest,A4:Manifest,A5:Manifest,A6:Manifest,A7:Manifest,A8:Manifest,A9:Manifest,A10:Manifest,A11:Manifest,A12:Manifest,A13:Manifest,A14:Manifest,A15:Manifest,A16:Manifest,A17:Manifest,A18:Manifest](t: (Exp[A1],Exp[A2],Exp[A3],Exp[A4],Exp[A5],Exp[A6],Exp[A7],Exp[A8],Exp[A9],Exp[A10],Exp[A11],Exp[A12],Exp[A13],Exp[A14],Exp[A15],Exp[A16],Exp[A17],Exp[A18]))(implicit pos: SourceContext) : Exp[(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10,A11,A12,A13,A14,A15,A16,A17,A18)] = ETuple18(t._1, t._2, t._3, t._4, t._5, t._6, t._7, t._8, t._9, t._10, t._11, t._12, t._13, t._14, t._15, t._16, t._17, t._18)
-  implicit def make_tuple19[A1:Manifest,A2:Manifest,A3:Manifest,A4:Manifest,A5:Manifest,A6:Manifest,A7:Manifest,A8:Manifest,A9:Manifest,A10:Manifest,A11:Manifest,A12:Manifest,A13:Manifest,A14:Manifest,A15:Manifest,A16:Manifest,A17:Manifest,A18:Manifest,A19:Manifest](t: (Exp[A1],Exp[A2],Exp[A3],Exp[A4],Exp[A5],Exp[A6],Exp[A7],Exp[A8],Exp[A9],Exp[A10],Exp[A11],Exp[A12],Exp[A13],Exp[A14],Exp[A15],Exp[A16],Exp[A17],Exp[A18],Exp[A19]))(implicit pos: SourceContext) : Exp[(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10,A11,A12,A13,A14,A15,A16,A17,A18,A19)] = ETuple19(t._1, t._2, t._3, t._4, t._5, t._6, t._7, t._8, t._9, t._10, t._11, t._12, t._13, t._14, t._15, t._16, t._17, t._18, t._19)
-  implicit def make_tuple20[A1:Manifest,A2:Manifest,A3:Manifest,A4:Manifest,A5:Manifest,A6:Manifest,A7:Manifest,A8:Manifest,A9:Manifest,A10:Manifest,A11:Manifest,A12:Manifest,A13:Manifest,A14:Manifest,A15:Manifest,A16:Manifest,A17:Manifest,A18:Manifest,A19:Manifest,A20:Manifest](t: (Exp[A1],Exp[A2],Exp[A3],Exp[A4],Exp[A5],Exp[A6],Exp[A7],Exp[A8],Exp[A9],Exp[A10],Exp[A11],Exp[A12],Exp[A13],Exp[A14],Exp[A15],Exp[A16],Exp[A17],Exp[A18],Exp[A19],Exp[A20]))(implicit pos: SourceContext) : Exp[(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10,A11,A12,A13,A14,A15,A16,A17,A18,A19,A20)] = ETuple20(t._1, t._2, t._3, t._4, t._5, t._6, t._7, t._8, t._9, t._10, t._11, t._12, t._13, t._14, t._15, t._16, t._17, t._18, t._19, t._20)
-  implicit def make_tuple21[A1:Manifest,A2:Manifest,A3:Manifest,A4:Manifest,A5:Manifest,A6:Manifest,A7:Manifest,A8:Manifest,A9:Manifest,A10:Manifest,A11:Manifest,A12:Manifest,A13:Manifest,A14:Manifest,A15:Manifest,A16:Manifest,A17:Manifest,A18:Manifest,A19:Manifest,A20:Manifest,A21:Manifest](t: (Exp[A1],Exp[A2],Exp[A3],Exp[A4],Exp[A5],Exp[A6],Exp[A7],Exp[A8],Exp[A9],Exp[A10],Exp[A11],Exp[A12],Exp[A13],Exp[A14],Exp[A15],Exp[A16],Exp[A17],Exp[A18],Exp[A19],Exp[A20],Exp[A21]))(implicit pos: SourceContext) : Exp[(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10,A11,A12,A13,A14,A15,A16,A17,A18,A19,A20,A21)] = ETuple21(t._1, t._2, t._3, t._4, t._5, t._6, t._7, t._8, t._9, t._10, t._11, t._12, t._13, t._14, t._15, t._16, t._17, t._18, t._19, t._20, t._21)
-  implicit def make_tuple22[A1:Manifest,A2:Manifest,A3:Manifest,A4:Manifest,A5:Manifest,A6:Manifest,A7:Manifest,A8:Manifest,A9:Manifest,A10:Manifest,A11:Manifest,A12:Manifest,A13:Manifest,A14:Manifest,A15:Manifest,A16:Manifest,A17:Manifest,A18:Manifest,A19:Manifest,A20:Manifest,A21:Manifest,A22:Manifest](t: (Exp[A1],Exp[A2],Exp[A3],Exp[A4],Exp[A5],Exp[A6],Exp[A7],Exp[A8],Exp[A9],Exp[A10],Exp[A11],Exp[A12],Exp[A13],Exp[A14],Exp[A15],Exp[A16],Exp[A17],Exp[A18],Exp[A19],Exp[A20],Exp[A21],Exp[A22]))(implicit pos: SourceContext) : Exp[(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10,A11,A12,A13,A14,A15,A16,A17,A18,A19,A20,A21,A22)] = ETuple22(t._1, t._2, t._3, t._4, t._5, t._6, t._7, t._8, t._9, t._10, t._11, t._12, t._13, t._14, t._15, t._16, t._17, t._18, t._19, t._20, t._21, t._22)
+trait TupleOpsExp extends TupleOps with StructExpOpt with EffectExp {
 
   case class ETuple2[A1:Manifest,A2:Manifest](_1: Exp[A1],_2: Exp[A2]) extends Def[(A1,A2)] {
     val m1 = manifest[A1]
@@ -669,6 +702,185 @@ trait TupleOpsExp extends TupleOps with EffectExp {
     val m21 = manifest[A21]
     val m22 = manifest[A22]
   }
+
+  val tuple_elems: Seq[String] = List("_1", "_2", "_3", "_4", "_5", "_6", "_7", "_8", "_9", "_10", "_11", "_12", "_13", "_14", "_15", "_16", "_17", "_18", "_19", "_20", "_21", "_22")
+
+  implicit def make_tuple2[A1:Manifest,A2:Manifest](t: (Exp[A1],Exp[A2]))(implicit pos: SourceContext) : Exp[(A1,A2)] = {
+    if (TupleOpsGenType.isCGen) struct(classTag[(A1,A2)], tuple_elems(0) -> t._1, tuple_elems(1) -> t._2)
+    else ETuple2(t._1, t._2)
+  }
+  implicit def make_tuple3[A1:Manifest,A2:Manifest,A3:Manifest](t: (Exp[A1],Exp[A2],Exp[A3]))(implicit pos: SourceContext) : Exp[(A1,A2,A3)] = {
+    if (TupleOpsGenType.isCGen) struct(classTag[(A1,A2,A3)], tuple_elems(0) -> t._1, tuple_elems(1) -> t._2, tuple_elems(2) -> t._3)
+    else ETuple3(t._1, t._2 ,t._3)
+  }
+  implicit def make_tuple4[A1:Manifest,A2:Manifest,A3:Manifest,A4:Manifest](t: (Exp[A1],Exp[A2],Exp[A3],Exp[A4]))(implicit pos: SourceContext) : Exp[(A1,A2,A3,A4)] = {
+    if (TupleOpsGenType.isCGen) struct(classTag[(A1,A2,A3,A4)], tuple_elems(0) -> t._1, tuple_elems(1) -> t._2, tuple_elems(2) -> t._3, tuple_elems(3) -> t._4)
+    else ETuple4(t._1, t._2 ,t._3 ,t._4)
+  }
+  implicit def make_tuple5[A1:Manifest,A2:Manifest,A3:Manifest,A4:Manifest,A5:Manifest](t: (Exp[A1],Exp[A2],Exp[A3],Exp[A4],Exp[A5]))(implicit pos: SourceContext) : Exp[(A1,A2,A3,A4,A5)] = {
+    if (TupleOpsGenType.isCGen) struct(classTag[(A1,A2,A3,A4,A5)], tuple_elems(0) -> t._1, tuple_elems(1) -> t._2, tuple_elems(2) -> t._3, tuple_elems(3) -> t._4, tuple_elems(4) -> t._5)
+    else ETuple5(t._1, t._2 ,t._3 ,t._4 ,t._5)
+  }
+  implicit def make_tuple6[A1:Manifest,A2:Manifest,A3:Manifest,A4:Manifest,A5:Manifest,A6:Manifest](t: (Exp[A1],Exp[A2],Exp[A3],Exp[A4],Exp[A5],Exp[A6]))(implicit pos: SourceContext) : Exp[(A1,A2,A3,A4,A5,A6)] = {
+    if (TupleOpsGenType.isCGen) struct(classTag[(A1,A2,A3,A4,A5,A6)], tuple_elems(0) -> t._1, tuple_elems(1) -> t._2, tuple_elems(2) -> t._3, tuple_elems(3) -> t._4, tuple_elems(4) -> t._5, tuple_elems(5) -> t._6)
+    else ETuple6(t._1, t._2 ,t._3 ,t._4 ,t._5 ,t._6)
+  }
+  implicit def make_tuple7[A1:Manifest,A2:Manifest,A3:Manifest,A4:Manifest,A5:Manifest,A6:Manifest,A7:Manifest](t: (Exp[A1],Exp[A2],Exp[A3],Exp[A4],Exp[A5],Exp[A6],Exp[A7]))(implicit pos: SourceContext) : Exp[(A1,A2,A3,A4,A5,A6,A7)] = {
+    if (TupleOpsGenType.isCGen) struct(classTag[(A1,A2,A3,A4,A5,A6,A7)], tuple_elems(0) -> t._1, tuple_elems(1) -> t._2, tuple_elems(2) -> t._3, tuple_elems(3) -> t._4, tuple_elems(4) -> t._5, tuple_elems(5) -> t._6, tuple_elems(6) -> t._7)
+    else ETuple7(t._1, t._2 ,t._3 ,t._4 ,t._5 ,t._6 ,t._7)
+  }
+  implicit def make_tuple8[A1:Manifest,A2:Manifest,A3:Manifest,A4:Manifest,A5:Manifest,A6:Manifest,A7:Manifest,A8:Manifest](t: (Exp[A1],Exp[A2],Exp[A3],Exp[A4],Exp[A5],Exp[A6],Exp[A7],Exp[A8]))(implicit pos: SourceContext) : Exp[(A1,A2,A3,A4,A5,A6,A7,A8)] = {
+    if (TupleOpsGenType.isCGen) struct(classTag[(A1,A2,A3,A4,A5,A6,A7,A8)], tuple_elems(0) -> t._1, tuple_elems(1) -> t._2, tuple_elems(2) -> t._3, tuple_elems(3) -> t._4, tuple_elems(4) -> t._5, tuple_elems(5) -> t._6, tuple_elems(6) -> t._7, tuple_elems(7) -> t._8)
+    else ETuple8(t._1, t._2 ,t._3 ,t._4 ,t._5 ,t._6 ,t._7 ,t._8)
+  }
+  implicit def make_tuple9[A1:Manifest,A2:Manifest,A3:Manifest,A4:Manifest,A5:Manifest,A6:Manifest,A7:Manifest,A8:Manifest,A9:Manifest](t: (Exp[A1],Exp[A2],Exp[A3],Exp[A4],Exp[A5],Exp[A6],Exp[A7],Exp[A8],Exp[A9]))(implicit pos: SourceContext) : Exp[(A1,A2,A3,A4,A5,A6,A7,A8,A9)] = {
+    if (TupleOpsGenType.isCGen) struct(classTag[(A1,A2,A3,A4,A5,A6,A7,A8,A9)], tuple_elems(0) -> t._1, tuple_elems(1) -> t._2, tuple_elems(2) -> t._3, tuple_elems(3) -> t._4, tuple_elems(4) -> t._5, tuple_elems(5) -> t._6, tuple_elems(6) -> t._7, tuple_elems(7) -> t._8, tuple_elems(8) -> t._9)
+    else ETuple9(t._1, t._2 ,t._3 ,t._4 ,t._5 ,t._6 ,t._7 ,t._8 ,t._9)
+  }
+  implicit def make_tuple10[A1:Manifest,A2:Manifest,A3:Manifest,A4:Manifest,A5:Manifest,A6:Manifest,A7:Manifest,A8:Manifest,A9:Manifest,A10:Manifest](t: (Exp[A1],Exp[A2],Exp[A3],Exp[A4],Exp[A5],Exp[A6],Exp[A7],Exp[A8],Exp[A9],Exp[A10]))(implicit pos: SourceContext) : Exp[(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10)] = {
+    if (TupleOpsGenType.isCGen) struct(classTag[(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10)], tuple_elems(0) -> t._1, tuple_elems(1) -> t._2, tuple_elems(2) -> t._3, tuple_elems(3) -> t._4, tuple_elems(4) -> t._5, tuple_elems(5) -> t._6, tuple_elems(6) -> t._7, tuple_elems(7) -> t._8, tuple_elems(8) -> t._9, tuple_elems(9) -> t._10)
+    else ETuple10(t._1, t._2 ,t._3 ,t._4 ,t._5 ,t._6 ,t._7 ,t._8 ,t._9 ,t._10)
+  }
+  implicit def make_tuple11[A1:Manifest,A2:Manifest,A3:Manifest,A4:Manifest,A5:Manifest,A6:Manifest,A7:Manifest,A8:Manifest,A9:Manifest,A10:Manifest,A11:Manifest](t: (Exp[A1],Exp[A2],Exp[A3],Exp[A4],Exp[A5],Exp[A6],Exp[A7],Exp[A8],Exp[A9],Exp[A10],Exp[A11]))(implicit pos: SourceContext) : Exp[(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10,A11)] = {
+    if (TupleOpsGenType.isCGen) struct(classTag[(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10,A11)], tuple_elems(0) -> t._1, tuple_elems(1) -> t._2, tuple_elems(2) -> t._3, tuple_elems(3) -> t._4, tuple_elems(4) -> t._5, tuple_elems(5) -> t._6, tuple_elems(6) -> t._7, tuple_elems(7) -> t._8, tuple_elems(8) -> t._9, tuple_elems(9) -> t._10, tuple_elems(10) -> t._11)
+    else ETuple11(t._1, t._2 ,t._3 ,t._4 ,t._5 ,t._6 ,t._7 ,t._8 ,t._9 ,t._10 ,t._11)
+  }
+  implicit def make_tuple12[A1:Manifest,A2:Manifest,A3:Manifest,A4:Manifest,A5:Manifest,A6:Manifest,A7:Manifest,A8:Manifest,A9:Manifest,A10:Manifest,A11:Manifest,A12:Manifest](t: (Exp[A1],Exp[A2],Exp[A3],Exp[A4],Exp[A5],Exp[A6],Exp[A7],Exp[A8],Exp[A9],Exp[A10],Exp[A11],Exp[A12]))(implicit pos: SourceContext) : Exp[(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10,A11,A12)] = {
+    if (TupleOpsGenType.isCGen) struct(classTag[(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10,A11,A12)], tuple_elems(0) -> t._1, tuple_elems(1) -> t._2, tuple_elems(2) -> t._3, tuple_elems(3) -> t._4, tuple_elems(4) -> t._5, tuple_elems(5) -> t._6, tuple_elems(6) -> t._7, tuple_elems(7) -> t._8, tuple_elems(8) -> t._9, tuple_elems(9) -> t._10, tuple_elems(10) -> t._11, tuple_elems(11) -> t._12)
+    else ETuple12(t._1, t._2 ,t._3 ,t._4 ,t._5 ,t._6 ,t._7 ,t._8 ,t._9 ,t._10 ,t._11 ,t._12)
+  }
+  implicit def make_tuple13[A1:Manifest,A2:Manifest,A3:Manifest,A4:Manifest,A5:Manifest,A6:Manifest,A7:Manifest,A8:Manifest,A9:Manifest,A10:Manifest,A11:Manifest,A12:Manifest,A13:Manifest](t: (Exp[A1],Exp[A2],Exp[A3],Exp[A4],Exp[A5],Exp[A6],Exp[A7],Exp[A8],Exp[A9],Exp[A10],Exp[A11],Exp[A12],Exp[A13]))(implicit pos: SourceContext) : Exp[(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10,A11,A12,A13)] = {
+    if (TupleOpsGenType.isCGen) struct(classTag[(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10,A11,A12,A13)], tuple_elems(0) -> t._1, tuple_elems(1) -> t._2, tuple_elems(2) -> t._3, tuple_elems(3) -> t._4, tuple_elems(4) -> t._5, tuple_elems(5) -> t._6, tuple_elems(6) -> t._7, tuple_elems(7) -> t._8, tuple_elems(8) -> t._9, tuple_elems(9) -> t._10, tuple_elems(10) -> t._11, tuple_elems(11) -> t._12, tuple_elems(12) -> t._13)
+    else ETuple13(t._1, t._2 ,t._3 ,t._4 ,t._5 ,t._6 ,t._7 ,t._8 ,t._9 ,t._10 ,t._11 ,t._12 ,t._13)
+  }
+  implicit def make_tuple14[A1:Manifest,A2:Manifest,A3:Manifest,A4:Manifest,A5:Manifest,A6:Manifest,A7:Manifest,A8:Manifest,A9:Manifest,A10:Manifest,A11:Manifest,A12:Manifest,A13:Manifest,A14:Manifest](t: (Exp[A1],Exp[A2],Exp[A3],Exp[A4],Exp[A5],Exp[A6],Exp[A7],Exp[A8],Exp[A9],Exp[A10],Exp[A11],Exp[A12],Exp[A13],Exp[A14]))(implicit pos: SourceContext) : Exp[(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10,A11,A12,A13,A14)] = {
+    if (TupleOpsGenType.isCGen) struct(classTag[(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10,A11,A12,A13,A14)], tuple_elems(0) -> t._1, tuple_elems(1) -> t._2, tuple_elems(2) -> t._3, tuple_elems(3) -> t._4, tuple_elems(4) -> t._5, tuple_elems(5) -> t._6, tuple_elems(6) -> t._7, tuple_elems(7) -> t._8, tuple_elems(8) -> t._9, tuple_elems(9) -> t._10, tuple_elems(10) -> t._11, tuple_elems(11) -> t._12, tuple_elems(12) -> t._13, tuple_elems(13) -> t._14)
+    else ETuple14(t._1, t._2 ,t._3 ,t._4 ,t._5 ,t._6 ,t._7 ,t._8 ,t._9 ,t._10 ,t._11 ,t._12 ,t._13 ,t._14)
+  }
+  implicit def make_tuple15[A1:Manifest,A2:Manifest,A3:Manifest,A4:Manifest,A5:Manifest,A6:Manifest,A7:Manifest,A8:Manifest,A9:Manifest,A10:Manifest,A11:Manifest,A12:Manifest,A13:Manifest,A14:Manifest,A15:Manifest](t: (Exp[A1],Exp[A2],Exp[A3],Exp[A4],Exp[A5],Exp[A6],Exp[A7],Exp[A8],Exp[A9],Exp[A10],Exp[A11],Exp[A12],Exp[A13],Exp[A14],Exp[A15]))(implicit pos: SourceContext) : Exp[(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10,A11,A12,A13,A14,A15)] = {
+    if (TupleOpsGenType.isCGen) struct(classTag[(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10,A11,A12,A13,A14,A15)], tuple_elems(0) -> t._1, tuple_elems(1) -> t._2, tuple_elems(2) -> t._3, tuple_elems(3) -> t._4, tuple_elems(4) -> t._5, tuple_elems(5) -> t._6, tuple_elems(6) -> t._7, tuple_elems(7) -> t._8, tuple_elems(8) -> t._9, tuple_elems(9) -> t._10, tuple_elems(10) -> t._11, tuple_elems(11) -> t._12, tuple_elems(12) -> t._13, tuple_elems(13) -> t._14, tuple_elems(14) -> t._15)
+    else ETuple15(t._1, t._2 ,t._3 ,t._4 ,t._5 ,t._6 ,t._7 ,t._8 ,t._9 ,t._10 ,t._11 ,t._12 ,t._13 ,t._14 ,t._15)
+  }
+  implicit def make_tuple16[A1:Manifest,A2:Manifest,A3:Manifest,A4:Manifest,A5:Manifest,A6:Manifest,A7:Manifest,A8:Manifest,A9:Manifest,A10:Manifest,A11:Manifest,A12:Manifest,A13:Manifest,A14:Manifest,A15:Manifest,A16:Manifest](t: (Exp[A1],Exp[A2],Exp[A3],Exp[A4],Exp[A5],Exp[A6],Exp[A7],Exp[A8],Exp[A9],Exp[A10],Exp[A11],Exp[A12],Exp[A13],Exp[A14],Exp[A15],Exp[A16]))(implicit pos: SourceContext) : Exp[(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10,A11,A12,A13,A14,A15,A16)] = {
+    if (TupleOpsGenType.isCGen) struct(classTag[(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10,A11,A12,A13,A14,A15,A16)], tuple_elems(0) -> t._1, tuple_elems(1) -> t._2, tuple_elems(2) -> t._3, tuple_elems(3) -> t._4, tuple_elems(4) -> t._5, tuple_elems(5) -> t._6, tuple_elems(6) -> t._7, tuple_elems(7) -> t._8, tuple_elems(8) -> t._9, tuple_elems(9) -> t._10, tuple_elems(10) -> t._11, tuple_elems(11) -> t._12, tuple_elems(12) -> t._13, tuple_elems(13) -> t._14, tuple_elems(14) -> t._15, tuple_elems(15) -> t._16)
+    else ETuple16(t._1, t._2 ,t._3 ,t._4 ,t._5 ,t._6 ,t._7 ,t._8 ,t._9 ,t._10 ,t._11 ,t._12 ,t._13 ,t._14 ,t._15 ,t._16)
+  }
+  implicit def make_tuple17[A1:Manifest,A2:Manifest,A3:Manifest,A4:Manifest,A5:Manifest,A6:Manifest,A7:Manifest,A8:Manifest,A9:Manifest,A10:Manifest,A11:Manifest,A12:Manifest,A13:Manifest,A14:Manifest,A15:Manifest,A16:Manifest,A17:Manifest](t: (Exp[A1],Exp[A2],Exp[A3],Exp[A4],Exp[A5],Exp[A6],Exp[A7],Exp[A8],Exp[A9],Exp[A10],Exp[A11],Exp[A12],Exp[A13],Exp[A14],Exp[A15],Exp[A16],Exp[A17]))(implicit pos: SourceContext) : Exp[(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10,A11,A12,A13,A14,A15,A16,A17)] = {
+    if (TupleOpsGenType.isCGen) struct(classTag[(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10,A11,A12,A13,A14,A15,A16,A17)], tuple_elems(0) -> t._1, tuple_elems(1) -> t._2, tuple_elems(2) -> t._3, tuple_elems(3) -> t._4, tuple_elems(4) -> t._5, tuple_elems(5) -> t._6, tuple_elems(6) -> t._7, tuple_elems(7) -> t._8, tuple_elems(8) -> t._9, tuple_elems(9) -> t._10, tuple_elems(10) -> t._11, tuple_elems(11) -> t._12, tuple_elems(12) -> t._13, tuple_elems(13) -> t._14, tuple_elems(14) -> t._15, tuple_elems(15) -> t._16, tuple_elems(16) -> t._17)
+    else ETuple17(t._1, t._2 ,t._3 ,t._4 ,t._5 ,t._6 ,t._7 ,t._8 ,t._9 ,t._10 ,t._11 ,t._12 ,t._13 ,t._14 ,t._15 ,t._16 ,t._17)
+  }
+  implicit def make_tuple18[A1:Manifest,A2:Manifest,A3:Manifest,A4:Manifest,A5:Manifest,A6:Manifest,A7:Manifest,A8:Manifest,A9:Manifest,A10:Manifest,A11:Manifest,A12:Manifest,A13:Manifest,A14:Manifest,A15:Manifest,A16:Manifest,A17:Manifest,A18:Manifest](t: (Exp[A1],Exp[A2],Exp[A3],Exp[A4],Exp[A5],Exp[A6],Exp[A7],Exp[A8],Exp[A9],Exp[A10],Exp[A11],Exp[A12],Exp[A13],Exp[A14],Exp[A15],Exp[A16],Exp[A17],Exp[A18]))(implicit pos: SourceContext) : Exp[(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10,A11,A12,A13,A14,A15,A16,A17,A18)] = {
+    if (TupleOpsGenType.isCGen) struct(classTag[(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10,A11,A12,A13,A14,A15,A16,A17,A18)], tuple_elems(0) -> t._1, tuple_elems(1) -> t._2, tuple_elems(2) -> t._3, tuple_elems(3) -> t._4, tuple_elems(4) -> t._5, tuple_elems(5) -> t._6, tuple_elems(6) -> t._7, tuple_elems(7) -> t._8, tuple_elems(8) -> t._9, tuple_elems(9) -> t._10, tuple_elems(10) -> t._11, tuple_elems(11) -> t._12, tuple_elems(12) -> t._13, tuple_elems(13) -> t._14, tuple_elems(14) -> t._15, tuple_elems(15) -> t._16, tuple_elems(16) -> t._17, tuple_elems(17) -> t._18)
+    else ETuple18(t._1, t._2 ,t._3 ,t._4 ,t._5 ,t._6 ,t._7 ,t._8 ,t._9 ,t._10 ,t._11 ,t._12 ,t._13 ,t._14 ,t._15 ,t._16 ,t._17 ,t._18)
+  }
+  implicit def make_tuple19[A1:Manifest,A2:Manifest,A3:Manifest,A4:Manifest,A5:Manifest,A6:Manifest,A7:Manifest,A8:Manifest,A9:Manifest,A10:Manifest,A11:Manifest,A12:Manifest,A13:Manifest,A14:Manifest,A15:Manifest,A16:Manifest,A17:Manifest,A18:Manifest,A19:Manifest](t: (Exp[A1],Exp[A2],Exp[A3],Exp[A4],Exp[A5],Exp[A6],Exp[A7],Exp[A8],Exp[A9],Exp[A10],Exp[A11],Exp[A12],Exp[A13],Exp[A14],Exp[A15],Exp[A16],Exp[A17],Exp[A18],Exp[A19]))(implicit pos: SourceContext) : Exp[(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10,A11,A12,A13,A14,A15,A16,A17,A18,A19)] = {
+    if (TupleOpsGenType.isCGen) struct(classTag[(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10,A11,A12,A13,A14,A15,A16,A17,A18,A19)], tuple_elems(0) -> t._1, tuple_elems(1) -> t._2, tuple_elems(2) -> t._3, tuple_elems(3) -> t._4, tuple_elems(4) -> t._5, tuple_elems(5) -> t._6, tuple_elems(6) -> t._7, tuple_elems(7) -> t._8, tuple_elems(8) -> t._9, tuple_elems(9) -> t._10, tuple_elems(10) -> t._11, tuple_elems(11) -> t._12, tuple_elems(12) -> t._13, tuple_elems(13) -> t._14, tuple_elems(14) -> t._15, tuple_elems(15) -> t._16, tuple_elems(16) -> t._17, tuple_elems(17) -> t._18, tuple_elems(18) -> t._19)
+    else ETuple19(t._1, t._2 ,t._3 ,t._4 ,t._5 ,t._6 ,t._7 ,t._8 ,t._9 ,t._10 ,t._11 ,t._12 ,t._13 ,t._14 ,t._15 ,t._16 ,t._17 ,t._18 ,t._19)
+  }
+  implicit def make_tuple20[A1:Manifest,A2:Manifest,A3:Manifest,A4:Manifest,A5:Manifest,A6:Manifest,A7:Manifest,A8:Manifest,A9:Manifest,A10:Manifest,A11:Manifest,A12:Manifest,A13:Manifest,A14:Manifest,A15:Manifest,A16:Manifest,A17:Manifest,A18:Manifest,A19:Manifest,A20:Manifest](t: (Exp[A1],Exp[A2],Exp[A3],Exp[A4],Exp[A5],Exp[A6],Exp[A7],Exp[A8],Exp[A9],Exp[A10],Exp[A11],Exp[A12],Exp[A13],Exp[A14],Exp[A15],Exp[A16],Exp[A17],Exp[A18],Exp[A19],Exp[A20]))(implicit pos: SourceContext) : Exp[(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10,A11,A12,A13,A14,A15,A16,A17,A18,A19,A20)] = {
+    if (TupleOpsGenType.isCGen) struct(classTag[(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10,A11,A12,A13,A14,A15,A16,A17,A18,A19,A20)], tuple_elems(0) -> t._1, tuple_elems(1) -> t._2, tuple_elems(2) -> t._3, tuple_elems(3) -> t._4, tuple_elems(4) -> t._5, tuple_elems(5) -> t._6, tuple_elems(6) -> t._7, tuple_elems(7) -> t._8, tuple_elems(8) -> t._9, tuple_elems(9) -> t._10, tuple_elems(10) -> t._11, tuple_elems(11) -> t._12, tuple_elems(12) -> t._13, tuple_elems(13) -> t._14, tuple_elems(14) -> t._15, tuple_elems(15) -> t._16, tuple_elems(16) -> t._17, tuple_elems(17) -> t._18, tuple_elems(18) -> t._19, tuple_elems(19) -> t._20)
+    else ETuple20(t._1, t._2 ,t._3 ,t._4 ,t._5 ,t._6 ,t._7 ,t._8 ,t._9 ,t._10 ,t._11 ,t._12 ,t._13 ,t._14 ,t._15 ,t._16 ,t._17 ,t._18 ,t._19 ,t._20)
+  }
+  implicit def make_tuple21[A1:Manifest,A2:Manifest,A3:Manifest,A4:Manifest,A5:Manifest,A6:Manifest,A7:Manifest,A8:Manifest,A9:Manifest,A10:Manifest,A11:Manifest,A12:Manifest,A13:Manifest,A14:Manifest,A15:Manifest,A16:Manifest,A17:Manifest,A18:Manifest,A19:Manifest,A20:Manifest,A21:Manifest](t: (Exp[A1],Exp[A2],Exp[A3],Exp[A4],Exp[A5],Exp[A6],Exp[A7],Exp[A8],Exp[A9],Exp[A10],Exp[A11],Exp[A12],Exp[A13],Exp[A14],Exp[A15],Exp[A16],Exp[A17],Exp[A18],Exp[A19],Exp[A20],Exp[A21]))(implicit pos: SourceContext) : Exp[(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10,A11,A12,A13,A14,A15,A16,A17,A18,A19,A20,A21)] = {
+    if (TupleOpsGenType.isCGen) struct(classTag[(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10,A11,A12,A13,A14,A15,A16,A17,A18,A19,A20,A21)], tuple_elems(0) -> t._1, tuple_elems(1) -> t._2, tuple_elems(2) -> t._3, tuple_elems(3) -> t._4, tuple_elems(4) -> t._5, tuple_elems(5) -> t._6, tuple_elems(6) -> t._7, tuple_elems(7) -> t._8, tuple_elems(8) -> t._9, tuple_elems(9) -> t._10, tuple_elems(10) -> t._11, tuple_elems(11) -> t._12, tuple_elems(12) -> t._13, tuple_elems(13) -> t._14, tuple_elems(14) -> t._15, tuple_elems(15) -> t._16, tuple_elems(16) -> t._17, tuple_elems(17) -> t._18, tuple_elems(18) -> t._19, tuple_elems(19) -> t._20, tuple_elems(20) -> t._21)
+    else ETuple21(t._1, t._2 ,t._3 ,t._4 ,t._5 ,t._6 ,t._7 ,t._8 ,t._9 ,t._10 ,t._11 ,t._12 ,t._13 ,t._14 ,t._15 ,t._16 ,t._17 ,t._18 ,t._19 ,t._20 ,t._21)
+  }
+  implicit def make_tuple22[A1:Manifest,A2:Manifest,A3:Manifest,A4:Manifest,A5:Manifest,A6:Manifest,A7:Manifest,A8:Manifest,A9:Manifest,A10:Manifest,A11:Manifest,A12:Manifest,A13:Manifest,A14:Manifest,A15:Manifest,A16:Manifest,A17:Manifest,A18:Manifest,A19:Manifest,A20:Manifest,A21:Manifest,A22:Manifest](t: (Exp[A1],Exp[A2],Exp[A3],Exp[A4],Exp[A5],Exp[A6],Exp[A7],Exp[A8],Exp[A9],Exp[A10],Exp[A11],Exp[A12],Exp[A13],Exp[A14],Exp[A15],Exp[A16],Exp[A17],Exp[A18],Exp[A19],Exp[A20],Exp[A21],Exp[A22]))(implicit pos: SourceContext) : Exp[(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10,A11,A12,A13,A14,A15,A16,A17,A18,A19,A20,A21,A22)] = {
+    if (TupleOpsGenType.isCGen) struct(classTag[(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10,A11,A12,A13,A14,A15,A16,A17,A18,A19,A20,A21,A22)], tuple_elems(0) -> t._1, tuple_elems(1) -> t._2, tuple_elems(2) -> t._3, tuple_elems(3) -> t._4, tuple_elems(4) -> t._5, tuple_elems(5) -> t._6, tuple_elems(6) -> t._7, tuple_elems(7) -> t._8, tuple_elems(8) -> t._9, tuple_elems(9) -> t._10, tuple_elems(10) -> t._11, tuple_elems(11) -> t._12, tuple_elems(12) -> t._13, tuple_elems(13) -> t._14, tuple_elems(14) -> t._15, tuple_elems(15) -> t._16, tuple_elems(16) -> t._17, tuple_elems(17) -> t._18, tuple_elems(18) -> t._19, tuple_elems(19) -> t._20, tuple_elems(20) -> t._21, tuple_elems(21) -> t._22)
+    else ETuple22(t._1, t._2 ,t._3 ,t._4 ,t._5 ,t._6 ,t._7 ,t._8 ,t._9 ,t._10 ,t._11 ,t._12 ,t._13 ,t._14 ,t._15 ,t._16 ,t._17 ,t._18 ,t._19 ,t._20 ,t._21 ,t._22)
+  }
+
+  
+  def hashTuple2(t: Rep[(_,_)]): Rep[Int] = reflectEffect(HashTuple2(t))
+  def hashTuple3(t: Rep[(_,_,_)]): Rep[Int] = reflectEffect(HashTuple3(t))
+  def hashTuple4(t: Rep[(_,_,_,_)]): Rep[Int] = reflectEffect(HashTuple4(t))
+  def hashTuple5(t: Rep[(_,_,_,_,_)]): Rep[Int] = reflectEffect(HashTuple5(t))
+  def hashTuple6(t: Rep[(_,_,_,_,_,_)]): Rep[Int] = reflectEffect(HashTuple6(t))
+  def hashTuple7(t: Rep[(_,_,_,_,_,_,_)]): Rep[Int] = reflectEffect(HashTuple7(t))
+  def hashTuple8(t: Rep[(_,_,_,_,_,_,_,_)]): Rep[Int] = reflectEffect(HashTuple8(t))
+  def hashTuple9(t: Rep[(_,_,_,_,_,_,_,_,_)]): Rep[Int] = reflectEffect(HashTuple9(t))
+  def hashTuple10(t: Rep[(_,_,_,_,_,_,_,_,_,_)]): Rep[Int] = reflectEffect(HashTuple10(t))
+  def hashTuple11(t: Rep[(_,_,_,_,_,_,_,_,_,_,_)]): Rep[Int] = reflectEffect(HashTuple11(t))
+  def hashTuple12(t: Rep[(_,_,_,_,_,_,_,_,_,_,_,_)]): Rep[Int] = reflectEffect(HashTuple12(t))
+  def hashTuple13(t: Rep[(_,_,_,_,_,_,_,_,_,_,_,_,_)]): Rep[Int] = reflectEffect(HashTuple13(t))
+  def hashTuple14(t: Rep[(_,_,_,_,_,_,_,_,_,_,_,_,_,_)]): Rep[Int] = reflectEffect(HashTuple14(t))
+  def hashTuple15(t: Rep[(_,_,_,_,_,_,_,_,_,_,_,_,_,_,_)]): Rep[Int] = reflectEffect(HashTuple15(t))
+  def hashTuple16(t: Rep[(_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_)]): Rep[Int] = reflectEffect(HashTuple16(t))
+  def hashTuple17(t: Rep[(_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_)]): Rep[Int] = reflectEffect(HashTuple17(t))
+  def hashTuple18(t: Rep[(_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_)]): Rep[Int] = reflectEffect(HashTuple18(t))
+  def hashTuple19(t: Rep[(_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_)]): Rep[Int] = reflectEffect(HashTuple19(t))
+  def hashTuple20(t: Rep[(_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_)]): Rep[Int] = reflectEffect(HashTuple20(t))
+  def hashTuple21(t: Rep[(_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_)]): Rep[Int] = reflectEffect(HashTuple21(t))
+  def hashTuple22(t: Rep[(_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_)]): Rep[Int] = reflectEffect(HashTuple22(t))
+
+  def compareTuple2(t1: Rep[(_,_)], t2: Rep[(_,_)]): Rep[Boolean] = reflectEffect(CompareTuple2(t1,t2))
+  def compareTuple3(t1: Rep[(_,_,_)], t2: Rep[(_,_,_)]): Rep[Boolean] = reflectEffect(CompareTuple3(t1,t2))
+  def compareTuple4(t1: Rep[(_,_,_,_)], t2: Rep[(_,_,_,_)]): Rep[Boolean] = reflectEffect(CompareTuple4(t1,t2))
+  def compareTuple5(t1: Rep[(_,_,_,_,_)], t2: Rep[(_,_,_,_,_)]): Rep[Boolean] = reflectEffect(CompareTuple5(t1,t2))
+  def compareTuple6(t1: Rep[(_,_,_,_,_,_)], t2: Rep[(_,_,_,_,_,_)]): Rep[Boolean] = reflectEffect(CompareTuple6(t1,t2))
+  def compareTuple7(t1: Rep[(_,_,_,_,_,_,_)], t2: Rep[(_,_,_,_,_,_,_)]): Rep[Boolean] = reflectEffect(CompareTuple7(t1,t2))
+  def compareTuple8(t1: Rep[(_,_,_,_,_,_,_,_)], t2: Rep[(_,_,_,_,_,_,_,_)]): Rep[Boolean] = reflectEffect(CompareTuple8(t1,t2))
+  def compareTuple9(t1: Rep[(_,_,_,_,_,_,_,_,_)], t2: Rep[(_,_,_,_,_,_,_,_,_)]): Rep[Boolean] = reflectEffect(CompareTuple9(t1,t2))
+  def compareTuple10(t1: Rep[(_,_,_,_,_,_,_,_,_,_)], t2: Rep[(_,_,_,_,_,_,_,_,_,_)]): Rep[Boolean] = reflectEffect(CompareTuple10(t1,t2))
+  def compareTuple11(t1: Rep[(_,_,_,_,_,_,_,_,_,_,_)], t2: Rep[(_,_,_,_,_,_,_,_,_,_,_)]): Rep[Boolean] = reflectEffect(CompareTuple11(t1,t2))
+  def compareTuple12(t1: Rep[(_,_,_,_,_,_,_,_,_,_,_,_)], t2: Rep[(_,_,_,_,_,_,_,_,_,_,_,_)]): Rep[Boolean] = reflectEffect(CompareTuple12(t1,t2))
+  def compareTuple13(t1: Rep[(_,_,_,_,_,_,_,_,_,_,_,_,_)], t2: Rep[(_,_,_,_,_,_,_,_,_,_,_,_,_)]): Rep[Boolean] = reflectEffect(CompareTuple13(t1,t2))
+  def compareTuple14(t1: Rep[(_,_,_,_,_,_,_,_,_,_,_,_,_,_)], t2: Rep[(_,_,_,_,_,_,_,_,_,_,_,_,_,_)]): Rep[Boolean] = reflectEffect(CompareTuple14(t1,t2))
+  def compareTuple15(t1: Rep[(_,_,_,_,_,_,_,_,_,_,_,_,_,_,_)], t2: Rep[(_,_,_,_,_,_,_,_,_,_,_,_,_,_,_)]): Rep[Boolean] = reflectEffect(CompareTuple15(t1,t2))
+  def compareTuple16(t1: Rep[(_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_)], t2: Rep[(_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_)]): Rep[Boolean] = reflectEffect(CompareTuple16(t1,t2))
+  def compareTuple17(t1: Rep[(_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_)], t2: Rep[(_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_)]): Rep[Boolean] = reflectEffect(CompareTuple17(t1,t2))
+  def compareTuple18(t1: Rep[(_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_)], t2: Rep[(_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_)]): Rep[Boolean] = reflectEffect(CompareTuple18(t1,t2))
+  def compareTuple19(t1: Rep[(_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_)], t2: Rep[(_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_)]): Rep[Boolean] = reflectEffect(CompareTuple19(t1,t2))
+  def compareTuple20(t1: Rep[(_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_)], t2: Rep[(_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_)]): Rep[Boolean] = reflectEffect(CompareTuple20(t1,t2))
+  def compareTuple21(t1: Rep[(_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_)], t2: Rep[(_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_)]): Rep[Boolean] = reflectEffect(CompareTuple21(t1,t2))
+  def compareTuple22(t1: Rep[(_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_)], t2: Rep[(_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_)]): Rep[Boolean] = reflectEffect(CompareTuple22(t1,t2))
+
+
+
+  case class HashTuple2(t: Exp[(_,_)]) extends Def[Int]
+  case class HashTuple3(t: Exp[(_,_,_)]) extends Def[Int]
+  case class HashTuple4(t: Exp[(_,_,_,_)]) extends Def[Int]
+  case class HashTuple5(t: Exp[(_,_,_,_,_)]) extends Def[Int]
+  case class HashTuple6(t: Exp[(_,_,_,_,_,_)]) extends Def[Int]
+  case class HashTuple7(t: Exp[(_,_,_,_,_,_,_)]) extends Def[Int]
+  case class HashTuple8(t: Exp[(_,_,_,_,_,_,_,_)]) extends Def[Int]
+  case class HashTuple9(t: Exp[(_,_,_,_,_,_,_,_,_)]) extends Def[Int]
+  case class HashTuple10(t: Exp[(_,_,_,_,_,_,_,_,_,_)]) extends Def[Int]
+  case class HashTuple11(t: Exp[(_,_,_,_,_,_,_,_,_,_,_)]) extends Def[Int]
+  case class HashTuple12(t: Exp[(_,_,_,_,_,_,_,_,_,_,_,_)]) extends Def[Int]
+  case class HashTuple13(t: Exp[(_,_,_,_,_,_,_,_,_,_,_,_,_)]) extends Def[Int]
+  case class HashTuple14(t: Exp[(_,_,_,_,_,_,_,_,_,_,_,_,_,_)]) extends Def[Int]
+  case class HashTuple15(t: Exp[(_,_,_,_,_,_,_,_,_,_,_,_,_,_,_)]) extends Def[Int]
+  case class HashTuple16(t: Exp[(_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_)]) extends Def[Int]
+  case class HashTuple17(t: Exp[(_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_)]) extends Def[Int]
+  case class HashTuple18(t: Exp[(_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_)]) extends Def[Int]
+  case class HashTuple19(t: Exp[(_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_)]) extends Def[Int]
+  case class HashTuple20(t: Exp[(_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_)]) extends Def[Int]
+  case class HashTuple21(t: Exp[(_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_)]) extends Def[Int]
+  case class HashTuple22(t: Exp[(_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_)]) extends Def[Int]
+
+  case class CompareTuple2(t1: Exp[(_,_)], t2: Exp[(_,_)]) extends Def[Boolean]
+  case class CompareTuple3(t1: Exp[(_,_,_)], t2: Exp[(_,_,_)]) extends Def[Boolean]
+  case class CompareTuple4(t1: Exp[(_,_,_,_)], t2: Exp[(_,_,_,_)]) extends Def[Boolean]
+  case class CompareTuple5(t1: Exp[(_,_,_,_,_)], t2: Exp[(_,_,_,_,_)]) extends Def[Boolean]
+  case class CompareTuple6(t1: Exp[(_,_,_,_,_,_)], t2: Exp[(_,_,_,_,_,_)]) extends Def[Boolean]
+  case class CompareTuple7(t1: Exp[(_,_,_,_,_,_,_)], t2: Exp[(_,_,_,_,_,_,_)]) extends Def[Boolean]
+  case class CompareTuple8(t1: Exp[(_,_,_,_,_,_,_,_)], t2: Exp[(_,_,_,_,_,_,_,_)]) extends Def[Boolean]
+  case class CompareTuple9(t1: Exp[(_,_,_,_,_,_,_,_,_)], t2: Exp[(_,_,_,_,_,_,_,_,_)]) extends Def[Boolean]
+  case class CompareTuple10(t1: Exp[(_,_,_,_,_,_,_,_,_,_)], t2: Exp[(_,_,_,_,_,_,_,_,_,_)]) extends Def[Boolean]
+  case class CompareTuple11(t1: Exp[(_,_,_,_,_,_,_,_,_,_,_)], t2: Exp[(_,_,_,_,_,_,_,_,_,_,_)]) extends Def[Boolean]
+  case class CompareTuple12(t1: Exp[(_,_,_,_,_,_,_,_,_,_,_,_)], t2: Exp[(_,_,_,_,_,_,_,_,_,_,_,_)]) extends Def[Boolean]
+  case class CompareTuple13(t1: Exp[(_,_,_,_,_,_,_,_,_,_,_,_,_)], t2: Exp[(_,_,_,_,_,_,_,_,_,_,_,_,_)]) extends Def[Boolean]
+  case class CompareTuple14(t1: Exp[(_,_,_,_,_,_,_,_,_,_,_,_,_,_)], t2: Exp[(_,_,_,_,_,_,_,_,_,_,_,_,_,_)]) extends Def[Boolean]
+  case class CompareTuple15(t1: Exp[(_,_,_,_,_,_,_,_,_,_,_,_,_,_,_)], t2: Exp[(_,_,_,_,_,_,_,_,_,_,_,_,_,_,_)]) extends Def[Boolean]
+  case class CompareTuple16(t1: Exp[(_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_)], t2: Exp[(_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_)]) extends Def[Boolean]
+  case class CompareTuple17(t1: Exp[(_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_)], t2: Exp[(_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_)]) extends Def[Boolean]
+  case class CompareTuple18(t1: Exp[(_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_)], t2: Exp[(_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_)]) extends Def[Boolean]
+  case class CompareTuple19(t1: Exp[(_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_)], t2: Exp[(_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_)]) extends Def[Boolean]
+  case class CompareTuple20(t1: Exp[(_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_)], t2: Exp[(_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_)]) extends Def[Boolean]
+  case class CompareTuple21(t1: Exp[(_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_)], t2: Exp[(_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_)]) extends Def[Boolean]
+  case class CompareTuple22(t1: Exp[(_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_)], t2: Exp[(_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_)]) extends Def[Boolean]
+
 
   case class Tuple2Access1[A1:Manifest](t: Exp[(A1,_)]) extends Def[A1] { val m = manifest[A1] }
   case class Tuple2Access2[A2:Manifest](t: Exp[(_,A2)]) extends Def[A2] { val m = manifest[A2] }
@@ -2531,36 +2743,327 @@ trait TupleOpsExp extends TupleOps with EffectExp {
   }).asInstanceOf[Exp[A]]
 }
 
-trait ScalaGenTupleOps extends ScalaGenBase {
+trait TupleGenBase extends GenericCodegen with BaseGenStruct { val IR: TupleOpsExp }
+
+trait ScalaGenTupleOps extends ScalaGenBase with TupleGenBase {
   val IR: TupleOpsExp
   import IR._
 
   override def emitNode(sym: Sym[Any], rhs: Def[Any]) = rhs match {
     case ETuple2(a1,a2) =>
       emitValDef(sym, "(" + quote(a1, true) + "," + quote(a2, true) + ")")
-    case Tuple2Access1(t) => emitValDef(sym, quote(t) + "._1")
-    case Tuple2Access2(t) => emitValDef(sym, quote(t) + "._2")
+    case Tuple2Access1(t) => emitValDef(sym, src"$t._1")
+    case Tuple2Access2(t) => emitValDef(sym, src"$t._2")
 
     case ETuple3(a1,a2,a3) =>
       emitValDef(sym, "(" + quote(a1, true) + "," + quote(a2, true) + "," + quote(a3, true) + ")")
-    case Tuple3Access1(t) => emitValDef(sym, quote(t) + "._1")
-    case Tuple3Access2(t) => emitValDef(sym, quote(t) + "._2")
-    case Tuple3Access3(t) => emitValDef(sym, quote(t) + "._3")
+    case Tuple3Access1(t) => emitValDef(sym, src"$t._1")
+    case Tuple3Access2(t) => emitValDef(sym, src"$t._2")
+    case Tuple3Access3(t) => emitValDef(sym, src"$t._3")
 
     case ETuple4(a1,a2,a3,a4) =>
       emitValDef(sym, "(" + quote(a1, true) + "," + quote(a2, true) + "," + quote(a3, true) + "," + quote(a4, true) + ")")
-    case Tuple4Access1(t) => emitValDef(sym, quote(t) + "._1")
-    case Tuple4Access2(t) => emitValDef(sym, quote(t) + "._2")
-    case Tuple4Access3(t) => emitValDef(sym, quote(t) + "._3")
-    case Tuple4Access4(t) => emitValDef(sym, quote(t) + "._4")
+    case Tuple4Access1(t) => emitValDef(sym, src"$t._1")
+    case Tuple4Access2(t) => emitValDef(sym, src"$t._2")
+    case Tuple4Access3(t) => emitValDef(sym, src"$t._3")
+    case Tuple4Access4(t) => emitValDef(sym, src"$t._4")
 
     case ETuple5(a1,a2,a3,a4,a5) =>
       emitValDef(sym, "(" + quote(a1, true) + "," + quote(a2, true) + "," + quote(a3, true) + "," + quote(a4, true) + "," + quote(a5, true) + ")")
-    case Tuple5Access1(t) => emitValDef(sym, quote(t) + "._1")
-    case Tuple5Access2(t) => emitValDef(sym, quote(t) + "._2")
-    case Tuple5Access3(t) => emitValDef(sym, quote(t) + "._3")
-    case Tuple5Access4(t) => emitValDef(sym, quote(t) + "._4")
-    case Tuple5Access5(t) => emitValDef(sym, quote(t) + "._5")
+    case Tuple5Access1(t) => emitValDef(sym, src"$t._1")
+    case Tuple5Access2(t) => emitValDef(sym, src"$t._2")
+    case Tuple5Access3(t) => emitValDef(sym, src"$t._3")
+    case Tuple5Access4(t) => emitValDef(sym, src"$t._4")
+    case Tuple5Access5(t) => emitValDef(sym, src"$t._5")
+ 
+    case ETuple6(a1,a2,a3,a4,a5,a6) =>
+      emitValDef(sym, "(" + quote(a1, true) + "," + quote(a2, true) + "," + quote(a3, true) + "," + quote(a4, true) + "," + quote(a5, true) + "," + quote(a6, true) + ")")
+    case Tuple6Access1(t) => emitValDef(sym, src"$t._1")
+    case Tuple6Access2(t) => emitValDef(sym, src"$t._2")
+    case Tuple6Access3(t) => emitValDef(sym, src"$t._3")
+    case Tuple6Access4(t) => emitValDef(sym, src"$t._4")
+    case Tuple6Access5(t) => emitValDef(sym, src"$t._5")
+    case Tuple6Access6(t) => emitValDef(sym, src"$t._6")
+
+    case ETuple7(a1,a2,a3,a4,a5,a6,a7) =>
+      emitValDef(sym, "(" + quote(a1, true) + "," + quote(a2, true) + "," + quote(a3, true) + "," + quote(a4, true) + "," + quote(a5, true) + "," + quote(a6, true) + "," + quote(a7, true) + ")")
+    case Tuple7Access1(t) => emitValDef(sym, src"$t._1")
+    case Tuple7Access2(t) => emitValDef(sym, src"$t._2")
+    case Tuple7Access3(t) => emitValDef(sym, src"$t._3")
+    case Tuple7Access4(t) => emitValDef(sym, src"$t._4")
+    case Tuple7Access5(t) => emitValDef(sym, src"$t._5")
+    case Tuple7Access6(t) => emitValDef(sym, src"$t._6")
+    case Tuple7Access7(t) => emitValDef(sym, src"$t._7")
+
+    case ETuple8(a1,a2,a3,a4,a5,a6,a7,a8) =>
+      emitValDef(sym, "(" + quote(a1, true) + "," + quote(a2, true) + "," + quote(a3, true) + "," + quote(a4, true) + "," + quote(a5, true) + "," + quote(a6, true) + "," + quote(a7, true) + "," + quote(a8, true) + ")")
+    case Tuple8Access1(t) => emitValDef(sym, src"$t._1")
+    case Tuple8Access2(t) => emitValDef(sym, src"$t._2")
+    case Tuple8Access3(t) => emitValDef(sym, src"$t._3")
+    case Tuple8Access4(t) => emitValDef(sym, src"$t._4")
+    case Tuple8Access5(t) => emitValDef(sym, src"$t._5")
+    case Tuple8Access6(t) => emitValDef(sym, src"$t._6")
+    case Tuple8Access7(t) => emitValDef(sym, src"$t._7")
+    case Tuple8Access8(t) => emitValDef(sym, src"$t._8")
+
+    case ETuple9(a1,a2,a3,a4,a5,a6,a7,a8,a9) =>
+      emitValDef(sym, "(" + quote(a1, true) + "," + quote(a2, true) + "," + quote(a3, true) + "," + quote(a4, true) + "," + quote(a5, true) + "," + quote(a6, true) + "," + quote(a7, true) + "," + quote(a8, true) + "," + quote(a9, true) + ")")
+    case Tuple9Access1(t) => emitValDef(sym, src"$t._1")
+    case Tuple9Access2(t) => emitValDef(sym, src"$t._2")
+    case Tuple9Access3(t) => emitValDef(sym, src"$t._3")
+    case Tuple9Access4(t) => emitValDef(sym, src"$t._4")
+    case Tuple9Access5(t) => emitValDef(sym, src"$t._5")
+    case Tuple9Access6(t) => emitValDef(sym, src"$t._6")
+    case Tuple9Access7(t) => emitValDef(sym, src"$t._7")
+    case Tuple9Access8(t) => emitValDef(sym, src"$t._8")
+    case Tuple9Access9(t) => emitValDef(sym, src"$t._9")
+
+    case ETuple10(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10) =>
+      emitValDef(sym, "(" + quote(a1, true) + "," + quote(a2, true) + "," + quote(a3, true) + "," + quote(a4, true) + "," + quote(a5, true) + "," + quote(a6, true) + "," + quote(a7, true) + "," + quote(a8, true) + "," + quote(a9, true) + "," + quote(a10, true) + ")")
+    case Tuple10Access1(t) => emitValDef(sym, src"$t._1")
+    case Tuple10Access2(t) => emitValDef(sym, src"$t._2")
+    case Tuple10Access3(t) => emitValDef(sym, src"$t._3")
+    case Tuple10Access4(t) => emitValDef(sym, src"$t._4")
+    case Tuple10Access5(t) => emitValDef(sym, src"$t._5")
+    case Tuple10Access6(t) => emitValDef(sym, src"$t._6")
+    case Tuple10Access7(t) => emitValDef(sym, src"$t._7")
+    case Tuple10Access8(t) => emitValDef(sym, src"$t._8")
+    case Tuple10Access9(t) => emitValDef(sym, src"$t._9")
+    case Tuple10Access10(t) => emitValDef(sym, src"$t._10")
+
+    case ETuple11(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11) =>
+      emitValDef(sym, "(" + quote(a1, true) + "," + quote(a2, true) + "," + quote(a3, true) + "," + quote(a4, true) + "," + quote(a5, true) + "," + quote(a6, true) + "," + quote(a7, true) + "," + quote(a8, true) + "," + quote(a9, true) + "," + quote(a10, true) + "," + quote(a11, true) + ")")
+    case Tuple11Access1(t) => emitValDef(sym, src"$t._1")
+    case Tuple11Access2(t) => emitValDef(sym, src"$t._2")
+    case Tuple11Access3(t) => emitValDef(sym, src"$t._3")
+    case Tuple11Access4(t) => emitValDef(sym, src"$t._4")
+    case Tuple11Access5(t) => emitValDef(sym, src"$t._5")
+    case Tuple11Access6(t) => emitValDef(sym, src"$t._6")
+    case Tuple11Access7(t) => emitValDef(sym, src"$t._7")
+    case Tuple11Access8(t) => emitValDef(sym, src"$t._8")
+    case Tuple11Access9(t) => emitValDef(sym, src"$t._9")
+    case Tuple11Access10(t) => emitValDef(sym, src"$t._10")
+    case Tuple11Access11(t) => emitValDef(sym, src"$t._11")
+
+    case ETuple12(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12) =>
+      emitValDef(sym, "(" + quote(a1, true) + "," + quote(a2, true) + "," + quote(a3, true) + "," + quote(a4, true) + "," + quote(a5, true) + "," + quote(a6, true) + "," + quote(a7, true) + "," + quote(a8, true) + "," + quote(a9, true) + "," + quote(a10, true) + "," + quote(a11, true) + "," + quote(a12, true) + ")")
+    case Tuple12Access1(t) => emitValDef(sym, src"$t._1")
+    case Tuple12Access2(t) => emitValDef(sym, src"$t._2")
+    case Tuple12Access3(t) => emitValDef(sym, src"$t._3")
+    case Tuple12Access4(t) => emitValDef(sym, src"$t._4")
+    case Tuple12Access5(t) => emitValDef(sym, src"$t._5")
+    case Tuple12Access6(t) => emitValDef(sym, src"$t._6")
+    case Tuple12Access7(t) => emitValDef(sym, src"$t._7")
+    case Tuple12Access8(t) => emitValDef(sym, src"$t._8")
+    case Tuple12Access9(t) => emitValDef(sym, src"$t._9")
+    case Tuple12Access10(t) => emitValDef(sym, src"$t._10")
+    case Tuple12Access11(t) => emitValDef(sym, src"$t._11")
+    case Tuple12Access12(t) => emitValDef(sym, src"$t._12")
+
+    case ETuple13(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13) =>
+      emitValDef(sym, "(" + quote(a1, true) + "," + quote(a2, true) + "," + quote(a3, true) + "," + quote(a4, true) + "," + quote(a5, true) + "," + quote(a6, true) + "," + quote(a7, true) + "," + quote(a8, true) + "," + quote(a9, true) + "," + quote(a10, true) + "," + quote(a11, true) + "," + quote(a12, true) + "," + quote(a13, true) + ")")
+    case Tuple13Access1(t) => emitValDef(sym, src"$t._1")
+    case Tuple13Access2(t) => emitValDef(sym, src"$t._2")
+    case Tuple13Access3(t) => emitValDef(sym, src"$t._3")
+    case Tuple13Access4(t) => emitValDef(sym, src"$t._4")
+    case Tuple13Access5(t) => emitValDef(sym, src"$t._5")
+    case Tuple13Access6(t) => emitValDef(sym, src"$t._6")
+    case Tuple13Access7(t) => emitValDef(sym, src"$t._7")
+    case Tuple13Access8(t) => emitValDef(sym, src"$t._8")
+    case Tuple13Access9(t) => emitValDef(sym, src"$t._9")
+    case Tuple13Access10(t) => emitValDef(sym, src"$t._10")
+    case Tuple13Access11(t) => emitValDef(sym, src"$t._11")
+    case Tuple13Access12(t) => emitValDef(sym, src"$t._12")
+    case Tuple13Access13(t) => emitValDef(sym, src"$t._13")
+
+    case ETuple14(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14) =>
+      emitValDef(sym, "(" + quote(a1, true) + "," + quote(a2, true) + "," + quote(a3, true) + "," + quote(a4, true) + "," + quote(a5, true) + "," + quote(a6, true) + "," + quote(a7, true) + "," + quote(a8, true) + "," + quote(a9, true) + "," + quote(a10, true) + "," + quote(a11, true) + "," + quote(a12, true) + "," + quote(a13, true) + "," + quote(a14, true) + ")")
+    case Tuple14Access1(t) => emitValDef(sym, src"$t._1")
+    case Tuple14Access2(t) => emitValDef(sym, src"$t._2")
+    case Tuple14Access3(t) => emitValDef(sym, src"$t._3")
+    case Tuple14Access4(t) => emitValDef(sym, src"$t._4")
+    case Tuple14Access5(t) => emitValDef(sym, src"$t._5")
+    case Tuple14Access6(t) => emitValDef(sym, src"$t._6")
+    case Tuple14Access7(t) => emitValDef(sym, src"$t._7")
+    case Tuple14Access8(t) => emitValDef(sym, src"$t._8")
+    case Tuple14Access9(t) => emitValDef(sym, src"$t._9")
+    case Tuple14Access10(t) => emitValDef(sym, src"$t._10")
+    case Tuple14Access11(t) => emitValDef(sym, src"$t._11")
+    case Tuple14Access12(t) => emitValDef(sym, src"$t._12")
+    case Tuple14Access13(t) => emitValDef(sym, src"$t._13")
+    case Tuple14Access14(t) => emitValDef(sym, src"$t._14")
+
+    case ETuple15(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14,a15) =>
+      emitValDef(sym, "(" + quote(a1, true) + "," + quote(a2, true) + "," + quote(a3, true) + "," + quote(a4, true) + "," + quote(a5, true) + "," + quote(a6, true) + "," + quote(a7, true) + "," + quote(a8, true) + "," + quote(a9, true) + "," + quote(a10, true) + "," + quote(a11, true) + "," + quote(a12, true) + "," + quote(a13, true) + "," + quote(a14, true) + "," + quote(a15, true) + ")")
+    case Tuple15Access1(t) => emitValDef(sym, src"$t._1")
+    case Tuple15Access2(t) => emitValDef(sym, src"$t._2")
+    case Tuple15Access3(t) => emitValDef(sym, src"$t._3")
+    case Tuple15Access4(t) => emitValDef(sym, src"$t._4")
+    case Tuple15Access5(t) => emitValDef(sym, src"$t._5")
+    case Tuple15Access6(t) => emitValDef(sym, src"$t._6")
+    case Tuple15Access7(t) => emitValDef(sym, src"$t._7")
+    case Tuple15Access8(t) => emitValDef(sym, src"$t._8")
+    case Tuple15Access9(t) => emitValDef(sym, src"$t._9")
+    case Tuple15Access10(t) => emitValDef(sym, src"$t._10")
+    case Tuple15Access11(t) => emitValDef(sym, src"$t._11")
+    case Tuple15Access12(t) => emitValDef(sym, src"$t._12")
+    case Tuple15Access13(t) => emitValDef(sym, src"$t._13")
+    case Tuple15Access14(t) => emitValDef(sym, src"$t._14")
+    case Tuple15Access15(t) => emitValDef(sym, src"$t._15")
+
+    case ETuple16(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14,a15,a16) =>
+      emitValDef(sym, "(" + quote(a1, true) + "," + quote(a2, true) + "," + quote(a3, true) + "," + quote(a4, true) + "," + quote(a5, true) + "," + quote(a6, true) + "," + quote(a7, true) + "," + quote(a8, true) + "," + quote(a9, true) + "," + quote(a10, true) + "," + quote(a11, true) + "," + quote(a12, true) + "," + quote(a13, true) + "," + quote(a14, true) + "," + quote(a15, true) + "," + quote(a16, true) + ")")
+    case Tuple16Access1(t) => emitValDef(sym, src"$t._1")
+    case Tuple16Access2(t) => emitValDef(sym, src"$t._2")
+    case Tuple16Access3(t) => emitValDef(sym, src"$t._3")
+    case Tuple16Access4(t) => emitValDef(sym, src"$t._4")
+    case Tuple16Access5(t) => emitValDef(sym, src"$t._5")
+    case Tuple16Access6(t) => emitValDef(sym, src"$t._6")
+    case Tuple16Access7(t) => emitValDef(sym, src"$t._7")
+    case Tuple16Access8(t) => emitValDef(sym, src"$t._8")
+    case Tuple16Access9(t) => emitValDef(sym, src"$t._9")
+    case Tuple16Access10(t) => emitValDef(sym, src"$t._10")
+    case Tuple16Access11(t) => emitValDef(sym, src"$t._11")
+    case Tuple16Access12(t) => emitValDef(sym, src"$t._12")
+    case Tuple16Access13(t) => emitValDef(sym, src"$t._13")
+    case Tuple16Access14(t) => emitValDef(sym, src"$t._14")
+    case Tuple16Access15(t) => emitValDef(sym, src"$t._15")
+    case Tuple16Access16(t) => emitValDef(sym, src"$t._16")
+
+    case ETuple17(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14,a15,a16,a17) =>
+      emitValDef(sym, "(" + quote(a1, true) + "," + quote(a2, true) + "," + quote(a3, true) + "," + quote(a4, true) + "," + quote(a5, true) + "," + quote(a6, true) + "," + quote(a7, true) + "," + quote(a8, true) + "," + quote(a9, true) + "," + quote(a10, true) + "," + quote(a11, true) + "," + quote(a12, true) + "," + quote(a13, true) + "," + quote(a14, true) + "," + quote(a15, true) + "," + quote(a16, true) + "," + quote(a17, true) + ")")
+    case Tuple17Access1(t) => emitValDef(sym, src"$t._1")
+    case Tuple17Access2(t) => emitValDef(sym, src"$t._2")
+    case Tuple17Access3(t) => emitValDef(sym, src"$t._3")
+    case Tuple17Access4(t) => emitValDef(sym, src"$t._4")
+    case Tuple17Access5(t) => emitValDef(sym, src"$t._5")
+    case Tuple17Access6(t) => emitValDef(sym, src"$t._6")
+    case Tuple17Access7(t) => emitValDef(sym, src"$t._7")
+    case Tuple17Access8(t) => emitValDef(sym, src"$t._8")
+    case Tuple17Access9(t) => emitValDef(sym, src"$t._9")
+    case Tuple17Access10(t) => emitValDef(sym, src"$t._10")
+    case Tuple17Access11(t) => emitValDef(sym, src"$t._11")
+    case Tuple17Access12(t) => emitValDef(sym, src"$t._12")
+    case Tuple17Access13(t) => emitValDef(sym, src"$t._13")
+    case Tuple17Access14(t) => emitValDef(sym, src"$t._14")
+    case Tuple17Access15(t) => emitValDef(sym, src"$t._15")
+    case Tuple17Access16(t) => emitValDef(sym, src"$t._16")
+    case Tuple17Access17(t) => emitValDef(sym, src"$t._17")
+
+    case ETuple18(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14,a15,a16,a17,a18) =>
+      emitValDef(sym, "(" + quote(a1, true) + "," + quote(a2, true) + "," + quote(a3, true) + "," + quote(a4, true) + "," + quote(a5, true) + "," + quote(a6, true) + "," + quote(a7, true) + "," + quote(a8, true) + "," + quote(a9, true) + "," + quote(a10, true) + "," + quote(a11, true) + "," + quote(a12, true) + "," + quote(a13, true) + "," + quote(a14, true) + "," + quote(a15, true) + "," + quote(a16, true) + "," + quote(a17, true) + "," + quote(a18, true) + ")")
+    case Tuple18Access1(t) => emitValDef(sym, src"$t._1")
+    case Tuple18Access2(t) => emitValDef(sym, src"$t._2")
+    case Tuple18Access3(t) => emitValDef(sym, src"$t._3")
+    case Tuple18Access4(t) => emitValDef(sym, src"$t._4")
+    case Tuple18Access5(t) => emitValDef(sym, src"$t._5")
+    case Tuple18Access6(t) => emitValDef(sym, src"$t._6")
+    case Tuple18Access7(t) => emitValDef(sym, src"$t._7")
+    case Tuple18Access8(t) => emitValDef(sym, src"$t._8")
+    case Tuple18Access9(t) => emitValDef(sym, src"$t._9")
+    case Tuple18Access10(t) => emitValDef(sym, src"$t._10")
+    case Tuple18Access11(t) => emitValDef(sym, src"$t._11")
+    case Tuple18Access12(t) => emitValDef(sym, src"$t._12")
+    case Tuple18Access13(t) => emitValDef(sym, src"$t._13")
+    case Tuple18Access14(t) => emitValDef(sym, src"$t._14")
+    case Tuple18Access15(t) => emitValDef(sym, src"$t._15")
+    case Tuple18Access16(t) => emitValDef(sym, src"$t._16")
+    case Tuple18Access17(t) => emitValDef(sym, src"$t._17")
+    case Tuple18Access18(t) => emitValDef(sym, src"$t._18")
+
+    case ETuple19(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14,a15,a16,a17,a18,a19) =>
+      emitValDef(sym, "(" + quote(a1, true) + "," + quote(a2, true) + "," + quote(a3, true) + "," + quote(a4, true) + "," + quote(a5, true) + "," + quote(a6, true) + "," + quote(a7, true) + "," + quote(a8, true) + "," + quote(a9, true) + "," + quote(a10, true) + "," + quote(a11, true) + "," + quote(a12, true) + "," + quote(a13, true) + "," + quote(a14, true) + "," + quote(a15, true) + "," + quote(a16, true) + "," + quote(a17, true) + "," + quote(a18, true) + "," + quote(a19, true) + ")")
+    case Tuple19Access1(t) => emitValDef(sym, src"$t._1")
+    case Tuple19Access2(t) => emitValDef(sym, src"$t._2")
+    case Tuple19Access3(t) => emitValDef(sym, src"$t._3")
+    case Tuple19Access4(t) => emitValDef(sym, src"$t._4")
+    case Tuple19Access5(t) => emitValDef(sym, src"$t._5")
+    case Tuple19Access6(t) => emitValDef(sym, src"$t._6")
+    case Tuple19Access7(t) => emitValDef(sym, src"$t._7")
+    case Tuple19Access8(t) => emitValDef(sym, src"$t._8")
+    case Tuple19Access9(t) => emitValDef(sym, src"$t._9")
+    case Tuple19Access10(t) => emitValDef(sym, src"$t._10")
+    case Tuple19Access11(t) => emitValDef(sym, src"$t._11")
+    case Tuple19Access12(t) => emitValDef(sym, src"$t._12")
+    case Tuple19Access13(t) => emitValDef(sym, src"$t._13")
+    case Tuple19Access14(t) => emitValDef(sym, src"$t._14")
+    case Tuple19Access15(t) => emitValDef(sym, src"$t._15")
+    case Tuple19Access16(t) => emitValDef(sym, src"$t._16")
+    case Tuple19Access17(t) => emitValDef(sym, src"$t._17")
+    case Tuple19Access18(t) => emitValDef(sym, src"$t._18")
+    case Tuple19Access19(t) => emitValDef(sym, src"$t._19")
+
+    case ETuple20(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14,a15,a16,a17,a18,a19,a20) =>
+      emitValDef(sym, "(" + quote(a1, true) + "," + quote(a2, true) + "," + quote(a3, true) + "," + quote(a4, true) + "," + quote(a5, true) + "," + quote(a6, true) + "," + quote(a7, true) + "," + quote(a8, true) + "," + quote(a9, true) + "," + quote(a10, true) + "," + quote(a11, true) + "," + quote(a12, true) + "," + quote(a13, true) + "," + quote(a14, true) + "," + quote(a15, true) + "," + quote(a16, true) + "," + quote(a17, true) + "," + quote(a18, true) + "," + quote(a19, true) + "," + quote(a20, true) + ")")
+    case Tuple20Access1(t) => emitValDef(sym, src"$t._1")
+    case Tuple20Access2(t) => emitValDef(sym, src"$t._2")
+    case Tuple20Access3(t) => emitValDef(sym, src"$t._3")
+    case Tuple20Access4(t) => emitValDef(sym, src"$t._4")
+    case Tuple20Access5(t) => emitValDef(sym, src"$t._5")
+    case Tuple20Access6(t) => emitValDef(sym, src"$t._6")
+    case Tuple20Access7(t) => emitValDef(sym, src"$t._7")
+    case Tuple20Access8(t) => emitValDef(sym, src"$t._8")
+    case Tuple20Access9(t) => emitValDef(sym, src"$t._9")
+    case Tuple20Access10(t) => emitValDef(sym, src"$t._10")
+    case Tuple20Access11(t) => emitValDef(sym, src"$t._11")
+    case Tuple20Access12(t) => emitValDef(sym, src"$t._12")
+    case Tuple20Access13(t) => emitValDef(sym, src"$t._13")
+    case Tuple20Access14(t) => emitValDef(sym, src"$t._14")
+    case Tuple20Access15(t) => emitValDef(sym, src"$t._15")
+    case Tuple20Access16(t) => emitValDef(sym, src"$t._16")
+    case Tuple20Access17(t) => emitValDef(sym, src"$t._17")
+    case Tuple20Access18(t) => emitValDef(sym, src"$t._18")
+    case Tuple20Access19(t) => emitValDef(sym, src"$t._19")
+    case Tuple20Access20(t) => emitValDef(sym, src"$t._20")
+
+    case ETuple21(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14,a15,a16,a17,a18,a19,a20,a21) =>
+      emitValDef(sym, "(" + quote(a1, true) + "," + quote(a2, true) + "," + quote(a3, true) + "," + quote(a4, true) + "," + quote(a5, true) + "," + quote(a6, true) + "," + quote(a7, true) + "," + quote(a8, true) + "," + quote(a9, true) + "," + quote(a10, true) + "," + quote(a11, true) + "," + quote(a12, true) + "," + quote(a13, true) + "," + quote(a14, true) + "," + quote(a15, true) + "," + quote(a16, true) + "," + quote(a17, true) + "," + quote(a18, true) + "," + quote(a19, true) + "," + quote(a20, true) + "," + quote(a21, true) + ")")
+    case Tuple21Access1(t) => emitValDef(sym, src"$t._1")
+    case Tuple21Access2(t) => emitValDef(sym, src"$t._2")
+    case Tuple21Access3(t) => emitValDef(sym, src"$t._3")
+    case Tuple21Access4(t) => emitValDef(sym, src"$t._4")
+    case Tuple21Access5(t) => emitValDef(sym, src"$t._5")
+    case Tuple21Access6(t) => emitValDef(sym, src"$t._6")
+    case Tuple21Access7(t) => emitValDef(sym, src"$t._7")
+    case Tuple21Access8(t) => emitValDef(sym, src"$t._8")
+    case Tuple21Access9(t) => emitValDef(sym, src"$t._9")
+    case Tuple21Access10(t) => emitValDef(sym, src"$t._10")
+    case Tuple21Access11(t) => emitValDef(sym, src"$t._11")
+    case Tuple21Access12(t) => emitValDef(sym, src"$t._12")
+    case Tuple21Access13(t) => emitValDef(sym, src"$t._13")
+    case Tuple21Access14(t) => emitValDef(sym, src"$t._14")
+    case Tuple21Access15(t) => emitValDef(sym, src"$t._15")
+    case Tuple21Access16(t) => emitValDef(sym, src"$t._16")
+    case Tuple21Access17(t) => emitValDef(sym, src"$t._17")
+    case Tuple21Access18(t) => emitValDef(sym, src"$t._18")
+    case Tuple21Access19(t) => emitValDef(sym, src"$t._19")
+    case Tuple21Access20(t) => emitValDef(sym, src"$t._20")
+    case Tuple21Access21(t) => emitValDef(sym, src"$t._21")
+
+    case ETuple22(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14,a15,a16,a17,a18,a19,a20,a21,a22) =>
+      emitValDef(sym, "(" + quote(a1, true) + "," + quote(a2, true) + "," + quote(a3, true) + "," + quote(a4, true) + "," + quote(a5, true) + "," + quote(a6, true) + "," + quote(a7, true) + "," + quote(a8, true) + "," + quote(a9, true) + "," + quote(a10, true) + "," + quote(a11, true) + "," + quote(a12, true) + "," + quote(a13, true) + "," + quote(a14, true) + "," + quote(a15, true) + "," + quote(a16, true) + "," + quote(a17, true) + "," + quote(a18, true) + "," + quote(a19, true) + "," + quote(a20, true) + "," + quote(a21, true) + "," + quote(a22, true) + ")")
+    case Tuple22Access1(t) => emitValDef(sym, src"$t._1")
+    case Tuple22Access2(t) => emitValDef(sym, src"$t._2")
+    case Tuple22Access3(t) => emitValDef(sym, src"$t._3")
+    case Tuple22Access4(t) => emitValDef(sym, src"$t._4")
+    case Tuple22Access5(t) => emitValDef(sym, src"$t._5")
+    case Tuple22Access6(t) => emitValDef(sym, src"$t._6")
+    case Tuple22Access7(t) => emitValDef(sym, src"$t._7")
+    case Tuple22Access8(t) => emitValDef(sym, src"$t._8")
+    case Tuple22Access9(t) => emitValDef(sym, src"$t._9")
+    case Tuple22Access10(t) => emitValDef(sym, src"$t._10")
+    case Tuple22Access11(t) => emitValDef(sym, src"$t._11")
+    case Tuple22Access12(t) => emitValDef(sym, src"$t._12")
+    case Tuple22Access13(t) => emitValDef(sym, src"$t._13")
+    case Tuple22Access14(t) => emitValDef(sym, src"$t._14")
+    case Tuple22Access15(t) => emitValDef(sym, src"$t._15")
+    case Tuple22Access16(t) => emitValDef(sym, src"$t._16")
+    case Tuple22Access17(t) => emitValDef(sym, src"$t._17")
+    case Tuple22Access18(t) => emitValDef(sym, src"$t._18")
+    case Tuple22Access19(t) => emitValDef(sym, src"$t._19")
+    case Tuple22Access20(t) => emitValDef(sym, src"$t._20")
+    case Tuple22Access21(t) => emitValDef(sym, src"$t._21")
+    case Tuple22Access22(t) => emitValDef(sym, src"$t._22")
 
     case ProductApply(x,i) => emitValDef(sym, quote(x) + "._" + quote(i))    
     case ListToTuple(y) => {
@@ -2568,304 +3071,155 @@ trait ScalaGenTupleOps extends ScalaGenBase {
         if (y.size == 1) emitValDef(sym, y.map(n => quote(n)).mkString(","))
         else emitValDef(sym, "new Tuple" + y.size + "(" + y.map(n => quote(n)).mkString(",") + ")")
     }   
- 
-    case ETuple6(a1,a2,a3,a4,a5,a6) =>
-      emitValDef(sym, "(" + quote(a1, true) + "," + quote(a2, true) + "," + quote(a3, true) + "," + quote(a4, true) + "," + quote(a5, true) + "," + quote(a6, true) + ")")
-    case Tuple6Access1(t) => emitValDef(sym, quote(t) + "._1")
-    case Tuple6Access2(t) => emitValDef(sym, quote(t) + "._2")
-    case Tuple6Access3(t) => emitValDef(sym, quote(t) + "._3")
-    case Tuple6Access4(t) => emitValDef(sym, quote(t) + "._4")
-    case Tuple6Access5(t) => emitValDef(sym, quote(t) + "._5")
-    case Tuple6Access6(t) => emitValDef(sym, quote(t) + "._6")
-
-    case ETuple7(a1,a2,a3,a4,a5,a6,a7) =>
-      emitValDef(sym, "(" + quote(a1, true) + "," + quote(a2, true) + "," + quote(a3, true) + "," + quote(a4, true) + "," + quote(a5, true) + "," + quote(a6, true) + "," + quote(a7, true) + ")")
-    case Tuple7Access1(t) => emitValDef(sym, quote(t) + "._1")
-    case Tuple7Access2(t) => emitValDef(sym, quote(t) + "._2")
-    case Tuple7Access3(t) => emitValDef(sym, quote(t) + "._3")
-    case Tuple7Access4(t) => emitValDef(sym, quote(t) + "._4")
-    case Tuple7Access5(t) => emitValDef(sym, quote(t) + "._5")
-    case Tuple7Access6(t) => emitValDef(sym, quote(t) + "._6")
-    case Tuple7Access7(t) => emitValDef(sym, quote(t) + "._7")
-
-    case ETuple8(a1,a2,a3,a4,a5,a6,a7,a8) =>
-      emitValDef(sym, "(" + quote(a1, true) + "," + quote(a2, true) + "," + quote(a3, true) + "," + quote(a4, true) + "," + quote(a5, true) + "," + quote(a6, true) + "," + quote(a7, true) + "," + quote(a8, true) + ")")
-    case Tuple8Access1(t) => emitValDef(sym, quote(t) + "._1")
-    case Tuple8Access2(t) => emitValDef(sym, quote(t) + "._2")
-    case Tuple8Access3(t) => emitValDef(sym, quote(t) + "._3")
-    case Tuple8Access4(t) => emitValDef(sym, quote(t) + "._4")
-    case Tuple8Access5(t) => emitValDef(sym, quote(t) + "._5")
-    case Tuple8Access6(t) => emitValDef(sym, quote(t) + "._6")
-    case Tuple8Access7(t) => emitValDef(sym, quote(t) + "._7")
-    case Tuple8Access8(t) => emitValDef(sym, quote(t) + "._8")
-
-    case ETuple9(a1,a2,a3,a4,a5,a6,a7,a8,a9) =>
-      emitValDef(sym, "(" + quote(a1, true) + "," + quote(a2, true) + "," + quote(a3, true) + "," + quote(a4, true) + "," + quote(a5, true) + "," + quote(a6, true) + "," + quote(a7, true) + "," + quote(a8, true) + "," + quote(a9, true) + ")")
-    case Tuple9Access1(t) => emitValDef(sym, quote(t) + "._1")
-    case Tuple9Access2(t) => emitValDef(sym, quote(t) + "._2")
-    case Tuple9Access3(t) => emitValDef(sym, quote(t) + "._3")
-    case Tuple9Access4(t) => emitValDef(sym, quote(t) + "._4")
-    case Tuple9Access5(t) => emitValDef(sym, quote(t) + "._5")
-    case Tuple9Access6(t) => emitValDef(sym, quote(t) + "._6")
-    case Tuple9Access7(t) => emitValDef(sym, quote(t) + "._7")
-    case Tuple9Access8(t) => emitValDef(sym, quote(t) + "._8")
-    case Tuple9Access9(t) => emitValDef(sym, quote(t) + "._9")
-
-    case ETuple10(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10) =>
-      emitValDef(sym, "(" + quote(a1, true) + "," + quote(a2, true) + "," + quote(a3, true) + "," + quote(a4, true) + "," + quote(a5, true) + "," + quote(a6, true) + "," + quote(a7, true) + "," + quote(a8, true) + "," + quote(a9, true) + "," + quote(a10, true) + ")")
-    case Tuple10Access1(t) => emitValDef(sym, quote(t) + "._1")
-    case Tuple10Access2(t) => emitValDef(sym, quote(t) + "._2")
-    case Tuple10Access3(t) => emitValDef(sym, quote(t) + "._3")
-    case Tuple10Access4(t) => emitValDef(sym, quote(t) + "._4")
-    case Tuple10Access5(t) => emitValDef(sym, quote(t) + "._5")
-    case Tuple10Access6(t) => emitValDef(sym, quote(t) + "._6")
-    case Tuple10Access7(t) => emitValDef(sym, quote(t) + "._7")
-    case Tuple10Access8(t) => emitValDef(sym, quote(t) + "._8")
-    case Tuple10Access9(t) => emitValDef(sym, quote(t) + "._9")
-    case Tuple10Access10(t) => emitValDef(sym, quote(t) + "._10")
-
-    case ETuple11(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11) =>
-      emitValDef(sym, "(" + quote(a1, true) + "," + quote(a2, true) + "," + quote(a3, true) + "," + quote(a4, true) + "," + quote(a5, true) + "," + quote(a6, true) + "," + quote(a7, true) + "," + quote(a8, true) + "," + quote(a9, true) + "," + quote(a10, true) + "," + quote(a11, true) + ")")
-    case Tuple11Access1(t) => emitValDef(sym, quote(t) + "._1")
-    case Tuple11Access2(t) => emitValDef(sym, quote(t) + "._2")
-    case Tuple11Access3(t) => emitValDef(sym, quote(t) + "._3")
-    case Tuple11Access4(t) => emitValDef(sym, quote(t) + "._4")
-    case Tuple11Access5(t) => emitValDef(sym, quote(t) + "._5")
-    case Tuple11Access6(t) => emitValDef(sym, quote(t) + "._6")
-    case Tuple11Access7(t) => emitValDef(sym, quote(t) + "._7")
-    case Tuple11Access8(t) => emitValDef(sym, quote(t) + "._8")
-    case Tuple11Access9(t) => emitValDef(sym, quote(t) + "._9")
-    case Tuple11Access10(t) => emitValDef(sym, quote(t) + "._10")
-    case Tuple11Access11(t) => emitValDef(sym, quote(t) + "._11")
-
-    case ETuple12(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12) =>
-      emitValDef(sym, "(" + quote(a1, true) + "," + quote(a2, true) + "," + quote(a3, true) + "," + quote(a4, true) + "," + quote(a5, true) + "," + quote(a6, true) + "," + quote(a7, true) + "," + quote(a8, true) + "," + quote(a9, true) + "," + quote(a10, true) + "," + quote(a11, true) + "," + quote(a12, true) + ")")
-    case Tuple12Access1(t) => emitValDef(sym, quote(t) + "._1")
-    case Tuple12Access2(t) => emitValDef(sym, quote(t) + "._2")
-    case Tuple12Access3(t) => emitValDef(sym, quote(t) + "._3")
-    case Tuple12Access4(t) => emitValDef(sym, quote(t) + "._4")
-    case Tuple12Access5(t) => emitValDef(sym, quote(t) + "._5")
-    case Tuple12Access6(t) => emitValDef(sym, quote(t) + "._6")
-    case Tuple12Access7(t) => emitValDef(sym, quote(t) + "._7")
-    case Tuple12Access8(t) => emitValDef(sym, quote(t) + "._8")
-    case Tuple12Access9(t) => emitValDef(sym, quote(t) + "._9")
-    case Tuple12Access10(t) => emitValDef(sym, quote(t) + "._10")
-    case Tuple12Access11(t) => emitValDef(sym, quote(t) + "._11")
-    case Tuple12Access12(t) => emitValDef(sym, quote(t) + "._12")
-
-    case ETuple13(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13) =>
-      emitValDef(sym, "(" + quote(a1, true) + "," + quote(a2, true) + "," + quote(a3, true) + "," + quote(a4, true) + "," + quote(a5, true) + "," + quote(a6, true) + "," + quote(a7, true) + "," + quote(a8, true) + "," + quote(a9, true) + "," + quote(a10, true) + "," + quote(a11, true) + "," + quote(a12, true) + "," + quote(a13, true) + ")")
-    case Tuple13Access1(t) => emitValDef(sym, quote(t) + "._1")
-    case Tuple13Access2(t) => emitValDef(sym, quote(t) + "._2")
-    case Tuple13Access3(t) => emitValDef(sym, quote(t) + "._3")
-    case Tuple13Access4(t) => emitValDef(sym, quote(t) + "._4")
-    case Tuple13Access5(t) => emitValDef(sym, quote(t) + "._5")
-    case Tuple13Access6(t) => emitValDef(sym, quote(t) + "._6")
-    case Tuple13Access7(t) => emitValDef(sym, quote(t) + "._7")
-    case Tuple13Access8(t) => emitValDef(sym, quote(t) + "._8")
-    case Tuple13Access9(t) => emitValDef(sym, quote(t) + "._9")
-    case Tuple13Access10(t) => emitValDef(sym, quote(t) + "._10")
-    case Tuple13Access11(t) => emitValDef(sym, quote(t) + "._11")
-    case Tuple13Access12(t) => emitValDef(sym, quote(t) + "._12")
-    case Tuple13Access13(t) => emitValDef(sym, quote(t) + "._13")
-
-    case ETuple14(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14) =>
-      emitValDef(sym, "(" + quote(a1, true) + "," + quote(a2, true) + "," + quote(a3, true) + "," + quote(a4, true) + "," + quote(a5, true) + "," + quote(a6, true) + "," + quote(a7, true) + "," + quote(a8, true) + "," + quote(a9, true) + "," + quote(a10, true) + "," + quote(a11, true) + "," + quote(a12, true) + "," + quote(a13, true) + "," + quote(a14, true) + ")")
-    case Tuple14Access1(t) => emitValDef(sym, quote(t) + "._1")
-    case Tuple14Access2(t) => emitValDef(sym, quote(t) + "._2")
-    case Tuple14Access3(t) => emitValDef(sym, quote(t) + "._3")
-    case Tuple14Access4(t) => emitValDef(sym, quote(t) + "._4")
-    case Tuple14Access5(t) => emitValDef(sym, quote(t) + "._5")
-    case Tuple14Access6(t) => emitValDef(sym, quote(t) + "._6")
-    case Tuple14Access7(t) => emitValDef(sym, quote(t) + "._7")
-    case Tuple14Access8(t) => emitValDef(sym, quote(t) + "._8")
-    case Tuple14Access9(t) => emitValDef(sym, quote(t) + "._9")
-    case Tuple14Access10(t) => emitValDef(sym, quote(t) + "._10")
-    case Tuple14Access11(t) => emitValDef(sym, quote(t) + "._11")
-    case Tuple14Access12(t) => emitValDef(sym, quote(t) + "._12")
-    case Tuple14Access13(t) => emitValDef(sym, quote(t) + "._13")
-    case Tuple14Access14(t) => emitValDef(sym, quote(t) + "._14")
-
-    case ETuple15(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14,a15) =>
-      emitValDef(sym, "(" + quote(a1, true) + "," + quote(a2, true) + "," + quote(a3, true) + "," + quote(a4, true) + "," + quote(a5, true) + "," + quote(a6, true) + "," + quote(a7, true) + "," + quote(a8, true) + "," + quote(a9, true) + "," + quote(a10, true) + "," + quote(a11, true) + "," + quote(a12, true) + "," + quote(a13, true) + "," + quote(a14, true) + "," + quote(a15, true) + ")")
-    case Tuple15Access1(t) => emitValDef(sym, quote(t) + "._1")
-    case Tuple15Access2(t) => emitValDef(sym, quote(t) + "._2")
-    case Tuple15Access3(t) => emitValDef(sym, quote(t) + "._3")
-    case Tuple15Access4(t) => emitValDef(sym, quote(t) + "._4")
-    case Tuple15Access5(t) => emitValDef(sym, quote(t) + "._5")
-    case Tuple15Access6(t) => emitValDef(sym, quote(t) + "._6")
-    case Tuple15Access7(t) => emitValDef(sym, quote(t) + "._7")
-    case Tuple15Access8(t) => emitValDef(sym, quote(t) + "._8")
-    case Tuple15Access9(t) => emitValDef(sym, quote(t) + "._9")
-    case Tuple15Access10(t) => emitValDef(sym, quote(t) + "._10")
-    case Tuple15Access11(t) => emitValDef(sym, quote(t) + "._11")
-    case Tuple15Access12(t) => emitValDef(sym, quote(t) + "._12")
-    case Tuple15Access13(t) => emitValDef(sym, quote(t) + "._13")
-    case Tuple15Access14(t) => emitValDef(sym, quote(t) + "._14")
-    case Tuple15Access15(t) => emitValDef(sym, quote(t) + "._15")
-
-    case ETuple16(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14,a15,a16) =>
-      emitValDef(sym, "(" + quote(a1, true) + "," + quote(a2, true) + "," + quote(a3, true) + "," + quote(a4, true) + "," + quote(a5, true) + "," + quote(a6, true) + "," + quote(a7, true) + "," + quote(a8, true) + "," + quote(a9, true) + "," + quote(a10, true) + "," + quote(a11, true) + "," + quote(a12, true) + "," + quote(a13, true) + "," + quote(a14, true) + "," + quote(a15, true) + "," + quote(a16, true) + ")")
-    case Tuple16Access1(t) => emitValDef(sym, quote(t) + "._1")
-    case Tuple16Access2(t) => emitValDef(sym, quote(t) + "._2")
-    case Tuple16Access3(t) => emitValDef(sym, quote(t) + "._3")
-    case Tuple16Access4(t) => emitValDef(sym, quote(t) + "._4")
-    case Tuple16Access5(t) => emitValDef(sym, quote(t) + "._5")
-    case Tuple16Access6(t) => emitValDef(sym, quote(t) + "._6")
-    case Tuple16Access7(t) => emitValDef(sym, quote(t) + "._7")
-    case Tuple16Access8(t) => emitValDef(sym, quote(t) + "._8")
-    case Tuple16Access9(t) => emitValDef(sym, quote(t) + "._9")
-    case Tuple16Access10(t) => emitValDef(sym, quote(t) + "._10")
-    case Tuple16Access11(t) => emitValDef(sym, quote(t) + "._11")
-    case Tuple16Access12(t) => emitValDef(sym, quote(t) + "._12")
-    case Tuple16Access13(t) => emitValDef(sym, quote(t) + "._13")
-    case Tuple16Access14(t) => emitValDef(sym, quote(t) + "._14")
-    case Tuple16Access15(t) => emitValDef(sym, quote(t) + "._15")
-    case Tuple16Access16(t) => emitValDef(sym, quote(t) + "._16")
-
-    case ETuple17(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14,a15,a16,a17) =>
-      emitValDef(sym, "(" + quote(a1, true) + "," + quote(a2, true) + "," + quote(a3, true) + "," + quote(a4, true) + "," + quote(a5, true) + "," + quote(a6, true) + "," + quote(a7, true) + "," + quote(a8, true) + "," + quote(a9, true) + "," + quote(a10, true) + "," + quote(a11, true) + "," + quote(a12, true) + "," + quote(a13, true) + "," + quote(a14, true) + "," + quote(a15, true) + "," + quote(a16, true) + "," + quote(a17, true) + ")")
-    case Tuple17Access1(t) => emitValDef(sym, quote(t) + "._1")
-    case Tuple17Access2(t) => emitValDef(sym, quote(t) + "._2")
-    case Tuple17Access3(t) => emitValDef(sym, quote(t) + "._3")
-    case Tuple17Access4(t) => emitValDef(sym, quote(t) + "._4")
-    case Tuple17Access5(t) => emitValDef(sym, quote(t) + "._5")
-    case Tuple17Access6(t) => emitValDef(sym, quote(t) + "._6")
-    case Tuple17Access7(t) => emitValDef(sym, quote(t) + "._7")
-    case Tuple17Access8(t) => emitValDef(sym, quote(t) + "._8")
-    case Tuple17Access9(t) => emitValDef(sym, quote(t) + "._9")
-    case Tuple17Access10(t) => emitValDef(sym, quote(t) + "._10")
-    case Tuple17Access11(t) => emitValDef(sym, quote(t) + "._11")
-    case Tuple17Access12(t) => emitValDef(sym, quote(t) + "._12")
-    case Tuple17Access13(t) => emitValDef(sym, quote(t) + "._13")
-    case Tuple17Access14(t) => emitValDef(sym, quote(t) + "._14")
-    case Tuple17Access15(t) => emitValDef(sym, quote(t) + "._15")
-    case Tuple17Access16(t) => emitValDef(sym, quote(t) + "._16")
-    case Tuple17Access17(t) => emitValDef(sym, quote(t) + "._17")
-
-    case ETuple18(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14,a15,a16,a17,a18) =>
-      emitValDef(sym, "(" + quote(a1, true) + "," + quote(a2, true) + "," + quote(a3, true) + "," + quote(a4, true) + "," + quote(a5, true) + "," + quote(a6, true) + "," + quote(a7, true) + "," + quote(a8, true) + "," + quote(a9, true) + "," + quote(a10, true) + "," + quote(a11, true) + "," + quote(a12, true) + "," + quote(a13, true) + "," + quote(a14, true) + "," + quote(a15, true) + "," + quote(a16, true) + "," + quote(a17, true) + "," + quote(a18, true) + ")")
-    case Tuple18Access1(t) => emitValDef(sym, quote(t) + "._1")
-    case Tuple18Access2(t) => emitValDef(sym, quote(t) + "._2")
-    case Tuple18Access3(t) => emitValDef(sym, quote(t) + "._3")
-    case Tuple18Access4(t) => emitValDef(sym, quote(t) + "._4")
-    case Tuple18Access5(t) => emitValDef(sym, quote(t) + "._5")
-    case Tuple18Access6(t) => emitValDef(sym, quote(t) + "._6")
-    case Tuple18Access7(t) => emitValDef(sym, quote(t) + "._7")
-    case Tuple18Access8(t) => emitValDef(sym, quote(t) + "._8")
-    case Tuple18Access9(t) => emitValDef(sym, quote(t) + "._9")
-    case Tuple18Access10(t) => emitValDef(sym, quote(t) + "._10")
-    case Tuple18Access11(t) => emitValDef(sym, quote(t) + "._11")
-    case Tuple18Access12(t) => emitValDef(sym, quote(t) + "._12")
-    case Tuple18Access13(t) => emitValDef(sym, quote(t) + "._13")
-    case Tuple18Access14(t) => emitValDef(sym, quote(t) + "._14")
-    case Tuple18Access15(t) => emitValDef(sym, quote(t) + "._15")
-    case Tuple18Access16(t) => emitValDef(sym, quote(t) + "._16")
-    case Tuple18Access17(t) => emitValDef(sym, quote(t) + "._17")
-    case Tuple18Access18(t) => emitValDef(sym, quote(t) + "._18")
-
-    case ETuple19(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14,a15,a16,a17,a18,a19) =>
-      emitValDef(sym, "(" + quote(a1, true) + "," + quote(a2, true) + "," + quote(a3, true) + "," + quote(a4, true) + "," + quote(a5, true) + "," + quote(a6, true) + "," + quote(a7, true) + "," + quote(a8, true) + "," + quote(a9, true) + "," + quote(a10, true) + "," + quote(a11, true) + "," + quote(a12, true) + "," + quote(a13, true) + "," + quote(a14, true) + "," + quote(a15, true) + "," + quote(a16, true) + "," + quote(a17, true) + "," + quote(a18, true) + "," + quote(a19, true) + ")")
-    case Tuple19Access1(t) => emitValDef(sym, quote(t) + "._1")
-    case Tuple19Access2(t) => emitValDef(sym, quote(t) + "._2")
-    case Tuple19Access3(t) => emitValDef(sym, quote(t) + "._3")
-    case Tuple19Access4(t) => emitValDef(sym, quote(t) + "._4")
-    case Tuple19Access5(t) => emitValDef(sym, quote(t) + "._5")
-    case Tuple19Access6(t) => emitValDef(sym, quote(t) + "._6")
-    case Tuple19Access7(t) => emitValDef(sym, quote(t) + "._7")
-    case Tuple19Access8(t) => emitValDef(sym, quote(t) + "._8")
-    case Tuple19Access9(t) => emitValDef(sym, quote(t) + "._9")
-    case Tuple19Access10(t) => emitValDef(sym, quote(t) + "._10")
-    case Tuple19Access11(t) => emitValDef(sym, quote(t) + "._11")
-    case Tuple19Access12(t) => emitValDef(sym, quote(t) + "._12")
-    case Tuple19Access13(t) => emitValDef(sym, quote(t) + "._13")
-    case Tuple19Access14(t) => emitValDef(sym, quote(t) + "._14")
-    case Tuple19Access15(t) => emitValDef(sym, quote(t) + "._15")
-    case Tuple19Access16(t) => emitValDef(sym, quote(t) + "._16")
-    case Tuple19Access17(t) => emitValDef(sym, quote(t) + "._17")
-    case Tuple19Access18(t) => emitValDef(sym, quote(t) + "._18")
-    case Tuple19Access19(t) => emitValDef(sym, quote(t) + "._19")
-
-    case ETuple20(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14,a15,a16,a17,a18,a19,a20) =>
-      emitValDef(sym, "(" + quote(a1, true) + "," + quote(a2, true) + "," + quote(a3, true) + "," + quote(a4, true) + "," + quote(a5, true) + "," + quote(a6, true) + "," + quote(a7, true) + "," + quote(a8, true) + "," + quote(a9, true) + "," + quote(a10, true) + "," + quote(a11, true) + "," + quote(a12, true) + "," + quote(a13, true) + "," + quote(a14, true) + "," + quote(a15, true) + "," + quote(a16, true) + "," + quote(a17, true) + "," + quote(a18, true) + "," + quote(a19, true) + "," + quote(a20, true) + ")")
-    case Tuple20Access1(t) => emitValDef(sym, quote(t) + "._1")
-    case Tuple20Access2(t) => emitValDef(sym, quote(t) + "._2")
-    case Tuple20Access3(t) => emitValDef(sym, quote(t) + "._3")
-    case Tuple20Access4(t) => emitValDef(sym, quote(t) + "._4")
-    case Tuple20Access5(t) => emitValDef(sym, quote(t) + "._5")
-    case Tuple20Access6(t) => emitValDef(sym, quote(t) + "._6")
-    case Tuple20Access7(t) => emitValDef(sym, quote(t) + "._7")
-    case Tuple20Access8(t) => emitValDef(sym, quote(t) + "._8")
-    case Tuple20Access9(t) => emitValDef(sym, quote(t) + "._9")
-    case Tuple20Access10(t) => emitValDef(sym, quote(t) + "._10")
-    case Tuple20Access11(t) => emitValDef(sym, quote(t) + "._11")
-    case Tuple20Access12(t) => emitValDef(sym, quote(t) + "._12")
-    case Tuple20Access13(t) => emitValDef(sym, quote(t) + "._13")
-    case Tuple20Access14(t) => emitValDef(sym, quote(t) + "._14")
-    case Tuple20Access15(t) => emitValDef(sym, quote(t) + "._15")
-    case Tuple20Access16(t) => emitValDef(sym, quote(t) + "._16")
-    case Tuple20Access17(t) => emitValDef(sym, quote(t) + "._17")
-    case Tuple20Access18(t) => emitValDef(sym, quote(t) + "._18")
-    case Tuple20Access19(t) => emitValDef(sym, quote(t) + "._19")
-    case Tuple20Access20(t) => emitValDef(sym, quote(t) + "._20")
-
-    case ETuple21(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14,a15,a16,a17,a18,a19,a20,a21) =>
-      emitValDef(sym, "(" + quote(a1, true) + "," + quote(a2, true) + "," + quote(a3, true) + "," + quote(a4, true) + "," + quote(a5, true) + "," + quote(a6, true) + "," + quote(a7, true) + "," + quote(a8, true) + "," + quote(a9, true) + "," + quote(a10, true) + "," + quote(a11, true) + "," + quote(a12, true) + "," + quote(a13, true) + "," + quote(a14, true) + "," + quote(a15, true) + "," + quote(a16, true) + "," + quote(a17, true) + "," + quote(a18, true) + "," + quote(a19, true) + "," + quote(a20, true) + "," + quote(a21, true) + ")")
-    case Tuple21Access1(t) => emitValDef(sym, quote(t) + "._1")
-    case Tuple21Access2(t) => emitValDef(sym, quote(t) + "._2")
-    case Tuple21Access3(t) => emitValDef(sym, quote(t) + "._3")
-    case Tuple21Access4(t) => emitValDef(sym, quote(t) + "._4")
-    case Tuple21Access5(t) => emitValDef(sym, quote(t) + "._5")
-    case Tuple21Access6(t) => emitValDef(sym, quote(t) + "._6")
-    case Tuple21Access7(t) => emitValDef(sym, quote(t) + "._7")
-    case Tuple21Access8(t) => emitValDef(sym, quote(t) + "._8")
-    case Tuple21Access9(t) => emitValDef(sym, quote(t) + "._9")
-    case Tuple21Access10(t) => emitValDef(sym, quote(t) + "._10")
-    case Tuple21Access11(t) => emitValDef(sym, quote(t) + "._11")
-    case Tuple21Access12(t) => emitValDef(sym, quote(t) + "._12")
-    case Tuple21Access13(t) => emitValDef(sym, quote(t) + "._13")
-    case Tuple21Access14(t) => emitValDef(sym, quote(t) + "._14")
-    case Tuple21Access15(t) => emitValDef(sym, quote(t) + "._15")
-    case Tuple21Access16(t) => emitValDef(sym, quote(t) + "._16")
-    case Tuple21Access17(t) => emitValDef(sym, quote(t) + "._17")
-    case Tuple21Access18(t) => emitValDef(sym, quote(t) + "._18")
-    case Tuple21Access19(t) => emitValDef(sym, quote(t) + "._19")
-    case Tuple21Access20(t) => emitValDef(sym, quote(t) + "._20")
-    case Tuple21Access21(t) => emitValDef(sym, quote(t) + "._21")
-
-    case ETuple22(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14,a15,a16,a17,a18,a19,a20,a21,a22) =>
-      emitValDef(sym, "(" + quote(a1, true) + "," + quote(a2, true) + "," + quote(a3, true) + "," + quote(a4, true) + "," + quote(a5, true) + "," + quote(a6, true) + "," + quote(a7, true) + "," + quote(a8, true) + "," + quote(a9, true) + "," + quote(a10, true) + "," + quote(a11, true) + "," + quote(a12, true) + "," + quote(a13, true) + "," + quote(a14, true) + "," + quote(a15, true) + "," + quote(a16, true) + "," + quote(a17, true) + "," + quote(a18, true) + "," + quote(a19, true) + "," + quote(a20, true) + "," + quote(a21, true) + "," + quote(a22, true) + ")")
-    case Tuple22Access1(t) => emitValDef(sym, quote(t) + "._1")
-    case Tuple22Access2(t) => emitValDef(sym, quote(t) + "._2")
-    case Tuple22Access3(t) => emitValDef(sym, quote(t) + "._3")
-    case Tuple22Access4(t) => emitValDef(sym, quote(t) + "._4")
-    case Tuple22Access5(t) => emitValDef(sym, quote(t) + "._5")
-    case Tuple22Access6(t) => emitValDef(sym, quote(t) + "._6")
-    case Tuple22Access7(t) => emitValDef(sym, quote(t) + "._7")
-    case Tuple22Access8(t) => emitValDef(sym, quote(t) + "._8")
-    case Tuple22Access9(t) => emitValDef(sym, quote(t) + "._9")
-    case Tuple22Access10(t) => emitValDef(sym, quote(t) + "._10")
-    case Tuple22Access11(t) => emitValDef(sym, quote(t) + "._11")
-    case Tuple22Access12(t) => emitValDef(sym, quote(t) + "._12")
-    case Tuple22Access13(t) => emitValDef(sym, quote(t) + "._13")
-    case Tuple22Access14(t) => emitValDef(sym, quote(t) + "._14")
-    case Tuple22Access15(t) => emitValDef(sym, quote(t) + "._15")
-    case Tuple22Access16(t) => emitValDef(sym, quote(t) + "._16")
-    case Tuple22Access17(t) => emitValDef(sym, quote(t) + "._17")
-    case Tuple22Access18(t) => emitValDef(sym, quote(t) + "._18")
-    case Tuple22Access19(t) => emitValDef(sym, quote(t) + "._19")
-    case Tuple22Access20(t) => emitValDef(sym, quote(t) + "._20")
-    case Tuple22Access21(t) => emitValDef(sym, quote(t) + "._21")
-    case Tuple22Access22(t) => emitValDef(sym, quote(t) + "._22")
 
     case _ => super.emitNode(sym, rhs)
   }
+  
+/*  override def remap[A](m: Manifest[A]) = m.runtimeClass.getSimpleName match {
+    case "Tuple2" => "Tuple2" + m.typeArguments.foldLeft("")((x,y) => x + remap(y).toString).replace("Array[","ArrayOf").replace("]","")
+    case "Tuple3" => "Tuple3" + m.typeArguments.foldLeft("")((x,y) => x + remap(y).toString).replace("Array[","ArrayOf").replace("]","")
+    case "Tuple4" => "Tuple4" + m.typeArguments.foldLeft("")((x,y) => x + remap(y).toString).replace("Array[","ArrayOf").replace("]","")
+    case "Tuple5" => "Tuple5" + m.typeArguments.foldLeft("")((x,y) => x + remap(y).toString).replace("Array[","ArrayOf").replace("]","")
+    case _ => super.remap(m)
+  }*/
 }
 
-trait CGenTupleOps extends CGenBase {
+trait CGenTupleOps extends CGenBase with TupleGenBase with CGenStruct {
   val IR: TupleOpsExp
   import IR._
   override def emitNode(sym: Sym[Any], rhs: Def[Any]) = rhs match {
-    case _ => super.emitNode(sym, rhs)
+  case HashTuple2(t) => emitValDef(sym, "(int)" + quote(t) + "->_1 + (int)" + quote(t) + "->_2;")
+  case HashTuple3(t) => emitValDef(sym, "(int)" + quote(t) + "->_1 + (int)" + quote(t) + "->_2 + (int)" + quote(t) + "->_3;")
+  case HashTuple4(t) => emitValDef(sym, "(int)" + quote(t) + "->_1 + (int)" + quote(t) + "->_2 + (int)" + quote(t) + "->_3 + (int)" + quote(t) + "->_4;")
+  case HashTuple5(t) => emitValDef(sym, "(int)" + quote(t) + "->_1 + (int)" + quote(t) + "->_2 + (int)" + quote(t) + "->_3 + (int)" + quote(t) + "->_4 + (int)" + quote(t) + "->_5;")
+  case HashTuple6(t) => emitValDef(sym, "(int)" + quote(t) + "->_1 + (int)" + quote(t) + "->_2 + (int)" + quote(t) + "->_3 + (int)" + quote(t) + "->_4 + (int)" + quote(t) + "->_5 + (int)" + quote(t) + "->_6;")
+  case HashTuple7(t) => emitValDef(sym, "(int)" + quote(t) + "->_1 + (int)" + quote(t) + "->_2 + (int)" + quote(t) + "->_3 + (int)" + quote(t) + "->_4 + (int)" + quote(t) + "->_5 + (int)" + quote(t) + "->_6 + (int)" + quote(t) + "->_7;")
+  case HashTuple8(t) => emitValDef(sym, "(int)" + quote(t) + "->_1 + (int)" + quote(t) + "->_2 + (int)" + quote(t) + "->_3 + (int)" + quote(t) + "->_4 + (int)" + quote(t) + "->_5 + (int)" + quote(t) + "->_6 + (int)" + quote(t) + "->_7 + (int)" + quote(t) + "->_8;")
+  case HashTuple9(t) => emitValDef(sym, "(int)" + quote(t) + "->_1 + (int)" + quote(t) + "->_2 + (int)" + quote(t) + "->_3 + (int)" + quote(t) + "->_4 + (int)" + quote(t) + "->_5 + (int)" + quote(t) + "->_6 + (int)" + quote(t) + "->_7 + (int)" + quote(t) + "->_8 + (int)" + quote(t) + "->_9;")
+  case HashTuple10(t) => emitValDef(sym, "(int)" + quote(t) + "->_1 + (int)" + quote(t) + "->_2 + (int)" + quote(t) + "->_3 + (int)" + quote(t) + "->_4 + (int)" + quote(t) + "->_5 + (int)" + quote(t) + "->_6 + (int)" + quote(t) + "->_7 + (int)" + quote(t) + "->_8 + (int)" + quote(t) + "->_9 + (int)" + quote(t) + "->_10;")
+  case HashTuple11(t) => emitValDef(sym, "(int)" + quote(t) + "->_1 + (int)" + quote(t) + "->_2 + (int)" + quote(t) + "->_3 + (int)" + quote(t) + "->_4 + (int)" + quote(t) + "->_5 + (int)" + quote(t) + "->_6 + (int)" + quote(t) + "->_7 + (int)" + quote(t) + "->_8 + (int)" + quote(t) + "->_9 + (int)" + quote(t) + "->_10 + (int)" + quote(t) + "->_11;")
+  case HashTuple12(t) => emitValDef(sym, "(int)" + quote(t) + "->_1 + (int)" + quote(t) + "->_2 + (int)" + quote(t) + "->_3 + (int)" + quote(t) + "->_4 + (int)" + quote(t) + "->_5 + (int)" + quote(t) + "->_6 + (int)" + quote(t) + "->_7 + (int)" + quote(t) + "->_8 + (int)" + quote(t) + "->_9 + (int)" + quote(t) + "->_10 + (int)" + quote(t) + "->_11 + (int)" + quote(t) + "->_12;")
+  case HashTuple13(t) => emitValDef(sym, "(int)" + quote(t) + "->_1 + (int)" + quote(t) + "->_2 + (int)" + quote(t) + "->_3 + (int)" + quote(t) + "->_4 + (int)" + quote(t) + "->_5 + (int)" + quote(t) + "->_6 + (int)" + quote(t) + "->_7 + (int)" + quote(t) + "->_8 + (int)" + quote(t) + "->_9 + (int)" + quote(t) + "->_10 + (int)" + quote(t) + "->_11 + (int)" + quote(t) + "->_12 + (int)" + quote(t) + "->_13;")
+  case HashTuple14(t) => emitValDef(sym, "(int)" + quote(t) + "->_1 + (int)" + quote(t) + "->_2 + (int)" + quote(t) + "->_3 + (int)" + quote(t) + "->_4 + (int)" + quote(t) + "->_5 + (int)" + quote(t) + "->_6 + (int)" + quote(t) + "->_7 + (int)" + quote(t) + "->_8 + (int)" + quote(t) + "->_9 + (int)" + quote(t) + "->_10 + (int)" + quote(t) + "->_11 + (int)" + quote(t) + "->_12 + (int)" + quote(t) + "->_13 + (int)" + quote(t) + "->_14;")
+  case HashTuple15(t) => emitValDef(sym, "(int)" + quote(t) + "->_1 + (int)" + quote(t) + "->_2 + (int)" + quote(t) + "->_3 + (int)" + quote(t) + "->_4 + (int)" + quote(t) + "->_5 + (int)" + quote(t) + "->_6 + (int)" + quote(t) + "->_7 + (int)" + quote(t) + "->_8 + (int)" + quote(t) + "->_9 + (int)" + quote(t) + "->_10 + (int)" + quote(t) + "->_11 + (int)" + quote(t) + "->_12 + (int)" + quote(t) + "->_13 + (int)" + quote(t) + "->_14 + (int)" + quote(t) + "->_15;")
+  case HashTuple16(t) => emitValDef(sym, "(int)" + quote(t) + "->_1 + (int)" + quote(t) + "->_2 + (int)" + quote(t) + "->_3 + (int)" + quote(t) + "->_4 + (int)" + quote(t) + "->_5 + (int)" + quote(t) + "->_6 + (int)" + quote(t) + "->_7 + (int)" + quote(t) + "->_8 + (int)" + quote(t) + "->_9 + (int)" + quote(t) + "->_10 + (int)" + quote(t) + "->_11 + (int)" + quote(t) + "->_12 + (int)" + quote(t) + "->_13 + (int)" + quote(t) + "->_14 + (int)" + quote(t) + "->_15 + (int)" + quote(t) + "->_16;")
+  case HashTuple17(t) => emitValDef(sym, "(int)" + quote(t) + "->_1 + (int)" + quote(t) + "->_2 + (int)" + quote(t) + "->_3 + (int)" + quote(t) + "->_4 + (int)" + quote(t) + "->_5 + (int)" + quote(t) + "->_6 + (int)" + quote(t) + "->_7 + (int)" + quote(t) + "->_8 + (int)" + quote(t) + "->_9 + (int)" + quote(t) + "->_10 + (int)" + quote(t) + "->_11 + (int)" + quote(t) + "->_12 + (int)" + quote(t) + "->_13 + (int)" + quote(t) + "->_14 + (int)" + quote(t) + "->_15 + (int)" + quote(t) + "->_16 + (int)" + quote(t) + "->_17;")
+  case HashTuple18(t) => emitValDef(sym, "(int)" + quote(t) + "->_1 + (int)" + quote(t) + "->_2 + (int)" + quote(t) + "->_3 + (int)" + quote(t) + "->_4 + (int)" + quote(t) + "->_5 + (int)" + quote(t) + "->_6 + (int)" + quote(t) + "->_7 + (int)" + quote(t) + "->_8 + (int)" + quote(t) + "->_9 + (int)" + quote(t) + "->_10 + (int)" + quote(t) + "->_11 + (int)" + quote(t) + "->_12 + (int)" + quote(t) + "->_13 + (int)" + quote(t) + "->_14 + (int)" + quote(t) + "->_15 + (int)" + quote(t) + "->_16 + (int)" + quote(t) + "->_17 + (int)" + quote(t) + "->_18;")
+  case HashTuple19(t) => emitValDef(sym, "(int)" + quote(t) + "->_1 + (int)" + quote(t) + "->_2 + (int)" + quote(t) + "->_3 + (int)" + quote(t) + "->_4 + (int)" + quote(t) + "->_5 + (int)" + quote(t) + "->_6 + (int)" + quote(t) + "->_7 + (int)" + quote(t) + "->_8 + (int)" + quote(t) + "->_9 + (int)" + quote(t) + "->_10 + (int)" + quote(t) + "->_11 + (int)" + quote(t) + "->_12 + (int)" + quote(t) + "->_13 + (int)" + quote(t) + "->_14 + (int)" + quote(t) + "->_15 + (int)" + quote(t) + "->_16 + (int)" + quote(t) + "->_17 + (int)" + quote(t) + "->_18 + (int)" + quote(t) + "->_19;")
+  case HashTuple20(t) => emitValDef(sym, "(int)" + quote(t) + "->_1 + (int)" + quote(t) + "->_2 + (int)" + quote(t) + "->_3 + (int)" + quote(t) + "->_4 + (int)" + quote(t) + "->_5 + (int)" + quote(t) + "->_6 + (int)" + quote(t) + "->_7 + (int)" + quote(t) + "->_8 + (int)" + quote(t) + "->_9 + (int)" + quote(t) + "->_10 + (int)" + quote(t) + "->_11 + (int)" + quote(t) + "->_12 + (int)" + quote(t) + "->_13 + (int)" + quote(t) + "->_14 + (int)" + quote(t) + "->_15 + (int)" + quote(t) + "->_16 + (int)" + quote(t) + "->_17 + (int)" + quote(t) + "->_18 + (int)" + quote(t) + "->_19 + (int)" + quote(t) + "->_20;")
+  case HashTuple21(t) => emitValDef(sym, "(int)" + quote(t) + "->_1 + (int)" + quote(t) + "->_2 + (int)" + quote(t) + "->_3 + (int)" + quote(t) + "->_4 + (int)" + quote(t) + "->_5 + (int)" + quote(t) + "->_6 + (int)" + quote(t) + "->_7 + (int)" + quote(t) + "->_8 + (int)" + quote(t) + "->_9 + (int)" + quote(t) + "->_10 + (int)" + quote(t) + "->_11 + (int)" + quote(t) + "->_12 + (int)" + quote(t) + "->_13 + (int)" + quote(t) + "->_14 + (int)" + quote(t) + "->_15 + (int)" + quote(t) + "->_16 + (int)" + quote(t) + "->_17 + (int)" + quote(t) + "->_18 + (int)" + quote(t) + "->_19 + (int)" + quote(t) + "->_20 + (int)" + quote(t) + "->_21;")
+  case HashTuple22(t) => emitValDef(sym, "(int)" + quote(t) + "->_1 + (int)" + quote(t) + "->_2 + (int)" + quote(t) + "->_3 + (int)" + quote(t) + "->_4 + (int)" + quote(t) + "->_5 + (int)" + quote(t) + "->_6 + (int)" + quote(t) + "->_7 + (int)" + quote(t) + "->_8 + (int)" + quote(t) + "->_9 + (int)" + quote(t) + "->_10 + (int)" + quote(t) + "->_11 + (int)" + quote(t) + "->_12 + (int)" + quote(t) + "->_13 + (int)" + quote(t) + "->_14 + (int)" + quote(t) + "->_15 + (int)" + quote(t) + "->_16 + (int)" + quote(t) + "->_17 + (int)" + quote(t) + "->_18 + (int)" + quote(t) + "->_19 + (int)" + quote(t) + "->_20 + (int)" + quote(t) + "->_21 + (int)" + quote(t) + "->_22;")
+	
+  case CompareTuple2(t1,t2) => emitValDef(sym, quote(t1) + "->_1 == " + quote(t2) + "->_1 && " + quote(t1) + "->_2 == " + quote(t2) + "->_2;")
+  case CompareTuple3(t1,t2) => emitValDef(sym, quote(t1) + "->_1 == " + quote(t2) + "->_1 && " + quote(t1) + "->_2 == " + quote(t2) + "->_2 && " + quote(t1) + "->_3 == " + quote(t2) + "->_3;")
+  case CompareTuple4(t1,t2) => emitValDef(sym, quote(t1) + "->_1 == " + quote(t2) + "->_1 && " + quote(t1) + "->_2 == " + quote(t2) + "->_2 && " + quote(t1) + "->_3 == " + quote(t2) + "->_3 && " + quote(t1) + "->_4 == " + quote(t2) + "->_4;")
+  case CompareTuple5(t1,t2) => emitValDef(sym, quote(t1) + "->_1 == " + quote(t2) + "->_1 && " + quote(t1) + "->_2 == " + quote(t2) + "->_2 && " + quote(t1) + "->_3 == " + quote(t2) + "->_3 && " + quote(t1) + "->_4 == " + quote(t2) + "->_4 && " + quote(t1) + "->_5 == " + quote(t2) + "->_5;")
+  case CompareTuple6(t1,t2) => emitValDef(sym, quote(t1) + "->_1 == " + quote(t2) + "->_1 && " + quote(t1) + "->_2 == " + quote(t2) + "->_2 && " + quote(t1) + "->_3 == " + quote(t2) + "->_3 && " + quote(t1) + "->_4 == " + quote(t2) + "->_4 && " + quote(t1) + "->_5 == " + quote(t2) + "->_5 && " + quote(t1) + "->_6 == " + quote(t2) + "->_6;")
+  case CompareTuple7(t1,t2) => emitValDef(sym, quote(t1) + "->_1 == " + quote(t2) + "->_1 && " + quote(t1) + "->_2 == " + quote(t2) + "->_2 && " + quote(t1) + "->_3 == " + quote(t2) + "->_3 && " + quote(t1) + "->_4 == " + quote(t2) + "->_4 && " + quote(t1) + "->_5 == " + quote(t2) + "->_5 && " + quote(t1) + "->_6 == " + quote(t2) + "->_6 && " + quote(t1) + "->_7 == " + quote(t2) + "->_7;")
+  case CompareTuple8(t1,t2) => emitValDef(sym, quote(t1) + "->_1 == " + quote(t2) + "->_1 && " + quote(t1) + "->_2 == " + quote(t2) + "->_2 && " + quote(t1) + "->_3 == " + quote(t2) + "->_3 && " + quote(t1) + "->_4 == " + quote(t2) + "->_4 && " + quote(t1) + "->_5 == " + quote(t2) + "->_5 && " + quote(t1) + "->_6 == " + quote(t2) + "->_6 && " + quote(t1) + "->_7 == " + quote(t2) + "->_7 && " + quote(t1) + "->_8 == " + quote(t2) + "->_8;")
+  case CompareTuple9(t1,t2) => emitValDef(sym, quote(t1) + "->_1 == " + quote(t2) + "->_1 && " + quote(t1) + "->_2 == " + quote(t2) + "->_2 && " + quote(t1) + "->_3 == " + quote(t2) + "->_3 && " + quote(t1) + "->_4 == " + quote(t2) + "->_4 && " + quote(t1) + "->_5 == " + quote(t2) + "->_5 && " + quote(t1) + "->_6 == " + quote(t2) + "->_6 && " + quote(t1) + "->_7 == " + quote(t2) + "->_7 && " + quote(t1) + "->_8 == " + quote(t2) + "->_8 && " + quote(t1) + "->_9 == " + quote(t2) + "->_9;")
+  case CompareTuple10(t1,t2) => emitValDef(sym, quote(t1) + "->_1 == " + quote(t2) + "->_1 && " + quote(t1) + "->_2 == " + quote(t2) + "->_2 && " + quote(t1) + "->_3 == " + quote(t2) + "->_3 && " + quote(t1) + "->_4 == " + quote(t2) + "->_4 && " + quote(t1) + "->_5 == " + quote(t2) + "->_5 && " + quote(t1) + "->_6 == " + quote(t2) + "->_6 && " + quote(t1) + "->_7 == " + quote(t2) + "->_7 && " + quote(t1) + "->_8 == " + quote(t2) + "->_8 && " + quote(t1) + "->_9 == " + quote(t2) + "->_9 && " + quote(t1) + "->_10 == " + quote(t2) + "->_10;")
+  case CompareTuple11(t1,t2) => emitValDef(sym, quote(t1) + "->_1 == " + quote(t2) + "->_1 && " + quote(t1) + "->_2 == " + quote(t2) + "->_2 && " + quote(t1) + "->_3 == " + quote(t2) + "->_3 && " + quote(t1) + "->_4 == " + quote(t2) + "->_4 && " + quote(t1) + "->_5 == " + quote(t2) + "->_5 && " + quote(t1) + "->_6 == " + quote(t2) + "->_6 && " + quote(t1) + "->_7 == " + quote(t2) + "->_7 && " + quote(t1) + "->_8 == " + quote(t2) + "->_8 && " + quote(t1) + "->_9 == " + quote(t2) + "->_9 && " + quote(t1) + "->_10 == " + quote(t2) + "->_10 && " + quote(t1) + "->_11 == " + quote(t2) + "->_11;")
+  case CompareTuple12(t1,t2) => emitValDef(sym, quote(t1) + "->_1 == " + quote(t2) + "->_1 && " + quote(t1) + "->_2 == " + quote(t2) + "->_2 && " + quote(t1) + "->_3 == " + quote(t2) + "->_3 && " + quote(t1) + "->_4 == " + quote(t2) + "->_4 && " + quote(t1) + "->_5 == " + quote(t2) + "->_5 && " + quote(t1) + "->_6 == " + quote(t2) + "->_6 && " + quote(t1) + "->_7 == " + quote(t2) + "->_7 && " + quote(t1) + "->_8 == " + quote(t2) + "->_8 && " + quote(t1) + "->_9 == " + quote(t2) + "->_9 && " + quote(t1) + "->_10 == " + quote(t2) + "->_10 && " + quote(t1) + "->_11 == " + quote(t2) + "->_11 && " + quote(t1) + "->_12 == " + quote(t2) + "->_12;")
+  case CompareTuple13(t1,t2) => emitValDef(sym, quote(t1) + "->_1 == " + quote(t2) + "->_1 && " + quote(t1) + "->_2 == " + quote(t2) + "->_2 && " + quote(t1) + "->_3 == " + quote(t2) + "->_3 && " + quote(t1) + "->_4 == " + quote(t2) + "->_4 && " + quote(t1) + "->_5 == " + quote(t2) + "->_5 && " + quote(t1) + "->_6 == " + quote(t2) + "->_6 && " + quote(t1) + "->_7 == " + quote(t2) + "->_7 && " + quote(t1) + "->_8 == " + quote(t2) + "->_8 && " + quote(t1) + "->_9 == " + quote(t2) + "->_9 && " + quote(t1) + "->_10 == " + quote(t2) + "->_10 && " + quote(t1) + "->_11 == " + quote(t2) + "->_11 && " + quote(t1) + "->_12 == " + quote(t2) + "->_12 && " + quote(t1) + "->_13 == " + quote(t2) + "->_13;")
+  case CompareTuple14(t1,t2) => emitValDef(sym, quote(t1) + "->_1 == " + quote(t2) + "->_1 && " + quote(t1) + "->_2 == " + quote(t2) + "->_2 && " + quote(t1) + "->_3 == " + quote(t2) + "->_3 && " + quote(t1) + "->_4 == " + quote(t2) + "->_4 && " + quote(t1) + "->_5 == " + quote(t2) + "->_5 && " + quote(t1) + "->_6 == " + quote(t2) + "->_6 && " + quote(t1) + "->_7 == " + quote(t2) + "->_7 && " + quote(t1) + "->_8 == " + quote(t2) + "->_8 && " + quote(t1) + "->_9 == " + quote(t2) + "->_9 && " + quote(t1) + "->_10 == " + quote(t2) + "->_10 && " + quote(t1) + "->_11 == " + quote(t2) + "->_11 && " + quote(t1) + "->_12 == " + quote(t2) + "->_12 && " + quote(t1) + "->_13 == " + quote(t2) + "->_13 && " + quote(t1) + "->_14 == " + quote(t2) + "->_14;")
+  case CompareTuple15(t1,t2) => emitValDef(sym, quote(t1) + "->_1 == " + quote(t2) + "->_1 && " + quote(t1) + "->_2 == " + quote(t2) + "->_2 && " + quote(t1) + "->_3 == " + quote(t2) + "->_3 && " + quote(t1) + "->_4 == " + quote(t2) + "->_4 && " + quote(t1) + "->_5 == " + quote(t2) + "->_5 && " + quote(t1) + "->_6 == " + quote(t2) + "->_6 && " + quote(t1) + "->_7 == " + quote(t2) + "->_7 && " + quote(t1) + "->_8 == " + quote(t2) + "->_8 && " + quote(t1) + "->_9 == " + quote(t2) + "->_9 && " + quote(t1) + "->_10 == " + quote(t2) + "->_10 && " + quote(t1) + "->_11 == " + quote(t2) + "->_11 && " + quote(t1) + "->_12 == " + quote(t2) + "->_12 && " + quote(t1) + "->_13 == " + quote(t2) + "->_13 && " + quote(t1) + "->_14 == " + quote(t2) + "->_14 && " + quote(t1) + "->_15 == " + quote(t2) + "->_15;")
+  case CompareTuple16(t1,t2) => emitValDef(sym, quote(t1) + "->_1 == " + quote(t2) + "->_1 && " + quote(t1) + "->_2 == " + quote(t2) + "->_2 && " + quote(t1) + "->_3 == " + quote(t2) + "->_3 && " + quote(t1) + "->_4 == " + quote(t2) + "->_4 && " + quote(t1) + "->_5 == " + quote(t2) + "->_5 && " + quote(t1) + "->_6 == " + quote(t2) + "->_6 && " + quote(t1) + "->_7 == " + quote(t2) + "->_7 && " + quote(t1) + "->_8 == " + quote(t2) + "->_8 && " + quote(t1) + "->_9 == " + quote(t2) + "->_9 && " + quote(t1) + "->_10 == " + quote(t2) + "->_10 && " + quote(t1) + "->_11 == " + quote(t2) + "->_11 && " + quote(t1) + "->_12 == " + quote(t2) + "->_12 && " + quote(t1) + "->_13 == " + quote(t2) + "->_13 && " + quote(t1) + "->_14 == " + quote(t2) + "->_14 && " + quote(t1) + "->_15 == " + quote(t2) + "->_15 && " + quote(t1) + "->_16 == " + quote(t2) + "->_16;")
+  case CompareTuple17(t1,t2) => emitValDef(sym, quote(t1) + "->_1 == " + quote(t2) + "->_1 && " + quote(t1) + "->_2 == " + quote(t2) + "->_2 && " + quote(t1) + "->_3 == " + quote(t2) + "->_3 && " + quote(t1) + "->_4 == " + quote(t2) + "->_4 && " + quote(t1) + "->_5 == " + quote(t2) + "->_5 && " + quote(t1) + "->_6 == " + quote(t2) + "->_6 && " + quote(t1) + "->_7 == " + quote(t2) + "->_7 && " + quote(t1) + "->_8 == " + quote(t2) + "->_8 && " + quote(t1) + "->_9 == " + quote(t2) + "->_9 && " + quote(t1) + "->_10 == " + quote(t2) + "->_10 && " + quote(t1) + "->_11 == " + quote(t2) + "->_11 && " + quote(t1) + "->_12 == " + quote(t2) + "->_12 && " + quote(t1) + "->_13 == " + quote(t2) + "->_13 && " + quote(t1) + "->_14 == " + quote(t2) + "->_14 && " + quote(t1) + "->_15 == " + quote(t2) + "->_15 && " + quote(t1) + "->_16 == " + quote(t2) + "->_16 && " + quote(t1) + "->_17 == " + quote(t2) + "->_17;")
+  case CompareTuple18(t1,t2) => emitValDef(sym, quote(t1) + "->_1 == " + quote(t2) + "->_1 && " + quote(t1) + "->_2 == " + quote(t2) + "->_2 && " + quote(t1) + "->_3 == " + quote(t2) + "->_3 && " + quote(t1) + "->_4 == " + quote(t2) + "->_4 && " + quote(t1) + "->_5 == " + quote(t2) + "->_5 && " + quote(t1) + "->_6 == " + quote(t2) + "->_6 && " + quote(t1) + "->_7 == " + quote(t2) + "->_7 && " + quote(t1) + "->_8 == " + quote(t2) + "->_8 && " + quote(t1) + "->_9 == " + quote(t2) + "->_9 && " + quote(t1) + "->_10 == " + quote(t2) + "->_10 && " + quote(t1) + "->_11 == " + quote(t2) + "->_11 && " + quote(t1) + "->_12 == " + quote(t2) + "->_12 && " + quote(t1) + "->_13 == " + quote(t2) + "->_13 && " + quote(t1) + "->_14 == " + quote(t2) + "->_14 && " + quote(t1) + "->_15 == " + quote(t2) + "->_15 && " + quote(t1) + "->_16 == " + quote(t2) + "->_16 && " + quote(t1) + "->_17 == " + quote(t2) + "->_17 && " + quote(t1) + "->_18 == " + quote(t2) + "->_18;")
+  case CompareTuple19(t1,t2) => emitValDef(sym, quote(t1) + "->_1 == " + quote(t2) + "->_1 && " + quote(t1) + "->_2 == " + quote(t2) + "->_2 && " + quote(t1) + "->_3 == " + quote(t2) + "->_3 && " + quote(t1) + "->_4 == " + quote(t2) + "->_4 && " + quote(t1) + "->_5 == " + quote(t2) + "->_5 && " + quote(t1) + "->_6 == " + quote(t2) + "->_6 && " + quote(t1) + "->_7 == " + quote(t2) + "->_7 && " + quote(t1) + "->_8 == " + quote(t2) + "->_8 && " + quote(t1) + "->_9 == " + quote(t2) + "->_9 && " + quote(t1) + "->_10 == " + quote(t2) + "->_10 && " + quote(t1) + "->_11 == " + quote(t2) + "->_11 && " + quote(t1) + "->_12 == " + quote(t2) + "->_12 && " + quote(t1) + "->_13 == " + quote(t2) + "->_13 && " + quote(t1) + "->_14 == " + quote(t2) + "->_14 && " + quote(t1) + "->_15 == " + quote(t2) + "->_15 && " + quote(t1) + "->_16 == " + quote(t2) + "->_16 && " + quote(t1) + "->_17 == " + quote(t2) + "->_17 && " + quote(t1) + "->_18 == " + quote(t2) + "->_18 && " + quote(t1) + "->_19 == " + quote(t2) + "->_19;")
+  case CompareTuple20(t1,t2) => emitValDef(sym, quote(t1) + "->_1 == " + quote(t2) + "->_1 && " + quote(t1) + "->_2 == " + quote(t2) + "->_2 && " + quote(t1) + "->_3 == " + quote(t2) + "->_3 && " + quote(t1) + "->_4 == " + quote(t2) + "->_4 && " + quote(t1) + "->_5 == " + quote(t2) + "->_5 && " + quote(t1) + "->_6 == " + quote(t2) + "->_6 && " + quote(t1) + "->_7 == " + quote(t2) + "->_7 && " + quote(t1) + "->_8 == " + quote(t2) + "->_8 && " + quote(t1) + "->_9 == " + quote(t2) + "->_9 && " + quote(t1) + "->_10 == " + quote(t2) + "->_10 && " + quote(t1) + "->_11 == " + quote(t2) + "->_11 && " + quote(t1) + "->_12 == " + quote(t2) + "->_12 && " + quote(t1) + "->_13 == " + quote(t2) + "->_13 && " + quote(t1) + "->_14 == " + quote(t2) + "->_14 && " + quote(t1) + "->_15 == " + quote(t2) + "->_15 && " + quote(t1) + "->_16 == " + quote(t2) + "->_16 && " + quote(t1) + "->_17 == " + quote(t2) + "->_17 && " + quote(t1) + "->_18 == " + quote(t2) + "->_18 && " + quote(t1) + "->_19 == " + quote(t2) + "->_19 && " + quote(t1) + "->_20 == " + quote(t2) + "->_20;")
+  case CompareTuple21(t1,t2) => emitValDef(sym, quote(t1) + "->_1 == " + quote(t2) + "->_1 && " + quote(t1) + "->_2 == " + quote(t2) + "->_2 && " + quote(t1) + "->_3 == " + quote(t2) + "->_3 && " + quote(t1) + "->_4 == " + quote(t2) + "->_4 && " + quote(t1) + "->_5 == " + quote(t2) + "->_5 && " + quote(t1) + "->_6 == " + quote(t2) + "->_6 && " + quote(t1) + "->_7 == " + quote(t2) + "->_7 && " + quote(t1) + "->_8 == " + quote(t2) + "->_8 && " + quote(t1) + "->_9 == " + quote(t2) + "->_9 && " + quote(t1) + "->_10 == " + quote(t2) + "->_10 && " + quote(t1) + "->_11 == " + quote(t2) + "->_11 && " + quote(t1) + "->_12 == " + quote(t2) + "->_12 && " + quote(t1) + "->_13 == " + quote(t2) + "->_13 && " + quote(t1) + "->_14 == " + quote(t2) + "->_14 && " + quote(t1) + "->_15 == " + quote(t2) + "->_15 && " + quote(t1) + "->_16 == " + quote(t2) + "->_16 && " + quote(t1) + "->_17 == " + quote(t2) + "->_17 && " + quote(t1) + "->_18 == " + quote(t2) + "->_18 && " + quote(t1) + "->_19 == " + quote(t2) + "->_19 && " + quote(t1) + "->_20 == " + quote(t2) + "->_20 && " + quote(t1) + "->_21 == " + quote(t2) + "->_21;")
+  case CompareTuple22(t1,t2) => emitValDef(sym, quote(t1) + "->_1 == " + quote(t2) + "->_1 && " + quote(t1) + "->_2 == " + quote(t2) + "->_2 && " + quote(t1) + "->_3 == " + quote(t2) + "->_3 && " + quote(t1) + "->_4 == " + quote(t2) + "->_4 && " + quote(t1) + "->_5 == " + quote(t2) + "->_5 && " + quote(t1) + "->_6 == " + quote(t2) + "->_6 && " + quote(t1) + "->_7 == " + quote(t2) + "->_7 && " + quote(t1) + "->_8 == " + quote(t2) + "->_8 && " + quote(t1) + "->_9 == " + quote(t2) + "->_9 && " + quote(t1) + "->_10 == " + quote(t2) + "->_10 && " + quote(t1) + "->_11 == " + quote(t2) + "->_11 && " + quote(t1) + "->_12 == " + quote(t2) + "->_12 && " + quote(t1) + "->_13 == " + quote(t2) + "->_13 && " + quote(t1) + "->_14 == " + quote(t2) + "->_14 && " + quote(t1) + "->_15 == " + quote(t2) + "->_15 && " + quote(t1) + "->_16 == " + quote(t2) + "->_16 && " + quote(t1) + "->_17 == " + quote(t2) + "->_17 && " + quote(t1) + "->_18 == " + quote(t2) + "->_18 && " + quote(t1) + "->_19 == " + quote(t2) + "->_19 && " + quote(t1) + "->_20 == " + quote(t2) + "->_20 && " + quote(t1) + "->_21 == " + quote(t2) + "->_21 && " + quote(t1) + "->_22 == " + quote(t2) + "->_22;")
+
+	case _ => super.emitNode(sym, rhs)
+  }
+
+  override def remap[A](m: Manifest[A]) = m.runtimeClass.getSimpleName match {
+    case "Tuple2" =>
+        val elems = IR.tuple_elems.take(2) zip m.typeArguments
+        IR.registerStruct(IR.structName(m), elems)
+        IR.structName(m) + "*"
+    case "Tuple3" =>
+        val elems = IR.tuple_elems.take(3) zip m.typeArguments
+        IR.registerStruct(IR.structName(m), elems)
+        IR.structName(m) + "*"
+    case "Tuple4" =>
+        val elems = IR.tuple_elems.take(4) zip m.typeArguments
+        IR.registerStruct(IR.structName(m), elems)
+        IR.structName(m) + "*"
+    case "Tuple5" =>
+        val elems = IR.tuple_elems.take(5) zip m.typeArguments
+        IR.registerStruct(IR.structName(m), elems)
+        IR.structName(m) + "*"
+    case "Tuple6" =>
+        val elems = IR.tuple_elems.take(6) zip m.typeArguments
+        IR.registerStruct(IR.structName(m), elems)
+        IR.structName(m) + "*"
+    case "Tuple7" =>
+        val elems = IR.tuple_elems.take(7) zip m.typeArguments
+        IR.registerStruct(IR.structName(m), elems)
+        IR.structName(m) + "*"
+    case "Tuple8" =>
+        val elems = IR.tuple_elems.take(8) zip m.typeArguments
+        IR.registerStruct(IR.structName(m), elems)
+        IR.structName(m) + "*"
+    case "Tuple9" =>
+        val elems = IR.tuple_elems.take(9) zip m.typeArguments
+        IR.registerStruct(IR.structName(m), elems)
+        IR.structName(m) + "*"
+    case "Tuple10" =>
+        val elems = IR.tuple_elems.take(10) zip m.typeArguments
+        IR.registerStruct(IR.structName(m), elems)
+        IR.structName(m) + "*"
+    case "Tuple11" =>
+        val elems = IR.tuple_elems.take(11) zip m.typeArguments
+        IR.registerStruct(IR.structName(m), elems)
+        IR.structName(m) + "*"
+    case "Tuple12" =>
+        val elems = IR.tuple_elems.take(12) zip m.typeArguments
+        IR.registerStruct(IR.structName(m), elems)
+        IR.structName(m) + "*"
+    case "Tuple13" =>
+        val elems = IR.tuple_elems.take(13) zip m.typeArguments
+        IR.registerStruct(IR.structName(m), elems)
+        IR.structName(m) + "*"
+    case "Tuple14" =>
+        val elems = IR.tuple_elems.take(14) zip m.typeArguments
+        IR.registerStruct(IR.structName(m), elems)
+        IR.structName(m) + "*"
+    case "Tuple15" =>
+        val elems = IR.tuple_elems.take(15) zip m.typeArguments
+        IR.registerStruct(IR.structName(m), elems)
+        IR.structName(m) + "*"
+    case "Tuple16" =>
+        val elems = IR.tuple_elems.take(16) zip m.typeArguments
+        IR.registerStruct(IR.structName(m), elems)
+        IR.structName(m) + "*"
+    case "Tuple17" =>
+        val elems = IR.tuple_elems.take(17) zip m.typeArguments
+        IR.registerStruct(IR.structName(m), elems)
+        IR.structName(m) + "*"
+    case "Tuple18" =>
+        val elems = IR.tuple_elems.take(18) zip m.typeArguments
+        IR.registerStruct(IR.structName(m), elems)
+        IR.structName(m) + "*"
+    case "Tuple19" =>
+        val elems = IR.tuple_elems.take(19) zip m.typeArguments
+        IR.registerStruct(IR.structName(m), elems)
+        IR.structName(m) + "*"
+    case "Tuple20" =>
+        val elems = IR.tuple_elems.take(20) zip m.typeArguments
+        IR.registerStruct(IR.structName(m), elems)
+        IR.structName(m) + "*"
+    case "Tuple21" =>
+        val elems = IR.tuple_elems.take(21) zip m.typeArguments
+        IR.registerStruct(IR.structName(m), elems)
+        IR.structName(m) + "*"
+    case "Tuple22" =>
+        val elems = IR.tuple_elems.take(22) zip m.typeArguments
+        IR.registerStruct(IR.structName(m), elems)
+        IR.structName(m) + "*"
+    case _ => super.remap(m)
   }
 }

@@ -1,4 +1,4 @@
-package scala.virtualization.lms
+/*package scala.virtualization.lms
 package common
 
 import java.io._
@@ -137,7 +137,7 @@ trait ScalaGenDynamicRecord extends ScalaGenBase with GenericNestedCodegen {
     }
 
 	def writeRecord(out: PrintWriter, className: String, attrs: List[(String, Class[_])]) {
-        out.print("class " + className + " extends Serializable" +/*scala.virtualization.lms.common.DynamicRecordExp*/ " {\n")
+        out.print("class " + className + " extends Serializable" +" {\n")
         for ((p1,p2) <- attrs) {
              val str = {
                  if (ClassManifest.fromClass(p2) == classManifest[Array[Byte]])
@@ -260,7 +260,7 @@ trait CGenDynamicRecord extends CGenBase with GenericNestedCodegen {
     }
 }
 
-/* HASHMAP */
+// HASHMAP
 trait DynamicRecordHashMap extends Base with HashMapOps with Variables {
   implicit def dRecHashMapToRepHashMapOps[K:Manifest,V:Manifest](m: HashMap[K,V]) = new dynamicRecordHashMapOpsCls[K,V](unit(m))
   implicit def dRecrepHashMapToHashMapOps[K:Manifest,V:Manifest](m: Rep[HashMap[K,V]]) = new dynamicRecordHashMapOpsCls[K,V](m)
@@ -296,7 +296,7 @@ trait DynamicRecordHashMapExp extends DynamicRecordHashMap with EffectExp with H
 
   override def hashmap_new[K:Manifest,V:Manifest](specializedKey: String = "", specializedValue: String = "")(implicit pos: SourceContext) = reflectMutable(DynamicRecordHashMapNew[K,V](specializedKey, specializedValue))
   override def hashmap_apply[K:Manifest,V:Manifest](m: Exp[HashMap[K,V]], k: Exp[K])(implicit pos: SourceContext) = DynamicRecordHashMapApply(m,k)
-  override def hashmap_size[K:Manifest,V:Manifest](m: Exp[HashMap[K,V]])(implicit pos: SourceContext) = /*reflectEffect(*/DynamicRecordHashMapSize(m)//)
+  override def hashmap_size[K:Manifest,V:Manifest](m: Exp[HashMap[K,V]])(implicit pos: SourceContext) = DynamicRecordHashMapSize(m)
   override def hashmap_removehead[K: Manifest, V: Manifest](m: Rep[HashMap[K,V]])(implicit pos: SourceContext) = reflectWrite(m)(DynamicRecordHashMapRemoveHead(m))
   def hashmap_getorelseupdate[K:Manifest,V:Manifest](m: Rep[HashMap[K,V]], k: Rep[K], v: => Exp[V], h: Exp[DynamicRecord] => Exp[Int] = null, e: (Exp[DynamicRecord],Exp[DynamicRecord])=>Exp[Boolean] = null)(implicit pos: SourceContext) = { 
     val b = reifyEffects(v)
@@ -307,20 +307,20 @@ trait DynamicRecordHashMapExp extends DynamicRecordHashMap with EffectExp with H
   }
   override def hashmap_mkString[K: Manifest, V: Manifest](m: Rep[HashMap[K,V]], v: Rep[String])(implicit pos: SourceContext) = reflectEffect(DynamicRecordHashMapMkString(m, v))
   
-  /*override def syms(p: Any): List[Sym[Any]] = p match {
-    case HashMapGetOrElseUpdate(m, k, v,h,e) => syms(m):::syms(v)
-    case _ => super.syms(p)
-  }*/
+  //override def syms(p: Any): List[Sym[Any]] = p match {
+  //  case HashMapGetOrElseUpdate(m, k, v,h,e) => syms(m):::syms(v)
+  //  case _ => super.syms(p)
+  //}
 
   override def boundSyms(p: Any): List[Sym[Any]] = p match {
     case DynamicRecordHashMapGetOrElseUpdate(m, k, v,h,e,d) => effectSyms(h) ::: effectSyms(v) ::: effectSyms(e)
     case _ => super.boundSyms(p)
   }
 
-  /*override def symsFreq(e: Any): List[(Sym[Any], Double)] = e match {
-    case HashMapGetOrElseUpdate(m, k, v,h,e) => freqNormal(m) ::: freqHot(v)
-    case _ => super.symsFreq(e)
-  } */ 
+  //override def symsFreq(e: Any): List[(Sym[Any], Double)] = e match {
+  //  case HashMapGetOrElseUpdate(m, k, v,h,e) => freqNormal(m) ::: freqHot(v)
+  //  case _ => super.symsFreq(e)
+  //}
 }
 
 trait ScalaGenDynamicRecordHashMap extends ScalaGenBase with GenericNestedCodegen with ScalaGenEffect {
@@ -394,4 +394,4 @@ trait ScalaGenDynamicRecordHashMap extends ScalaGenBase with GenericNestedCodege
     }
     case _ => super.emitNode(sym, rhs)
   }
-}
+}*/

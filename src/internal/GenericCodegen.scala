@@ -43,6 +43,7 @@ trait GenericCodegen extends BlockTraversal {
   }
 
   def emitFileHeader(): Unit = {}
+  def emitFunctions(): Unit = {}
   
   // Initializer
   def initializeGenerator(buildDir:String, args: Array[String], _analysisResults: MMap[String,Any]): Unit = { analysisResults = _analysisResults }
@@ -72,7 +73,9 @@ trait GenericCodegen extends BlockTraversal {
     
     stream.close()
   }
-  
+
+  def runTransformations[A:Manifest](body: Block[A]): Block[A] = body
+ 
   // exception handler
   def exceptionHandler(e: Exception, outFile:File, kstream:PrintWriter): Unit = {
       kstream.close()
@@ -84,7 +87,10 @@ trait GenericCodegen extends BlockTraversal {
    * except that we should replace all '$' by '.'
    * because inner class names might contain $ sign
    */
-  def remap(s: String): String = s.replace('$', '.')
+  def remap(s: String): String = s match {
+	case "java.lang.Character" => "Character"
+	case _ => s.replace('$', '.')
+  }
   def remap[A](s: String, method: String, t: Manifest[A]) : String = remap(s, method, t.toString)
   def remap(s: String, method: String, t: String) : String = s + method + "[" + remap(t) + "]"    
   def remap[A](m: Manifest[A]): String = m match {
@@ -98,7 +104,7 @@ trait GenericCodegen extends BlockTraversal {
         val ms = m.toString
         remap(ms.take(ms.indexOf("["))) + "[" + targs.map(tp => remap(tp)).mkString(", ") + "]"
       }
-      else m.toString    
+      else remap(m.toString)
   }
   def remapImpl[A](m: Manifest[A]): String = remap(m)
   //def remapVar[A](m: Manifest[Variable[A]]) : String = remap(m.typeArguments.head)
@@ -498,9 +504,40 @@ trait GenericCodegen extends BlockTraversal {
 
 
 
-trait GenericNestedCodegen extends NestedBlockTraversal with GenericCodegen {
-  val IR: Expressions with Effects
+trait GenericNestedCodegen extends NestedBlockTraversal with GenericCodegen { self =>
+  val IR: Expressions with Effects with LoweringTransform
   import IR._
+
+  /* Lowering stuff */
+  def lowerNode[T:Manifest](sym: Sym[T], rhs: Def[T]): Unit = {
+//	println("Lowering " + sym  + " with def " + rhs )
+    rhs match {
+      case Reflect(s, u, effects) => lowerNode(sym, s)
+      case dflt@_ => { 
+        //System.out.println("Don't know how to lower symbol " + dflt + ".")
+		()
+      }
+    }
+  }
+
+  object HIRLowering extends LoweringTransformer
+  object LIRLowering extends LoweringTransformer
+  object LIRTraversal extends NestedBlockTraversal {
+    val IR: self.IR.type = self.IR
+    def apply[A: Manifest](b: Block[A]) = traverseBlock(b)
+    override def traverseStm(stm: Stm): Unit = stm match {
+        case TP(sym, rhs) => lowerNode(sym, rhs)(sym.tp)
+        case _ => throw new GenerationFailedException(s"don't know how to generate code for statement: $stm during LIRTraversal")
+	}
+  }
+
+  def remapManifest[A:Manifest](m: Sym[A]): Manifest[_] = manifest[A]
+
+  override def runTransformations[A:Manifest](body: Block[A]): Block[A] = {
+    val b = HIRLowering.run(body)
+	LIRTraversal(b)
+    LIRLowering.run(b)
+  }
 
   override def traverseStm(stm: Stm) = super[GenericCodegen].traverseStm(stm)
     
@@ -520,11 +557,10 @@ trait GenericNestedCodegen extends NestedBlockTraversal with GenericCodegen {
   // Allows the gen string interpolator to perform emitBlock when passed a Block
   implicit class NestedCodegenHelper(sc: StringContext) extends CodegenHelper(sc) {
 
-    override def printToStream(arg: Any): Unit = arg match {
+  override def printToStream(arg: Any): Unit = arg match {
       case NestedBlock(b) => emitBlock(b)
       case b: Block[_] => stream.print(quoteOrRemap(getBlockResult(b)))
       case _ => stream.print(quoteOrRemap(arg))
     }
   }
-
 }

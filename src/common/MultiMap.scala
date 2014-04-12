@@ -115,8 +115,8 @@ trait ScalaGenHashMultiMapOpt extends GenericNestedCodegen with ScalaGenEffect {
   override def emitNode(sym: Sym[Any], rhs: Def[Any]) = rhs match {
     case m@HashMultiMapNew(size, spkey, spvalue) => {
         // Sanity check
-        if (m.mV != manifest[Set[scala.virtualization.lms.common.DynamicRecord]])
-            throw new RuntimeException("ScalaGenHashMultiMapOpt can only be used with sets of DynamicRecords (you provided " + remap(m.mV))
+        //if (m.mV != manifest[Set[scala.virtualization.lms.common.DynamicRecord]])
+          //  throw new RuntimeException("ScalaGenHashMultiMapOpt can only be used with sets of DynamicRecords (you provided " + remap(m.mV))
         val value = if (spvalue != "") spvalue else remap(m.mV)
         emitValDef(sym, "new Array[" + value + "](" + size + ")")
     }

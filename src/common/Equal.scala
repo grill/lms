@@ -4,6 +4,7 @@ package common
 import java.io.PrintWriter
 import scala.virtualization.lms.util.OverloadHack
 import scala.reflect.SourceContext
+import scala.virtualization.lms.internal.CNestedCodegen
 
 trait LiftEquals extends Base {
   this: Equal =>
@@ -83,8 +84,14 @@ trait ScalaGenEqual extends ScalaGenBase {
   import IR._
   
   override def emitNode(sym: Sym[Any], rhs: Def[Any]) = rhs match {
-    case Equal(a,b) =>  emitValDef(sym, src"$a == $b")
-    case NotEqual(a,b) =>  emitValDef(sym, src"$a != $b")
+    case Equal(a,b) => 
+		if (a.tp == manifest[Array[Byte]] || b.tp == manifest[Array[Byte]])
+			emitValDef(sym, src"java.util.Arrays.equals($a,$b)")
+		else emitValDef(sym, src"$a == $b")
+    case NotEqual(a,b) =>  
+		if (a.tp == manifest[Array[Byte]] || b.tp == manifest[Array[Byte]])
+			emitValDef(sym, src"!java.util.Arrays.equals($a,$b)")
+		else emitValDef(sym, src"$a != $b")
     case _ => super.emitNode(sym, rhs)
   }
 }
@@ -96,9 +103,15 @@ trait CLikeGenEqual extends CLikeGenBase {
   override def emitNode(sym: Sym[Any], rhs: Def[Any]) = {
       rhs match {
         case Equal(a,b) =>
-          emitValDef(sym, src"$a == $b")
-        case NotEqual(a,b) =>
-          emitValDef(sym, src"$a != $b")
+		  if (b.tp == manifest[Array[Byte]] || b.tp == manifest[String])
+			// Hm... is this generic enough? it implicitly introduces a "lowering" for accessing
+			// the array field of the implicitly lowered array. 
+			emitValDef(sym, "strcmp(" + quote(a) + "->array," + quote(b) + ") == 0;")
+          else emitValDef(sym, src"$a == $b")
+        case NotEqual(a,b) => 
+		  if (b.tp == manifest[Array[Byte]] || b.tp == manifest[String])
+			emitValDef(sym, "strcmp(" + quote(a) + "->array," + quote(b) + ") != 0;")
+          else emitValDef(sym, src"$a != $b")
         case _ => super.emitNode(sym, rhs)
       }
     }
@@ -106,4 +119,14 @@ trait CLikeGenEqual extends CLikeGenBase {
 
 trait CudaGenEqual extends CudaGenBase with CLikeGenEqual
 trait OpenCLGenEqual extends OpenCLGenBase with CLikeGenEqual
-trait CGenEqual extends CGenBase with CLikeGenEqual
+trait CGenEqual extends CGenBase with CLikeGenEqual with CNestedCodegen {
+  val IR: EqualExp
+  import IR._
+  
+  override def lowerNode[A:Manifest](sym: Sym[A], rhs: Def[A]) = rhs match {
+	case Equal(lhs,rhs) => sym.atPhase(LIRLowering) {
+		reflectEffect(Equal(LIRLowering(lhs),LIRLowering(rhs))).asInstanceOf[Exp[A]]
+	}
+	case _ => super.lowerNode(sym,rhs)
+  }
+}

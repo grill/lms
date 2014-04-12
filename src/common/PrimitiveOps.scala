@@ -128,6 +128,17 @@ trait PrimitiveOps extends Variables with OverloadHack {
   def long_shiftright(lhs: Rep[Long], rhs: Rep[Int])(implicit pos: SourceContext): Rep[Long]
   def long_shiftright_unsigned(lhs: Rep[Long], rhs: Rep[Int])(implicit pos: SourceContext): Rep[Long]
   def long_toint(lhs: Rep[Long])(implicit pos: SourceContext): Rep[Int]
+
+  /**
+   * Character
+   */
+  def infix_-(lhs: Rep[Character], rhs: Rep[Character])(implicit pos: SourceContext, o: Overloaded1) = char_minus(lhs, rhs)
+  def char_minus(lhs: Rep[Character], rhs: Rep[Character])(implicit pos: SourceContext): Rep[Int]
+  
+  /**
+   * Byte
+   */
+  def infix_-(lhs: Rep[Byte], rhs: Rep[Byte])(implicit pos: SourceContext, o: Overloaded2) = char_minus(lhs.asInstanceOf[Rep[Character]], rhs.asInstanceOf[Rep[Character]])
 }
 
 trait PrimitiveOpsExp extends PrimitiveOps with BaseExp {
@@ -200,6 +211,12 @@ trait PrimitiveOpsExp extends PrimitiveOps with BaseExp {
   def long_shiftright_unsigned(lhs: Exp[Long], rhs: Exp[Int])(implicit pos: SourceContext) = LongShiftRightUnsigned(lhs,rhs)
   def long_toint(lhs: Exp[Long])(implicit pos: SourceContext) = LongToInt(lhs)
     
+  /**
+   * Character
+   */
+  case class CharMinus(lhs: Exp[Character], rhs: Exp[Character]) extends Def[Int]
+  def char_minus(lhs: Exp[Character], rhs: Exp[Character])(implicit pos: SourceContext) = CharMinus(lhs, rhs)
+
   override def mirror[A:Manifest](e: Def[A], f: Transformer)(implicit pos: SourceContext): Exp[A] = ({
     implicit var a: Numeric[A] = null // hack!! need to store it in Def instances??
     e match {
@@ -220,6 +237,7 @@ trait PrimitiveOpsExp extends PrimitiveOps with BaseExp {
       case LongBinaryAnd(x,y) => long_binaryand(f(x),f(y))
       case LongToInt(x) => long_toint(f(x))
       case LongShiftRightUnsigned(x,y) => long_shiftright_unsigned(f(x),f(y))
+	  case CharMinus(x,y) => char_minus(f(x),f(y))
       case _ => super.mirror(e,f)
     }
   }).asInstanceOf[Exp[A]]
@@ -264,6 +282,7 @@ trait ScalaGenPrimitiveOps extends ScalaGenBase {
     case LongShiftRight(lhs,rhs) => emitValDef(sym, src"$lhs >> $rhs")
     case LongShiftRightUnsigned(lhs,rhs) => emitValDef(sym, src"$lhs >>> $rhs")   
     case LongToInt(lhs) => emitValDef(sym, src"$lhs.toInt")
+	case CharMinus(lhs,rhs) => emitValDef(sym, src"$lhs - $rhs")
     case _ => super.emitNode(sym, rhs)
   }
 }
@@ -287,6 +306,7 @@ trait CLikeGenPrimitiveOps extends CLikeGenBase {
       case IntBinaryOr(lhs,rhs) => emitValDef(sym, src"$lhs | $rhs")
       case IntBinaryAnd(lhs,rhs) => emitValDef(sym, src"$lhs & $rhs")
       case IntDoubleValue(lhs) => emitValDef(sym, src"(double)$lhs")
+	  case CharMinus(lhs,rhs) => emitValDef(sym, src"$lhs - $rhs")
       case _ => super.emitNode(sym, rhs)
     }
   }

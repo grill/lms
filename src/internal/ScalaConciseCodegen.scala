@@ -14,7 +14,7 @@ import scala.reflect.SourceContext
  * @author Mohammad Dashti (mohammad.dashti@epfl.ch)
  */
 trait ScalaConciseCodegen extends ScalaNestedCodegen { self =>
-  val IR: ExtendedExpressions with Effects
+  val IR: ExtendedExpressions with Effects with LoweringTransform
   import IR._
 
   override def emitValDef(sym: Sym[Any], rhs: String): Unit = {

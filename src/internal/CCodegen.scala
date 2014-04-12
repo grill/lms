@@ -1,6 +1,7 @@
 package scala.virtualization.lms
 package internal
 
+import scala.virtualization.lms.common.{Base,BaseExp}
 import java.io.{FileWriter, StringWriter, PrintWriter, File}
 import java.util.ArrayList
 import collection.mutable.{ListBuffer, ArrayBuffer, LinkedList, HashMap, ListMap, HashSet, Map => MMap}
@@ -14,6 +15,7 @@ trait CCodegen extends CLikeCodegen {
   override def kernelFileExt = "cpp"
   override def toString = "c"
 
+  var compileCount = 0
   var helperFuncIdx = 0
   var helperFuncString:StringBuilder = null
   var hstream: PrintWriter = null
@@ -45,6 +47,12 @@ trait CCodegen extends CLikeCodegen {
       out.append("}")
       out.toString
     }
+  }
+
+  def initCompile = {
+    val className = "staged" + compileCount
+    compileCount = compileCount + 1
+    className
   }
 
   override def kernelInit(syms: List[Sym[Any]], vals: List[Sym[Any]], vars: List[Sym[Any]], resultIsVar: Boolean): Unit = {
@@ -113,17 +121,16 @@ trait CCodegen extends CLikeCodegen {
   }
      
   def allocStruct(sym: Sym[Any], structName: String, out: PrintWriter) {
-  		out.println("struct " + structName + "* " + quote(sym) + " = (struct " + structName + "*)malloc(sizeof(struct " + structName + "));")
+  		out.println(structName + "* " + quote(sym) + " = (" + structName + "*)malloc(sizeof(" + structName + "));")
   }
 
   def getMemoryAllocString(count: String, memType: String): String = {
   		"(" + memType + "*)malloc(" + count + " * sizeof(" + memType + "));"
   }
  
-  def emitSource[A:Manifest](args: List[Sym[_]], body: Block[A], functionName: String, out: PrintWriter, dynamicReturnType: String = null, serializable: Boolean = false): List[(Sym[Any], Any)] = {
-
-    val sA = if (dynamicReturnType != null) dynamicReturnType else remap(manifest[A])
-
+  def emitSource[A:Manifest](args: List[Sym[_]], b: Block[A], functionName: String, out: PrintWriter, dynamicReturnType: String = null, serializable: Boolean = false): List[(Sym[Any], Any)] = {
+	val body = runTransformations(b)
+    val sA = if (dynamicReturnType != null) dynamicReturnType else remap(getBlockResult(body).tp)
     withStream(out) {
       stream.println("/*****************************************\n"+
                      "  Emitting C Generated Code                  \n"+
@@ -131,16 +138,23 @@ trait CCodegen extends CLikeCodegen {
                      "#include <stdio.h>\n" +
                      "#include <stdlib.h>\n" +
                      "#include <stdbool.h>\n" +
-					 "#include <glib.h>"
-      )
+					 "#include <glib.h>\n" + 
+					 "#include <sys/time.h>")
+
+	  stream.println("int strcmp(const char *s1, const char *s2);")
+
+	  stream.println("int timeval_subtract(struct timeval *result, struct timeval *t2, struct timeval *t1) {\n" +
+    				 "\tlong int diff = (t2->tv_usec + 1000000 * t2->tv_sec) - (t1->tv_usec + 1000000 * t1->tv_sec);\n" +
+					 "\tresult->tv_sec = diff / 1000000;\n" +
+				     "\tresult->tv_usec = diff % 1000000;\n" + 
+					 "\treturn (diff<0);\n" +
+					 "}\n")
 
       // TODO: static data
 	  val sw = new StringWriter()
 	  val tempWriter = new PrintWriter(sw)
       tempWriter.println(sA+" "+functionName+"("+args.map(a => remap(a.tp)+" "+quote(a)).mkString(", ")+") {")
-      withStream(tempWriter) { 
-	  	emitBlock(body) 
-	  }
+      withStream(tempWriter) { emitBlock(body) }
 	  val y = getBlockResult(body)
       if (remap(y.tp) != "void")
         tempWriter.println("return " + quote(y) + ";")
@@ -151,12 +165,17 @@ trait CCodegen extends CLikeCodegen {
 	  withStream(tempWriter) { emitFileHeader() }
 	  code = sw.toString + code
 
+	  stream.println("/********************* DATA STRUCTURES ***********************/")
 	  emitDataStructures(stream)
+	  stream.println("")
+	  stream.println("/************************ FUNCTIONS **************************/")
+	  emitFunctions()
+	  stream.println("")
+	  stream.println("/************************ MAIN BODY **************************/")
 	  stream.println(code) 
-
-     stream.println("/*****************************************\n"+
-                     "  End of C Generated Code                  \n"+
-                     "*******************************************/")
+      stream.println("/*****************************************\n"+
+                     " *  End of C Generated Code              *\n"+
+                     " *****************************************/")
     }
     Nil
   }  
@@ -253,38 +272,33 @@ trait CCodegen extends CLikeCodegen {
     stream.println(") {")
   }
 
-  def remapInternal(m: String): String = {
-	m match {
-		// Happens only if remapInternal is called immediately, without remap
-		case m if m.startsWith("Array") => remapInternal(m.substring(m.indexOf("[") + 1, m.indexOf("]"))) + "*"
-        case "Int" => "int"
-        case "Long" => "long"
-        case "Float" => "float"
-        case "Double" => "double"
-        case "Boolean" => "bool"
-        case "Unit" => "void"
-		case "Any" => "void*"
-		case "Char" | "byte" | "Byte" => "char" // A byte is a char in C
-		case "java.lang.Character" => "char"
-		case "java.lang.String" => "const char*"
-		case "java.lang.String" | "class java.lang.String" => "const char*"
-		case "java.io.File" => "FILE*"
-		case "java.util.Scanner" => "FILE*" // A scanner is basically mapped through basic file I/O
-        case _ => {
-			System.err.println("CGen: remap(m) : Unknown data type (%s)".format(m.toString))
-			m // This cases shouldn't be happening. Throw an error and return it as is ( This is better than crashing for development)
-		}
-   }
-  }
-	 
-  override def remap[A](m: Manifest[A]) : String = {
-    if (m.erasure == classOf[Variable[Any]] ) {
-      remap(m.typeArguments.head)
-    }
-	else if (m.erasure.isArray) remapInternal(m.erasure.getComponentType.toString) + "*"
-    else remapInternal(m.toString)
+  override def quote(x: Exp[Any]) : String = {
+	x match {
+		case Const(y: java.lang.Character) => 
+			if (y == '\0') "'\\0'"
+			else "'" + y.toString + "'"
+		case Const(null) => "NULL"
+		case Const(()) => ";"
+		case _ => super.quote(x)
+	}
   }
 
+  override def remap[A](m: Manifest[A]) = {
+	m match {
+        case s if m == manifest[Int] => "int"
+        case s if m == manifest[Double] => "double"
+		case s if m == manifest[Long] => "long"
+		case s if m == manifest[Character] => "char"
+		case s if m == manifest[Byte] => "char"
+		case s if m == manifest[Boolean] => "bool"
+		case s if m == manifest[String] => "char*"
+		case s if m == manifest[Float] => "float"
+		case s if m == manifest[Unit] => "void"
+		case s if m <:< manifest[Const[Any]] => remap(m.typeArguments.head)
+		case _ => super.remap(m)
+	}
+  }
+  
   /*******************************************************
    * Methods below are for emitting helper functions
    *******************************************************/
@@ -359,11 +373,35 @@ trait CCodegen extends CLikeCodegen {
 
 // TODO: do we need this for each target?
 trait CNestedCodegen extends GenericNestedCodegen with CCodegen {
-  val IR: Expressions with Effects
+  val IR: Expressions with Effects with LoweringTransform
   import IR._
-  
 }
 
 trait CFatCodegen extends GenericFatCodegen with CCodegen {
-  val IR: Expressions with Effects with FatExpressions
+  val IR: Expressions with Effects with FatExpressions with LoweringTransform
+}
+  
+trait Pointer extends Base {
+	class PointerManifest[A:Manifest]
+    def pointer_assign[A:Manifest](s: Rep[A], vl: Rep[A]): Rep[Unit]
+	def getPointerManifest[A:Manifest] = manifest[PointerManifest[A]]
+}
+
+trait PointerExp extends Pointer with BaseExp with Effects {
+	case class PointerAssign[A:Manifest](s: Exp[A], vl: Exp[A]) extends Def[Unit]
+    def pointer_assign[A:Manifest](s: Exp[A], vl: Exp[A]) = reflectEffect(PointerAssign(s,vl))
+}
+
+trait CGenPointer extends GenericNestedCodegen {
+	val IR: PointerExp
+	import IR._
+	
+    override def remap[A](m: Manifest[A]) = m match {
+		case s if m <:< manifest[PointerManifest[Any]] => remap(m.typeArguments.head) + "*"
+        case _ => super.remap(m)
+    }
+	override def emitNode(sym: Sym[Any], rhs: Def[Any]) = rhs match {
+		case PointerAssign(s,vl) => stream.println("*" + quote(s) + " = " + quote(vl) + ";")
+		case _ => super.emitNode(sym, rhs)
+  	}
 }
