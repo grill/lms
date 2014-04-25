@@ -136,22 +136,24 @@ trait CLikeGenBooleanOps extends CLikeGenBase with GenericNestedCodegen {
   override def emitNode(sym: Sym[Any], rhs: Def[Any]) = {
     rhs match {
   	  case BooleanNegate(b) => emitValDef(sym, src"!$b")
+      // case BooleanAnd(lhs,rhs) => emitValDef(sym, src"$lhs && $rhs")
       case b@BooleanAnd(lhs,rhs) => {
-			emitValDef(b.c, quote(lhs))
-        	stream.println("if (" + quote(lhs) + ") {")
-			emitBlock(rhs)
-    	    stream.println(quote(b.c) + " = " + quote(getBlockResult(rhs)) + ";")
-        	stream.println("}")
-			emitValDef(sym, quote(b.c))
-	  }
+  			emitValDef(b.c, quote(lhs))
+          	stream.println("if (" + quote(lhs) + ") {")
+  			emitBlock(rhs)
+      	    stream.println(quote(b.c) + " = " + quote(getBlockResult(rhs)) + ";")
+          	stream.println("}")
+  			emitValDef(sym, quote(b.c))
+  	  }
+      // case BooleanOr(lhs,rhs) => emitValDef(sym, src"$lhs || $rhs")
       case b@BooleanOr(lhs,rhs) => {
-			emitValDef(b.c, quote(lhs))
-			stream.println("if (" + quote(lhs) + " == false) {")
-			emitBlock(rhs)
-			stream.println(quote(b.c) + " = " + quote(getBlockResult(rhs)) + ";")
-        	stream.println("}")
-			emitValDef(sym, quote(b.c))
-	  }
+  			emitValDef(b.c, quote(lhs))
+  			stream.println("if (" + quote(lhs) + " == false) {")
+  			emitBlock(rhs)
+  			stream.println(quote(b.c) + " = " + quote(getBlockResult(rhs)) + ";")
+          	stream.println("}")
+  			emitValDef(sym, quote(b.c))
+  	  }
       case _ => super.emitNode(sym,rhs)
     }
   }

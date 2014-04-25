@@ -384,10 +384,11 @@ trait CLikeGenArrayOps extends BaseGenArrayOps with CLikeGenBase {
 
   override def emitNode(sym: Sym[Any], rhs: Def[Any]) = {
       rhs match {
-        case ArrayLength(x) => emitValDef(sym, src"$x.length")
-        case ArrayApply(x,n) => emitValDef(sym, src"$x.apply($n)")
+        case ArrayLength(x) => emitValDef(sym, src"sizeof($x)/sizeof(*$x)") // WARN: statically allocated elements only
+        case ArrayApply(x,n) => emitValDef(sym, src"$x[$n]")
         case ArrayUpdate(x,n,y) => stream.println(src"$x.update($n,$y);")
         case ArrayMutable(x) => emitValDef(sym, src"$x //array made mutable")
+        case ArraySlice(x,s,e) => val tp=remap(x.tp.typeArguments(0)); emitValDef(sym, src"({ size_t sz=sizeof("+tp+")*($e-$s); "+tp+"* r = ("+tp+"*)malloc(sz); memcpy(r,(("+tp+"*)$x)+$s,sz); r; })")
         case _ => super.emitNode(sym, rhs)
       }
     }

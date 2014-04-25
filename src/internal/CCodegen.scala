@@ -138,8 +138,9 @@ trait CCodegen extends CLikeCodegen {
                      "#include <stdio.h>\n" +
                      "#include <stdlib.h>\n" +
                      "#include <stdbool.h>\n" +
-					 "#include <glib.h>\n" + 
-					 "#include <sys/time.h>")
+                     "#include <glib.h>\n" + 
+                     "#include <sys/time.h>\n" +
+                     "#include <string.h>")
 
 	  stream.println("int strcmp(const char *s1, const char *s2);")
 
@@ -272,21 +273,35 @@ trait CCodegen extends CLikeCodegen {
     stream.println(") {")
   }
 
-  override def quote(x: Exp[Any]) : String = {
-	x match {
+  override def quote(x: Exp[Any]) : String = x match {
 		case Const(y: java.lang.Character) => 
 			if (y == '\0') "'\\0'"
 			else "'" + y.toString + "'"
 		case Const(null) => "NULL"
 		case Const(()) => ";"
 		case _ => super.quote(x)
-	}
   }
+  
+  // override def remap[A](m: Manifest[A]) : String = {
+  //   if (m.erasure == classOf[Variable[Any]] ) {
+  //     remap(m.typeArguments.head)
+  //   } else m.toString match {
+  //     case "Int" => "int"
+  //     case "Long" => "long"
+  //     case "Float" => "float"
+  //     case "Double" => "double"
+  //     case "Boolean" => "bool"
+  //     case "Unit" => "void"
+  //     case "Char" => "char"
+  //     case "java.lang.String" => "char*"
+  //     case s if s.startsWith("Array[") => remap(m.typeArguments(0))+"*"
+  //     case _ => throw new GenerationFailedException("CGen: remap(m) : Unknown data type (%s)".format(m.toString))
+  //   }
+  // }
 
-  override def remap[A](m: Manifest[A]) = {
-	m match {
-        case s if m == manifest[Int] => "int"
-        case s if m == manifest[Double] => "double"
+  override def remap[A](m: Manifest[A]) = m match {
+    case s if m == manifest[Int] => "int"
+    case s if m == manifest[Double] => "double"
 		case s if m == manifest[Long] => "long"
 		case s if m == manifest[Character] => "char"
 		case s if m == manifest[Byte] => "char"
@@ -297,7 +312,6 @@ trait CCodegen extends CLikeCodegen {
 		case s if m <:< manifest[Const[Any]] => remap(m.typeArguments.head)
 		case _ => super.remap(m)
 	}
-  }
   
   /*******************************************************
    * Methods below are for emitting helper functions

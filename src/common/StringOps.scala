@@ -222,7 +222,6 @@ trait CGenStringOps extends CGenBase with CNestedCodegen {
 
   override def emitNode(sym: Sym[Any], rhs: Def[Any]) = rhs match {
     case StringNew(s1) => emitValDef(sym, src"$s1")
-    case StringPlus(s1,s2) => emitValDef(sym,src"strcat($s1,$s2);")
     case StringStartsWith(s1,s2) => emitValDef(sym, "strncmp(" + quote(s1) + "," + quote(s2) + ", strlen(" + quote(s2) + ")) == 0;")
     case sew@StringEndsWith(s1,s2) => {
       emitValDef(sew.lenstr,"strlen("+quote(s1)+")")
@@ -236,6 +235,19 @@ trait CGenStringOps extends CGenBase with CNestedCodegen {
     case StringIndexOfSlice(s1,s2,idx) => 
 		emitValDef(sym, "strstr(&" + quote(s1) + "[" + quote(idx) + "]," + quote(s2) + ") - " + quote(s1))
 		stream.println("if (" + quote(sym) + " < 0) " + quote(sym) + " = -1;") 
+    case StringToInt(s) => emitValDef(sym,src"atoi($s)")
+    case StringToLong(s) => emitValDef(sym,src"atol($s)")
+    case StringToFloat(s) => emitValDef(sym,src"atof($s)")
+    case StringToDouble(s) => emitValDef(sym,src"atof($s)")
+    case StringSubstringWithEndIndex(s,a,b) => emitValDef(sym, src"({ int l=$b-$a; char* r=(char*)malloc(l); memcpy(r,((char*)$s)+$a,l); r[l]=0; r; })")
+    case StringLength(s) => emitValDef(sym, src"strlen($s)")
+    // case StringPlus(s1,s2) => emitValDef(sym,src"strcat($s1,$s2);")
+    case StringPlus(s1,s2) => s2.tp.toString match {
+      // Warning: memory leaks. We need a global mechanism like reference counting, possibly release pool(*) wrapping functions.
+      // (*) See https://developer.apple.com/library/mac/documentation/Cocoa/Reference/Foundation/Classes/NSAutoreleasePool_Class/Reference/Reference.html
+      case "java.lang.String" => emitValDef(sym,src"({ int l1=strlen($s1),l2=strlen($s2); char* r=(char*)malloc(l1+l2+1); memcpy(r,$s1,l1); memcpy(r+l1,$s2,l2); r[l1+l2]=0; r; })")
+      case "Char" => emitValDef(sym,src"({ int l1=strlen($s1); char* r=(char*)malloc(l1+2); memcpy(r,$s1,l1); r[l1]=$s2; r[l1+2]=0; r; })")
+    }
     case StringTrim(s) => throw new GenerationFailedException("CGenStringOps: StringTrim not implemented yet")
     case StringSplit(s, sep) => throw new GenerationFailedException("CGenStringOps: StringSplit not implemented yet")
     case _ => super.emitNode(sym, rhs)
