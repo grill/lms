@@ -1,0 +1,32 @@
+-- begin
+/*****************************************
+  Emitting Generated Code                  
+*******************************************/
+class Test extends ((Unit)=>(Array[Double])) {
+def apply(x0:Unit): Array[Double] = {
+val x1 = scala.virtualization.lms.epfl.test6.VectorOps.random(7)
+val x3 = scala.virtualization.lms.epfl.test6.VectorOps.random(7)
+val x4 = (x1,x3)
+val x5 = scala.virtualization.lms.epfl.test6.VectorOps.plus(x4)
+x5
+}
+}
+/*****************************************
+  End of Generated Code                  
+*******************************************/
+/*****************************************
+  Emitting Generated Code                  
+*******************************************/
+class staged3 extends ((Unit)=>(Array[Double])) {
+def apply(x7:Unit): Array[Double] = {
+val x8 = scala.virtualization.lms.epfl.test6.VectorOps.random(7)
+val x9 = scala.virtualization.lms.epfl.test6.VectorOps.random(7)
+val x10 = (x8,x9)
+val x11 = scala.virtualization.lms.epfl.test6.VectorOps.plus(x10)
+x11
+}
+}
+/*****************************************
+  End of Generated Code                  
+*******************************************/
+

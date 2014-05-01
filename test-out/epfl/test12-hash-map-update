@@ -1,0 +1,148 @@
+/*****************************************
+  Emitting Generated Code                  
+*******************************************/
+class IntHashMapUpdate extends ((Int)=>(Unit)) {
+def apply(x110:Int): Unit = {
+val x111 = new HashMap[Int,Array[Int]]()
+val x112 = new Array[Int](5)
+x112(0) = 1
+x112(1) = 2
+val x115 = x111.table
+val x116 = x115.length
+val x5 = 1.hashCode
+val x6 = x5.toLong
+val x7 = x6 >>> 20
+val x8 = x6 >>> 12
+val x9 = x7 ^ x8
+val x10 = x9 ^ x6
+val x11 = x10 >>> 7
+val x12 = x10 ^ x11
+val x13 = x10 >>> 4
+val x14 = x12 ^ x13
+val x15 = x14.toInt
+val x117 = x116 - 1
+val x118 = x15 & x117
+val x119 = x115(x118)
+var x120 = x119
+val x121 = x120
+val x122 = x121 == null
+if (x122) {
+val x123 = new Entry(1, x112)
+x115(x118) = x123
+val x125 = x111.size
+val x126 = x125 + 1
+x111.size = x126
+
+} else {
+while ({
+val x129 = x120
+val x130 = x129.hasNext
+val x136 = if (x130) {
+val x131 = x120
+val x132 = x131.key
+val x133 = x132 != 1
+
+x133
+} else false
+
+x136
+}) {
+val x138 = x120
+val x139 = x138.next
+x120 = x139
+()
+}
+val x143 = x120
+val x144 = x143.key
+val x145 = x144 == 1
+if (x145) {
+x143.value = x112
+
+} else {
+val x148 = new Entry(1, x112)
+x143.next = x148
+val x150 = x111.size
+val x151 = x150 + 1
+x111.size = x151
+
+}
+
+}
+var x157 = x119
+val x158 = x157
+val x159 = x158 == null
+val x181 = if (x159) {
+null
+} else {
+while ({
+val x160 = x157
+val x161 = x160.hasNext
+val x167 = if (x161) {
+val x162 = x157
+val x163 = x162.key
+val x164 = x163 != 1
+
+x164
+} else false
+
+x167
+}) {
+val x169 = x157
+val x170 = x169.next
+x157 = x170
+()
+}
+val x174 = x157
+val x175 = x174.key
+val x176 = x175 == 1
+val x179 = if (x176) {
+val x177 = x174.value
+x177
+} else {
+null
+}
+x179
+}
+x181(0) = 10
+var x183 = x119
+val x184 = x183
+val x185 = x184 == null
+val x207 = if (x185) {
+null
+} else {
+while ({
+val x186 = x183
+val x187 = x186.hasNext
+val x193 = if (x187) {
+val x188 = x183
+val x189 = x188.key
+val x190 = x189 != 1
+
+x190
+} else false
+
+x193
+}) {
+val x195 = x183
+val x196 = x195.next
+x183 = x196
+()
+}
+val x200 = x183
+val x201 = x200.key
+val x202 = x201 == 1
+val x205 = if (x202) {
+val x203 = x200.value
+x203
+} else {
+null
+}
+x205
+}
+val x208 = x207(0)
+println(x208)
+}
+}
+/*****************************************
+  End of Generated Code                  
+*******************************************/

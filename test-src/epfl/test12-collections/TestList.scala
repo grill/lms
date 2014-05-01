@@ -35,7 +35,7 @@ class TestList extends FileDiffSuite {
 
   val prefix = "test-out/epfl/test12-"
 
-  it("testMapFlatMapAndFilter") {
+ /* it("testMapFlatMapAndFilter") {
     withOutFile(prefix+"map-flatmap-filter") {
       val prog = new MapFlatMapAndFilter with ListOpsExp with NumericOpsExp with OrderingOpsExp
       val codegen = new ScalaGenEffect with ScalaGenListOps with ScalaGenNumericOps with ScalaGenOrderingOps { val IR: prog.type = prog }
@@ -62,6 +62,6 @@ class TestList extends FileDiffSuite {
       codegen.emitSource1(prog.test, "MkString", new PrintWriter(System.out))
     }
     assertFileEqualsCheck(prefix+"mkstring")
-  }
+  }*/
 
 }

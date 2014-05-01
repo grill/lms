@@ -1,0 +1,102 @@
+/*****************************************
+  Emitting Generated Code                  
+*******************************************/
+class IntHashMapGetAndUpdate extends ((Int)=>(Unit)) {
+def apply(x74:Int): Unit = {
+val x75 = new HashMap[Int,Int]()
+val x76 = x75.table
+val x77 = x76.length
+val x2 = 1.hashCode
+val x3 = x2.toLong
+val x4 = x3 >>> 20
+val x5 = x3 >>> 12
+val x6 = x4 ^ x5
+val x7 = x6 ^ x3
+val x8 = x7 >>> 7
+val x9 = x7 ^ x8
+val x10 = x7 >>> 4
+val x11 = x9 ^ x10
+val x12 = x11.toInt
+val x78 = x77 - 1
+val x79 = x12 & x78
+val x80 = x76(x79)
+var x81 = x80
+val x82 = x81
+val x83 = x82 == null
+if (x83) {
+val x84 = new Entry(1, 2)
+x76(x79) = x84
+
+} else {
+while ({
+val x87 = x81
+val x88 = x87.hasNext
+val x94 = if (x88) {
+val x89 = x81
+val x90 = x89.key
+val x91 = x90 != 1
+
+x91
+} else false
+
+x94
+}) {
+val x96 = x81
+val x97 = x96.next
+x81 = x97
+()
+}
+val x101 = x81
+val x102 = x101.key
+val x103 = x102 == 1
+if (x103) {
+x101.value = 2
+
+} else {
+val x106 = new Entry(1, 2)
+x101.next = x106
+
+}
+
+}
+var x112 = x80
+val x113 = x112
+val x114 = x113 == null
+val x136 = if (x114) {
+null
+} else {
+while ({
+val x115 = x112
+val x116 = x115.hasNext
+val x122 = if (x116) {
+val x117 = x112
+val x118 = x117.key
+val x119 = x118 != 1
+
+x119
+} else false
+
+x122
+}) {
+val x124 = x112
+val x125 = x124.next
+x112 = x125
+()
+}
+val x129 = x112
+val x130 = x129.key
+val x131 = x130 == 1
+val x134 = if (x131) {
+val x132 = x129.value
+x132
+} else {
+null
+}
+x134
+}
+println(x136)
+}
+}
+/*****************************************
+  End of Generated Code                  
+*******************************************/

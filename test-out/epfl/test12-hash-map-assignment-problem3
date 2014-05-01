@@ -1,0 +1,51 @@
+NestedDeps: List()
+Reflect: Reflect(HashMapGetSize(Sym(0)),Summary(false,false,false,false,false,List(),List(),List(Sym(0)),List(Sym(0)),List(),List()),List(Sym(0)))
+NestedDeps: List()
+Reflect: Reflect(PrintLn(Sym(1)),Summary(true,true,false,false,false,List(),List(),List(),List(),List(),List()),List())
+NestedDeps: List()
+Reflect: Reflect(NewVar(Sym(0)),Summary(false,false,false,false,true,List(),List(),List(Sym(0)),List(Sym(0)),List(),List()),List(Sym(0)))
+NestedDeps: List()
+Reflect: Reflect(ReadVar(Variable(Sym(3))),Summary(false,false,false,false,false,List(),List(),List(Sym(3), Sym(0)),List(Sym(3), Sym(0)),List(),List()),List(Sym(0), Sym(3)))
+Write: WrappedArray(Sym(4))Def: HashMapSetSize(Sym(4),Const(2))
+NestedDeps: List()
+Reflect: Reflect(HashMapSetSize(Sym(4),Const(2)),Summary(false,false,false,false,false,List(),List(),List(Sym(4), Sym(0)),List(Sym(4), Sym(0)),List(Sym(4)),List(Sym(4))),List(Sym(0), Sym(4)))
+Alias: List(Sym(0))
+NestedDeps: List()
+Reflect: Reflect(HashMapGetSize(Sym(0)),Summary(false,false,false,false,false,List(),List(),List(Sym(0)),List(Sym(0)),List(),List()),List(Sym(0)))
+NestedDeps: List()
+Reflect: Reflect(PrintLn(Sym(1)),Summary(true,true,false,false,false,List(),List(),List(),List(),List(),List()),List(Sym(2)))
+NestedDeps: List()
+Reflect: Reflect(NewHashMap(Int,Int),Summary(false,false,false,false,true,List(),List(),List(),List(),List(),List()),List())
+NestedDeps: List()
+Reflect: Reflect(HashMapGetSize(Sym(8)),Summary(false,false,false,false,false,List(),List(),List(Sym(8)),List(Sym(8)),List(),List()),List(Sym(8)))
+NestedDeps: List()
+Reflect: Reflect(PrintLn(Sym(9)),Summary(true,true,false,false,false,List(),List(),List(),List(),List(),List()),List())
+NestedDeps: List()
+Reflect: Reflect(NewVar(Sym(8)),Summary(false,false,false,false,true,List(),List(),List(Sym(8)),List(Sym(8)),List(),List()),List(Sym(8)))
+NestedDeps: List()
+Reflect: Reflect(ReadVar(Variable(Sym(11))),Summary(false,false,false,false,false,List(),List(),List(Sym(11), Sym(8)),List(Sym(11), Sym(8)),List(),List()),List(Sym(8), Sym(11)))
+Write: WrappedArray(Sym(12))Def: HashMapSetSize(Sym(12),Const(2))
+NestedDeps: List()
+Reflect: Reflect(HashMapSetSize(Sym(12),Const(2)),Summary(false,false,false,false,false,List(),List(),List(Sym(12), Sym(8)),List(Sym(12), Sym(8)),List(Sym(12)),List(Sym(12))),List(Sym(8), Sym(12)))
+Alias: List(Sym(8))
+NestedDeps: List()
+Reflect: Reflect(HashMapGetSize(Sym(8)),Summary(false,false,false,false,false,List(),List(),List(Sym(8)),List(Sym(8)),List(),List()),List(Sym(8)))
+NestedDeps: List()
+Reflect: Reflect(PrintLn(Sym(9)),Summary(true,true,false,false,false,List(),List(),List(),List(),List(),List()),List(Sym(10)))
+/*****************************************
+  Emitting Generated Code                  
+*******************************************/
+class IntHashMapAssignmentProblem3 extends ((Int)=>(Unit)) {
+def apply(x7:Int): Unit = {
+val x8 = new HashMap[Int,Int]()
+val x9 = x8.size
+println(x9)
+var x11 = x8
+val x12 = x11
+x12.size = 2
+println(x9)
+}
+}
+/*****************************************
+  End of Generated Code                  
+*******************************************/

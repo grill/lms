@@ -50,5 +50,36 @@ class TestConstCSE extends FileDiffSuite {
     }
     assertFileEqualsCheck(prefix+"constcse1")
   }
-
 }
+
+object TestConstCSE {
+
+   def main(args: Array[String]) = {
+      trait Prog extends ScalaOpsPkg {
+        def test1(test_param: Rep[Boolean], acc: Rep[Long]): Rep[Long] = {
+          val dblVal = if(test_param) unit(1.0) else unit(0.0)
+          val lngVal = if(test_param) unit(1L) else unit(0L)
+          auxMethod(acc + lngVal, dblVal)
+        }
+
+        def auxMethod(val1: Rep[Long], val2: Rep[Double]): Rep[Long] = {
+          val1 + unit(133L) + rep_asinstanceof[Double, Long](val2,manifest[Double],manifest[Long])
+        }
+      }
+
+       new Prog with ScalaOpsPkgExp with ScalaCompile{ self =>
+
+        val printWriter = new java.io.PrintWriter(System.out)
+
+        //test1: first "loop"
+        val codegen = new ScalaCodeGenPkg with ScalaCodegen{ val IR: self.type = self }
+
+        codegen.emitSource2(test1 _ , "test1", printWriter)
+        val source = new StringWriter
+        val testc1 = compile2(test1)
+        scala.Console.println(testc1(true,12))
+
+
+      }
+   }
+ }

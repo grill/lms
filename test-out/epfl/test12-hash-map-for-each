@@ -1,0 +1,211 @@
+/*****************************************
+  Emitting Generated Code                  
+*******************************************/
+class IntHashMapForEach extends ((Int)=>(Unit)) {
+def apply(x170:Int): Unit = {
+val x171 = new HashMap[Int,Int]()
+val x172 = x171.table
+val x173 = x172.length
+val x2 = 1.hashCode
+val x3 = x2.toLong
+val x4 = x3 >>> 20
+val x5 = x3 >>> 12
+val x6 = x4 ^ x5
+val x7 = x6 ^ x3
+val x8 = x7 >>> 7
+val x9 = x7 ^ x8
+val x10 = x7 >>> 4
+val x11 = x9 ^ x10
+val x12 = x11.toInt
+val x174 = x173 - 1
+val x175 = x12 & x174
+val x176 = x172(x175)
+var x177 = x176
+val x178 = x177
+val x179 = x178 == null
+if (x179) {
+val x180 = new Entry(1, 2)
+x172(x175) = x180
+val x182 = x171.size
+val x183 = x182 + 1
+x171.size = x183
+
+} else {
+while ({
+val x186 = x177
+val x187 = x186.hasNext
+val x193 = if (x187) {
+val x188 = x177
+val x189 = x188.key
+val x190 = x189 != 1
+
+x190
+} else false
+
+x193
+}) {
+val x195 = x177
+val x196 = x195.next
+x177 = x196
+()
+}
+val x200 = x177
+val x201 = x200.key
+val x202 = x201 == 1
+if (x202) {
+x200.value = 2
+
+} else {
+val x205 = new Entry(1, 2)
+x200.next = x205
+val x207 = x171.size
+val x208 = x207 + 1
+x171.size = x208
+
+}
+
+}
+var x214 = x176
+val x215 = x214
+val x216 = x215 == null
+if (x216) {
+val x217 = new Entry(1, 2)
+x172(x175) = x217
+val x219 = x171.size
+val x220 = x219 + 1
+x171.size = x220
+
+} else {
+while ({
+val x223 = x214
+val x224 = x223.hasNext
+val x230 = if (x224) {
+val x225 = x214
+val x226 = x225.key
+val x227 = x226 != 1
+
+x227
+} else false
+
+x230
+}) {
+val x232 = x214
+val x233 = x232.next
+x214 = x233
+()
+}
+val x237 = x214
+val x238 = x237.key
+val x239 = x238 == 1
+if (x239) {
+x237.value = 2
+
+} else {
+val x242 = new Entry(1, 2)
+x237.next = x242
+val x244 = x171.size
+val x245 = x244 + 1
+x171.size = x245
+
+}
+
+}
+val x91 = 2.hashCode
+val x92 = x91.toLong
+val x93 = x92 >>> 20
+val x94 = x92 >>> 12
+val x95 = x93 ^ x94
+val x96 = x95 ^ x92
+val x97 = x96 >>> 7
+val x98 = x96 ^ x97
+val x99 = x96 >>> 4
+val x100 = x98 ^ x99
+val x101 = x100.toInt
+val x251 = x101 & x174
+val x252 = x172(x251)
+var x253 = x252
+val x254 = x253
+val x255 = x254 == null
+if (x255) {
+val x256 = new Entry(2, 3)
+x172(x251) = x256
+val x258 = x171.size
+val x259 = x258 + 1
+x171.size = x259
+
+} else {
+while ({
+val x262 = x253
+val x263 = x262.hasNext
+val x269 = if (x263) {
+val x264 = x253
+val x265 = x264.key
+val x266 = x265 != 2
+
+x266
+} else false
+
+x269
+}) {
+val x271 = x253
+val x272 = x271.next
+x253 = x272
+()
+}
+val x276 = x253
+val x277 = x276.key
+val x278 = x277 == 2
+if (x278) {
+x276.value = 3
+
+} else {
+val x281 = new Entry(2, 3)
+x276.next = x281
+val x283 = x171.size
+val x284 = x283 + 1
+x171.size = x284
+
+}
+
+}
+var x290 = 0
+var x291 = null
+while ({
+val x292 = x290
+val x293 = x172.length
+val x294 = x292 < x293
+x294
+}) {
+val x296 = x290
+val x297 = x296 + 1
+x290 = x297
+val x299 = x290
+val x300 = x172(x299)
+val x301 = x300 != null
+if (x301) {
+x291 = x300
+val x303 = x291
+println(x303)
+while ({
+val x305 = x291
+val x306 = x305.hasNext
+x306
+}) {
+val x308 = x291
+val x309 = x308.next
+x291 = x309
+val x311 = x291
+println(x311)
+
+}
+
+} else {
+()
+}
+
+}
+}
+}
+/*****************************************
+  End of Generated Code                  
+*******************************************/

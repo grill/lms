@@ -95,6 +95,19 @@ trait ArrayOpsExp extends ArrayOps with EffectExp with VariablesExp {
   case class ArrayMkString[A:Manifest](a: Exp[Array[A]], b: Exp[String] = unit("")) extends Def[String]
   case class ArrayCorresponds[A:Manifest, B: Manifest](x: Exp[Array[A]], x2: Exp[Array[B]]) extends Def[Boolean]
   case class ArrayMutable[A:Manifest](a: Exp[Array[A]]) extends Def[Array[A]]
+
+
+  override def containSyms(e: Any): List[Sym[Any]] = e match {
+    case ArrayUpdate(a, i, v) => syms(v)
+    case ArrayApply(a, i) => Nil
+    case _ => super.containSyms(e)
+  }
+
+  override def extractSyms(e: Any): List[Sym[Any]] = e match {
+    case ArrayUpdate(a, i, v) => Nil
+    case ArrayApply(a, i) => syms(a)
+    case _ => super.extractSyms(e)
+  }
   
   def array_obj_new[T:Manifest](n: Exp[Int], specializedType: Rep[String] = unit("")) = reflectMutable(ArrayNew(n, specializedType))
   def array_obj_fromseq[T:Manifest](xs: Seq[T]) = /*reflectMutable(*/ ArrayFromSeq(xs) /*)*/

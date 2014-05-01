@@ -1,0 +1,382 @@
+Nested: WrappedArray(Sym(0)) Def: HashMapGetTable(Sym(0))
+Context: List(Sym(0))
+ReflectReadMutable repsW: List(Sym(0))
+NestedDeps: List()
+Reflect: Reflect(HashMapGetTable(Sym(0)),Summary(false,false,false,false,false,List((List(Sym(0)),List(HashMapGetTable(Sym(0))))),List(Sym(0)),List(Sym(0)),List(Sym(0)),List(),List()),List(Sym(0)))
+Alias: List()
+NestedDeps: List()
+Reflect: Reflect(ArrayLength(Sym(1)),Summary(false,false,false,false,false,List(),List(),List(Sym(1), Sym(0)),List(Sym(1), Sym(0)),List(),List()),List(Sym(0), Sym(1)))
+Nested: WrappedArray(Sym(1)) Def: ArrayApply(Sym(1),Sym(15))
+Context: List(Sym(0), Sym(1), Sym(13))
+ReflectReadMutable repsW: List(Sym(1))
+NestedDeps: List()
+Reflect: Reflect(ArrayApply(Sym(1),Sym(15)),Summary(false,false,false,false,false,List((List(Sym(1)),List(ArrayApply(Sym(1),Sym(15))))),List(Sym(1)),List(Sym(1), Sym(0)),List(Sym(1), Sym(0)),List(),List()),List(Sym(0), Sym(1)))
+Alias: List(Sym(0))
+NestedDeps: List()
+Reflect: Reflect(NewVar(Sym(16)),Summary(false,false,false,false,true,List(),List(),List(Sym(16), Sym(1), Sym(0)),List(Sym(16), Sym(1), Sym(0)),List(),List()),List(Sym(0), Sym(1), Sym(16)))
+NestedDeps: List()
+Reflect: Reflect(HashMapGetSize(Sym(0)),Summary(false,false,false,false,false,List(),List(),List(Sym(0)),List(Sym(0)),List(),List()),List(Sym(0)))
+NestedDeps: List()
+Reflect: Reflect(ReadVar(Variable(Sym(17))),Summary(false,false,false,false,false,List(),List(),List(Sym(17), Sym(16), Sym(1), Sym(0)),List(Sym(17), Sym(16), Sym(1), Sym(0)),List(),List()),List(Sym(0), Sym(1), Sym(16), Sym(17)))
+NestedDeps: List()
+Reflect: Reflect(Equal(Sym(19),Const(null)),Summary(false,false,false,false,false,List(),List(),List(Sym(19), Sym(16), Sym(1), Sym(0)),List(Sym(19), Sym(16), Sym(1), Sym(0)),List(),List()),List(Sym(0), Sym(1), Sym(16), Sym(19)))
+Nested: WrappedArray(Sym(1)) Def: ArrayApply(Sym(1),Sym(15))
+Context: List(Sym(0), Sym(1), Sym(13), Sym(16), Sym(17), Sym(18), Sym(19), Sym(20))
+ReflectReadMutable repsW: List(Sym(1))
+NestedDeps: List()
+Reflect: Reflect(ArrayApply(Sym(1),Sym(15)),Summary(false,false,false,false,false,List((List(Sym(1)),List(ArrayApply(Sym(1),Sym(15))))),List(Sym(1)),List(Sym(1), Sym(0)),List(Sym(1), Sym(0)),List(),List()),List(Sym(0), Sym(1)))
+Alias: List(Sym(0))
+NestedDeps: List()
+Reflect: Reflect(EntryCreate(Const(1),Const(2)),Summary(false,false,false,false,true,List(),List(),List(),List(),List(),List()),List())
+Write: WrappedArray(Sym(16))Def: ArrayUpdate(Sym(1),Sym(15),Sym(21))
+NestedDeps: List()
+Reflect: Reflect(ArrayUpdate(Sym(1),Sym(15),Sym(21)),Summary(false,false,false,false,false,List(),List(),List(Sym(1), Sym(0), Sym(21)),List(Sym(1), Sym(0), Sym(21)),List(Sym(16)),List(Sym(16))),List(Sym(0), Sym(1), Sym(16), Sym(17), Sym(19), Sym(20), Sym(21)))
+Alias: List(Sym(1), Sym(0), Sym(21))
+Write: WrappedArray(Sym(0))Def: HashMapSetSize(Sym(0),Sym(23))
+NestedDeps: List()
+Reflect: Reflect(HashMapSetSize(Sym(0),Sym(23)),Summary(false,false,false,false,false,List(),List(),List(Sym(0)),List(Sym(0)),List(Sym(0)),List(Sym(0))),List(Sym(0), Sym(1), Sym(13), Sym(16), Sym(17), Sym(18), Sym(19), Sym(20), Sym(22)))
+Alias: List()
+NestedDeps: List()
+Reflect: Reflect(ReadVar(Variable(Sym(17))),Summary(false,false,false,false,false,List(),List(),List(Sym(17), Sym(16), Sym(1), Sym(0)),List(Sym(17), Sym(16), Sym(1), Sym(0)),List(),List()),List())
+NestedDeps: List()
+Reflect: Reflect(EntryHasNext(Sym(26)),Summary(false,false,false,false,false,List(),List(),List(Sym(26), Sym(16), Sym(1), Sym(0)),List(Sym(26), Sym(16), Sym(1), Sym(0)),List(),List()),List(Sym(26)))
+NestedDeps: List()
+Reflect: Reflect(ReadVar(Variable(Sym(17))),Summary(false,false,false,false,false,List(),List(),List(Sym(17), Sym(16), Sym(1), Sym(0)),List(Sym(17), Sym(16), Sym(1), Sym(0)),List(),List()),List())
+NestedDeps: List()
+Reflect: Reflect(EntryGetKey(Sym(28)),Summary(false,false,false,false,false,List(),List(),List(Sym(28), Sym(16), Sym(1), Sym(0)),List(Sym(28), Sym(16), Sym(1), Sym(0)),List(),List()),List(Sym(28)))
+NestedDeps: List()
+Reflect: Reflect(ReadVar(Variable(Sym(17))),Summary(false,false,false,false,false,List(),List(),List(Sym(17), Sym(16), Sym(1), Sym(0)),List(Sym(17), Sym(16), Sym(1), Sym(0)),List(),List()),List())
+NestedDeps: List()
+Reflect: Reflect(EntryNext(Sym(35)),Summary(false,false,false,false,false,List(),List(),List(Sym(35), Sym(16), Sym(1), Sym(0)),List(Sym(35), Sym(16), Sym(1), Sym(0)),List(),List()),List(Sym(35)))
+Write: WrappedArray(Sym(17))Def: Assign(Variable(Sym(17)),Sym(36))
+NestedDeps: List()
+Reflect: Reflect(Assign(Variable(Sym(17)),Sym(36)),Summary(false,false,false,false,false,List(),List(),List(Sym(17), Sym(36), Sym(35), Sym(16), Sym(1), Sym(0)),List(Sym(17), Sym(36), Sym(35), Sym(16), Sym(1), Sym(0)),List(Sym(17)),List(Sym(17))),List(Sym(35), Sym(36)))
+Alias: List(Sym(36), Sym(35), Sym(16), Sym(1), Sym(0))
+NestedDeps: List()
+Reflect: Reflect(While(Block(Sym(34)),Block(Sym(38))),Summary(false,false,false,false,false,List(),List(),List(Sym(17), Sym(16), Sym(1), Sym(0), Sym(26), Sym(35), Sym(36)),List(Sym(17), Sym(16), Sym(1), Sym(0), Sym(26)),List(Sym(17)),List()),List(Sym(0), Sym(1), Sym(16), Sym(17), Sym(19)))
+NestedDeps: List()
+Reflect: Reflect(ReadVar(Variable(Sym(17))),Summary(false,false,false,false,false,List(),List(),List(Sym(17), Sym(16), Sym(1), Sym(0)),List(Sym(17), Sym(16), Sym(1), Sym(0)),List(),List()),List(Sym(0), Sym(1), Sym(16), Sym(17), Sym(39)))
+NestedDeps: List()
+Reflect: Reflect(EntryGetKey(Sym(40)),Summary(false,false,false,false,false,List(),List(),List(Sym(40), Sym(16), Sym(1), Sym(0)),List(Sym(40), Sym(16), Sym(1), Sym(0)),List(),List()),List(Sym(0), Sym(1), Sym(16), Sym(40)))
+NestedDeps: List()
+Reflect: Reflect(ReadVar(Variable(Sym(17))),Summary(false,false,false,false,false,List(),List(),List(Sym(17), Sym(16), Sym(1), Sym(0)),List(Sym(17), Sym(16), Sym(1), Sym(0)),List(),List()),List(Sym(0), Sym(1), Sym(16), Sym(17), Sym(39)))
+Write: WrappedArray(Sym(40))Def: EntrySetValue(Sym(40),Const(2))
+NestedDeps: List()
+Reflect: Reflect(EntrySetValue(Sym(40),Const(2)),Summary(false,false,false,false,false,List(),List(),List(Sym(40), Sym(16), Sym(1), Sym(0)),List(Sym(40), Sym(16), Sym(1), Sym(0)),List(Sym(40)),List(Sym(40))),List(Sym(0), Sym(1), Sym(16), Sym(40), Sym(41)))
+Alias: List(Sym(16), Sym(1), Sym(0))
+NestedDeps: List()
+Reflect: Reflect(ReadVar(Variable(Sym(17))),Summary(false,false,false,false,false,List(),List(),List(Sym(17), Sym(16), Sym(1), Sym(0)),List(Sym(17), Sym(16), Sym(1), Sym(0)),List(),List()),List(Sym(0), Sym(1), Sym(16), Sym(17), Sym(39)))
+NestedDeps: List()
+Reflect: Reflect(EntryCreate(Const(1),Const(2)),Summary(false,false,false,false,true,List(),List(),List(),List(),List(),List()),List())
+Write: WrappedArray(Sym(40))Def: EntrySetNext(Sym(40),Sym(45))
+NestedDeps: List()
+Reflect: Reflect(EntrySetNext(Sym(40),Sym(45)),Summary(false,false,false,false,false,List(),List(),List(Sym(40), Sym(16), Sym(1), Sym(0), Sym(45)),List(Sym(40), Sym(16), Sym(1), Sym(0), Sym(45)),List(Sym(40)),List(Sym(40))),List(Sym(0), Sym(1), Sym(16), Sym(40), Sym(41), Sym(45)))
+Alias: List(Sym(16), Sym(1), Sym(0), Sym(45))
+Write: WrappedArray(Sym(0))Def: HashMapSetSize(Sym(0),Sym(23))
+NestedDeps: List()
+Reflect: Reflect(HashMapSetSize(Sym(0),Sym(23)),Summary(false,false,false,false,false,List(),List(),List(Sym(0)),List(Sym(0)),List(Sym(0)),List(Sym(0))),List(Sym(0), Sym(1), Sym(13), Sym(16), Sym(17), Sym(18), Sym(19), Sym(20), Sym(39), Sym(40), Sym(41), Sym(46)))
+Alias: List()
+NestedDeps: List()
+Reflect: Reflect(IfThenElse(Sym(42),Block(Sym(44)),Block(Sym(48))),Summary(false,false,false,false,false,List(),List(),List(Sym(40), Sym(16), Sym(1), Sym(0)),List(Sym(40), Sym(16), Sym(1), Sym(0)),List(Sym(40), Sym(0)),List(Sym(40))),List(Sym(0), Sym(1), Sym(13), Sym(16), Sym(17), Sym(18), Sym(19), Sym(20), Sym(39), Sym(40), Sym(41)))
+NestedDeps: List()
+Reflect: Reflect(IfThenElse(Sym(20),Block(Sym(25)),Block(Sym(50))),Summary(false,false,false,false,false,List(),List(),List(Sym(1), Sym(0), Sym(17), Sym(16), Sym(26), Sym(35), Sym(36), Sym(40)),List(Sym(1), Sym(0)),List(Sym(16), Sym(0), Sym(17), Sym(40)),List()),List(Sym(0), Sym(1), Sym(13), Sym(16), Sym(17), Sym(18), Sym(19), Sym(20)))
+Nested: WrappedArray(Sym(0)) Def: HashMapGetTable(Sym(0))
+Context: List(Sym(0), Sym(1), Sym(13), Sym(16), Sym(17), Sym(18), Sym(19), Sym(20), Sym(51))
+ReflectReadMutable repsW: List(Sym(0))
+NestedDeps: List()
+Reflect: Reflect(HashMapGetTable(Sym(0)),Summary(false,false,false,false,false,List((List(Sym(0)),List(HashMapGetTable(Sym(0))))),List(Sym(0)),List(Sym(0)),List(Sym(0)),List(),List()),List(Sym(0), Sym(51)))
+Alias: List()
+NestedDeps: List()
+Reflect: Reflect(ArrayLength(Sym(52)),Summary(false,false,false,false,false,List(),List(),List(Sym(52), Sym(0)),List(Sym(52), Sym(0)),List(),List()),List(Sym(0), Sym(51), Sym(52)))
+Nested: WrappedArray(Sym(52)) Def: ArrayApply(Sym(52),Sym(55))
+Context: List(Sym(0), Sym(1), Sym(13), Sym(16), Sym(17), Sym(18), Sym(19), Sym(20), Sym(51), Sym(52), Sym(53))
+ReflectReadMutable repsW: List(Sym(52))
+NestedDeps: List()
+Reflect: Reflect(ArrayApply(Sym(52),Sym(55)),Summary(false,false,false,false,false,List((List(Sym(52)),List(ArrayApply(Sym(52),Sym(55))))),List(Sym(52)),List(Sym(52), Sym(0)),List(Sym(52), Sym(0)),List(),List()),List(Sym(0), Sym(51), Sym(52)))
+Alias: List(Sym(0))
+NestedDeps: List()
+Reflect: Reflect(NewVar(Sym(56)),Summary(false,false,false,false,true,List(),List(),List(Sym(56), Sym(52), Sym(0)),List(Sym(56), Sym(52), Sym(0)),List(),List()),List(Sym(0), Sym(51), Sym(52), Sym(56)))
+NestedDeps: List()
+Reflect: Reflect(ReadVar(Variable(Sym(57))),Summary(false,false,false,false,false,List(),List(),List(Sym(57), Sym(56), Sym(52), Sym(0)),List(Sym(57), Sym(56), Sym(52), Sym(0)),List(),List()),List(Sym(0), Sym(51), Sym(52), Sym(56), Sym(57)))
+NestedDeps: List()
+Reflect: Reflect(Equal(Sym(58),Const(null)),Summary(false,false,false,false,false,List(),List(),List(Sym(58), Sym(56), Sym(52), Sym(0)),List(Sym(58), Sym(56), Sym(52), Sym(0)),List(),List()),List(Sym(0), Sym(51), Sym(52), Sym(56), Sym(58)))
+NestedDeps: List()
+Reflect: Reflect(ReadVar(Variable(Sym(57))),Summary(false,false,false,false,false,List(),List(),List(Sym(57), Sym(56), Sym(52), Sym(0)),List(Sym(57), Sym(56), Sym(52), Sym(0)),List(),List()),List())
+NestedDeps: List()
+Reflect: Reflect(EntryHasNext(Sym(60)),Summary(false,false,false,false,false,List(),List(),List(Sym(60), Sym(56), Sym(52), Sym(0)),List(Sym(60), Sym(56), Sym(52), Sym(0)),List(),List()),List(Sym(60)))
+NestedDeps: List()
+Reflect: Reflect(ReadVar(Variable(Sym(57))),Summary(false,false,false,false,false,List(),List(),List(Sym(57), Sym(56), Sym(52), Sym(0)),List(Sym(57), Sym(56), Sym(52), Sym(0)),List(),List()),List())
+NestedDeps: List()
+Reflect: Reflect(EntryGetKey(Sym(62)),Summary(false,false,false,false,false,List(),List(),List(Sym(62), Sym(56), Sym(52), Sym(0)),List(Sym(62), Sym(56), Sym(52), Sym(0)),List(),List()),List(Sym(62)))
+NestedDeps: List()
+Reflect: Reflect(ReadVar(Variable(Sym(57))),Summary(false,false,false,false,false,List(),List(),List(Sym(57), Sym(56), Sym(52), Sym(0)),List(Sym(57), Sym(56), Sym(52), Sym(0)),List(),List()),List())
+NestedDeps: List()
+Reflect: Reflect(EntryNext(Sym(69)),Summary(false,false,false,false,false,List(),List(),List(Sym(69), Sym(56), Sym(52), Sym(0)),List(Sym(69), Sym(56), Sym(52), Sym(0)),List(),List()),List(Sym(69)))
+Write: WrappedArray(Sym(57))Def: Assign(Variable(Sym(57)),Sym(70))
+NestedDeps: List()
+Reflect: Reflect(Assign(Variable(Sym(57)),Sym(70)),Summary(false,false,false,false,false,List(),List(),List(Sym(57), Sym(70), Sym(69), Sym(56), Sym(52), Sym(0)),List(Sym(57), Sym(70), Sym(69), Sym(56), Sym(52), Sym(0)),List(Sym(57)),List(Sym(57))),List(Sym(69), Sym(70)))
+Alias: List(Sym(70), Sym(69), Sym(56), Sym(52), Sym(0))
+NestedDeps: List()
+Reflect: Reflect(While(Block(Sym(68)),Block(Sym(72))),Summary(false,false,false,false,false,List(),List(),List(Sym(57), Sym(56), Sym(52), Sym(0), Sym(60), Sym(69), Sym(70)),List(Sym(57), Sym(56), Sym(52), Sym(0), Sym(60)),List(Sym(57)),List()),List(Sym(0), Sym(51), Sym(52), Sym(56), Sym(57), Sym(58)))
+NestedDeps: List()
+Reflect: Reflect(ReadVar(Variable(Sym(57))),Summary(false,false,false,false,false,List(),List(),List(Sym(57), Sym(56), Sym(52), Sym(0)),List(Sym(57), Sym(56), Sym(52), Sym(0)),List(),List()),List(Sym(0), Sym(51), Sym(52), Sym(56), Sym(57), Sym(73)))
+NestedDeps: List()
+Reflect: Reflect(EntryGetKey(Sym(74)),Summary(false,false,false,false,false,List(),List(),List(Sym(74), Sym(56), Sym(52), Sym(0)),List(Sym(74), Sym(56), Sym(52), Sym(0)),List(),List()),List(Sym(0), Sym(51), Sym(52), Sym(56), Sym(74)))
+NestedDeps: List()
+Reflect: Reflect(ReadVar(Variable(Sym(57))),Summary(false,false,false,false,false,List(),List(),List(Sym(57), Sym(56), Sym(52), Sym(0)),List(Sym(57), Sym(56), Sym(52), Sym(0)),List(),List()),List(Sym(0), Sym(51), Sym(52), Sym(56), Sym(57), Sym(73)))
+NestedDeps: List()
+Reflect: Reflect(EntryGetValue(Sym(74)),Summary(false,false,false,false,false,List(),List(),List(Sym(74), Sym(56), Sym(52), Sym(0)),List(Sym(74), Sym(56), Sym(52), Sym(0)),List(),List()),List(Sym(0), Sym(51), Sym(52), Sym(56), Sym(74)))
+NestedDeps: List()
+Reflect: Reflect(IfThenElse(Sym(76),Block(Sym(78)),Block(Const(null))),Summary(false,false,false,false,false,List(),List(),List(Sym(74), Sym(56), Sym(52), Sym(0)),List(),List(),List()),List(Sym(0), Sym(51), Sym(52), Sym(56), Sym(74)))
+NestedDeps: List()
+Reflect: Reflect(IfThenElse(Sym(59),Block(Const(null)),Block(Sym(80))),Summary(false,false,false,false,false,List(),List(),List(Sym(57), Sym(56), Sym(52), Sym(0), Sym(60), Sym(69), Sym(70), Sym(74)),List(),List(Sym(57)),List()),List(Sym(0), Sym(51), Sym(52), Sym(56), Sym(57), Sym(58)))
+NestedDeps: List()
+Reflect: Reflect(PrintLn(Sym(81)),Summary(true,true,false,false,false,List(),List(),List(),List(),List(),List()),List())
+NestedDeps: List()
+Reflect: Reflect(NewHashMap(Int,Int),Summary(false,false,false,false,true,List(),List(),List(),List(),List(),List()),List())
+Nested: WrappedArray(Sym(84)) Def: HashMapGetTable(Sym(84))
+Context: List(Sym(84))
+ReflectReadMutable repsW: List(Sym(84))
+NestedDeps: List()
+Reflect: Reflect(HashMapGetTable(Sym(84)),Summary(false,false,false,false,false,List((List(Sym(84)),List(HashMapGetTable(Sym(84))))),List(Sym(84)),List(Sym(84)),List(Sym(84)),List(),List()),List(Sym(84)))
+Alias: List()
+NestedDeps: List()
+Reflect: Reflect(ArrayLength(Sym(85)),Summary(false,false,false,false,false,List(),List(),List(Sym(85), Sym(84)),List(Sym(85), Sym(84)),List(),List()),List(Sym(84), Sym(85)))
+Nested: WrappedArray(Sym(85)) Def: ArrayApply(Sym(85),Sym(88))
+Context: List(Sym(84), Sym(85), Sym(86))
+ReflectReadMutable repsW: List(Sym(85))
+NestedDeps: List()
+Reflect: Reflect(ArrayApply(Sym(85),Sym(88)),Summary(false,false,false,false,false,List((List(Sym(85)),List(ArrayApply(Sym(85),Sym(88))))),List(Sym(85)),List(Sym(85), Sym(84)),List(Sym(85), Sym(84)),List(),List()),List(Sym(84), Sym(85)))
+Alias: List(Sym(84))
+NestedDeps: List()
+Reflect: Reflect(NewVar(Sym(89)),Summary(false,false,false,false,true,List(),List(),List(Sym(89), Sym(85), Sym(84)),List(Sym(89), Sym(85), Sym(84)),List(),List()),List(Sym(84), Sym(85), Sym(89)))
+NestedDeps: List()
+Reflect: Reflect(HashMapGetSize(Sym(84)),Summary(false,false,false,false,false,List(),List(),List(Sym(84)),List(Sym(84)),List(),List()),List(Sym(84)))
+NestedDeps: List()
+Reflect: Reflect(ReadVar(Variable(Sym(90))),Summary(false,false,false,false,false,List(),List(),List(Sym(90), Sym(89), Sym(85), Sym(84)),List(Sym(90), Sym(89), Sym(85), Sym(84)),List(),List()),List(Sym(84), Sym(85), Sym(89), Sym(90)))
+NestedDeps: List()
+Reflect: Reflect(Equal(Sym(92),Const(null)),Summary(false,false,false,false,false,List(),List(),List(Sym(92), Sym(89), Sym(85), Sym(84)),List(Sym(92), Sym(89), Sym(85), Sym(84)),List(),List()),List(Sym(84), Sym(85), Sym(89), Sym(92)))
+Nested: WrappedArray(Sym(85)) Def: ArrayApply(Sym(85),Sym(88))
+Context: List(Sym(84), Sym(85), Sym(86), Sym(89), Sym(90), Sym(91), Sym(92), Sym(93))
+ReflectReadMutable repsW: List(Sym(85))
+NestedDeps: List()
+Reflect: Reflect(ArrayApply(Sym(85),Sym(88)),Summary(false,false,false,false,false,List((List(Sym(85)),List(ArrayApply(Sym(85),Sym(88))))),List(Sym(85)),List(Sym(85), Sym(84)),List(Sym(85), Sym(84)),List(),List()),List(Sym(84), Sym(85)))
+Alias: List(Sym(84))
+NestedDeps: List()
+Reflect: Reflect(EntryCreate(Const(1),Const(2)),Summary(false,false,false,false,true,List(),List(),List(),List(),List(),List()),List())
+Write: WrappedArray(Sym(89))Def: ArrayUpdate(Sym(85),Sym(88),Sym(94))
+NestedDeps: List()
+Reflect: Reflect(ArrayUpdate(Sym(85),Sym(88),Sym(94)),Summary(false,false,false,false,false,List(),List(),List(Sym(85), Sym(84), Sym(94)),List(Sym(85), Sym(84), Sym(94)),List(Sym(89)),List(Sym(89))),List(Sym(84), Sym(85), Sym(89), Sym(90), Sym(92), Sym(93), Sym(94)))
+Alias: List(Sym(85), Sym(84), Sym(94))
+Write: WrappedArray(Sym(84))Def: HashMapSetSize(Sym(84),Sym(96))
+NestedDeps: List()
+Reflect: Reflect(HashMapSetSize(Sym(84),Sym(96)),Summary(false,false,false,false,false,List(),List(),List(Sym(84)),List(Sym(84)),List(Sym(84)),List(Sym(84))),List(Sym(84), Sym(85), Sym(86), Sym(89), Sym(90), Sym(91), Sym(92), Sym(93), Sym(95)))
+Alias: List()
+NestedDeps: List()
+Reflect: Reflect(ReadVar(Variable(Sym(90))),Summary(false,false,false,false,false,List(),List(),List(Sym(90), Sym(89), Sym(85), Sym(84)),List(Sym(90), Sym(89), Sym(85), Sym(84)),List(),List()),List())
+NestedDeps: List()
+Reflect: Reflect(EntryHasNext(Sym(99)),Summary(false,false,false,false,false,List(),List(),List(Sym(99), Sym(89), Sym(85), Sym(84)),List(Sym(99), Sym(89), Sym(85), Sym(84)),List(),List()),List(Sym(99)))
+NestedDeps: List()
+Reflect: Reflect(ReadVar(Variable(Sym(90))),Summary(false,false,false,false,false,List(),List(),List(Sym(90), Sym(89), Sym(85), Sym(84)),List(Sym(90), Sym(89), Sym(85), Sym(84)),List(),List()),List())
+NestedDeps: List()
+Reflect: Reflect(EntryGetKey(Sym(101)),Summary(false,false,false,false,false,List(),List(),List(Sym(101), Sym(89), Sym(85), Sym(84)),List(Sym(101), Sym(89), Sym(85), Sym(84)),List(),List()),List(Sym(101)))
+NestedDeps: List()
+Reflect: Reflect(ReadVar(Variable(Sym(90))),Summary(false,false,false,false,false,List(),List(),List(Sym(90), Sym(89), Sym(85), Sym(84)),List(Sym(90), Sym(89), Sym(85), Sym(84)),List(),List()),List())
+NestedDeps: List()
+Reflect: Reflect(EntryNext(Sym(108)),Summary(false,false,false,false,false,List(),List(),List(Sym(108), Sym(89), Sym(85), Sym(84)),List(Sym(108), Sym(89), Sym(85), Sym(84)),List(),List()),List(Sym(108)))
+Write: WrappedArray(Sym(90))Def: Assign(Variable(Sym(90)),Sym(109))
+NestedDeps: List()
+Reflect: Reflect(Assign(Variable(Sym(90)),Sym(109)),Summary(false,false,false,false,false,List(),List(),List(Sym(90), Sym(109), Sym(108), Sym(89), Sym(85), Sym(84)),List(Sym(90), Sym(109), Sym(108), Sym(89), Sym(85), Sym(84)),List(Sym(90)),List(Sym(90))),List(Sym(108), Sym(109)))
+Alias: List(Sym(109), Sym(108), Sym(89), Sym(85), Sym(84))
+NestedDeps: List()
+Reflect: Reflect(While(Block(Sym(107)),Block(Sym(111))),Summary(false,false,false,false,false,List(),List(),List(Sym(90), Sym(89), Sym(85), Sym(84), Sym(99), Sym(108), Sym(109)),List(Sym(90), Sym(89), Sym(85), Sym(84), Sym(99)),List(Sym(90)),List()),List(Sym(84), Sym(85), Sym(89), Sym(90), Sym(92)))
+NestedDeps: List()
+Reflect: Reflect(ReadVar(Variable(Sym(90))),Summary(false,false,false,false,false,List(),List(),List(Sym(90), Sym(89), Sym(85), Sym(84)),List(Sym(90), Sym(89), Sym(85), Sym(84)),List(),List()),List(Sym(84), Sym(85), Sym(89), Sym(90), Sym(112)))
+NestedDeps: List()
+Reflect: Reflect(EntryGetKey(Sym(113)),Summary(false,false,false,false,false,List(),List(),List(Sym(113), Sym(89), Sym(85), Sym(84)),List(Sym(113), Sym(89), Sym(85), Sym(84)),List(),List()),List(Sym(84), Sym(85), Sym(89), Sym(113)))
+NestedDeps: List()
+Reflect: Reflect(ReadVar(Variable(Sym(90))),Summary(false,false,false,false,false,List(),List(),List(Sym(90), Sym(89), Sym(85), Sym(84)),List(Sym(90), Sym(89), Sym(85), Sym(84)),List(),List()),List(Sym(84), Sym(85), Sym(89), Sym(90), Sym(112)))
+Write: WrappedArray(Sym(113))Def: EntrySetValue(Sym(113),Const(2))
+NestedDeps: List()
+Reflect: Reflect(EntrySetValue(Sym(113),Const(2)),Summary(false,false,false,false,false,List(),List(),List(Sym(113), Sym(89), Sym(85), Sym(84)),List(Sym(113), Sym(89), Sym(85), Sym(84)),List(Sym(113)),List(Sym(113))),List(Sym(84), Sym(85), Sym(89), Sym(113), Sym(114)))
+Alias: List(Sym(89), Sym(85), Sym(84))
+NestedDeps: List()
+Reflect: Reflect(ReadVar(Variable(Sym(90))),Summary(false,false,false,false,false,List(),List(),List(Sym(90), Sym(89), Sym(85), Sym(84)),List(Sym(90), Sym(89), Sym(85), Sym(84)),List(),List()),List(Sym(84), Sym(85), Sym(89), Sym(90), Sym(112)))
+NestedDeps: List()
+Reflect: Reflect(EntryCreate(Const(1),Const(2)),Summary(false,false,false,false,true,List(),List(),List(),List(),List(),List()),List())
+Write: WrappedArray(Sym(113))Def: EntrySetNext(Sym(113),Sym(118))
+NestedDeps: List()
+Reflect: Reflect(EntrySetNext(Sym(113),Sym(118)),Summary(false,false,false,false,false,List(),List(),List(Sym(113), Sym(89), Sym(85), Sym(84), Sym(118)),List(Sym(113), Sym(89), Sym(85), Sym(84), Sym(118)),List(Sym(113)),List(Sym(113))),List(Sym(84), Sym(85), Sym(89), Sym(113), Sym(114), Sym(118)))
+Alias: List(Sym(89), Sym(85), Sym(84), Sym(118))
+Write: WrappedArray(Sym(84))Def: HashMapSetSize(Sym(84),Sym(96))
+NestedDeps: List()
+Reflect: Reflect(HashMapSetSize(Sym(84),Sym(96)),Summary(false,false,false,false,false,List(),List(),List(Sym(84)),List(Sym(84)),List(Sym(84)),List(Sym(84))),List(Sym(84), Sym(85), Sym(86), Sym(89), Sym(90), Sym(91), Sym(92), Sym(93), Sym(112), Sym(113), Sym(114), Sym(119)))
+Alias: List()
+NestedDeps: List()
+Reflect: Reflect(IfThenElse(Sym(115),Block(Sym(117)),Block(Sym(121))),Summary(false,false,false,false,false,List(),List(),List(Sym(113), Sym(89), Sym(85), Sym(84)),List(Sym(113), Sym(89), Sym(85), Sym(84)),List(Sym(113), Sym(84)),List(Sym(113))),List(Sym(84), Sym(85), Sym(86), Sym(89), Sym(90), Sym(91), Sym(92), Sym(93), Sym(112), Sym(113), Sym(114)))
+NestedDeps: List()
+Reflect: Reflect(IfThenElse(Sym(93),Block(Sym(98)),Block(Sym(123))),Summary(false,false,false,false,false,List(),List(),List(Sym(85), Sym(84), Sym(90), Sym(89), Sym(99), Sym(108), Sym(109), Sym(113)),List(Sym(85), Sym(84)),List(Sym(89), Sym(84), Sym(90), Sym(113)),List()),List(Sym(84), Sym(85), Sym(86), Sym(89), Sym(90), Sym(91), Sym(92), Sym(93)))
+Nested: WrappedArray(Sym(84)) Def: HashMapGetTable(Sym(84))
+Context: List(Sym(84), Sym(85), Sym(86), Sym(89), Sym(90), Sym(91), Sym(92), Sym(93), Sym(124))
+ReflectReadMutable repsW: List(Sym(84))
+NestedDeps: List()
+Reflect: Reflect(HashMapGetTable(Sym(84)),Summary(false,false,false,false,false,List((List(Sym(84)),List(HashMapGetTable(Sym(84))))),List(Sym(84)),List(Sym(84)),List(Sym(84)),List(),List()),List(Sym(84), Sym(124)))
+Alias: List()
+NestedDeps: List()
+Reflect: Reflect(ArrayLength(Sym(125)),Summary(false,false,false,false,false,List(),List(),List(Sym(125), Sym(84)),List(Sym(125), Sym(84)),List(),List()),List(Sym(84), Sym(124), Sym(125)))
+Nested: WrappedArray(Sym(125)) Def: ArrayApply(Sym(125),Sym(128))
+Context: List(Sym(84), Sym(85), Sym(86), Sym(89), Sym(90), Sym(91), Sym(92), Sym(93), Sym(124), Sym(125), Sym(126))
+ReflectReadMutable repsW: List(Sym(125))
+NestedDeps: List()
+Reflect: Reflect(ArrayApply(Sym(125),Sym(128)),Summary(false,false,false,false,false,List((List(Sym(125)),List(ArrayApply(Sym(125),Sym(128))))),List(Sym(125)),List(Sym(125), Sym(84)),List(Sym(125), Sym(84)),List(),List()),List(Sym(84), Sym(124), Sym(125)))
+Alias: List(Sym(84))
+NestedDeps: List()
+Reflect: Reflect(NewVar(Sym(129)),Summary(false,false,false,false,true,List(),List(),List(Sym(129), Sym(125), Sym(84)),List(Sym(129), Sym(125), Sym(84)),List(),List()),List(Sym(84), Sym(124), Sym(125), Sym(129)))
+NestedDeps: List()
+Reflect: Reflect(ReadVar(Variable(Sym(130))),Summary(false,false,false,false,false,List(),List(),List(Sym(130), Sym(129), Sym(125), Sym(84)),List(Sym(130), Sym(129), Sym(125), Sym(84)),List(),List()),List(Sym(84), Sym(124), Sym(125), Sym(129), Sym(130)))
+NestedDeps: List()
+Reflect: Reflect(Equal(Sym(131),Const(null)),Summary(false,false,false,false,false,List(),List(),List(Sym(131), Sym(129), Sym(125), Sym(84)),List(Sym(131), Sym(129), Sym(125), Sym(84)),List(),List()),List(Sym(84), Sym(124), Sym(125), Sym(129), Sym(131)))
+NestedDeps: List()
+Reflect: Reflect(ReadVar(Variable(Sym(130))),Summary(false,false,false,false,false,List(),List(),List(Sym(130), Sym(129), Sym(125), Sym(84)),List(Sym(130), Sym(129), Sym(125), Sym(84)),List(),List()),List())
+NestedDeps: List()
+Reflect: Reflect(EntryHasNext(Sym(133)),Summary(false,false,false,false,false,List(),List(),List(Sym(133), Sym(129), Sym(125), Sym(84)),List(Sym(133), Sym(129), Sym(125), Sym(84)),List(),List()),List(Sym(133)))
+NestedDeps: List()
+Reflect: Reflect(ReadVar(Variable(Sym(130))),Summary(false,false,false,false,false,List(),List(),List(Sym(130), Sym(129), Sym(125), Sym(84)),List(Sym(130), Sym(129), Sym(125), Sym(84)),List(),List()),List())
+NestedDeps: List()
+Reflect: Reflect(EntryGetKey(Sym(135)),Summary(false,false,false,false,false,List(),List(),List(Sym(135), Sym(129), Sym(125), Sym(84)),List(Sym(135), Sym(129), Sym(125), Sym(84)),List(),List()),List(Sym(135)))
+NestedDeps: List()
+Reflect: Reflect(ReadVar(Variable(Sym(130))),Summary(false,false,false,false,false,List(),List(),List(Sym(130), Sym(129), Sym(125), Sym(84)),List(Sym(130), Sym(129), Sym(125), Sym(84)),List(),List()),List())
+NestedDeps: List()
+Reflect: Reflect(EntryNext(Sym(142)),Summary(false,false,false,false,false,List(),List(),List(Sym(142), Sym(129), Sym(125), Sym(84)),List(Sym(142), Sym(129), Sym(125), Sym(84)),List(),List()),List(Sym(142)))
+Write: WrappedArray(Sym(130))Def: Assign(Variable(Sym(130)),Sym(143))
+NestedDeps: List()
+Reflect: Reflect(Assign(Variable(Sym(130)),Sym(143)),Summary(false,false,false,false,false,List(),List(),List(Sym(130), Sym(143), Sym(142), Sym(129), Sym(125), Sym(84)),List(Sym(130), Sym(143), Sym(142), Sym(129), Sym(125), Sym(84)),List(Sym(130)),List(Sym(130))),List(Sym(142), Sym(143)))
+Alias: List(Sym(143), Sym(142), Sym(129), Sym(125), Sym(84))
+NestedDeps: List()
+Reflect: Reflect(While(Block(Sym(141)),Block(Sym(145))),Summary(false,false,false,false,false,List(),List(),List(Sym(130), Sym(129), Sym(125), Sym(84), Sym(133), Sym(142), Sym(143)),List(Sym(130), Sym(129), Sym(125), Sym(84), Sym(133)),List(Sym(130)),List()),List(Sym(84), Sym(124), Sym(125), Sym(129), Sym(130), Sym(131)))
+NestedDeps: List()
+Reflect: Reflect(ReadVar(Variable(Sym(130))),Summary(false,false,false,false,false,List(),List(),List(Sym(130), Sym(129), Sym(125), Sym(84)),List(Sym(130), Sym(129), Sym(125), Sym(84)),List(),List()),List(Sym(84), Sym(124), Sym(125), Sym(129), Sym(130), Sym(146)))
+NestedDeps: List()
+Reflect: Reflect(EntryGetKey(Sym(147)),Summary(false,false,false,false,false,List(),List(),List(Sym(147), Sym(129), Sym(125), Sym(84)),List(Sym(147), Sym(129), Sym(125), Sym(84)),List(),List()),List(Sym(84), Sym(124), Sym(125), Sym(129), Sym(147)))
+NestedDeps: List()
+Reflect: Reflect(ReadVar(Variable(Sym(130))),Summary(false,false,false,false,false,List(),List(),List(Sym(130), Sym(129), Sym(125), Sym(84)),List(Sym(130), Sym(129), Sym(125), Sym(84)),List(),List()),List(Sym(84), Sym(124), Sym(125), Sym(129), Sym(130), Sym(146)))
+NestedDeps: List()
+Reflect: Reflect(EntryGetValue(Sym(147)),Summary(false,false,false,false,false,List(),List(),List(Sym(147), Sym(129), Sym(125), Sym(84)),List(Sym(147), Sym(129), Sym(125), Sym(84)),List(),List()),List(Sym(84), Sym(124), Sym(125), Sym(129), Sym(147)))
+NestedDeps: List()
+Reflect: Reflect(IfThenElse(Sym(149),Block(Sym(151)),Block(Const(null))),Summary(false,false,false,false,false,List(),List(),List(Sym(147), Sym(129), Sym(125), Sym(84)),List(),List(),List()),List(Sym(84), Sym(124), Sym(125), Sym(129), Sym(147)))
+NestedDeps: List()
+Reflect: Reflect(IfThenElse(Sym(132),Block(Const(null)),Block(Sym(153))),Summary(false,false,false,false,false,List(),List(),List(Sym(130), Sym(129), Sym(125), Sym(84), Sym(133), Sym(142), Sym(143), Sym(147)),List(),List(Sym(130)),List()),List(Sym(84), Sym(124), Sym(125), Sym(129), Sym(130), Sym(131)))
+NestedDeps: List()
+Reflect: Reflect(PrintLn(Sym(154)),Summary(true,true,false,false,false,List(),List(),List(),List(),List(),List()),List())
+/*****************************************
+  Emitting Generated Code                  
+*******************************************/
+class IntHashMapGetAndUpdate extends ((Int)=>(Unit)) {
+def apply(x83:Int): Unit = {
+val x84 = new HashMap[Int,Int]()
+val x85 = x84.table
+val x86 = x85.length
+val x2 = 1.hashCode
+val x3 = x2.toLong
+val x4 = x3 >>> 20
+val x5 = x3 >>> 12
+val x6 = x4 ^ x5
+val x7 = x6 ^ x3
+val x8 = x7 >>> 7
+val x9 = x7 ^ x8
+val x10 = x7 >>> 4
+val x11 = x9 ^ x10
+val x12 = x11.toInt
+val x87 = x86 - 1
+val x88 = x12 & x87
+val x89 = x85(x88)
+var x90 = x89
+val x91 = x84.size
+val x92 = x90
+val x93 = x92 == null
+if (x93) {
+val x94 = new Entry(1, 2)
+x85(x88) = x94
+val x96 = x91 + 1
+x84.size = x96
+
+} else {
+while ({
+val x99 = x90
+val x100 = x99.hasNext
+val x106 = if (x100) {
+val x101 = x90
+val x102 = x101.key
+val x103 = x102 != 1
+
+x103
+} else false
+
+x106
+}) {
+val x108 = x90
+val x109 = x108.next
+x90 = x109
+()
+}
+val x113 = x90
+val x114 = x113.key
+val x115 = x114 == 1
+if (x115) {
+x113.value = 2
+
+} else {
+val x118 = new Entry(1, 2)
+x113.next = x118
+val x96 = x91 + 1
+x84.size = x96
+
+}
+
+}
+val x125 = x84.table
+val x126 = x125.length
+val x127 = x126 - 1
+val x128 = x12 & x127
+val x129 = x125(x128)
+var x130 = x129
+val x131 = x130
+val x132 = x131 == null
+val x154 = if (x132) {
+null
+} else {
+while ({
+val x133 = x130
+val x134 = x133.hasNext
+val x140 = if (x134) {
+val x135 = x130
+val x136 = x135.key
+val x137 = x136 != 1
+
+x137
+} else false
+
+x140
+}) {
+val x142 = x130
+val x143 = x142.next
+x130 = x143
+()
+}
+val x147 = x130
+val x148 = x147.key
+val x149 = x148 == 1
+val x152 = if (x149) {
+val x150 = x147.value
+x150
+} else {
+null
+}
+x152
+}
+println(x154)
+}
+}
+/*****************************************
+  End of Generated Code                  
+*******************************************/

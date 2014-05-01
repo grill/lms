@@ -1,0 +1,158 @@
+/*****************************************
+  Emitting Generated Code                  
+*******************************************/
+class IntHashMapContains extends ((Int)=>(Unit)) {
+def apply(x113:Int): Unit = {
+val x114 = new HashMap[Int,Int]()
+val x115 = x114.table
+val x116 = x115.length
+val x2 = 1.hashCode
+val x3 = x2.toLong
+val x4 = x3 >>> 20
+val x5 = x3 >>> 12
+val x6 = x4 ^ x5
+val x7 = x6 ^ x3
+val x8 = x7 >>> 7
+val x9 = x7 ^ x8
+val x10 = x7 >>> 4
+val x11 = x9 ^ x10
+val x12 = x11.toInt
+val x117 = x116 - 1
+val x118 = x12 & x117
+val x119 = x115(x118)
+var x120 = x119
+val x121 = x120
+val x122 = x121 == null
+if (x122) {
+val x123 = new Entry(1, 2)
+x115(x118) = x123
+val x125 = x114.size
+val x126 = x125 + 1
+x114.size = x126
+
+} else {
+while ({
+val x129 = x120
+val x130 = x129.hasNext
+val x136 = if (x130) {
+val x131 = x120
+val x132 = x131.key
+val x133 = x132 != 1
+
+x133
+} else false
+
+x136
+}) {
+val x138 = x120
+val x139 = x138.next
+x120 = x139
+()
+}
+val x143 = x120
+val x144 = x143.key
+val x145 = x144 == 1
+if (x145) {
+x143.value = 2
+
+} else {
+val x148 = new Entry(1, 2)
+x143.next = x148
+val x150 = x114.size
+val x151 = x150 + 1
+x114.size = x151
+
+}
+
+}
+val x157 = x113.hashCode
+val x158 = x157.toLong
+val x159 = x158 >>> 20
+val x160 = x158 >>> 12
+val x161 = x159 ^ x160
+val x162 = x161 ^ x158
+val x163 = x162 >>> 7
+val x164 = x162 ^ x163
+val x165 = x162 >>> 4
+val x166 = x164 ^ x165
+val x167 = x166.toInt
+val x168 = x167 & x117
+val x169 = x115(x168)
+var x170 = x169
+val x171 = x170
+val x172 = x171 == null
+val x191 = if (x172) {
+false
+} else {
+while ({
+val x173 = x170
+val x174 = x173.hasNext
+val x180 = if (x174) {
+val x175 = x170
+val x176 = x175.key
+val x177 = x176 != x113
+
+x177
+} else false
+
+x180
+}) {
+val x182 = x170
+val x183 = x182.next
+x170 = x183
+()
+}
+val x187 = x170
+val x188 = x187.key
+val x189 = x188 == x113
+x189
+}
+println(x191)
+val x77 = 0.hashCode
+val x78 = x77.toLong
+val x79 = x78 >>> 20
+val x80 = x78 >>> 12
+val x81 = x79 ^ x80
+val x82 = x81 ^ x78
+val x83 = x82 >>> 7
+val x84 = x82 ^ x83
+val x85 = x82 >>> 4
+val x86 = x84 ^ x85
+val x87 = x86.toInt
+val x193 = x87 & x117
+val x194 = x115(x193)
+var x195 = x194
+val x196 = x195
+val x197 = x196 == null
+val x216 = if (x197) {
+false
+} else {
+while ({
+val x198 = x195
+val x199 = x198.hasNext
+val x205 = if (x199) {
+val x200 = x195
+val x201 = x200.key
+val x202 = x201 != 0
+
+x202
+} else false
+
+x205
+}) {
+val x207 = x195
+val x208 = x207.next
+x195 = x208
+()
+}
+val x212 = x195
+val x213 = x212.key
+val x214 = x213 == 0
+x214
+}
+println(x216)
+}
+}
+/*****************************************
+  End of Generated Code                  
+*******************************************/

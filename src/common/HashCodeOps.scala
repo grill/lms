@@ -10,7 +10,7 @@ trait HashCodeOps extends Base {
 
 trait HashCodeOpsExp extends BaseExp with EffectExp {
     case class HashCode(x: Rep[Any]) extends Def[Int]
-    def __hashCode(x: Rep[Any]) = reflectEffect(HashCode(x))
+    def __hashCode(x: Rep[Any]) = HashCode(x)
 }
 
 trait ScalaGenHashCodeOps extends ScalaGenBase {

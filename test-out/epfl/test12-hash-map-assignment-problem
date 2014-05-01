@@ -1,0 +1,1144 @@
+Nested: WrappedArray(Sym(0)) Def: HashMapGetTable(Sym(0))
+Context: List(Sym(0))
+acc333: HashMapGetTable(Sym(0))
+acc: HashMapGetTable(Sym(0))
+x: NewHashMap(Int,Int) u.p: List() p: List(Sym(0)) u.acc: null acc: HashMapGetTable(Sym(0))
+NestedDeps: List()
+Reflect: Reflect(HashMapGetTable(Sym(0)),Summary(false,false,false,false,false,List(Sym(0)),HashMapGetTable(Sym(0)),List(Sym(0)),List(Sym(0)),List(),List()),List(Sym(0)))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(ArrayLength(Sym(1)),Summary(false,false,false,false,false,List(),null,List(Sym(0)),List(Sym(0)),List(),List()),List(Sym(0)))
+Nested: WrappedArray(Sym(1)) Def: ArrayApply(Sym(1),Sym(15))
+Context: List(Sym(0), Sym(1), Sym(13))
+acc333: ArrayApply(Sym(1),Sym(15))
+acc: ArrayApply(Sym(1),Sym(15))
+x: NewHashMap(Int,Int) u.p: List() p: List(Sym(1)) u.acc: null acc: ArrayApply(Sym(1),Sym(15))
+x: HashMapGetTable(Sym(0)) u.p: List(Sym(0)) p: List(Sym(1)) u.acc: HashMapGetTable(Sym(0)) acc: ArrayApply(Sym(1),Sym(15))
+x: ArrayLength(Sym(1)) u.p: List() p: List(Sym(1)) u.acc: null acc: ArrayApply(Sym(1),Sym(15))
+NestedDeps: List()
+Reflect: Reflect(ArrayApply(Sym(1),Sym(15)),Summary(false,false,false,false,false,List(Sym(1)),ArrayApply(Sym(1),Sym(15)),List(Sym(0)),List(Sym(0)),List(),List()),List(Sym(0)))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(NewVar(Sym(16)),Summary(false,false,false,false,true,List(),null,List(Sym(0)),List(Sym(0)),List(),List()),List(Sym(0)))
+Nested: WrappedArray(Sym(0)) Def: HashMapGetSize(Sym(0))
+Context: List(Sym(0), Sym(1), Sym(13), Sym(16), Sym(17))
+acc333: HashMapGetSize(Sym(0))
+acc: HashMapGetSize(Sym(0))
+x: NewHashMap(Int,Int) u.p: List() p: List(Sym(0)) u.acc: null acc: HashMapGetSize(Sym(0))
+x: HashMapGetTable(Sym(0)) u.p: List(Sym(0)) p: List(Sym(0)) u.acc: HashMapGetTable(Sym(0)) acc: HashMapGetSize(Sym(0))
+x: ArrayLength(Sym(1)) u.p: List() p: List(Sym(0)) u.acc: null acc: HashMapGetSize(Sym(0))
+x: ArrayApply(Sym(1),Sym(15)) u.p: List(Sym(1)) p: List(Sym(0)) u.acc: ArrayApply(Sym(1),Sym(15)) acc: HashMapGetSize(Sym(0))
+x: NewVar(Sym(16)) u.p: List() p: List(Sym(0)) u.acc: null acc: HashMapGetSize(Sym(0))
+NestedDeps: List()
+Reflect: Reflect(HashMapGetSize(Sym(0)),Summary(false,false,false,false,false,List(Sym(0)),HashMapGetSize(Sym(0)),List(Sym(0)),List(Sym(0)),List(),List()),List(Sym(0)))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(ReadVar(Variable(Sym(17))),Summary(false,false,false,false,false,List(),null,List(Sym(17), Sym(0)),List(Sym(17), Sym(0)),List(),List()),List(Sym(0), Sym(17)))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(Equal(Sym(19),Const(null)),Summary(false,false,false,false,false,List(),null,List(Sym(0)),List(Sym(0)),List(),List()),List(Sym(0)))
+Nested: WrappedArray(Sym(1)) Def: ArrayApply(Sym(1),Sym(15))
+Context: List(Sym(0), Sym(1), Sym(13), Sym(16), Sym(17), Sym(18), Sym(19), Sym(20))
+acc333: ArrayApply(Sym(1),Sym(15))
+acc: ArrayApply(Sym(1),Sym(15))
+x: NewHashMap(Int,Int) u.p: List() p: List(Sym(1)) u.acc: null acc: ArrayApply(Sym(1),Sym(15))
+x: HashMapGetTable(Sym(0)) u.p: List(Sym(0)) p: List(Sym(1)) u.acc: HashMapGetTable(Sym(0)) acc: ArrayApply(Sym(1),Sym(15))
+x: ArrayLength(Sym(1)) u.p: List() p: List(Sym(1)) u.acc: null acc: ArrayApply(Sym(1),Sym(15))
+x: ArrayApply(Sym(1),Sym(15)) u.p: List(Sym(1)) p: List(Sym(1)) u.acc: ArrayApply(Sym(1),Sym(15)) acc: ArrayApply(Sym(1),Sym(15))
+x: NewVar(Sym(16)) u.p: List() p: List(Sym(1)) u.acc: null acc: ArrayApply(Sym(1),Sym(15))
+x: HashMapGetSize(Sym(0)) u.p: List(Sym(0)) p: List(Sym(1)) u.acc: HashMapGetSize(Sym(0)) acc: ArrayApply(Sym(1),Sym(15))
+x: ReadVar(Variable(Sym(17))) u.p: List() p: List(Sym(1)) u.acc: null acc: ArrayApply(Sym(1),Sym(15))
+x: Equal(Sym(19),Const(null)) u.p: List() p: List(Sym(1)) u.acc: null acc: ArrayApply(Sym(1),Sym(15))
+NestedDeps: List()
+Reflect: Reflect(ArrayApply(Sym(1),Sym(15)),Summary(false,false,false,false,false,List(Sym(1)),ArrayApply(Sym(1),Sym(15)),List(Sym(0)),List(Sym(0)),List(),List()),List(Sym(0)))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(EntryCreate(Const(1),Const(2)),Summary(false,false,false,false,true,List(),null,List(),List(),List(),List()),List())
+Write: WrappedArray(Sym(16))Def: ArrayUpdate(Sym(1),Sym(15),Sym(21))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(ArrayUpdate(Sym(1),Sym(15),Sym(21)),Summary(false,false,false,false,false,List(),null,List(Sym(0), Sym(21)),List(Sym(0), Sym(21)),List(Sym(16)),List(Sym(16))),List(Sym(0), Sym(16), Sym(21)))
+Nested: WrappedArray(Sym(0)) Def: HashMapGetSize(Sym(0))
+Context: List(Sym(0), Sym(1), Sym(13), Sym(16), Sym(17), Sym(18), Sym(19), Sym(20), Sym(21), Sym(22))
+acc333: HashMapGetSize(Sym(0))
+acc: HashMapGetSize(Sym(0))
+x: NewHashMap(Int,Int) u.p: List() p: List(Sym(0)) u.acc: null acc: HashMapGetSize(Sym(0))
+x: HashMapGetTable(Sym(0)) u.p: List(Sym(0)) p: List(Sym(0)) u.acc: HashMapGetTable(Sym(0)) acc: HashMapGetSize(Sym(0))
+x: ArrayLength(Sym(1)) u.p: List() p: List(Sym(0)) u.acc: null acc: HashMapGetSize(Sym(0))
+x: ArrayApply(Sym(1),Sym(15)) u.p: List(Sym(1)) p: List(Sym(0)) u.acc: ArrayApply(Sym(1),Sym(15)) acc: HashMapGetSize(Sym(0))
+x: NewVar(Sym(16)) u.p: List() p: List(Sym(0)) u.acc: null acc: HashMapGetSize(Sym(0))
+x: HashMapGetSize(Sym(0)) u.p: List(Sym(0)) p: List(Sym(0)) u.acc: HashMapGetSize(Sym(0)) acc: HashMapGetSize(Sym(0))
+x: ReadVar(Variable(Sym(17))) u.p: List() p: List(Sym(0)) u.acc: null acc: HashMapGetSize(Sym(0))
+x: Equal(Sym(19),Const(null)) u.p: List() p: List(Sym(0)) u.acc: null acc: HashMapGetSize(Sym(0))
+x: EntryCreate(Const(1),Const(2)) u.p: List() p: List(Sym(0)) u.acc: null acc: HashMapGetSize(Sym(0))
+x: ArrayUpdate(Sym(1),Sym(15),Sym(21)) u.p: List() p: List(Sym(0)) u.acc: null acc: HashMapGetSize(Sym(0))
+NestedDeps: List()
+Reflect: Reflect(HashMapGetSize(Sym(0)),Summary(false,false,false,false,false,List(Sym(0)),HashMapGetSize(Sym(0)),List(Sym(0)),List(Sym(0)),List(),List()),List(Sym(0)))
+Write: WrappedArray(Sym(18))Def: HashMapSetSize(Sym(0),Sym(23))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(HashMapSetSize(Sym(0),Sym(23)),Summary(false,false,false,false,false,List(),null,List(Sym(0)),List(Sym(0)),List(Sym(18)),List(Sym(18))),List(Sym(0), Sym(18)))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(ReadVar(Variable(Sym(17))),Summary(false,false,false,false,false,List(),null,List(Sym(17), Sym(0)),List(Sym(17), Sym(0)),List(),List()),List())
+acc: null
+NestedDeps: List()
+Reflect: Reflect(EntryHasNext(Sym(26)),Summary(false,false,false,false,false,List(),null,List(Sym(0)),List(Sym(0)),List(),List()),List())
+acc: null
+NestedDeps: List()
+Reflect: Reflect(ReadVar(Variable(Sym(17))),Summary(false,false,false,false,false,List(),null,List(Sym(17), Sym(0)),List(Sym(17), Sym(0)),List(),List()),List())
+acc: null
+NestedDeps: List()
+Reflect: Reflect(EntryGetKey(Sym(28)),Summary(false,false,false,false,false,List(),null,List(Sym(0)),List(Sym(0)),List(),List()),List())
+acc: null
+NestedDeps: List()
+Reflect: Reflect(ReadVar(Variable(Sym(17))),Summary(false,false,false,false,false,List(),null,List(Sym(17), Sym(0)),List(Sym(17), Sym(0)),List(),List()),List())
+acc: null
+NestedDeps: List()
+Reflect: Reflect(EntryNext(Sym(35)),Summary(false,false,false,false,false,List(),null,List(Sym(0)),List(Sym(0)),List(),List()),List())
+Write: WrappedArray(Sym(17))Def: Assign(Variable(Sym(17)),Sym(36))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(Assign(Variable(Sym(17)),Sym(36)),Summary(false,false,false,false,false,List(),null,List(Sym(17), Sym(0)),List(Sym(17), Sym(0)),List(Sym(17)),List(Sym(17))),List(Sym(35)))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(While(Block(Sym(34)),Block(Sym(38))),Summary(false,false,false,false,false,List(),null,List(Sym(17), Sym(0)),List(Sym(17), Sym(0)),List(Sym(17)),List()),List(Sym(0), Sym(17), Sym(19)))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(ReadVar(Variable(Sym(17))),Summary(false,false,false,false,false,List(),null,List(Sym(17), Sym(0)),List(Sym(17), Sym(0)),List(),List()),List(Sym(0), Sym(17), Sym(39)))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(EntryGetKey(Sym(40)),Summary(false,false,false,false,false,List(),null,List(Sym(0)),List(Sym(0)),List(),List()),List(Sym(0)))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(ReadVar(Variable(Sym(17))),Summary(false,false,false,false,false,List(),null,List(Sym(17), Sym(0)),List(Sym(17), Sym(0)),List(),List()),List(Sym(0), Sym(17), Sym(39)))
+Write: WrappedArray(Sym(40))Def: EntrySetValue(Sym(40),Const(2))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(EntrySetValue(Sym(40),Const(2)),Summary(false,false,false,false,false,List(),null,List(Sym(0)),List(Sym(0)),List(Sym(40)),List(Sym(40))),List(Sym(0), Sym(40)))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(ReadVar(Variable(Sym(17))),Summary(false,false,false,false,false,List(),null,List(Sym(17), Sym(0)),List(Sym(17), Sym(0)),List(),List()),List(Sym(0), Sym(17), Sym(39)))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(EntryCreate(Const(1),Const(2)),Summary(false,false,false,false,true,List(),null,List(),List(),List(),List()),List())
+Write: WrappedArray(Sym(40))Def: EntrySetNext(Sym(40),Sym(45))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(EntrySetNext(Sym(40),Sym(45)),Summary(false,false,false,false,false,List(),null,List(Sym(0), Sym(45)),List(Sym(0), Sym(45)),List(Sym(40)),List(Sym(40))),List(Sym(0), Sym(40), Sym(45)))
+Nested: WrappedArray(Sym(0)) Def: HashMapGetSize(Sym(0))
+Context: List(Sym(0), Sym(1), Sym(13), Sym(16), Sym(17), Sym(18), Sym(19), Sym(20), Sym(39), Sym(40), Sym(41), Sym(45), Sym(46))
+acc333: HashMapGetSize(Sym(0))
+acc: HashMapGetSize(Sym(0))
+x: NewHashMap(Int,Int) u.p: List() p: List(Sym(0)) u.acc: null acc: HashMapGetSize(Sym(0))
+x: HashMapGetTable(Sym(0)) u.p: List(Sym(0)) p: List(Sym(0)) u.acc: HashMapGetTable(Sym(0)) acc: HashMapGetSize(Sym(0))
+x: ArrayLength(Sym(1)) u.p: List() p: List(Sym(0)) u.acc: null acc: HashMapGetSize(Sym(0))
+x: ArrayApply(Sym(1),Sym(15)) u.p: List(Sym(1)) p: List(Sym(0)) u.acc: ArrayApply(Sym(1),Sym(15)) acc: HashMapGetSize(Sym(0))
+x: NewVar(Sym(16)) u.p: List() p: List(Sym(0)) u.acc: null acc: HashMapGetSize(Sym(0))
+x: HashMapGetSize(Sym(0)) u.p: List(Sym(0)) p: List(Sym(0)) u.acc: HashMapGetSize(Sym(0)) acc: HashMapGetSize(Sym(0))
+x: ReadVar(Variable(Sym(17))) u.p: List() p: List(Sym(0)) u.acc: null acc: HashMapGetSize(Sym(0))
+x: Equal(Sym(19),Const(null)) u.p: List() p: List(Sym(0)) u.acc: null acc: HashMapGetSize(Sym(0))
+x: While(Block(Sym(34)),Block(Sym(38))) u.p: List() p: List(Sym(0)) u.acc: null acc: HashMapGetSize(Sym(0))
+x: ReadVar(Variable(Sym(17))) u.p: List() p: List(Sym(0)) u.acc: null acc: HashMapGetSize(Sym(0))
+x: EntryGetKey(Sym(40)) u.p: List() p: List(Sym(0)) u.acc: null acc: HashMapGetSize(Sym(0))
+x: EntryCreate(Const(1),Const(2)) u.p: List() p: List(Sym(0)) u.acc: null acc: HashMapGetSize(Sym(0))
+x: EntrySetNext(Sym(40),Sym(45)) u.p: List() p: List(Sym(0)) u.acc: null acc: HashMapGetSize(Sym(0))
+NestedDeps: List()
+Reflect: Reflect(HashMapGetSize(Sym(0)),Summary(false,false,false,false,false,List(Sym(0)),HashMapGetSize(Sym(0)),List(Sym(0)),List(Sym(0)),List(),List()),List(Sym(0)))
+Write: WrappedArray(Sym(18))Def: HashMapSetSize(Sym(0),Sym(23))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(HashMapSetSize(Sym(0),Sym(23)),Summary(false,false,false,false,false,List(),null,List(Sym(0)),List(Sym(0)),List(Sym(18)),List(Sym(18))),List(Sym(0), Sym(18)))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(IfThenElse(Sym(42),Block(Sym(44)),Block(Sym(48))),Summary(false,false,false,false,false,List(),null,List(Sym(0)),List(Sym(0)),List(Sym(40), Sym(18)),List(Sym(40))),List(Sym(0), Sym(18), Sym(40)))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(IfThenElse(Sym(20),Block(Sym(25)),Block(Sym(50))),Summary(false,false,false,false,false,List(),null,List(Sym(0), Sym(17)),List(Sym(0)),List(Sym(16), Sym(18), Sym(17), Sym(40)),List()),List(Sym(0), Sym(16), Sym(17), Sym(18), Sym(19)))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(NewVar(Sym(0)),Summary(false,false,false,false,true,List(),null,List(Sym(0)),List(Sym(0)),List(),List()),List(Sym(0)))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(ReadVar(Variable(Sym(52))),Summary(false,false,false,false,false,List(),null,List(Sym(52), Sym(0)),List(Sym(52), Sym(0)),List(),List()),List(Sym(0), Sym(52)))
+Nested: WrappedArray(Sym(53)) Def: HashMapGetTable(Sym(53))
+Context: List(Sym(0), Sym(1), Sym(13), Sym(16), Sym(17), Sym(18), Sym(19), Sym(20), Sym(51), Sym(52), Sym(53))
+acc333: HashMapGetTable(Sym(53))
+acc: HashMapGetTable(Sym(53))
+x: NewHashMap(Int,Int) u.p: List() p: List(Sym(53)) u.acc: null acc: HashMapGetTable(Sym(53))
+x: HashMapGetTable(Sym(0)) u.p: List(Sym(0)) p: List(Sym(53)) u.acc: HashMapGetTable(Sym(0)) acc: HashMapGetTable(Sym(53))
+x: ArrayLength(Sym(1)) u.p: List() p: List(Sym(53)) u.acc: null acc: HashMapGetTable(Sym(53))
+x: ArrayApply(Sym(1),Sym(15)) u.p: List(Sym(1)) p: List(Sym(53)) u.acc: ArrayApply(Sym(1),Sym(15)) acc: HashMapGetTable(Sym(53))
+x: NewVar(Sym(16)) u.p: List() p: List(Sym(53)) u.acc: null acc: HashMapGetTable(Sym(53))
+x: HashMapGetSize(Sym(0)) u.p: List(Sym(0)) p: List(Sym(53)) u.acc: HashMapGetSize(Sym(0)) acc: HashMapGetTable(Sym(53))
+x: ReadVar(Variable(Sym(17))) u.p: List() p: List(Sym(53)) u.acc: null acc: HashMapGetTable(Sym(53))
+x: Equal(Sym(19),Const(null)) u.p: List() p: List(Sym(53)) u.acc: null acc: HashMapGetTable(Sym(53))
+x: IfThenElse(Sym(20),Block(Sym(25)),Block(Sym(50))) u.p: List() p: List(Sym(53)) u.acc: null acc: HashMapGetTable(Sym(53))
+x: NewVar(Sym(0)) u.p: List() p: List(Sym(53)) u.acc: null acc: HashMapGetTable(Sym(53))
+x: ReadVar(Variable(Sym(52))) u.p: List() p: List(Sym(53)) u.acc: null acc: HashMapGetTable(Sym(53))
+NestedDeps: List()
+Reflect: Reflect(HashMapGetTable(Sym(53)),Summary(false,false,false,false,false,List(Sym(53)),HashMapGetTable(Sym(53)),List(Sym(0)),List(Sym(0)),List(),List()),List(Sym(0)))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(ArrayLength(Sym(54)),Summary(false,false,false,false,false,List(),null,List(Sym(0)),List(Sym(0)),List(),List()),List(Sym(0)))
+Nested: WrappedArray(Sym(54)) Def: ArrayApply(Sym(54),Sym(57))
+Context: List(Sym(0), Sym(1), Sym(13), Sym(16), Sym(17), Sym(18), Sym(19), Sym(20), Sym(51), Sym(52), Sym(53), Sym(54), Sym(55))
+acc333: ArrayApply(Sym(54),Sym(57))
+acc: ArrayApply(Sym(54),Sym(57))
+x: NewHashMap(Int,Int) u.p: List() p: List(Sym(54)) u.acc: null acc: ArrayApply(Sym(54),Sym(57))
+x: HashMapGetTable(Sym(0)) u.p: List(Sym(0)) p: List(Sym(54)) u.acc: HashMapGetTable(Sym(0)) acc: ArrayApply(Sym(54),Sym(57))
+x: ArrayLength(Sym(1)) u.p: List() p: List(Sym(54)) u.acc: null acc: ArrayApply(Sym(54),Sym(57))
+x: ArrayApply(Sym(1),Sym(15)) u.p: List(Sym(1)) p: List(Sym(54)) u.acc: ArrayApply(Sym(1),Sym(15)) acc: ArrayApply(Sym(54),Sym(57))
+x: NewVar(Sym(16)) u.p: List() p: List(Sym(54)) u.acc: null acc: ArrayApply(Sym(54),Sym(57))
+x: HashMapGetSize(Sym(0)) u.p: List(Sym(0)) p: List(Sym(54)) u.acc: HashMapGetSize(Sym(0)) acc: ArrayApply(Sym(54),Sym(57))
+x: ReadVar(Variable(Sym(17))) u.p: List() p: List(Sym(54)) u.acc: null acc: ArrayApply(Sym(54),Sym(57))
+x: Equal(Sym(19),Const(null)) u.p: List() p: List(Sym(54)) u.acc: null acc: ArrayApply(Sym(54),Sym(57))
+x: IfThenElse(Sym(20),Block(Sym(25)),Block(Sym(50))) u.p: List() p: List(Sym(54)) u.acc: null acc: ArrayApply(Sym(54),Sym(57))
+x: NewVar(Sym(0)) u.p: List() p: List(Sym(54)) u.acc: null acc: ArrayApply(Sym(54),Sym(57))
+x: ReadVar(Variable(Sym(52))) u.p: List() p: List(Sym(54)) u.acc: null acc: ArrayApply(Sym(54),Sym(57))
+x: HashMapGetTable(Sym(53)) u.p: List(Sym(53)) p: List(Sym(54)) u.acc: HashMapGetTable(Sym(53)) acc: ArrayApply(Sym(54),Sym(57))
+x: ArrayLength(Sym(54)) u.p: List() p: List(Sym(54)) u.acc: null acc: ArrayApply(Sym(54),Sym(57))
+NestedDeps: List()
+Reflect: Reflect(ArrayApply(Sym(54),Sym(57)),Summary(false,false,false,false,false,List(Sym(54)),ArrayApply(Sym(54),Sym(57)),List(Sym(0)),List(Sym(0)),List(),List()),List(Sym(0)))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(NewVar(Sym(58)),Summary(false,false,false,false,true,List(),null,List(Sym(0)),List(Sym(0)),List(),List()),List(Sym(0)))
+Nested: WrappedArray(Sym(53)) Def: HashMapGetSize(Sym(53))
+Context: List(Sym(0), Sym(1), Sym(13), Sym(16), Sym(17), Sym(18), Sym(19), Sym(20), Sym(51), Sym(52), Sym(53), Sym(54), Sym(55), Sym(58), Sym(59))
+acc333: HashMapGetSize(Sym(53))
+acc: HashMapGetSize(Sym(53))
+x: NewHashMap(Int,Int) u.p: List() p: List(Sym(53)) u.acc: null acc: HashMapGetSize(Sym(53))
+x: HashMapGetTable(Sym(0)) u.p: List(Sym(0)) p: List(Sym(53)) u.acc: HashMapGetTable(Sym(0)) acc: HashMapGetSize(Sym(53))
+x: ArrayLength(Sym(1)) u.p: List() p: List(Sym(53)) u.acc: null acc: HashMapGetSize(Sym(53))
+x: ArrayApply(Sym(1),Sym(15)) u.p: List(Sym(1)) p: List(Sym(53)) u.acc: ArrayApply(Sym(1),Sym(15)) acc: HashMapGetSize(Sym(53))
+x: NewVar(Sym(16)) u.p: List() p: List(Sym(53)) u.acc: null acc: HashMapGetSize(Sym(53))
+x: HashMapGetSize(Sym(0)) u.p: List(Sym(0)) p: List(Sym(53)) u.acc: HashMapGetSize(Sym(0)) acc: HashMapGetSize(Sym(53))
+x: ReadVar(Variable(Sym(17))) u.p: List() p: List(Sym(53)) u.acc: null acc: HashMapGetSize(Sym(53))
+x: Equal(Sym(19),Const(null)) u.p: List() p: List(Sym(53)) u.acc: null acc: HashMapGetSize(Sym(53))
+x: IfThenElse(Sym(20),Block(Sym(25)),Block(Sym(50))) u.p: List() p: List(Sym(53)) u.acc: null acc: HashMapGetSize(Sym(53))
+x: NewVar(Sym(0)) u.p: List() p: List(Sym(53)) u.acc: null acc: HashMapGetSize(Sym(53))
+x: ReadVar(Variable(Sym(52))) u.p: List() p: List(Sym(53)) u.acc: null acc: HashMapGetSize(Sym(53))
+x: HashMapGetTable(Sym(53)) u.p: List(Sym(53)) p: List(Sym(53)) u.acc: HashMapGetTable(Sym(53)) acc: HashMapGetSize(Sym(53))
+x: ArrayLength(Sym(54)) u.p: List() p: List(Sym(53)) u.acc: null acc: HashMapGetSize(Sym(53))
+x: ArrayApply(Sym(54),Sym(57)) u.p: List(Sym(54)) p: List(Sym(53)) u.acc: ArrayApply(Sym(54),Sym(57)) acc: HashMapGetSize(Sym(53))
+x: NewVar(Sym(58)) u.p: List() p: List(Sym(53)) u.acc: null acc: HashMapGetSize(Sym(53))
+NestedDeps: List()
+Reflect: Reflect(HashMapGetSize(Sym(53)),Summary(false,false,false,false,false,List(Sym(53)),HashMapGetSize(Sym(53)),List(Sym(0)),List(Sym(0)),List(),List()),List(Sym(0)))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(ReadVar(Variable(Sym(59))),Summary(false,false,false,false,false,List(),null,List(Sym(59), Sym(0)),List(Sym(59), Sym(0)),List(),List()),List(Sym(0), Sym(59)))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(Equal(Sym(61),Const(null)),Summary(false,false,false,false,false,List(),null,List(Sym(0)),List(Sym(0)),List(),List()),List(Sym(0)))
+Nested: WrappedArray(Sym(54)) Def: ArrayApply(Sym(54),Sym(57))
+Context: List(Sym(0), Sym(1), Sym(13), Sym(16), Sym(17), Sym(18), Sym(19), Sym(20), Sym(51), Sym(52), Sym(53), Sym(54), Sym(55), Sym(58), Sym(59), Sym(60), Sym(61), Sym(62))
+acc333: ArrayApply(Sym(54),Sym(57))
+acc: ArrayApply(Sym(54),Sym(57))
+x: NewHashMap(Int,Int) u.p: List() p: List(Sym(54)) u.acc: null acc: ArrayApply(Sym(54),Sym(57))
+x: HashMapGetTable(Sym(0)) u.p: List(Sym(0)) p: List(Sym(54)) u.acc: HashMapGetTable(Sym(0)) acc: ArrayApply(Sym(54),Sym(57))
+x: ArrayLength(Sym(1)) u.p: List() p: List(Sym(54)) u.acc: null acc: ArrayApply(Sym(54),Sym(57))
+x: ArrayApply(Sym(1),Sym(15)) u.p: List(Sym(1)) p: List(Sym(54)) u.acc: ArrayApply(Sym(1),Sym(15)) acc: ArrayApply(Sym(54),Sym(57))
+x: NewVar(Sym(16)) u.p: List() p: List(Sym(54)) u.acc: null acc: ArrayApply(Sym(54),Sym(57))
+x: HashMapGetSize(Sym(0)) u.p: List(Sym(0)) p: List(Sym(54)) u.acc: HashMapGetSize(Sym(0)) acc: ArrayApply(Sym(54),Sym(57))
+x: ReadVar(Variable(Sym(17))) u.p: List() p: List(Sym(54)) u.acc: null acc: ArrayApply(Sym(54),Sym(57))
+x: Equal(Sym(19),Const(null)) u.p: List() p: List(Sym(54)) u.acc: null acc: ArrayApply(Sym(54),Sym(57))
+x: IfThenElse(Sym(20),Block(Sym(25)),Block(Sym(50))) u.p: List() p: List(Sym(54)) u.acc: null acc: ArrayApply(Sym(54),Sym(57))
+x: NewVar(Sym(0)) u.p: List() p: List(Sym(54)) u.acc: null acc: ArrayApply(Sym(54),Sym(57))
+x: ReadVar(Variable(Sym(52))) u.p: List() p: List(Sym(54)) u.acc: null acc: ArrayApply(Sym(54),Sym(57))
+x: HashMapGetTable(Sym(53)) u.p: List(Sym(53)) p: List(Sym(54)) u.acc: HashMapGetTable(Sym(53)) acc: ArrayApply(Sym(54),Sym(57))
+x: ArrayLength(Sym(54)) u.p: List() p: List(Sym(54)) u.acc: null acc: ArrayApply(Sym(54),Sym(57))
+x: ArrayApply(Sym(54),Sym(57)) u.p: List(Sym(54)) p: List(Sym(54)) u.acc: ArrayApply(Sym(54),Sym(57)) acc: ArrayApply(Sym(54),Sym(57))
+x: NewVar(Sym(58)) u.p: List() p: List(Sym(54)) u.acc: null acc: ArrayApply(Sym(54),Sym(57))
+x: HashMapGetSize(Sym(53)) u.p: List(Sym(53)) p: List(Sym(54)) u.acc: HashMapGetSize(Sym(53)) acc: ArrayApply(Sym(54),Sym(57))
+x: ReadVar(Variable(Sym(59))) u.p: List() p: List(Sym(54)) u.acc: null acc: ArrayApply(Sym(54),Sym(57))
+x: Equal(Sym(61),Const(null)) u.p: List() p: List(Sym(54)) u.acc: null acc: ArrayApply(Sym(54),Sym(57))
+NestedDeps: List()
+Reflect: Reflect(ArrayApply(Sym(54),Sym(57)),Summary(false,false,false,false,false,List(Sym(54)),ArrayApply(Sym(54),Sym(57)),List(Sym(0)),List(Sym(0)),List(),List()),List(Sym(0)))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(EntryCreate(Const(1),Const(3)),Summary(false,false,false,false,true,List(),null,List(),List(),List(),List()),List())
+Write: WrappedArray(Sym(58))Def: ArrayUpdate(Sym(54),Sym(57),Sym(63))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(ArrayUpdate(Sym(54),Sym(57),Sym(63)),Summary(false,false,false,false,false,List(),null,List(Sym(0), Sym(63)),List(Sym(0), Sym(63)),List(Sym(58)),List(Sym(58))),List(Sym(0), Sym(58), Sym(63)))
+Nested: WrappedArray(Sym(53)) Def: HashMapGetSize(Sym(53))
+Context: List(Sym(0), Sym(1), Sym(13), Sym(16), Sym(17), Sym(18), Sym(19), Sym(20), Sym(51), Sym(52), Sym(53), Sym(54), Sym(55), Sym(58), Sym(59), Sym(60), Sym(61), Sym(62), Sym(63), Sym(64))
+acc333: HashMapGetSize(Sym(53))
+acc: HashMapGetSize(Sym(53))
+x: NewHashMap(Int,Int) u.p: List() p: List(Sym(53)) u.acc: null acc: HashMapGetSize(Sym(53))
+x: HashMapGetTable(Sym(0)) u.p: List(Sym(0)) p: List(Sym(53)) u.acc: HashMapGetTable(Sym(0)) acc: HashMapGetSize(Sym(53))
+x: ArrayLength(Sym(1)) u.p: List() p: List(Sym(53)) u.acc: null acc: HashMapGetSize(Sym(53))
+x: ArrayApply(Sym(1),Sym(15)) u.p: List(Sym(1)) p: List(Sym(53)) u.acc: ArrayApply(Sym(1),Sym(15)) acc: HashMapGetSize(Sym(53))
+x: NewVar(Sym(16)) u.p: List() p: List(Sym(53)) u.acc: null acc: HashMapGetSize(Sym(53))
+x: HashMapGetSize(Sym(0)) u.p: List(Sym(0)) p: List(Sym(53)) u.acc: HashMapGetSize(Sym(0)) acc: HashMapGetSize(Sym(53))
+x: ReadVar(Variable(Sym(17))) u.p: List() p: List(Sym(53)) u.acc: null acc: HashMapGetSize(Sym(53))
+x: Equal(Sym(19),Const(null)) u.p: List() p: List(Sym(53)) u.acc: null acc: HashMapGetSize(Sym(53))
+x: IfThenElse(Sym(20),Block(Sym(25)),Block(Sym(50))) u.p: List() p: List(Sym(53)) u.acc: null acc: HashMapGetSize(Sym(53))
+x: NewVar(Sym(0)) u.p: List() p: List(Sym(53)) u.acc: null acc: HashMapGetSize(Sym(53))
+x: ReadVar(Variable(Sym(52))) u.p: List() p: List(Sym(53)) u.acc: null acc: HashMapGetSize(Sym(53))
+x: HashMapGetTable(Sym(53)) u.p: List(Sym(53)) p: List(Sym(53)) u.acc: HashMapGetTable(Sym(53)) acc: HashMapGetSize(Sym(53))
+x: ArrayLength(Sym(54)) u.p: List() p: List(Sym(53)) u.acc: null acc: HashMapGetSize(Sym(53))
+x: ArrayApply(Sym(54),Sym(57)) u.p: List(Sym(54)) p: List(Sym(53)) u.acc: ArrayApply(Sym(54),Sym(57)) acc: HashMapGetSize(Sym(53))
+x: NewVar(Sym(58)) u.p: List() p: List(Sym(53)) u.acc: null acc: HashMapGetSize(Sym(53))
+x: HashMapGetSize(Sym(53)) u.p: List(Sym(53)) p: List(Sym(53)) u.acc: HashMapGetSize(Sym(53)) acc: HashMapGetSize(Sym(53))
+x: ReadVar(Variable(Sym(59))) u.p: List() p: List(Sym(53)) u.acc: null acc: HashMapGetSize(Sym(53))
+x: Equal(Sym(61),Const(null)) u.p: List() p: List(Sym(53)) u.acc: null acc: HashMapGetSize(Sym(53))
+x: EntryCreate(Const(1),Const(3)) u.p: List() p: List(Sym(53)) u.acc: null acc: HashMapGetSize(Sym(53))
+x: ArrayUpdate(Sym(54),Sym(57),Sym(63)) u.p: List() p: List(Sym(53)) u.acc: null acc: HashMapGetSize(Sym(53))
+NestedDeps: List()
+Reflect: Reflect(HashMapGetSize(Sym(53)),Summary(false,false,false,false,false,List(Sym(53)),HashMapGetSize(Sym(53)),List(Sym(0)),List(Sym(0)),List(),List()),List(Sym(0)))
+Write: WrappedArray(Sym(60))Def: HashMapSetSize(Sym(53),Sym(65))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(HashMapSetSize(Sym(53),Sym(65)),Summary(false,false,false,false,false,List(),null,List(Sym(0)),List(Sym(0)),List(Sym(60)),List(Sym(60))),List(Sym(0), Sym(60)))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(ReadVar(Variable(Sym(59))),Summary(false,false,false,false,false,List(),null,List(Sym(59), Sym(0)),List(Sym(59), Sym(0)),List(),List()),List())
+acc: null
+NestedDeps: List()
+Reflect: Reflect(EntryHasNext(Sym(68)),Summary(false,false,false,false,false,List(),null,List(Sym(0)),List(Sym(0)),List(),List()),List())
+acc: null
+NestedDeps: List()
+Reflect: Reflect(ReadVar(Variable(Sym(59))),Summary(false,false,false,false,false,List(),null,List(Sym(59), Sym(0)),List(Sym(59), Sym(0)),List(),List()),List())
+acc: null
+NestedDeps: List()
+Reflect: Reflect(EntryGetKey(Sym(70)),Summary(false,false,false,false,false,List(),null,List(Sym(0)),List(Sym(0)),List(),List()),List())
+acc: null
+NestedDeps: List()
+Reflect: Reflect(ReadVar(Variable(Sym(59))),Summary(false,false,false,false,false,List(),null,List(Sym(59), Sym(0)),List(Sym(59), Sym(0)),List(),List()),List())
+acc: null
+NestedDeps: List()
+Reflect: Reflect(EntryNext(Sym(77)),Summary(false,false,false,false,false,List(),null,List(Sym(0)),List(Sym(0)),List(),List()),List())
+Write: WrappedArray(Sym(59))Def: Assign(Variable(Sym(59)),Sym(78))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(Assign(Variable(Sym(59)),Sym(78)),Summary(false,false,false,false,false,List(),null,List(Sym(59), Sym(0)),List(Sym(59), Sym(0)),List(Sym(59)),List(Sym(59))),List(Sym(77)))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(While(Block(Sym(76)),Block(Sym(80))),Summary(false,false,false,false,false,List(),null,List(Sym(59), Sym(0)),List(Sym(59), Sym(0)),List(Sym(59)),List()),List(Sym(0), Sym(59), Sym(61)))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(ReadVar(Variable(Sym(59))),Summary(false,false,false,false,false,List(),null,List(Sym(59), Sym(0)),List(Sym(59), Sym(0)),List(),List()),List(Sym(0), Sym(59), Sym(81)))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(EntryGetKey(Sym(82)),Summary(false,false,false,false,false,List(),null,List(Sym(0)),List(Sym(0)),List(),List()),List(Sym(0)))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(ReadVar(Variable(Sym(59))),Summary(false,false,false,false,false,List(),null,List(Sym(59), Sym(0)),List(Sym(59), Sym(0)),List(),List()),List(Sym(0), Sym(59), Sym(81)))
+Write: WrappedArray(Sym(82))Def: EntrySetValue(Sym(82),Const(3))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(EntrySetValue(Sym(82),Const(3)),Summary(false,false,false,false,false,List(),null,List(Sym(0)),List(Sym(0)),List(Sym(82)),List(Sym(82))),List(Sym(0), Sym(82)))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(ReadVar(Variable(Sym(59))),Summary(false,false,false,false,false,List(),null,List(Sym(59), Sym(0)),List(Sym(59), Sym(0)),List(),List()),List(Sym(0), Sym(59), Sym(81)))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(EntryCreate(Const(1),Const(3)),Summary(false,false,false,false,true,List(),null,List(),List(),List(),List()),List())
+Write: WrappedArray(Sym(82))Def: EntrySetNext(Sym(82),Sym(87))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(EntrySetNext(Sym(82),Sym(87)),Summary(false,false,false,false,false,List(),null,List(Sym(0), Sym(87)),List(Sym(0), Sym(87)),List(Sym(82)),List(Sym(82))),List(Sym(0), Sym(82), Sym(87)))
+Nested: WrappedArray(Sym(53)) Def: HashMapGetSize(Sym(53))
+Context: List(Sym(0), Sym(1), Sym(13), Sym(16), Sym(17), Sym(18), Sym(19), Sym(20), Sym(51), Sym(52), Sym(53), Sym(54), Sym(55), Sym(58), Sym(59), Sym(60), Sym(61), Sym(62), Sym(81), Sym(82), Sym(83), Sym(87), Sym(88))
+acc333: HashMapGetSize(Sym(53))
+acc: HashMapGetSize(Sym(53))
+x: NewHashMap(Int,Int) u.p: List() p: List(Sym(53)) u.acc: null acc: HashMapGetSize(Sym(53))
+x: HashMapGetTable(Sym(0)) u.p: List(Sym(0)) p: List(Sym(53)) u.acc: HashMapGetTable(Sym(0)) acc: HashMapGetSize(Sym(53))
+x: ArrayLength(Sym(1)) u.p: List() p: List(Sym(53)) u.acc: null acc: HashMapGetSize(Sym(53))
+x: ArrayApply(Sym(1),Sym(15)) u.p: List(Sym(1)) p: List(Sym(53)) u.acc: ArrayApply(Sym(1),Sym(15)) acc: HashMapGetSize(Sym(53))
+x: NewVar(Sym(16)) u.p: List() p: List(Sym(53)) u.acc: null acc: HashMapGetSize(Sym(53))
+x: HashMapGetSize(Sym(0)) u.p: List(Sym(0)) p: List(Sym(53)) u.acc: HashMapGetSize(Sym(0)) acc: HashMapGetSize(Sym(53))
+x: ReadVar(Variable(Sym(17))) u.p: List() p: List(Sym(53)) u.acc: null acc: HashMapGetSize(Sym(53))
+x: Equal(Sym(19),Const(null)) u.p: List() p: List(Sym(53)) u.acc: null acc: HashMapGetSize(Sym(53))
+x: IfThenElse(Sym(20),Block(Sym(25)),Block(Sym(50))) u.p: List() p: List(Sym(53)) u.acc: null acc: HashMapGetSize(Sym(53))
+x: NewVar(Sym(0)) u.p: List() p: List(Sym(53)) u.acc: null acc: HashMapGetSize(Sym(53))
+x: ReadVar(Variable(Sym(52))) u.p: List() p: List(Sym(53)) u.acc: null acc: HashMapGetSize(Sym(53))
+x: HashMapGetTable(Sym(53)) u.p: List(Sym(53)) p: List(Sym(53)) u.acc: HashMapGetTable(Sym(53)) acc: HashMapGetSize(Sym(53))
+x: ArrayLength(Sym(54)) u.p: List() p: List(Sym(53)) u.acc: null acc: HashMapGetSize(Sym(53))
+x: ArrayApply(Sym(54),Sym(57)) u.p: List(Sym(54)) p: List(Sym(53)) u.acc: ArrayApply(Sym(54),Sym(57)) acc: HashMapGetSize(Sym(53))
+x: NewVar(Sym(58)) u.p: List() p: List(Sym(53)) u.acc: null acc: HashMapGetSize(Sym(53))
+x: HashMapGetSize(Sym(53)) u.p: List(Sym(53)) p: List(Sym(53)) u.acc: HashMapGetSize(Sym(53)) acc: HashMapGetSize(Sym(53))
+x: ReadVar(Variable(Sym(59))) u.p: List() p: List(Sym(53)) u.acc: null acc: HashMapGetSize(Sym(53))
+x: Equal(Sym(61),Const(null)) u.p: List() p: List(Sym(53)) u.acc: null acc: HashMapGetSize(Sym(53))
+x: While(Block(Sym(76)),Block(Sym(80))) u.p: List() p: List(Sym(53)) u.acc: null acc: HashMapGetSize(Sym(53))
+x: ReadVar(Variable(Sym(59))) u.p: List() p: List(Sym(53)) u.acc: null acc: HashMapGetSize(Sym(53))
+x: EntryGetKey(Sym(82)) u.p: List() p: List(Sym(53)) u.acc: null acc: HashMapGetSize(Sym(53))
+x: EntryCreate(Const(1),Const(3)) u.p: List() p: List(Sym(53)) u.acc: null acc: HashMapGetSize(Sym(53))
+x: EntrySetNext(Sym(82),Sym(87)) u.p: List() p: List(Sym(53)) u.acc: null acc: HashMapGetSize(Sym(53))
+NestedDeps: List()
+Reflect: Reflect(HashMapGetSize(Sym(53)),Summary(false,false,false,false,false,List(Sym(53)),HashMapGetSize(Sym(53)),List(Sym(0)),List(Sym(0)),List(),List()),List(Sym(0)))
+Write: WrappedArray(Sym(60))Def: HashMapSetSize(Sym(53),Sym(65))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(HashMapSetSize(Sym(53),Sym(65)),Summary(false,false,false,false,false,List(),null,List(Sym(0)),List(Sym(0)),List(Sym(60)),List(Sym(60))),List(Sym(0), Sym(60)))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(IfThenElse(Sym(84),Block(Sym(86)),Block(Sym(90))),Summary(false,false,false,false,false,List(),null,List(Sym(0)),List(Sym(0)),List(Sym(82), Sym(60)),List(Sym(82))),List(Sym(0), Sym(60), Sym(82)))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(IfThenElse(Sym(62),Block(Sym(67)),Block(Sym(92))),Summary(false,false,false,false,false,List(),null,List(Sym(0), Sym(59)),List(Sym(0)),List(Sym(58), Sym(60), Sym(59), Sym(82)),List()),List(Sym(0), Sym(58), Sym(59), Sym(60), Sym(61)))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(ReadVar(Variable(Sym(52))),Summary(false,false,false,false,false,List(),null,List(Sym(52), Sym(0)),List(Sym(52), Sym(0)),List(),List()),List(Sym(0), Sym(52)))
+Nested: WrappedArray(Sym(53)) Def: HashMapGetTable(Sym(53))
+Context: List(Sym(0), Sym(1), Sym(13), Sym(16), Sym(17), Sym(18), Sym(19), Sym(20), Sym(51), Sym(52), Sym(53), Sym(54), Sym(55), Sym(58), Sym(59), Sym(60), Sym(61), Sym(62), Sym(93))
+acc333: HashMapGetTable(Sym(53))
+acc: HashMapGetTable(Sym(53))
+x: NewHashMap(Int,Int) u.p: List() p: List(Sym(53)) u.acc: null acc: HashMapGetTable(Sym(53))
+x: HashMapGetTable(Sym(0)) u.p: List(Sym(0)) p: List(Sym(53)) u.acc: HashMapGetTable(Sym(0)) acc: HashMapGetTable(Sym(53))
+x: ArrayLength(Sym(1)) u.p: List() p: List(Sym(53)) u.acc: null acc: HashMapGetTable(Sym(53))
+x: ArrayApply(Sym(1),Sym(15)) u.p: List(Sym(1)) p: List(Sym(53)) u.acc: ArrayApply(Sym(1),Sym(15)) acc: HashMapGetTable(Sym(53))
+x: NewVar(Sym(16)) u.p: List() p: List(Sym(53)) u.acc: null acc: HashMapGetTable(Sym(53))
+x: HashMapGetSize(Sym(0)) u.p: List(Sym(0)) p: List(Sym(53)) u.acc: HashMapGetSize(Sym(0)) acc: HashMapGetTable(Sym(53))
+x: ReadVar(Variable(Sym(17))) u.p: List() p: List(Sym(53)) u.acc: null acc: HashMapGetTable(Sym(53))
+x: Equal(Sym(19),Const(null)) u.p: List() p: List(Sym(53)) u.acc: null acc: HashMapGetTable(Sym(53))
+x: IfThenElse(Sym(20),Block(Sym(25)),Block(Sym(50))) u.p: List() p: List(Sym(53)) u.acc: null acc: HashMapGetTable(Sym(53))
+x: NewVar(Sym(0)) u.p: List() p: List(Sym(53)) u.acc: null acc: HashMapGetTable(Sym(53))
+x: ReadVar(Variable(Sym(52))) u.p: List() p: List(Sym(53)) u.acc: null acc: HashMapGetTable(Sym(53))
+x: HashMapGetTable(Sym(53)) u.p: List(Sym(53)) p: List(Sym(53)) u.acc: HashMapGetTable(Sym(53)) acc: HashMapGetTable(Sym(53))
+x: ArrayLength(Sym(54)) u.p: List() p: List(Sym(53)) u.acc: null acc: HashMapGetTable(Sym(53))
+x: ArrayApply(Sym(54),Sym(57)) u.p: List(Sym(54)) p: List(Sym(53)) u.acc: ArrayApply(Sym(54),Sym(57)) acc: HashMapGetTable(Sym(53))
+x: NewVar(Sym(58)) u.p: List() p: List(Sym(53)) u.acc: null acc: HashMapGetTable(Sym(53))
+x: HashMapGetSize(Sym(53)) u.p: List(Sym(53)) p: List(Sym(53)) u.acc: HashMapGetSize(Sym(53)) acc: HashMapGetTable(Sym(53))
+x: ReadVar(Variable(Sym(59))) u.p: List() p: List(Sym(53)) u.acc: null acc: HashMapGetTable(Sym(53))
+x: Equal(Sym(61),Const(null)) u.p: List() p: List(Sym(53)) u.acc: null acc: HashMapGetTable(Sym(53))
+x: IfThenElse(Sym(62),Block(Sym(67)),Block(Sym(92))) u.p: List() p: List(Sym(53)) u.acc: null acc: HashMapGetTable(Sym(53))
+NestedDeps: List()
+Reflect: Reflect(HashMapGetTable(Sym(53)),Summary(false,false,false,false,false,List(Sym(53)),HashMapGetTable(Sym(53)),List(Sym(0)),List(Sym(0)),List(),List()),List(Sym(0)))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(ArrayLength(Sym(54)),Summary(false,false,false,false,false,List(),null,List(Sym(0)),List(Sym(0)),List(),List()),List(Sym(0)))
+Nested: WrappedArray(Sym(54)) Def: ArrayApply(Sym(54),Sym(57))
+Context: List(Sym(0), Sym(1), Sym(13), Sym(16), Sym(17), Sym(18), Sym(19), Sym(20), Sym(51), Sym(52), Sym(53), Sym(54), Sym(55), Sym(58), Sym(59), Sym(60), Sym(61), Sym(62), Sym(93))
+acc333: ArrayApply(Sym(54),Sym(57))
+acc: ArrayApply(Sym(54),Sym(57))
+x: NewHashMap(Int,Int) u.p: List() p: List(Sym(54)) u.acc: null acc: ArrayApply(Sym(54),Sym(57))
+x: HashMapGetTable(Sym(0)) u.p: List(Sym(0)) p: List(Sym(54)) u.acc: HashMapGetTable(Sym(0)) acc: ArrayApply(Sym(54),Sym(57))
+x: ArrayLength(Sym(1)) u.p: List() p: List(Sym(54)) u.acc: null acc: ArrayApply(Sym(54),Sym(57))
+x: ArrayApply(Sym(1),Sym(15)) u.p: List(Sym(1)) p: List(Sym(54)) u.acc: ArrayApply(Sym(1),Sym(15)) acc: ArrayApply(Sym(54),Sym(57))
+x: NewVar(Sym(16)) u.p: List() p: List(Sym(54)) u.acc: null acc: ArrayApply(Sym(54),Sym(57))
+x: HashMapGetSize(Sym(0)) u.p: List(Sym(0)) p: List(Sym(54)) u.acc: HashMapGetSize(Sym(0)) acc: ArrayApply(Sym(54),Sym(57))
+x: ReadVar(Variable(Sym(17))) u.p: List() p: List(Sym(54)) u.acc: null acc: ArrayApply(Sym(54),Sym(57))
+x: Equal(Sym(19),Const(null)) u.p: List() p: List(Sym(54)) u.acc: null acc: ArrayApply(Sym(54),Sym(57))
+x: IfThenElse(Sym(20),Block(Sym(25)),Block(Sym(50))) u.p: List() p: List(Sym(54)) u.acc: null acc: ArrayApply(Sym(54),Sym(57))
+x: NewVar(Sym(0)) u.p: List() p: List(Sym(54)) u.acc: null acc: ArrayApply(Sym(54),Sym(57))
+x: ReadVar(Variable(Sym(52))) u.p: List() p: List(Sym(54)) u.acc: null acc: ArrayApply(Sym(54),Sym(57))
+x: HashMapGetTable(Sym(53)) u.p: List(Sym(53)) p: List(Sym(54)) u.acc: HashMapGetTable(Sym(53)) acc: ArrayApply(Sym(54),Sym(57))
+x: ArrayLength(Sym(54)) u.p: List() p: List(Sym(54)) u.acc: null acc: ArrayApply(Sym(54),Sym(57))
+x: ArrayApply(Sym(54),Sym(57)) u.p: List(Sym(54)) p: List(Sym(54)) u.acc: ArrayApply(Sym(54),Sym(57)) acc: ArrayApply(Sym(54),Sym(57))
+x: NewVar(Sym(58)) u.p: List() p: List(Sym(54)) u.acc: null acc: ArrayApply(Sym(54),Sym(57))
+x: HashMapGetSize(Sym(53)) u.p: List(Sym(53)) p: List(Sym(54)) u.acc: HashMapGetSize(Sym(53)) acc: ArrayApply(Sym(54),Sym(57))
+x: ReadVar(Variable(Sym(59))) u.p: List() p: List(Sym(54)) u.acc: null acc: ArrayApply(Sym(54),Sym(57))
+x: Equal(Sym(61),Const(null)) u.p: List() p: List(Sym(54)) u.acc: null acc: ArrayApply(Sym(54),Sym(57))
+x: IfThenElse(Sym(62),Block(Sym(67)),Block(Sym(92))) u.p: List() p: List(Sym(54)) u.acc: null acc: ArrayApply(Sym(54),Sym(57))
+NestedDeps: List(Sym(93))
+Reflect: Reflect(ArrayApply(Sym(54),Sym(57)),Summary(false,false,false,false,false,List(Sym(54)),ArrayApply(Sym(54),Sym(57)),List(Sym(0)),List(Sym(0)),List(),List()),List(Sym(0), Sym(93)))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(NewVar(Sym(94)),Summary(false,false,false,false,true,List(),null,List(Sym(0)),List(Sym(0)),List(),List()),List(Sym(0)))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(ReadVar(Variable(Sym(95))),Summary(false,false,false,false,false,List(),null,List(Sym(95), Sym(0)),List(Sym(95), Sym(0)),List(),List()),List(Sym(0), Sym(95)))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(Equal(Sym(96),Const(null)),Summary(false,false,false,false,false,List(),null,List(Sym(0)),List(Sym(0)),List(),List()),List(Sym(0)))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(ReadVar(Variable(Sym(95))),Summary(false,false,false,false,false,List(),null,List(Sym(95), Sym(0)),List(Sym(95), Sym(0)),List(),List()),List())
+acc: null
+NestedDeps: List()
+Reflect: Reflect(EntryHasNext(Sym(98)),Summary(false,false,false,false,false,List(),null,List(Sym(0)),List(Sym(0)),List(),List()),List())
+acc: null
+NestedDeps: List()
+Reflect: Reflect(ReadVar(Variable(Sym(95))),Summary(false,false,false,false,false,List(),null,List(Sym(95), Sym(0)),List(Sym(95), Sym(0)),List(),List()),List())
+acc: null
+NestedDeps: List()
+Reflect: Reflect(EntryGetKey(Sym(100)),Summary(false,false,false,false,false,List(),null,List(Sym(0)),List(Sym(0)),List(),List()),List())
+acc: null
+NestedDeps: List()
+Reflect: Reflect(ReadVar(Variable(Sym(95))),Summary(false,false,false,false,false,List(),null,List(Sym(95), Sym(0)),List(Sym(95), Sym(0)),List(),List()),List())
+acc: null
+NestedDeps: List()
+Reflect: Reflect(EntryNext(Sym(107)),Summary(false,false,false,false,false,List(),null,List(Sym(0)),List(Sym(0)),List(),List()),List())
+Write: WrappedArray(Sym(95))Def: Assign(Variable(Sym(95)),Sym(108))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(Assign(Variable(Sym(95)),Sym(108)),Summary(false,false,false,false,false,List(),null,List(Sym(95), Sym(0)),List(Sym(95), Sym(0)),List(Sym(95)),List(Sym(95))),List(Sym(107)))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(While(Block(Sym(106)),Block(Sym(110))),Summary(false,false,false,false,false,List(),null,List(Sym(95), Sym(0)),List(Sym(95), Sym(0)),List(Sym(95)),List()),List(Sym(0), Sym(95), Sym(96)))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(ReadVar(Variable(Sym(95))),Summary(false,false,false,false,false,List(),null,List(Sym(95), Sym(0)),List(Sym(95), Sym(0)),List(),List()),List(Sym(0), Sym(95), Sym(111)))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(EntryGetKey(Sym(112)),Summary(false,false,false,false,false,List(),null,List(Sym(0)),List(Sym(0)),List(),List()),List(Sym(0)))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(ReadVar(Variable(Sym(95))),Summary(false,false,false,false,false,List(),null,List(Sym(95), Sym(0)),List(Sym(95), Sym(0)),List(),List()),List(Sym(0), Sym(95), Sym(111)))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(EntryGetValue(Sym(112)),Summary(false,false,false,false,false,List(),null,List(Sym(0)),List(Sym(0)),List(),List()),List(Sym(0)))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(IfThenElse(Sym(114),Block(Sym(116)),Block(Const(null))),Summary(false,false,false,false,false,List(),null,List(Sym(0)),List(),List(),List()),List(Sym(0)))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(IfThenElse(Sym(97),Block(Const(null)),Block(Sym(118))),Summary(false,false,false,false,false,List(),null,List(Sym(95), Sym(0)),List(),List(Sym(95)),List()),List(Sym(0), Sym(95), Sym(96)))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(PrintLn(Sym(119)),Summary(true,true,false,false,false,List(),null,List(),List(),List(),List()),List())
+acc: null
+NestedDeps: List()
+Reflect: Reflect(NewHashMap(Int,Int),Summary(false,false,false,false,true,List(),null,List(),List(),List(),List()),List())
+Nested: WrappedArray(Sym(122)) Def: HashMapGetTable(Sym(122))
+Context: List(Sym(122))
+acc333: HashMapGetTable(Sym(122))
+acc: HashMapGetTable(Sym(122))
+x: NewHashMap(Int,Int) u.p: List() p: List(Sym(122)) u.acc: null acc: HashMapGetTable(Sym(122))
+NestedDeps: List()
+Reflect: Reflect(HashMapGetTable(Sym(122)),Summary(false,false,false,false,false,List(Sym(122)),HashMapGetTable(Sym(122)),List(Sym(122)),List(Sym(122)),List(),List()),List(Sym(122)))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(ArrayLength(Sym(123)),Summary(false,false,false,false,false,List(),null,List(Sym(122)),List(Sym(122)),List(),List()),List(Sym(122)))
+Nested: WrappedArray(Sym(123)) Def: ArrayApply(Sym(123),Sym(126))
+Context: List(Sym(122), Sym(123), Sym(124))
+acc333: ArrayApply(Sym(123),Sym(126))
+acc: ArrayApply(Sym(123),Sym(126))
+x: NewHashMap(Int,Int) u.p: List() p: List(Sym(123)) u.acc: null acc: ArrayApply(Sym(123),Sym(126))
+x: HashMapGetTable(Sym(122)) u.p: List(Sym(122)) p: List(Sym(123)) u.acc: HashMapGetTable(Sym(122)) acc: ArrayApply(Sym(123),Sym(126))
+x: ArrayLength(Sym(123)) u.p: List() p: List(Sym(123)) u.acc: null acc: ArrayApply(Sym(123),Sym(126))
+NestedDeps: List()
+Reflect: Reflect(ArrayApply(Sym(123),Sym(126)),Summary(false,false,false,false,false,List(Sym(123)),ArrayApply(Sym(123),Sym(126)),List(Sym(122)),List(Sym(122)),List(),List()),List(Sym(122)))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(NewVar(Sym(127)),Summary(false,false,false,false,true,List(),null,List(Sym(122)),List(Sym(122)),List(),List()),List(Sym(122)))
+Nested: WrappedArray(Sym(122)) Def: HashMapGetSize(Sym(122))
+Context: List(Sym(122), Sym(123), Sym(124), Sym(127), Sym(128))
+acc333: HashMapGetSize(Sym(122))
+acc: HashMapGetSize(Sym(122))
+x: NewHashMap(Int,Int) u.p: List() p: List(Sym(122)) u.acc: null acc: HashMapGetSize(Sym(122))
+x: HashMapGetTable(Sym(122)) u.p: List(Sym(122)) p: List(Sym(122)) u.acc: HashMapGetTable(Sym(122)) acc: HashMapGetSize(Sym(122))
+x: ArrayLength(Sym(123)) u.p: List() p: List(Sym(122)) u.acc: null acc: HashMapGetSize(Sym(122))
+x: ArrayApply(Sym(123),Sym(126)) u.p: List(Sym(123)) p: List(Sym(122)) u.acc: ArrayApply(Sym(123),Sym(126)) acc: HashMapGetSize(Sym(122))
+x: NewVar(Sym(127)) u.p: List() p: List(Sym(122)) u.acc: null acc: HashMapGetSize(Sym(122))
+NestedDeps: List()
+Reflect: Reflect(HashMapGetSize(Sym(122)),Summary(false,false,false,false,false,List(Sym(122)),HashMapGetSize(Sym(122)),List(Sym(122)),List(Sym(122)),List(),List()),List(Sym(122)))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(ReadVar(Variable(Sym(128))),Summary(false,false,false,false,false,List(),null,List(Sym(128), Sym(122)),List(Sym(128), Sym(122)),List(),List()),List(Sym(122), Sym(128)))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(Equal(Sym(130),Const(null)),Summary(false,false,false,false,false,List(),null,List(Sym(122)),List(Sym(122)),List(),List()),List(Sym(122)))
+Nested: WrappedArray(Sym(123)) Def: ArrayApply(Sym(123),Sym(126))
+Context: List(Sym(122), Sym(123), Sym(124), Sym(127), Sym(128), Sym(129), Sym(130), Sym(131))
+acc333: ArrayApply(Sym(123),Sym(126))
+acc: ArrayApply(Sym(123),Sym(126))
+x: NewHashMap(Int,Int) u.p: List() p: List(Sym(123)) u.acc: null acc: ArrayApply(Sym(123),Sym(126))
+x: HashMapGetTable(Sym(122)) u.p: List(Sym(122)) p: List(Sym(123)) u.acc: HashMapGetTable(Sym(122)) acc: ArrayApply(Sym(123),Sym(126))
+x: ArrayLength(Sym(123)) u.p: List() p: List(Sym(123)) u.acc: null acc: ArrayApply(Sym(123),Sym(126))
+x: ArrayApply(Sym(123),Sym(126)) u.p: List(Sym(123)) p: List(Sym(123)) u.acc: ArrayApply(Sym(123),Sym(126)) acc: ArrayApply(Sym(123),Sym(126))
+x: NewVar(Sym(127)) u.p: List() p: List(Sym(123)) u.acc: null acc: ArrayApply(Sym(123),Sym(126))
+x: HashMapGetSize(Sym(122)) u.p: List(Sym(122)) p: List(Sym(123)) u.acc: HashMapGetSize(Sym(122)) acc: ArrayApply(Sym(123),Sym(126))
+x: ReadVar(Variable(Sym(128))) u.p: List() p: List(Sym(123)) u.acc: null acc: ArrayApply(Sym(123),Sym(126))
+x: Equal(Sym(130),Const(null)) u.p: List() p: List(Sym(123)) u.acc: null acc: ArrayApply(Sym(123),Sym(126))
+NestedDeps: List()
+Reflect: Reflect(ArrayApply(Sym(123),Sym(126)),Summary(false,false,false,false,false,List(Sym(123)),ArrayApply(Sym(123),Sym(126)),List(Sym(122)),List(Sym(122)),List(),List()),List(Sym(122)))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(EntryCreate(Const(1),Const(2)),Summary(false,false,false,false,true,List(),null,List(),List(),List(),List()),List())
+Write: WrappedArray(Sym(127))Def: ArrayUpdate(Sym(123),Sym(126),Sym(132))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(ArrayUpdate(Sym(123),Sym(126),Sym(132)),Summary(false,false,false,false,false,List(),null,List(Sym(122), Sym(132)),List(Sym(122), Sym(132)),List(Sym(127)),List(Sym(127))),List(Sym(122), Sym(127), Sym(132)))
+Nested: WrappedArray(Sym(122)) Def: HashMapGetSize(Sym(122))
+Context: List(Sym(122), Sym(123), Sym(124), Sym(127), Sym(128), Sym(129), Sym(130), Sym(131), Sym(132), Sym(133))
+acc333: HashMapGetSize(Sym(122))
+acc: HashMapGetSize(Sym(122))
+x: NewHashMap(Int,Int) u.p: List() p: List(Sym(122)) u.acc: null acc: HashMapGetSize(Sym(122))
+x: HashMapGetTable(Sym(122)) u.p: List(Sym(122)) p: List(Sym(122)) u.acc: HashMapGetTable(Sym(122)) acc: HashMapGetSize(Sym(122))
+x: ArrayLength(Sym(123)) u.p: List() p: List(Sym(122)) u.acc: null acc: HashMapGetSize(Sym(122))
+x: ArrayApply(Sym(123),Sym(126)) u.p: List(Sym(123)) p: List(Sym(122)) u.acc: ArrayApply(Sym(123),Sym(126)) acc: HashMapGetSize(Sym(122))
+x: NewVar(Sym(127)) u.p: List() p: List(Sym(122)) u.acc: null acc: HashMapGetSize(Sym(122))
+x: HashMapGetSize(Sym(122)) u.p: List(Sym(122)) p: List(Sym(122)) u.acc: HashMapGetSize(Sym(122)) acc: HashMapGetSize(Sym(122))
+x: ReadVar(Variable(Sym(128))) u.p: List() p: List(Sym(122)) u.acc: null acc: HashMapGetSize(Sym(122))
+x: Equal(Sym(130),Const(null)) u.p: List() p: List(Sym(122)) u.acc: null acc: HashMapGetSize(Sym(122))
+x: EntryCreate(Const(1),Const(2)) u.p: List() p: List(Sym(122)) u.acc: null acc: HashMapGetSize(Sym(122))
+x: ArrayUpdate(Sym(123),Sym(126),Sym(132)) u.p: List() p: List(Sym(122)) u.acc: null acc: HashMapGetSize(Sym(122))
+NestedDeps: List()
+Reflect: Reflect(HashMapGetSize(Sym(122)),Summary(false,false,false,false,false,List(Sym(122)),HashMapGetSize(Sym(122)),List(Sym(122)),List(Sym(122)),List(),List()),List(Sym(122)))
+Write: WrappedArray(Sym(129))Def: HashMapSetSize(Sym(122),Sym(134))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(HashMapSetSize(Sym(122),Sym(134)),Summary(false,false,false,false,false,List(),null,List(Sym(122)),List(Sym(122)),List(Sym(129)),List(Sym(129))),List(Sym(122), Sym(129)))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(ReadVar(Variable(Sym(128))),Summary(false,false,false,false,false,List(),null,List(Sym(128), Sym(122)),List(Sym(128), Sym(122)),List(),List()),List())
+acc: null
+NestedDeps: List()
+Reflect: Reflect(EntryHasNext(Sym(137)),Summary(false,false,false,false,false,List(),null,List(Sym(122)),List(Sym(122)),List(),List()),List())
+acc: null
+NestedDeps: List()
+Reflect: Reflect(ReadVar(Variable(Sym(128))),Summary(false,false,false,false,false,List(),null,List(Sym(128), Sym(122)),List(Sym(128), Sym(122)),List(),List()),List())
+acc: null
+NestedDeps: List()
+Reflect: Reflect(EntryGetKey(Sym(139)),Summary(false,false,false,false,false,List(),null,List(Sym(122)),List(Sym(122)),List(),List()),List())
+acc: null
+NestedDeps: List()
+Reflect: Reflect(ReadVar(Variable(Sym(128))),Summary(false,false,false,false,false,List(),null,List(Sym(128), Sym(122)),List(Sym(128), Sym(122)),List(),List()),List())
+acc: null
+NestedDeps: List()
+Reflect: Reflect(EntryNext(Sym(146)),Summary(false,false,false,false,false,List(),null,List(Sym(122)),List(Sym(122)),List(),List()),List())
+Write: WrappedArray(Sym(128))Def: Assign(Variable(Sym(128)),Sym(147))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(Assign(Variable(Sym(128)),Sym(147)),Summary(false,false,false,false,false,List(),null,List(Sym(128), Sym(122)),List(Sym(128), Sym(122)),List(Sym(128)),List(Sym(128))),List(Sym(146)))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(While(Block(Sym(145)),Block(Sym(149))),Summary(false,false,false,false,false,List(),null,List(Sym(128), Sym(122)),List(Sym(128), Sym(122)),List(Sym(128)),List()),List(Sym(122), Sym(128), Sym(130)))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(ReadVar(Variable(Sym(128))),Summary(false,false,false,false,false,List(),null,List(Sym(128), Sym(122)),List(Sym(128), Sym(122)),List(),List()),List(Sym(122), Sym(128), Sym(150)))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(EntryGetKey(Sym(151)),Summary(false,false,false,false,false,List(),null,List(Sym(122)),List(Sym(122)),List(),List()),List(Sym(122)))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(ReadVar(Variable(Sym(128))),Summary(false,false,false,false,false,List(),null,List(Sym(128), Sym(122)),List(Sym(128), Sym(122)),List(),List()),List(Sym(122), Sym(128), Sym(150)))
+Write: WrappedArray(Sym(151))Def: EntrySetValue(Sym(151),Const(2))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(EntrySetValue(Sym(151),Const(2)),Summary(false,false,false,false,false,List(),null,List(Sym(122)),List(Sym(122)),List(Sym(151)),List(Sym(151))),List(Sym(122), Sym(151)))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(ReadVar(Variable(Sym(128))),Summary(false,false,false,false,false,List(),null,List(Sym(128), Sym(122)),List(Sym(128), Sym(122)),List(),List()),List(Sym(122), Sym(128), Sym(150)))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(EntryCreate(Const(1),Const(2)),Summary(false,false,false,false,true,List(),null,List(),List(),List(),List()),List())
+Write: WrappedArray(Sym(151))Def: EntrySetNext(Sym(151),Sym(156))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(EntrySetNext(Sym(151),Sym(156)),Summary(false,false,false,false,false,List(),null,List(Sym(122), Sym(156)),List(Sym(122), Sym(156)),List(Sym(151)),List(Sym(151))),List(Sym(122), Sym(151), Sym(156)))
+Nested: WrappedArray(Sym(122)) Def: HashMapGetSize(Sym(122))
+Context: List(Sym(122), Sym(123), Sym(124), Sym(127), Sym(128), Sym(129), Sym(130), Sym(131), Sym(150), Sym(151), Sym(152), Sym(156), Sym(157))
+acc333: HashMapGetSize(Sym(122))
+acc: HashMapGetSize(Sym(122))
+x: NewHashMap(Int,Int) u.p: List() p: List(Sym(122)) u.acc: null acc: HashMapGetSize(Sym(122))
+x: HashMapGetTable(Sym(122)) u.p: List(Sym(122)) p: List(Sym(122)) u.acc: HashMapGetTable(Sym(122)) acc: HashMapGetSize(Sym(122))
+x: ArrayLength(Sym(123)) u.p: List() p: List(Sym(122)) u.acc: null acc: HashMapGetSize(Sym(122))
+x: ArrayApply(Sym(123),Sym(126)) u.p: List(Sym(123)) p: List(Sym(122)) u.acc: ArrayApply(Sym(123),Sym(126)) acc: HashMapGetSize(Sym(122))
+x: NewVar(Sym(127)) u.p: List() p: List(Sym(122)) u.acc: null acc: HashMapGetSize(Sym(122))
+x: HashMapGetSize(Sym(122)) u.p: List(Sym(122)) p: List(Sym(122)) u.acc: HashMapGetSize(Sym(122)) acc: HashMapGetSize(Sym(122))
+x: ReadVar(Variable(Sym(128))) u.p: List() p: List(Sym(122)) u.acc: null acc: HashMapGetSize(Sym(122))
+x: Equal(Sym(130),Const(null)) u.p: List() p: List(Sym(122)) u.acc: null acc: HashMapGetSize(Sym(122))
+x: While(Block(Sym(145)),Block(Sym(149))) u.p: List() p: List(Sym(122)) u.acc: null acc: HashMapGetSize(Sym(122))
+x: ReadVar(Variable(Sym(128))) u.p: List() p: List(Sym(122)) u.acc: null acc: HashMapGetSize(Sym(122))
+x: EntryGetKey(Sym(151)) u.p: List() p: List(Sym(122)) u.acc: null acc: HashMapGetSize(Sym(122))
+x: EntryCreate(Const(1),Const(2)) u.p: List() p: List(Sym(122)) u.acc: null acc: HashMapGetSize(Sym(122))
+x: EntrySetNext(Sym(151),Sym(156)) u.p: List() p: List(Sym(122)) u.acc: null acc: HashMapGetSize(Sym(122))
+NestedDeps: List()
+Reflect: Reflect(HashMapGetSize(Sym(122)),Summary(false,false,false,false,false,List(Sym(122)),HashMapGetSize(Sym(122)),List(Sym(122)),List(Sym(122)),List(),List()),List(Sym(122)))
+Write: WrappedArray(Sym(129))Def: HashMapSetSize(Sym(122),Sym(134))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(HashMapSetSize(Sym(122),Sym(134)),Summary(false,false,false,false,false,List(),null,List(Sym(122)),List(Sym(122)),List(Sym(129)),List(Sym(129))),List(Sym(122), Sym(129)))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(IfThenElse(Sym(153),Block(Sym(155)),Block(Sym(159))),Summary(false,false,false,false,false,List(),null,List(Sym(122)),List(Sym(122)),List(Sym(151), Sym(129)),List(Sym(151))),List(Sym(122), Sym(129), Sym(151)))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(IfThenElse(Sym(131),Block(Sym(136)),Block(Sym(161))),Summary(false,false,false,false,false,List(),null,List(Sym(122), Sym(128)),List(Sym(122)),List(Sym(127), Sym(129), Sym(128), Sym(151)),List()),List(Sym(122), Sym(127), Sym(128), Sym(129), Sym(130)))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(NewVar(Sym(122)),Summary(false,false,false,false,true,List(),null,List(Sym(122)),List(Sym(122)),List(),List()),List(Sym(122)))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(ReadVar(Variable(Sym(163))),Summary(false,false,false,false,false,List(),null,List(Sym(163), Sym(122)),List(Sym(163), Sym(122)),List(),List()),List(Sym(122), Sym(163)))
+Nested: WrappedArray(Sym(164)) Def: HashMapGetTable(Sym(164))
+Context: List(Sym(122), Sym(123), Sym(124), Sym(127), Sym(128), Sym(129), Sym(130), Sym(131), Sym(162), Sym(163), Sym(164))
+acc333: HashMapGetTable(Sym(164))
+acc: HashMapGetTable(Sym(164))
+x: NewHashMap(Int,Int) u.p: List() p: List(Sym(164)) u.acc: null acc: HashMapGetTable(Sym(164))
+x: HashMapGetTable(Sym(122)) u.p: List(Sym(122)) p: List(Sym(164)) u.acc: HashMapGetTable(Sym(122)) acc: HashMapGetTable(Sym(164))
+x: ArrayLength(Sym(123)) u.p: List() p: List(Sym(164)) u.acc: null acc: HashMapGetTable(Sym(164))
+x: ArrayApply(Sym(123),Sym(126)) u.p: List(Sym(123)) p: List(Sym(164)) u.acc: ArrayApply(Sym(123),Sym(126)) acc: HashMapGetTable(Sym(164))
+x: NewVar(Sym(127)) u.p: List() p: List(Sym(164)) u.acc: null acc: HashMapGetTable(Sym(164))
+x: HashMapGetSize(Sym(122)) u.p: List(Sym(122)) p: List(Sym(164)) u.acc: HashMapGetSize(Sym(122)) acc: HashMapGetTable(Sym(164))
+x: ReadVar(Variable(Sym(128))) u.p: List() p: List(Sym(164)) u.acc: null acc: HashMapGetTable(Sym(164))
+x: Equal(Sym(130),Const(null)) u.p: List() p: List(Sym(164)) u.acc: null acc: HashMapGetTable(Sym(164))
+x: IfThenElse(Sym(131),Block(Sym(136)),Block(Sym(161))) u.p: List() p: List(Sym(164)) u.acc: null acc: HashMapGetTable(Sym(164))
+x: NewVar(Sym(122)) u.p: List() p: List(Sym(164)) u.acc: null acc: HashMapGetTable(Sym(164))
+x: ReadVar(Variable(Sym(163))) u.p: List() p: List(Sym(164)) u.acc: null acc: HashMapGetTable(Sym(164))
+NestedDeps: List()
+Reflect: Reflect(HashMapGetTable(Sym(164)),Summary(false,false,false,false,false,List(Sym(164)),HashMapGetTable(Sym(164)),List(Sym(122)),List(Sym(122)),List(),List()),List(Sym(122)))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(ArrayLength(Sym(165)),Summary(false,false,false,false,false,List(),null,List(Sym(122)),List(Sym(122)),List(),List()),List(Sym(122)))
+Nested: WrappedArray(Sym(165)) Def: ArrayApply(Sym(165),Sym(168))
+Context: List(Sym(122), Sym(123), Sym(124), Sym(127), Sym(128), Sym(129), Sym(130), Sym(131), Sym(162), Sym(163), Sym(164), Sym(165), Sym(166))
+acc333: ArrayApply(Sym(165),Sym(168))
+acc: ArrayApply(Sym(165),Sym(168))
+x: NewHashMap(Int,Int) u.p: List() p: List(Sym(165)) u.acc: null acc: ArrayApply(Sym(165),Sym(168))
+x: HashMapGetTable(Sym(122)) u.p: List(Sym(122)) p: List(Sym(165)) u.acc: HashMapGetTable(Sym(122)) acc: ArrayApply(Sym(165),Sym(168))
+x: ArrayLength(Sym(123)) u.p: List() p: List(Sym(165)) u.acc: null acc: ArrayApply(Sym(165),Sym(168))
+x: ArrayApply(Sym(123),Sym(126)) u.p: List(Sym(123)) p: List(Sym(165)) u.acc: ArrayApply(Sym(123),Sym(126)) acc: ArrayApply(Sym(165),Sym(168))
+x: NewVar(Sym(127)) u.p: List() p: List(Sym(165)) u.acc: null acc: ArrayApply(Sym(165),Sym(168))
+x: HashMapGetSize(Sym(122)) u.p: List(Sym(122)) p: List(Sym(165)) u.acc: HashMapGetSize(Sym(122)) acc: ArrayApply(Sym(165),Sym(168))
+x: ReadVar(Variable(Sym(128))) u.p: List() p: List(Sym(165)) u.acc: null acc: ArrayApply(Sym(165),Sym(168))
+x: Equal(Sym(130),Const(null)) u.p: List() p: List(Sym(165)) u.acc: null acc: ArrayApply(Sym(165),Sym(168))
+x: IfThenElse(Sym(131),Block(Sym(136)),Block(Sym(161))) u.p: List() p: List(Sym(165)) u.acc: null acc: ArrayApply(Sym(165),Sym(168))
+x: NewVar(Sym(122)) u.p: List() p: List(Sym(165)) u.acc: null acc: ArrayApply(Sym(165),Sym(168))
+x: ReadVar(Variable(Sym(163))) u.p: List() p: List(Sym(165)) u.acc: null acc: ArrayApply(Sym(165),Sym(168))
+x: HashMapGetTable(Sym(164)) u.p: List(Sym(164)) p: List(Sym(165)) u.acc: HashMapGetTable(Sym(164)) acc: ArrayApply(Sym(165),Sym(168))
+x: ArrayLength(Sym(165)) u.p: List() p: List(Sym(165)) u.acc: null acc: ArrayApply(Sym(165),Sym(168))
+NestedDeps: List()
+Reflect: Reflect(ArrayApply(Sym(165),Sym(168)),Summary(false,false,false,false,false,List(Sym(165)),ArrayApply(Sym(165),Sym(168)),List(Sym(122)),List(Sym(122)),List(),List()),List(Sym(122)))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(NewVar(Sym(169)),Summary(false,false,false,false,true,List(),null,List(Sym(122)),List(Sym(122)),List(),List()),List(Sym(122)))
+Nested: WrappedArray(Sym(164)) Def: HashMapGetSize(Sym(164))
+Context: List(Sym(122), Sym(123), Sym(124), Sym(127), Sym(128), Sym(129), Sym(130), Sym(131), Sym(162), Sym(163), Sym(164), Sym(165), Sym(166), Sym(169), Sym(170))
+acc333: HashMapGetSize(Sym(164))
+acc: HashMapGetSize(Sym(164))
+x: NewHashMap(Int,Int) u.p: List() p: List(Sym(164)) u.acc: null acc: HashMapGetSize(Sym(164))
+x: HashMapGetTable(Sym(122)) u.p: List(Sym(122)) p: List(Sym(164)) u.acc: HashMapGetTable(Sym(122)) acc: HashMapGetSize(Sym(164))
+x: ArrayLength(Sym(123)) u.p: List() p: List(Sym(164)) u.acc: null acc: HashMapGetSize(Sym(164))
+x: ArrayApply(Sym(123),Sym(126)) u.p: List(Sym(123)) p: List(Sym(164)) u.acc: ArrayApply(Sym(123),Sym(126)) acc: HashMapGetSize(Sym(164))
+x: NewVar(Sym(127)) u.p: List() p: List(Sym(164)) u.acc: null acc: HashMapGetSize(Sym(164))
+x: HashMapGetSize(Sym(122)) u.p: List(Sym(122)) p: List(Sym(164)) u.acc: HashMapGetSize(Sym(122)) acc: HashMapGetSize(Sym(164))
+x: ReadVar(Variable(Sym(128))) u.p: List() p: List(Sym(164)) u.acc: null acc: HashMapGetSize(Sym(164))
+x: Equal(Sym(130),Const(null)) u.p: List() p: List(Sym(164)) u.acc: null acc: HashMapGetSize(Sym(164))
+x: IfThenElse(Sym(131),Block(Sym(136)),Block(Sym(161))) u.p: List() p: List(Sym(164)) u.acc: null acc: HashMapGetSize(Sym(164))
+x: NewVar(Sym(122)) u.p: List() p: List(Sym(164)) u.acc: null acc: HashMapGetSize(Sym(164))
+x: ReadVar(Variable(Sym(163))) u.p: List() p: List(Sym(164)) u.acc: null acc: HashMapGetSize(Sym(164))
+x: HashMapGetTable(Sym(164)) u.p: List(Sym(164)) p: List(Sym(164)) u.acc: HashMapGetTable(Sym(164)) acc: HashMapGetSize(Sym(164))
+x: ArrayLength(Sym(165)) u.p: List() p: List(Sym(164)) u.acc: null acc: HashMapGetSize(Sym(164))
+x: ArrayApply(Sym(165),Sym(168)) u.p: List(Sym(165)) p: List(Sym(164)) u.acc: ArrayApply(Sym(165),Sym(168)) acc: HashMapGetSize(Sym(164))
+x: NewVar(Sym(169)) u.p: List() p: List(Sym(164)) u.acc: null acc: HashMapGetSize(Sym(164))
+NestedDeps: List()
+Reflect: Reflect(HashMapGetSize(Sym(164)),Summary(false,false,false,false,false,List(Sym(164)),HashMapGetSize(Sym(164)),List(Sym(122)),List(Sym(122)),List(),List()),List(Sym(122)))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(ReadVar(Variable(Sym(170))),Summary(false,false,false,false,false,List(),null,List(Sym(170), Sym(122)),List(Sym(170), Sym(122)),List(),List()),List(Sym(122), Sym(170)))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(Equal(Sym(172),Const(null)),Summary(false,false,false,false,false,List(),null,List(Sym(122)),List(Sym(122)),List(),List()),List(Sym(122)))
+Nested: WrappedArray(Sym(165)) Def: ArrayApply(Sym(165),Sym(168))
+Context: List(Sym(122), Sym(123), Sym(124), Sym(127), Sym(128), Sym(129), Sym(130), Sym(131), Sym(162), Sym(163), Sym(164), Sym(165), Sym(166), Sym(169), Sym(170), Sym(171), Sym(172), Sym(173))
+acc333: ArrayApply(Sym(165),Sym(168))
+acc: ArrayApply(Sym(165),Sym(168))
+x: NewHashMap(Int,Int) u.p: List() p: List(Sym(165)) u.acc: null acc: ArrayApply(Sym(165),Sym(168))
+x: HashMapGetTable(Sym(122)) u.p: List(Sym(122)) p: List(Sym(165)) u.acc: HashMapGetTable(Sym(122)) acc: ArrayApply(Sym(165),Sym(168))
+x: ArrayLength(Sym(123)) u.p: List() p: List(Sym(165)) u.acc: null acc: ArrayApply(Sym(165),Sym(168))
+x: ArrayApply(Sym(123),Sym(126)) u.p: List(Sym(123)) p: List(Sym(165)) u.acc: ArrayApply(Sym(123),Sym(126)) acc: ArrayApply(Sym(165),Sym(168))
+x: NewVar(Sym(127)) u.p: List() p: List(Sym(165)) u.acc: null acc: ArrayApply(Sym(165),Sym(168))
+x: HashMapGetSize(Sym(122)) u.p: List(Sym(122)) p: List(Sym(165)) u.acc: HashMapGetSize(Sym(122)) acc: ArrayApply(Sym(165),Sym(168))
+x: ReadVar(Variable(Sym(128))) u.p: List() p: List(Sym(165)) u.acc: null acc: ArrayApply(Sym(165),Sym(168))
+x: Equal(Sym(130),Const(null)) u.p: List() p: List(Sym(165)) u.acc: null acc: ArrayApply(Sym(165),Sym(168))
+x: IfThenElse(Sym(131),Block(Sym(136)),Block(Sym(161))) u.p: List() p: List(Sym(165)) u.acc: null acc: ArrayApply(Sym(165),Sym(168))
+x: NewVar(Sym(122)) u.p: List() p: List(Sym(165)) u.acc: null acc: ArrayApply(Sym(165),Sym(168))
+x: ReadVar(Variable(Sym(163))) u.p: List() p: List(Sym(165)) u.acc: null acc: ArrayApply(Sym(165),Sym(168))
+x: HashMapGetTable(Sym(164)) u.p: List(Sym(164)) p: List(Sym(165)) u.acc: HashMapGetTable(Sym(164)) acc: ArrayApply(Sym(165),Sym(168))
+x: ArrayLength(Sym(165)) u.p: List() p: List(Sym(165)) u.acc: null acc: ArrayApply(Sym(165),Sym(168))
+x: ArrayApply(Sym(165),Sym(168)) u.p: List(Sym(165)) p: List(Sym(165)) u.acc: ArrayApply(Sym(165),Sym(168)) acc: ArrayApply(Sym(165),Sym(168))
+x: NewVar(Sym(169)) u.p: List() p: List(Sym(165)) u.acc: null acc: ArrayApply(Sym(165),Sym(168))
+x: HashMapGetSize(Sym(164)) u.p: List(Sym(164)) p: List(Sym(165)) u.acc: HashMapGetSize(Sym(164)) acc: ArrayApply(Sym(165),Sym(168))
+x: ReadVar(Variable(Sym(170))) u.p: List() p: List(Sym(165)) u.acc: null acc: ArrayApply(Sym(165),Sym(168))
+x: Equal(Sym(172),Const(null)) u.p: List() p: List(Sym(165)) u.acc: null acc: ArrayApply(Sym(165),Sym(168))
+NestedDeps: List()
+Reflect: Reflect(ArrayApply(Sym(165),Sym(168)),Summary(false,false,false,false,false,List(Sym(165)),ArrayApply(Sym(165),Sym(168)),List(Sym(122)),List(Sym(122)),List(),List()),List(Sym(122)))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(EntryCreate(Const(1),Const(3)),Summary(false,false,false,false,true,List(),null,List(),List(),List(),List()),List())
+Write: WrappedArray(Sym(169))Def: ArrayUpdate(Sym(165),Sym(168),Sym(174))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(ArrayUpdate(Sym(165),Sym(168),Sym(174)),Summary(false,false,false,false,false,List(),null,List(Sym(122), Sym(174)),List(Sym(122), Sym(174)),List(Sym(169)),List(Sym(169))),List(Sym(122), Sym(169), Sym(174)))
+Nested: WrappedArray(Sym(164)) Def: HashMapGetSize(Sym(164))
+Context: List(Sym(122), Sym(123), Sym(124), Sym(127), Sym(128), Sym(129), Sym(130), Sym(131), Sym(162), Sym(163), Sym(164), Sym(165), Sym(166), Sym(169), Sym(170), Sym(171), Sym(172), Sym(173), Sym(174), Sym(175))
+acc333: HashMapGetSize(Sym(164))
+acc: HashMapGetSize(Sym(164))
+x: NewHashMap(Int,Int) u.p: List() p: List(Sym(164)) u.acc: null acc: HashMapGetSize(Sym(164))
+x: HashMapGetTable(Sym(122)) u.p: List(Sym(122)) p: List(Sym(164)) u.acc: HashMapGetTable(Sym(122)) acc: HashMapGetSize(Sym(164))
+x: ArrayLength(Sym(123)) u.p: List() p: List(Sym(164)) u.acc: null acc: HashMapGetSize(Sym(164))
+x: ArrayApply(Sym(123),Sym(126)) u.p: List(Sym(123)) p: List(Sym(164)) u.acc: ArrayApply(Sym(123),Sym(126)) acc: HashMapGetSize(Sym(164))
+x: NewVar(Sym(127)) u.p: List() p: List(Sym(164)) u.acc: null acc: HashMapGetSize(Sym(164))
+x: HashMapGetSize(Sym(122)) u.p: List(Sym(122)) p: List(Sym(164)) u.acc: HashMapGetSize(Sym(122)) acc: HashMapGetSize(Sym(164))
+x: ReadVar(Variable(Sym(128))) u.p: List() p: List(Sym(164)) u.acc: null acc: HashMapGetSize(Sym(164))
+x: Equal(Sym(130),Const(null)) u.p: List() p: List(Sym(164)) u.acc: null acc: HashMapGetSize(Sym(164))
+x: IfThenElse(Sym(131),Block(Sym(136)),Block(Sym(161))) u.p: List() p: List(Sym(164)) u.acc: null acc: HashMapGetSize(Sym(164))
+x: NewVar(Sym(122)) u.p: List() p: List(Sym(164)) u.acc: null acc: HashMapGetSize(Sym(164))
+x: ReadVar(Variable(Sym(163))) u.p: List() p: List(Sym(164)) u.acc: null acc: HashMapGetSize(Sym(164))
+x: HashMapGetTable(Sym(164)) u.p: List(Sym(164)) p: List(Sym(164)) u.acc: HashMapGetTable(Sym(164)) acc: HashMapGetSize(Sym(164))
+x: ArrayLength(Sym(165)) u.p: List() p: List(Sym(164)) u.acc: null acc: HashMapGetSize(Sym(164))
+x: ArrayApply(Sym(165),Sym(168)) u.p: List(Sym(165)) p: List(Sym(164)) u.acc: ArrayApply(Sym(165),Sym(168)) acc: HashMapGetSize(Sym(164))
+x: NewVar(Sym(169)) u.p: List() p: List(Sym(164)) u.acc: null acc: HashMapGetSize(Sym(164))
+x: HashMapGetSize(Sym(164)) u.p: List(Sym(164)) p: List(Sym(164)) u.acc: HashMapGetSize(Sym(164)) acc: HashMapGetSize(Sym(164))
+x: ReadVar(Variable(Sym(170))) u.p: List() p: List(Sym(164)) u.acc: null acc: HashMapGetSize(Sym(164))
+x: Equal(Sym(172),Const(null)) u.p: List() p: List(Sym(164)) u.acc: null acc: HashMapGetSize(Sym(164))
+x: EntryCreate(Const(1),Const(3)) u.p: List() p: List(Sym(164)) u.acc: null acc: HashMapGetSize(Sym(164))
+x: ArrayUpdate(Sym(165),Sym(168),Sym(174)) u.p: List() p: List(Sym(164)) u.acc: null acc: HashMapGetSize(Sym(164))
+NestedDeps: List()
+Reflect: Reflect(HashMapGetSize(Sym(164)),Summary(false,false,false,false,false,List(Sym(164)),HashMapGetSize(Sym(164)),List(Sym(122)),List(Sym(122)),List(),List()),List(Sym(122)))
+Write: WrappedArray(Sym(171))Def: HashMapSetSize(Sym(164),Sym(176))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(HashMapSetSize(Sym(164),Sym(176)),Summary(false,false,false,false,false,List(),null,List(Sym(122)),List(Sym(122)),List(Sym(171)),List(Sym(171))),List(Sym(122), Sym(171)))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(ReadVar(Variable(Sym(170))),Summary(false,false,false,false,false,List(),null,List(Sym(170), Sym(122)),List(Sym(170), Sym(122)),List(),List()),List())
+acc: null
+NestedDeps: List()
+Reflect: Reflect(EntryHasNext(Sym(179)),Summary(false,false,false,false,false,List(),null,List(Sym(122)),List(Sym(122)),List(),List()),List())
+acc: null
+NestedDeps: List()
+Reflect: Reflect(ReadVar(Variable(Sym(170))),Summary(false,false,false,false,false,List(),null,List(Sym(170), Sym(122)),List(Sym(170), Sym(122)),List(),List()),List())
+acc: null
+NestedDeps: List()
+Reflect: Reflect(EntryGetKey(Sym(181)),Summary(false,false,false,false,false,List(),null,List(Sym(122)),List(Sym(122)),List(),List()),List())
+acc: null
+NestedDeps: List()
+Reflect: Reflect(ReadVar(Variable(Sym(170))),Summary(false,false,false,false,false,List(),null,List(Sym(170), Sym(122)),List(Sym(170), Sym(122)),List(),List()),List())
+acc: null
+NestedDeps: List()
+Reflect: Reflect(EntryNext(Sym(188)),Summary(false,false,false,false,false,List(),null,List(Sym(122)),List(Sym(122)),List(),List()),List())
+Write: WrappedArray(Sym(170))Def: Assign(Variable(Sym(170)),Sym(189))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(Assign(Variable(Sym(170)),Sym(189)),Summary(false,false,false,false,false,List(),null,List(Sym(170), Sym(122)),List(Sym(170), Sym(122)),List(Sym(170)),List(Sym(170))),List(Sym(188)))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(While(Block(Sym(187)),Block(Sym(191))),Summary(false,false,false,false,false,List(),null,List(Sym(170), Sym(122)),List(Sym(170), Sym(122)),List(Sym(170)),List()),List(Sym(122), Sym(170), Sym(172)))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(ReadVar(Variable(Sym(170))),Summary(false,false,false,false,false,List(),null,List(Sym(170), Sym(122)),List(Sym(170), Sym(122)),List(),List()),List(Sym(122), Sym(170), Sym(192)))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(EntryGetKey(Sym(193)),Summary(false,false,false,false,false,List(),null,List(Sym(122)),List(Sym(122)),List(),List()),List(Sym(122)))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(ReadVar(Variable(Sym(170))),Summary(false,false,false,false,false,List(),null,List(Sym(170), Sym(122)),List(Sym(170), Sym(122)),List(),List()),List(Sym(122), Sym(170), Sym(192)))
+Write: WrappedArray(Sym(193))Def: EntrySetValue(Sym(193),Const(3))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(EntrySetValue(Sym(193),Const(3)),Summary(false,false,false,false,false,List(),null,List(Sym(122)),List(Sym(122)),List(Sym(193)),List(Sym(193))),List(Sym(122), Sym(193)))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(ReadVar(Variable(Sym(170))),Summary(false,false,false,false,false,List(),null,List(Sym(170), Sym(122)),List(Sym(170), Sym(122)),List(),List()),List(Sym(122), Sym(170), Sym(192)))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(EntryCreate(Const(1),Const(3)),Summary(false,false,false,false,true,List(),null,List(),List(),List(),List()),List())
+Write: WrappedArray(Sym(193))Def: EntrySetNext(Sym(193),Sym(198))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(EntrySetNext(Sym(193),Sym(198)),Summary(false,false,false,false,false,List(),null,List(Sym(122), Sym(198)),List(Sym(122), Sym(198)),List(Sym(193)),List(Sym(193))),List(Sym(122), Sym(193), Sym(198)))
+Nested: WrappedArray(Sym(164)) Def: HashMapGetSize(Sym(164))
+Context: List(Sym(122), Sym(123), Sym(124), Sym(127), Sym(128), Sym(129), Sym(130), Sym(131), Sym(162), Sym(163), Sym(164), Sym(165), Sym(166), Sym(169), Sym(170), Sym(171), Sym(172), Sym(173), Sym(192), Sym(193), Sym(194), Sym(198), Sym(199))
+acc333: HashMapGetSize(Sym(164))
+acc: HashMapGetSize(Sym(164))
+x: NewHashMap(Int,Int) u.p: List() p: List(Sym(164)) u.acc: null acc: HashMapGetSize(Sym(164))
+x: HashMapGetTable(Sym(122)) u.p: List(Sym(122)) p: List(Sym(164)) u.acc: HashMapGetTable(Sym(122)) acc: HashMapGetSize(Sym(164))
+x: ArrayLength(Sym(123)) u.p: List() p: List(Sym(164)) u.acc: null acc: HashMapGetSize(Sym(164))
+x: ArrayApply(Sym(123),Sym(126)) u.p: List(Sym(123)) p: List(Sym(164)) u.acc: ArrayApply(Sym(123),Sym(126)) acc: HashMapGetSize(Sym(164))
+x: NewVar(Sym(127)) u.p: List() p: List(Sym(164)) u.acc: null acc: HashMapGetSize(Sym(164))
+x: HashMapGetSize(Sym(122)) u.p: List(Sym(122)) p: List(Sym(164)) u.acc: HashMapGetSize(Sym(122)) acc: HashMapGetSize(Sym(164))
+x: ReadVar(Variable(Sym(128))) u.p: List() p: List(Sym(164)) u.acc: null acc: HashMapGetSize(Sym(164))
+x: Equal(Sym(130),Const(null)) u.p: List() p: List(Sym(164)) u.acc: null acc: HashMapGetSize(Sym(164))
+x: IfThenElse(Sym(131),Block(Sym(136)),Block(Sym(161))) u.p: List() p: List(Sym(164)) u.acc: null acc: HashMapGetSize(Sym(164))
+x: NewVar(Sym(122)) u.p: List() p: List(Sym(164)) u.acc: null acc: HashMapGetSize(Sym(164))
+x: ReadVar(Variable(Sym(163))) u.p: List() p: List(Sym(164)) u.acc: null acc: HashMapGetSize(Sym(164))
+x: HashMapGetTable(Sym(164)) u.p: List(Sym(164)) p: List(Sym(164)) u.acc: HashMapGetTable(Sym(164)) acc: HashMapGetSize(Sym(164))
+x: ArrayLength(Sym(165)) u.p: List() p: List(Sym(164)) u.acc: null acc: HashMapGetSize(Sym(164))
+x: ArrayApply(Sym(165),Sym(168)) u.p: List(Sym(165)) p: List(Sym(164)) u.acc: ArrayApply(Sym(165),Sym(168)) acc: HashMapGetSize(Sym(164))
+x: NewVar(Sym(169)) u.p: List() p: List(Sym(164)) u.acc: null acc: HashMapGetSize(Sym(164))
+x: HashMapGetSize(Sym(164)) u.p: List(Sym(164)) p: List(Sym(164)) u.acc: HashMapGetSize(Sym(164)) acc: HashMapGetSize(Sym(164))
+x: ReadVar(Variable(Sym(170))) u.p: List() p: List(Sym(164)) u.acc: null acc: HashMapGetSize(Sym(164))
+x: Equal(Sym(172),Const(null)) u.p: List() p: List(Sym(164)) u.acc: null acc: HashMapGetSize(Sym(164))
+x: While(Block(Sym(187)),Block(Sym(191))) u.p: List() p: List(Sym(164)) u.acc: null acc: HashMapGetSize(Sym(164))
+x: ReadVar(Variable(Sym(170))) u.p: List() p: List(Sym(164)) u.acc: null acc: HashMapGetSize(Sym(164))
+x: EntryGetKey(Sym(193)) u.p: List() p: List(Sym(164)) u.acc: null acc: HashMapGetSize(Sym(164))
+x: EntryCreate(Const(1),Const(3)) u.p: List() p: List(Sym(164)) u.acc: null acc: HashMapGetSize(Sym(164))
+x: EntrySetNext(Sym(193),Sym(198)) u.p: List() p: List(Sym(164)) u.acc: null acc: HashMapGetSize(Sym(164))
+NestedDeps: List()
+Reflect: Reflect(HashMapGetSize(Sym(164)),Summary(false,false,false,false,false,List(Sym(164)),HashMapGetSize(Sym(164)),List(Sym(122)),List(Sym(122)),List(),List()),List(Sym(122)))
+Write: WrappedArray(Sym(171))Def: HashMapSetSize(Sym(164),Sym(176))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(HashMapSetSize(Sym(164),Sym(176)),Summary(false,false,false,false,false,List(),null,List(Sym(122)),List(Sym(122)),List(Sym(171)),List(Sym(171))),List(Sym(122), Sym(171)))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(IfThenElse(Sym(195),Block(Sym(197)),Block(Sym(201))),Summary(false,false,false,false,false,List(),null,List(Sym(122)),List(Sym(122)),List(Sym(193), Sym(171)),List(Sym(193))),List(Sym(122), Sym(171), Sym(193)))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(IfThenElse(Sym(173),Block(Sym(178)),Block(Sym(203))),Summary(false,false,false,false,false,List(),null,List(Sym(122), Sym(170)),List(Sym(122)),List(Sym(169), Sym(171), Sym(170), Sym(193)),List()),List(Sym(122), Sym(169), Sym(170), Sym(171), Sym(172)))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(ReadVar(Variable(Sym(163))),Summary(false,false,false,false,false,List(),null,List(Sym(163), Sym(122)),List(Sym(163), Sym(122)),List(),List()),List(Sym(122), Sym(163)))
+Nested: WrappedArray(Sym(164)) Def: HashMapGetTable(Sym(164))
+Context: List(Sym(122), Sym(123), Sym(124), Sym(127), Sym(128), Sym(129), Sym(130), Sym(131), Sym(162), Sym(163), Sym(164), Sym(165), Sym(166), Sym(169), Sym(170), Sym(171), Sym(172), Sym(173), Sym(204))
+acc333: HashMapGetTable(Sym(164))
+acc: HashMapGetTable(Sym(164))
+x: NewHashMap(Int,Int) u.p: List() p: List(Sym(164)) u.acc: null acc: HashMapGetTable(Sym(164))
+x: HashMapGetTable(Sym(122)) u.p: List(Sym(122)) p: List(Sym(164)) u.acc: HashMapGetTable(Sym(122)) acc: HashMapGetTable(Sym(164))
+x: ArrayLength(Sym(123)) u.p: List() p: List(Sym(164)) u.acc: null acc: HashMapGetTable(Sym(164))
+x: ArrayApply(Sym(123),Sym(126)) u.p: List(Sym(123)) p: List(Sym(164)) u.acc: ArrayApply(Sym(123),Sym(126)) acc: HashMapGetTable(Sym(164))
+x: NewVar(Sym(127)) u.p: List() p: List(Sym(164)) u.acc: null acc: HashMapGetTable(Sym(164))
+x: HashMapGetSize(Sym(122)) u.p: List(Sym(122)) p: List(Sym(164)) u.acc: HashMapGetSize(Sym(122)) acc: HashMapGetTable(Sym(164))
+x: ReadVar(Variable(Sym(128))) u.p: List() p: List(Sym(164)) u.acc: null acc: HashMapGetTable(Sym(164))
+x: Equal(Sym(130),Const(null)) u.p: List() p: List(Sym(164)) u.acc: null acc: HashMapGetTable(Sym(164))
+x: IfThenElse(Sym(131),Block(Sym(136)),Block(Sym(161))) u.p: List() p: List(Sym(164)) u.acc: null acc: HashMapGetTable(Sym(164))
+x: NewVar(Sym(122)) u.p: List() p: List(Sym(164)) u.acc: null acc: HashMapGetTable(Sym(164))
+x: ReadVar(Variable(Sym(163))) u.p: List() p: List(Sym(164)) u.acc: null acc: HashMapGetTable(Sym(164))
+x: HashMapGetTable(Sym(164)) u.p: List(Sym(164)) p: List(Sym(164)) u.acc: HashMapGetTable(Sym(164)) acc: HashMapGetTable(Sym(164))
+x: ArrayLength(Sym(165)) u.p: List() p: List(Sym(164)) u.acc: null acc: HashMapGetTable(Sym(164))
+x: ArrayApply(Sym(165),Sym(168)) u.p: List(Sym(165)) p: List(Sym(164)) u.acc: ArrayApply(Sym(165),Sym(168)) acc: HashMapGetTable(Sym(164))
+x: NewVar(Sym(169)) u.p: List() p: List(Sym(164)) u.acc: null acc: HashMapGetTable(Sym(164))
+x: HashMapGetSize(Sym(164)) u.p: List(Sym(164)) p: List(Sym(164)) u.acc: HashMapGetSize(Sym(164)) acc: HashMapGetTable(Sym(164))
+x: ReadVar(Variable(Sym(170))) u.p: List() p: List(Sym(164)) u.acc: null acc: HashMapGetTable(Sym(164))
+x: Equal(Sym(172),Const(null)) u.p: List() p: List(Sym(164)) u.acc: null acc: HashMapGetTable(Sym(164))
+x: IfThenElse(Sym(173),Block(Sym(178)),Block(Sym(203))) u.p: List() p: List(Sym(164)) u.acc: null acc: HashMapGetTable(Sym(164))
+NestedDeps: List()
+Reflect: Reflect(HashMapGetTable(Sym(164)),Summary(false,false,false,false,false,List(Sym(164)),HashMapGetTable(Sym(164)),List(Sym(122)),List(Sym(122)),List(),List()),List(Sym(122)))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(ArrayLength(Sym(165)),Summary(false,false,false,false,false,List(),null,List(Sym(122)),List(Sym(122)),List(),List()),List(Sym(122)))
+Nested: WrappedArray(Sym(165)) Def: ArrayApply(Sym(165),Sym(168))
+Context: List(Sym(122), Sym(123), Sym(124), Sym(127), Sym(128), Sym(129), Sym(130), Sym(131), Sym(162), Sym(163), Sym(164), Sym(165), Sym(166), Sym(169), Sym(170), Sym(171), Sym(172), Sym(173), Sym(204))
+acc333: ArrayApply(Sym(165),Sym(168))
+acc: ArrayApply(Sym(165),Sym(168))
+x: NewHashMap(Int,Int) u.p: List() p: List(Sym(165)) u.acc: null acc: ArrayApply(Sym(165),Sym(168))
+x: HashMapGetTable(Sym(122)) u.p: List(Sym(122)) p: List(Sym(165)) u.acc: HashMapGetTable(Sym(122)) acc: ArrayApply(Sym(165),Sym(168))
+x: ArrayLength(Sym(123)) u.p: List() p: List(Sym(165)) u.acc: null acc: ArrayApply(Sym(165),Sym(168))
+x: ArrayApply(Sym(123),Sym(126)) u.p: List(Sym(123)) p: List(Sym(165)) u.acc: ArrayApply(Sym(123),Sym(126)) acc: ArrayApply(Sym(165),Sym(168))
+x: NewVar(Sym(127)) u.p: List() p: List(Sym(165)) u.acc: null acc: ArrayApply(Sym(165),Sym(168))
+x: HashMapGetSize(Sym(122)) u.p: List(Sym(122)) p: List(Sym(165)) u.acc: HashMapGetSize(Sym(122)) acc: ArrayApply(Sym(165),Sym(168))
+x: ReadVar(Variable(Sym(128))) u.p: List() p: List(Sym(165)) u.acc: null acc: ArrayApply(Sym(165),Sym(168))
+x: Equal(Sym(130),Const(null)) u.p: List() p: List(Sym(165)) u.acc: null acc: ArrayApply(Sym(165),Sym(168))
+x: IfThenElse(Sym(131),Block(Sym(136)),Block(Sym(161))) u.p: List() p: List(Sym(165)) u.acc: null acc: ArrayApply(Sym(165),Sym(168))
+x: NewVar(Sym(122)) u.p: List() p: List(Sym(165)) u.acc: null acc: ArrayApply(Sym(165),Sym(168))
+x: ReadVar(Variable(Sym(163))) u.p: List() p: List(Sym(165)) u.acc: null acc: ArrayApply(Sym(165),Sym(168))
+x: HashMapGetTable(Sym(164)) u.p: List(Sym(164)) p: List(Sym(165)) u.acc: HashMapGetTable(Sym(164)) acc: ArrayApply(Sym(165),Sym(168))
+x: ArrayLength(Sym(165)) u.p: List() p: List(Sym(165)) u.acc: null acc: ArrayApply(Sym(165),Sym(168))
+x: ArrayApply(Sym(165),Sym(168)) u.p: List(Sym(165)) p: List(Sym(165)) u.acc: ArrayApply(Sym(165),Sym(168)) acc: ArrayApply(Sym(165),Sym(168))
+x: NewVar(Sym(169)) u.p: List() p: List(Sym(165)) u.acc: null acc: ArrayApply(Sym(165),Sym(168))
+x: HashMapGetSize(Sym(164)) u.p: List(Sym(164)) p: List(Sym(165)) u.acc: HashMapGetSize(Sym(164)) acc: ArrayApply(Sym(165),Sym(168))
+x: ReadVar(Variable(Sym(170))) u.p: List() p: List(Sym(165)) u.acc: null acc: ArrayApply(Sym(165),Sym(168))
+x: Equal(Sym(172),Const(null)) u.p: List() p: List(Sym(165)) u.acc: null acc: ArrayApply(Sym(165),Sym(168))
+x: IfThenElse(Sym(173),Block(Sym(178)),Block(Sym(203))) u.p: List() p: List(Sym(165)) u.acc: null acc: ArrayApply(Sym(165),Sym(168))
+NestedDeps: List(Sym(204))
+Reflect: Reflect(ArrayApply(Sym(165),Sym(168)),Summary(false,false,false,false,false,List(Sym(165)),ArrayApply(Sym(165),Sym(168)),List(Sym(122)),List(Sym(122)),List(),List()),List(Sym(122), Sym(204)))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(NewVar(Sym(205)),Summary(false,false,false,false,true,List(),null,List(Sym(122)),List(Sym(122)),List(),List()),List(Sym(122)))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(ReadVar(Variable(Sym(206))),Summary(false,false,false,false,false,List(),null,List(Sym(206), Sym(122)),List(Sym(206), Sym(122)),List(),List()),List(Sym(122), Sym(206)))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(Equal(Sym(207),Const(null)),Summary(false,false,false,false,false,List(),null,List(Sym(122)),List(Sym(122)),List(),List()),List(Sym(122)))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(ReadVar(Variable(Sym(206))),Summary(false,false,false,false,false,List(),null,List(Sym(206), Sym(122)),List(Sym(206), Sym(122)),List(),List()),List())
+acc: null
+NestedDeps: List()
+Reflect: Reflect(EntryHasNext(Sym(209)),Summary(false,false,false,false,false,List(),null,List(Sym(122)),List(Sym(122)),List(),List()),List())
+acc: null
+NestedDeps: List()
+Reflect: Reflect(ReadVar(Variable(Sym(206))),Summary(false,false,false,false,false,List(),null,List(Sym(206), Sym(122)),List(Sym(206), Sym(122)),List(),List()),List())
+acc: null
+NestedDeps: List()
+Reflect: Reflect(EntryGetKey(Sym(211)),Summary(false,false,false,false,false,List(),null,List(Sym(122)),List(Sym(122)),List(),List()),List())
+acc: null
+NestedDeps: List()
+Reflect: Reflect(ReadVar(Variable(Sym(206))),Summary(false,false,false,false,false,List(),null,List(Sym(206), Sym(122)),List(Sym(206), Sym(122)),List(),List()),List())
+acc: null
+NestedDeps: List()
+Reflect: Reflect(EntryNext(Sym(218)),Summary(false,false,false,false,false,List(),null,List(Sym(122)),List(Sym(122)),List(),List()),List())
+Write: WrappedArray(Sym(206))Def: Assign(Variable(Sym(206)),Sym(219))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(Assign(Variable(Sym(206)),Sym(219)),Summary(false,false,false,false,false,List(),null,List(Sym(206), Sym(122)),List(Sym(206), Sym(122)),List(Sym(206)),List(Sym(206))),List(Sym(218)))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(While(Block(Sym(217)),Block(Sym(221))),Summary(false,false,false,false,false,List(),null,List(Sym(206), Sym(122)),List(Sym(206), Sym(122)),List(Sym(206)),List()),List(Sym(122), Sym(206), Sym(207)))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(ReadVar(Variable(Sym(206))),Summary(false,false,false,false,false,List(),null,List(Sym(206), Sym(122)),List(Sym(206), Sym(122)),List(),List()),List(Sym(122), Sym(206), Sym(222)))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(EntryGetKey(Sym(223)),Summary(false,false,false,false,false,List(),null,List(Sym(122)),List(Sym(122)),List(),List()),List(Sym(122)))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(ReadVar(Variable(Sym(206))),Summary(false,false,false,false,false,List(),null,List(Sym(206), Sym(122)),List(Sym(206), Sym(122)),List(),List()),List(Sym(122), Sym(206), Sym(222)))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(EntryGetValue(Sym(223)),Summary(false,false,false,false,false,List(),null,List(Sym(122)),List(Sym(122)),List(),List()),List(Sym(122)))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(IfThenElse(Sym(225),Block(Sym(227)),Block(Const(null))),Summary(false,false,false,false,false,List(),null,List(Sym(122)),List(),List(),List()),List(Sym(122)))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(IfThenElse(Sym(208),Block(Const(null)),Block(Sym(229))),Summary(false,false,false,false,false,List(),null,List(Sym(206), Sym(122)),List(),List(Sym(206)),List()),List(Sym(122), Sym(206), Sym(207)))
+acc: null
+NestedDeps: List()
+Reflect: Reflect(PrintLn(Sym(230)),Summary(true,true,false,false,false,List(),null,List(),List(),List(),List()),List())
+/*****************************************
+  Emitting Generated Code                  
+*******************************************/
+class IntHashMapAssignmentProblem extends ((Int)=>(Unit)) {
+def apply(x121:Int): Unit = {
+val x122 = new HashMap[Int,Int]()
+val x123 = x122.table
+val x124 = x123.length
+val x2 = 1.hashCode
+val x3 = x2.toLong
+val x4 = x3 >>> 20
+val x5 = x3 >>> 12
+val x6 = x4 ^ x5
+val x7 = x6 ^ x3
+val x8 = x7 >>> 7
+val x9 = x7 ^ x8
+val x10 = x7 >>> 4
+val x11 = x9 ^ x10
+val x12 = x11.toInt
+val x125 = x124 - 1
+val x126 = x12 & x125
+val x127 = x123(x126)
+var x128 = x127
+val x129 = x122.size
+val x130 = x128
+val x131 = x130 == null
+if (x131) {
+val x132 = new Entry(1, 2)
+x123(x126) = x132
+val x134 = x129 + 1
+x122.size = x134
+
+} else {
+while ({
+val x137 = x128
+val x138 = x137.hasNext
+val x144 = if (x138) {
+val x139 = x128
+val x140 = x139.key
+val x141 = x140 != 1
+
+x141
+} else false
+
+x144
+}) {
+val x146 = x128
+val x147 = x146.next
+x128 = x147
+()
+}
+val x151 = x128
+val x152 = x151.key
+val x153 = x152 == 1
+if (x153) {
+x151.value = 2
+
+} else {
+val x156 = new Entry(1, 2)
+x151.next = x156
+val x134 = x129 + 1
+x122.size = x134
+
+}
+
+}
+var x163 = x122
+val x164 = x163
+val x165 = x164.table
+val x166 = x165.length
+val x167 = x166 - 1
+val x168 = x12 & x167
+val x169 = x165(x168)
+var x170 = x169
+val x171 = x164.size
+val x172 = x170
+val x173 = x172 == null
+if (x173) {
+val x174 = new Entry(1, 3)
+x165(x168) = x174
+val x176 = x171 + 1
+x164.size = x176
+
+} else {
+while ({
+val x179 = x170
+val x180 = x179.hasNext
+val x186 = if (x180) {
+val x181 = x170
+val x182 = x181.key
+val x183 = x182 != 1
+
+x183
+} else false
+
+x186
+}) {
+val x188 = x170
+val x189 = x188.next
+x170 = x189
+()
+}
+val x193 = x170
+val x194 = x193.key
+val x195 = x194 == 1
+if (x195) {
+x193.value = 3
+
+} else {
+val x198 = new Entry(1, 3)
+x193.next = x198
+val x176 = x171 + 1
+x164.size = x176
+
+}
+
+}
+val x205 = x165(x168)
+var x206 = x205
+val x207 = x206
+val x208 = x207 == null
+val x230 = if (x208) {
+null
+} else {
+while ({
+val x209 = x206
+val x210 = x209.hasNext
+val x216 = if (x210) {
+val x211 = x206
+val x212 = x211.key
+val x213 = x212 != 1
+
+x213
+} else false
+
+x216
+}) {
+val x218 = x206
+val x219 = x218.next
+x206 = x219
+()
+}
+val x223 = x206
+val x224 = x223.key
+val x225 = x224 == 1
+val x228 = if (x225) {
+val x226 = x223.value
+x226
+} else {
+null
+}
+x228
+}
+println(x230)
+}
+}
+/*****************************************
+  End of Generated Code                  
+*******************************************/
