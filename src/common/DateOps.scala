@@ -4,6 +4,7 @@ package common
 import scala.virtualization.lms.common._
 import scala.reflect.SourceContext
 import java.util.Date
+import scala.virtualization.lms.internal.GenerationFailedException
 
 /**
  * Lifter Classes for Date
@@ -52,3 +53,18 @@ trait ScalaGenDate extends ScalaGenBase {
     case _ => super.emitNode(sym, rhs)
   }
 }
+
+trait CLikeGenDate extends CLikeGenBase {
+  val IR: DateExp
+  import IR._
+
+  override def emitNode(sym: Sym[Any], rhs: Def[Any]) = rhs match {
+    case NewDate() => throw new GenerationFailedException("CLikeGenDate: DateOps is not supported")
+    case DtGetTime(x) => throw new GenerationFailedException("CLikeGenDate: DateOps is not supported")
+    case _ => super.emitNode(sym, rhs)
+  }
+}
+
+trait CudaGenDate extends CudaGenBase with CLikeGenDate
+trait OpenCLGenDate extends OpenCLGenBase with CLikeGenDate
+trait CGenDate extends CGenBase with CLikeGenDate

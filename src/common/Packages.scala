@@ -37,15 +37,16 @@ trait ScalaOpsPkgExpOpt extends ScalaOpsPkgExp
  * Code gen: each target must define a code generator package.
  */
 trait COpsPkg extends ScalaOpsPkg 
-trait COpsPkgExp extends ScalaOpsPkgExp 
+trait COpsPkgExp extends COpsPkg with ScalaOpsPkgExp 
+trait COpsPkgExpOpt extends COpsPkgExp with ScalaOpsPkgExpOpt 
 
 /////////
 // Scala
-trait ScalaCodeGenPkg extends ScalaGenImplicitOps with ScalaGenNumericOps with ScalaGenFractionalOps with ScalaGenOrderingOps
+trait ScalaCodeGenPkg extends ScalaGenDSLOps with ScalaGenImplicitOps with ScalaGenNumericOps with ScalaGenFractionalOps with ScalaGenOrderingOps
     with ScalaGenStringOps with ScalaGenRangeOps with ScalaGenIOOps with ScalaGenArrayOps with ScalaGenBooleanOps
     with ScalaGenPrimitiveOps with ScalaGenMiscOps with ScalaGenTupledFunctions with ScalaGenEqual with ScalaGenIfThenElse
     with ScalaGenVariables with ScalaGenWhile with ScalaGenTupleOps with ScalaGenListOps
-    with ScalaGenSeqOps with ScalaGenDSLOps with ScalaGenMathOps with ScalaGenCastingOps with ScalaGenSetOps
+    with ScalaGenSeqOps with ScalaGenMathOps with ScalaGenCastingOps with ScalaGenSetOps
     with ScalaGenObjectOps with ScalaGenArrayBufferOps with ScalaGenDate with ScalaGenGregorianCalendar
     with ScalaGenSimpleDateFormat with ScalaGenUncheckedOps
   { val IR: ScalaOpsPkgExp  }
@@ -54,10 +55,12 @@ trait ScalaCodeGenPkg extends ScalaGenImplicitOps with ScalaGenNumericOps with S
 /////
 // C
 trait CCodeGenPkg extends CGenDSLOps with CGenImplicitOps with CGenNumericOps with CGenFractionalOps with CGenOrderingOps
-    with CGenStringOps /*with CGenRangeOps*/ with CGenIOOps with CGenArrayOps with CGenBooleanOps
-    with CGenPrimitiveOps with CGenMiscOps /*with CGenFunctions*/ with CGenEqual with CGenIfThenElse
-    with CGenVariables with CGenWhile
-    with CGenMathOps with CGenCastingOps with CGenSetOps with CGenArrayBufferOps with CGenUncheckedOps
+    with CGenStringOps with CGenRangeOps with CGenIOOps with CGenArrayOps with CGenBooleanOps
+    with CGenPrimitiveOps with CGenMiscOps with CGenTupledFunctions with CGenEqual with CGenIfThenElse
+    with CGenVariables with CGenWhile with CGenTupleOps with CGenListOps
+    with CGenSeqOps with CGenMathOps with CGenCastingOps with CGenSetOps 
+    with CGenObjectOps with CGenArrayBufferOps with CGenDate with CGenGregorianCalendar
+    with CGenSimpleDateFormat with CGenUncheckedOps
     { val IR: COpsPkgExp  }
 
 ///////

@@ -5,6 +5,7 @@ import scala.virtualization.lms.common._
 import scala.reflect.SourceContext
 import java.util.Date
 import java.util.GregorianCalendar
+import scala.virtualization.lms.internal.GenerationFailedException
 
 /**
  * Lifter Classes for GregorianCalendar
@@ -54,3 +55,18 @@ trait ScalaGenGregorianCalendar extends ScalaGenBase {
     case _ => super.emitNode(sym, rhs)
   }
 }
+
+trait CLikeGenGregorianCalendar extends CLikeGenBase {
+  val IR: GregorianCalendarExp
+  import IR._
+
+  override def emitNode(sym: Sym[Any], rhs: Def[Any]) = rhs match {
+    case NewGregorianCalendar(y, m, d) => throw new GenerationFailedException("CLikeGenGregorianCalendar: GregorianCalendarOps is not supported")
+    case GcGetTime(x) => throw new GenerationFailedException("CLikeGenGregorianCalendar: GregorianCalendarOps is not supported")
+    case _ => super.emitNode(sym, rhs)
+  }
+}
+
+trait CudaGenGregorianCalendar extends CudaGenBase with CLikeGenGregorianCalendar
+trait OpenCLGenGregorianCalendar extends OpenCLGenBase with CLikeGenGregorianCalendar
+trait CGenGregorianCalendar extends CGenBase with CLikeGenGregorianCalendar
