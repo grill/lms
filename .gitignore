@@ -7,5 +7,6 @@ project/build/target
 target
 virtualization-lms-core.iml
 .gitingore
+old/*
 #test-out
 CompiledClasses/*

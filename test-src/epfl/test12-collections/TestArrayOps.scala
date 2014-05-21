@@ -7,6 +7,77 @@ import internal._
 import java.io.PrintWriter
 import scala.reflect.SourceContext
 
+  trait VariablesNested extends VariablesExpOpt {
+    override  def var_new[T:Manifest](init: Exp[T])(implicit pos: SourceContext): Var[T] = {
+      //reflectEffect(NewVar(init)).asInstanceOf[Var[T]]
+      Variable(reflectMutable(NewVar(init)))
+    }
+
+    override  def var_assign[T:Manifest](lhs: Var[T], rhs: Exp[T])(implicit pos: SourceContext): Exp[Unit] = {
+      reflectWriteMutable(lhs.e)(rhs)(Assign(lhs, rhs))
+      Const()
+    }
+
+    override  def var_plusequals[T:Manifest](lhs: Var[T], rhs: Exp[T])(implicit pos: SourceContext): Exp[Unit] = {
+      reflectWriteMutable(lhs.e)(rhs)(VarPlusEquals(lhs, rhs))
+      Const()
+    }
+
+    override  def var_minusequals[T:Manifest](lhs: Var[T], rhs: Exp[T])(implicit pos: SourceContext): Exp[Unit] = {
+      reflectWriteMutable(lhs.e)(rhs)(VarMinusEquals(lhs, rhs))
+      Const()
+    }
+  
+    override  def var_timesequals[T:Manifest](lhs: Var[T], rhs: Exp[T])(implicit pos: SourceContext): Exp[Unit] = {
+      reflectWriteMutable(lhs.e)(rhs)(VarTimesEquals(lhs, rhs))
+      Const()
+    }
+  
+    override  def var_divideequals[T:Manifest](lhs: Var[T], rhs: Exp[T])(implicit pos: SourceContext): Exp[Unit] = {
+      reflectWriteMutable(lhs.e)(rhs)(VarDivideEquals(lhs, rhs))
+      Const()
+    }
+
+    override def readVar[T:Manifest](v: Var[T])(implicit pos: SourceContext) : Exp[T] = reflectReadMutable(v.e) { ReadVar(v) }
+  }
+
+
+trait ScalaGenVariablesNested extends ScalaGenVariables {
+  val IR: VariablesExp
+  import IR._
+
+  override def emitNode(sym: Sym[Any], rhs: Def[Any]) = rhs match {
+    case ReadVar(a) => emitValDef(sym, quote(a))
+    case NewVar(init) => {
+      if (sym.tp != manifest[Variable[Nothing]]) {
+        val obj = sym.asInstanceOf[Sym[Variable[Any]]]
+            emitVarDef(obj, quote(init))
+      }
+    }
+    case ReadVar(null) => {} // emitVarDef(sym.asInstanceOf[Sym[Variable[Any]]], "null")
+    case Assign(a, b) => {
+        val lhsIsNull = a match {
+            case Def(Reflect(NewVar(y: Exp[_]),_,_)) => 
+                if (y.tp == manifest[Nothing]) true
+                else false
+            case y@_ => false
+        }
+        val obj = a.asInstanceOf[Sym[Variable[Any]]]
+        if (lhsIsNull) {
+            emitVarDef(obj, quote(b))
+        }
+        else emitAssignment(sym, quote(a), quote(b))
+    }
+    //case Assign(a, b) => emitAssignment(quote(a), quote(b))
+    case VarPlusEquals(a, b) => stream.println(quote(a) + " += " + quote(b))
+    case VarMinusEquals(a, b) => stream.println(quote(a) + " -= " + quote(b))
+    case VarTimesEquals(a, b) => stream.println(quote(a) + " *= " + quote(b))
+    case VarDivideEquals(a, b) => stream.println(quote(a) + " /= " + quote(b))
+    case _ => super.emitNode(sym, rhs)
+  }
+}
+
+
   class HashMap[K,V] {
     val DEFAULT_INITIAL_CAPACITY = 16
     val MAXIMUM_CAPACITY = 1 << 30
@@ -155,6 +226,7 @@ import scala.reflect.SourceContext
   with NumericOpsExp with EqualExp with WhileExp with OrderingOpsExp with IfThenElseExp
    with SeqOpsExp with MathOpsExp with CastingOpsExp with SetOpsExp with ObjectOpsExp
    with Blocks with MiscOpsExp
+   with VariablesNested
   {
   case class NewHashMap[K, V](mK: Manifest[K], mV: Manifest[V]) extends Def[HashMap[K, V]]
   case class HashMapGetSize[K, V](x: Exp[HashMap[K, V]]) extends Def[Int]
@@ -351,10 +423,10 @@ import scala.reflect.SourceContext
         i = i + unit(1)
         if(array_apply(m,i) != unit(null)) {
           var_assign(n, array_apply(m, i))
-          f(n)
+          f(readVar(n))
           while(n.hasNext()) {
             var_assign(n, n.next())
-            f(n)
+            f(readVar(n))
           }
         }
       }
@@ -379,16 +451,16 @@ import scala.reflect.SourceContext
       val p: Var[Entry[K,V]] = var_new(unit(null))
       val n = var_new(array_apply(m, idx))
 
-      if(notequals(n, unit(null))) {
-        while(n.hasNext() && n.getKey() != k) {
-          var_assign(p, n)
-          var_assign(n, n.next())
+      if(notequals(readVar(n), unit(null))) {
+        while(readVar(n).hasNext() && readVar(n).getKey() != k) {
+          var_assign(p, readVar(n))
+          var_assign(n, readVar(n).next())
         }
 
-        if(p == unit(null))
+        if(readVar(p) == unit(null))
           array_update(m, idx, unit(null))
-        else if(n.getKey() == k) {
-          p.setNext(n.next())
+        else if(readVar(n).getKey() == k) {
+          p.setNext(readVar(n).next())
         }
       }
     }
@@ -441,7 +513,8 @@ class TestArrayOps extends FileDiffSuite {
 
           //TODO: find out why DCE doesn't work here --> should have no side effects
           val rN2 = reflectReadMutable (t1) ( ArrayApply(t1, unit(0)) )
-          reflectWrite(rN2)( ArrayUpdate(t1, unit(0), entry_new(unit(0),unit(1))) )
+          val entry = entry_new(unit(0),unit(1))
+          reflectWriteMutable(rN2)(entry)( ArrayUpdate(t1, unit(0), entry) )
 
           println(reflectReadMutable (m.table) ( ArrayApply(m.table, unit(0)) ))
         }
@@ -548,15 +621,15 @@ class TestArrayOps extends FileDiffSuite {
   it("testGetAndUpdateOptVar") {
     withOutFile(prefix+"hash-map-get-and-update-opt-var") {
       val prog = new HashMapArrOps with MiscOps with HashMapArrOpsExp
-        with MiscOpsExp with ScalaOpsPkgExp {
+        with MiscOpsExp with ScalaOpsPkgExp with VariablesNested {
         def f(i : Rep[Int]): Rep[Unit] = {
           val a = hashmap_new[Int, Int](unit(200))
           val n = var_new(unit(1))
           var_assign(n, unit(2))
           
-          a.update(unit(2), n)
+          a.update(unit(2), readVar(n))
 
-          a.update(n, a(n) + unit(1))
+          a.update(n, a(readVar(n)) + unit(1))
 
           println(a(unit(2)))
         }
@@ -574,7 +647,8 @@ class TestArrayOps extends FileDiffSuite {
   it("testAssignmentProblem1") {
     withOutFile(prefix+"hash-map-assignment-problem1") {
       val prog = new HashMapArrOps with MiscOps with HashMapArrOpsExp
-        with MiscOpsExp with ScalaOpsPkgExp {
+        with MiscOpsExp with ScalaOpsPkgExp
+        with VariablesNested {
         def f(i : Rep[Int]): Rep[Unit] = {
           val a = hashmap_new[Int, Int](unit(200))
           a.update(unit(1), unit(2))
@@ -588,7 +662,7 @@ class TestArrayOps extends FileDiffSuite {
 
       val codegen = new ScalaGenArrayOps with ScalaGenMiscOps
       with ScalaGenEntry with ScalaCodeGenPkg with ScalaGenHashCodeOps
-      with ScalaGenHashMap { val IR: prog.type = prog }
+      with ScalaGenHashMap /*with ScalaGenVariablesNested */{ val IR: prog.type = prog }
       codegen.emitSource1(prog.f, "IntHashMapAssignmentProblem1", new PrintWriter(System.out))
     }
     //assertFileEqualsCheck(prefix+"hash-map-creation")
@@ -597,7 +671,8 @@ class TestArrayOps extends FileDiffSuite {
   it("testAssignmentProblem2") {
     withOutFile(prefix+"hash-map-assignment-problem2") {
       val prog = new HashMapArrOps with MiscOps with HashMapArrOpsExp
-        with MiscOpsExp with ScalaOpsPkgExp {
+        with MiscOpsExp with ScalaOpsPkgExp
+        with VariablesNested {
         def f(i : Rep[Int]): Rep[Unit] = {
           val a = hashmap_new[Int, Int](unit(200))
           a.update(unit(1), unit(2))
@@ -612,7 +687,7 @@ class TestArrayOps extends FileDiffSuite {
 
       val codegen = new ScalaGenArrayOps with ScalaGenMiscOps
       with ScalaGenEntry with ScalaCodeGenPkg with ScalaGenHashCodeOps
-      with ScalaGenHashMap { val IR: prog.type = prog }
+      with ScalaGenHashMap /*with ScalaGenVariablesNested */ { val IR: prog.type = prog }
       codegen.emitSource1(prog.f, "IntHashMapAssignmentProblem2", new PrintWriter(System.out))
     }
     //assertFileEqualsCheck(prefix+"hash-map-creation")
@@ -621,7 +696,8 @@ class TestArrayOps extends FileDiffSuite {
   it("testAssignmentProblem3") {
     withOutFile(prefix+"hash-map-assignment-problem3") {
       val prog = new HashMapArrOps with MiscOps with HashMapArrOpsExp
-        with MiscOpsExp with ScalaOpsPkgExp {
+        with MiscOpsExp with ScalaOpsPkgExpOpt 
+        with VariablesNested {
         def f(i : Rep[Int]): Rep[Unit] = {
           val a = hashmap_new[Int, Int](unit(200))
 
@@ -637,7 +713,7 @@ class TestArrayOps extends FileDiffSuite {
 
       val codegen = new ScalaGenArrayOps with ScalaGenMiscOps
       with ScalaGenEntry with ScalaCodeGenPkg with ScalaGenHashCodeOps
-      with ScalaGenHashMap { val IR: prog.type = prog }
+      with ScalaGenHashMap /*with ScalaGenVariablesNested */ { val IR: prog.type = prog }
       codegen.emitSource1(prog.f, "IntHashMapAssignmentProblem3", new PrintWriter(System.out))
     }
     //assertFileEqualsCheck(prefix+"hash-map-creation")

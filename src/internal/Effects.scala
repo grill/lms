@@ -381,6 +381,8 @@ trait Effects extends Expressions with Blocks with Utils {
 
 
   var globalMutableSyms: List[Sym[Any]] = Nil
+  var encounteredAlias: Map[Sym[Any], Set[Sym[Any]]] = Map()
+  var pW: List[Sym[Any]] = Nil
 
   def reflectMutableSym[A](s: Sym[A]): Sym[A] = {
     assert(findDefinition(s).isEmpty)
@@ -396,45 +398,76 @@ trait Effects extends Expressions with Blocks with Utils {
     z
   }
 
+  def equalReadOperation(currentNode: List[Def[Any]], otherNode: List[Def[Any]]) =
+      !currentNode.map(_.getClass).intersect(otherNode.map(_.getClass)).isEmpty
+
   def reflectReadMutable[A:Manifest](parent0: Exp[Any]*)(d: Def[A])(implicit pos: SourceContext): Exp[A] = {
     println("Nested: " + parent0 + " Def: " + d)
     println("Context: " + context)
     val parent = parent0.toList.asInstanceOf[List[Sym[Any]]]
-    val pp = List((parent, List(d)))
 
-    val prevWrites = context filter ({ case e@Def(Reflect(x, u, _)) =>
+
+    //returns all aliases of the parent reference
+    val repsOther = parent flatMap { findDefinition(_) match {
+        case Some(TP(_, Reflect(_, u, _))) => u.aliasRep
+        case _ => List()
+    }}
+
+    //TODO: optimize look up last read and use representative
+    //TODO: if not there look at the aliases of parents and try to find a representative there
+    //Pseudo code: look through all parent references and their alias representatives
+    //and see if there have been any equal reads
+    //if yes -> use symbol as representative
+    //if no -> return List()
+
+    val pp = List(((parent ++ repsOther).toSet.toList, List(d)))
+
+    val prevWrites = (context filter ({ case e@Def(Reflect(x, u, _)) =>
           //println("x: " + x + " u.p: " + u.parentSym + " p: " + parent + " u.acc: " + u.acctype + " acc: " + acctype);
           u.readFrom.exists({ uRF => pp.exists( rF =>
             !rF._1.intersect(uRF._1).isEmpty &&
-            !rF._2.map(_.getClass).intersect(uRF._2.map(_.getClass)).isEmpty
+            equalReadOperation(rF._2, uRF._2)
           )})   }) flatMap ({ e =>
             context filter { case Def(Reflect(_, u, _)) => u.mayWrite.contains(e) }
-          })
+          })).asInstanceOf[List[Sym[Any]]]
 
     val repsW  = if(prevWrites.isEmpty) {
-      context find { case Def(Reflect(prev, u, _)) => prev == d && !mustOnlyAlloc(u) } flatMap {
+      //current symbol is representative
+      //or check via parent aliases if anyone else is the representative
+      List()
+      /*context find { case Def(Reflect(prev, u, _)) => prev == d && !mustOnlyAlloc(u) } flatMap {
         case Def(Reflect(_, u, _)) => Some(u.aliasRep) } getOrElse { 
             //TODO: fix this
             //List(fresh[A])
             parent
-          }
+          }*/
     } else {
-      findDefinition(prevWrites.last.asInstanceOf[Sym[Any]]) match {
+      findDefinition(prevWrites.last) match {
         case Some(TP(_, Reflect(_, u, _))) => u.aliasRep
-        case _ => //TODO: what if multiple node can read the same data
-
+        case _ => List()
+        //TODO: what if multiple node can read the same data    
       //TODO: move CSE with dep info from effect tracking here
-        context find { case Def(Reflect(prev, u, _)) => prev == d && !mustOnlyAlloc(u) } flatMap {
+        /*context find { case Def(Reflect(prev, u, _)) => prev == d && !mustOnlyAlloc(u) } flatMap {
           case Def(Reflect(_, u, _)) => Some(u.aliasRep) } getOrElse { 
             //TODO: fix this
             //List(fresh[A])
             parent
-          }
+          }*/
         }
     }
 
     println("ReflectReadMutable repsW: " + repsW)
+    pW = prevWrites
     val z = reflectEffect(d, ReadMutable(parent, List(d), repsW))
+    pW = Nil
+
+    println("AliasRep: " + (findDefinition(z.asInstanceOf[Sym[Any]]) match {
+      //TODO: either write to get or alloc ??
+      //case Some(TP(_, Reflect(_, u, _))) if (mustOnlyAlloc(u)) => List(x)
+      case Some(TP(_, Reflect(_, u, deps))) => "" + u.aliasRep + " deps: " + deps
+      case _ => ""
+    }))
+
     val mutableAliases = mutableTransitiveAliases(d) filterNot (parent contains _)
     println("Alias: " + mutableAliases)
     checkIllegalSharing(z, mutableAliases)
@@ -444,7 +477,18 @@ trait Effects extends Expressions with Blocks with Utils {
   def reflectWriteMutable[A:Manifest](write0: Exp[Any]*)(read0: Exp[Any]*)(d: Def[A])(implicit pos: SourceContext): Exp[A] = {
     println("Write: " + write0 + "Def: " + d)
     val write = write0.toList.asInstanceOf[List[Sym[Any]]] // should check...
-    val read = read0.toList.asInstanceOf[List[Sym[Any]]] // should check...
+    //val read = read0.toList.asInstanceOf[List[Sym[Any]]] // should check...
+
+    /*encounteredAlias = (encounteredAlias /: read) { (e, r) =>
+      e find { case (n,s) => s contains r } match {
+        case Some((a,s)) => 
+            e.updated(a, s ++ write)
+        case _ =>
+            e.updated(r, (r::write).toSet)
+      }
+    }
+
+    println("encounteredAlias: " + encounteredAlias)*/
 
     //get all previous reps --> contains
     val repsW = write.flatMap { x => findDefinition(x) match {
@@ -455,18 +499,29 @@ trait Effects extends Expressions with Blocks with Utils {
     }}
     //TODO: remove the old ones when reassign happens
 
-    //get all reps from written exprs
-    val repsR = read.flatMap { x => findDefinition(x) match {
+    //get all reps from written exprs --> get alias
+    val repsR = (read0.toList.flatMap { case x: Sym[Any] => Some(x)
+                                        case _ => None
+    }).flatMap { x => findDefinition(x) match {
       //TODO: either write to get or alloc ??
-      case Some(TP(_, Reflect(_, u, _))) if (mustOnlyAlloc(u)) => List(x)
+      //case Some(TP(_, Reflect(_, u, _))) if (mustOnlyAlloc(u)) => List(x)
       case Some(TP(_, Reflect(_, u, _))) => u.aliasRep
     }}
 
     println("reflectWriteMutable repsW: " + repsW + ", repsR: " + repsR)
     val z = reflectEffect(d, WriteMutable(write, repsR ++ repsW))
 
+    println("AliasRep: " + (findDefinition(z.asInstanceOf[Sym[Any]]) match {
+      //TODO: either write to get or alloc ??
+      //case Some(TP(_, Reflect(_, u, _))) if (mustOnlyAlloc(u)) => List(x)
+      case Some(TP(_, Reflect(_, u, deps))) => "" + u.aliasRep + " deps: " + deps
+      case _ => ""
+    }))
+
+    //generate fresh symbols after write for reads
+
     val mutableAliases = mutableTransitiveAliases(d) filterNot (write contains _)
-    println("Alias: " + mutableAliases)
+    //println("Alias: " + mutableAliases)
     checkIllegalSharing(z, mutableAliases)
     z
   }
@@ -508,8 +563,11 @@ trait Effects extends Expressions with Blocks with Utils {
          super.toAtom(x)
 	    else {
        	val z = fresh[A]
-	       val zd = Reflect(x,u,null)
-	       createReflectDefinition(z, zd)
+        val zd = if(mustOnlyAlloc(u) || (mustIdempotent(u) && u.aliasRep.isEmpty))
+            Reflect(x,u.copy(aliasRep=List(z)),null)
+        else
+            Reflect(x,u,null)
+        createReflectDefinition(z, zd)
 	    }
     } else if (mustPure(u))
       super.toAtom(x)
@@ -522,7 +580,7 @@ trait Effects extends Expressions with Blocks with Utils {
 
       //effect tracking
       val deps = calculateDependencies(u)
-      val zd = Reflect(x,u,deps)
+      var zd = Reflect(x,u,deps)
       println("Reflect: " + zd)
 
       //CSE
@@ -533,6 +591,11 @@ trait Effects extends Expressions with Blocks with Utils {
               context find { case Def(d) => d == zd } map { _.asInstanceOf[Exp[A]] } getOrElse {
     //        findDefinition(zd) map (_.sym) filter (context contains _) getOrElse { // local cse TODO: turn around and look at context first??
               val z = fresh[A]
+              zd = if(mustOnlyAlloc(u) || (mustIdempotent(u) && u.aliasRep.isEmpty))
+                  Reflect(x,u.copy(aliasRep=List(z)),deps)
+              else
+                  Reflect(x,u,deps)
+
               if (!x.toString.startsWith("ReadVar")) { // supress output for ReadVar
                 printlog("promoting to effect: " + z + "=" + zd)
                 for (w <- u.mayRead)
@@ -554,6 +617,10 @@ trait Effects extends Expressions with Blocks with Utils {
           }*/
       } else {
         val z = fresh[A](List(pos))
+        zd = if(mustOnlyAlloc(u) || (mustIdempotent(u) && u.aliasRep.isEmpty))
+            Reflect(x,u.copy(aliasRep=List(z)),deps)
+        else
+            Reflect(x,u,deps)
         // make sure all writes go to allocs
         if (Config.verbosity >= 1) {
 	        for (w <- u.mayWrite if !isWritableSym(w)) {
@@ -617,19 +684,18 @@ trait Effects extends Expressions with Blocks with Utils {
       val simpleDeps = if (!u.maySimple) Nil else scope filter { case e@Def(Reflect(_, u, _)) => u.maySimple }
       val globalDeps = scope filter { case e@Def(Reflect(_, u, _)) => u.mayGlobal }
       //TODO: enable this check als for reflectWriteNested and reflectWrite
-      val nestedDeps =  if(isReadMutable(u)) {
+      val nestedDeps =  pW/*if(isReadMutable(u)) {
         scope filter ({ case e@Def(Reflect(x, u, _)) =>
           //println("x: " + x + " u.p: " + u.parentSym + " p: " + parent + " u.acc: " + u.acctype + " acc: " + acctype);
           u.readFrom.exists({ uRF => parent.exists( rF =>
-            !rF._1.intersect(uRF._1).isEmpty &&
-            !rF._2.map(_.getClass).intersect(uRF._2.map(_.getClass)).isEmpty
+            !rF._1.intersect(uRF._1).isEmpty && equalReadOperation(rF._2, uRF._2)
           )})
           /*u.parentSym == parent && u.acctype != null && u.acctype.getClass == acctype.getClass*/ }) flatMap ({ case e =>
             scope filter { case Def(Reflect(_, u, _)) => u.mayWrite.contains(e) }
           })
       } else {
         Nil
-      }
+      }*/
       println("NestedDeps: " + nestedDeps)
 
       // TODO: write-on-read deps should be weak

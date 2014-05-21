@@ -4,8 +4,13 @@ NestedDeps: List()
 Reflect: Reflect(PrintLn(Sym(1)),Summary(true,true,false,false,false,List(),List(),List(),List(),List(),List()),List())
 NestedDeps: List()
 Reflect: Reflect(NewVar(Sym(0)),Summary(false,false,false,false,true,List(),List(),List(Sym(0)),List(Sym(0)),List(),List()),List(Sym(0)))
+Nested: WrappedArray(Sym(3)) Def: ReadVar(Variable(Sym(3)))
+Context: List(Sym(0), Sym(1), Sym(2), Sym(3))
+ReflectReadMutable repsW: List()
 NestedDeps: List()
-Reflect: Reflect(ReadVar(Variable(Sym(3))),Summary(false,false,false,false,false,List(),List(),List(Sym(3), Sym(0)),List(Sym(3), Sym(0)),List(),List()),List(Sym(0), Sym(3)))
+Reflect: Reflect(ReadVar(Variable(Sym(3))),Summary(false,false,false,false,false,List((List(Sym(3)),List(ReadVar(Variable(Sym(3)))))),List(),List(Sym(3), Sym(0)),List(Sym(3), Sym(0)),List(),List()),List(Sym(0), Sym(3)))
+AliasRep: List(Sym(4)) deps: List(Sym(0), Sym(3))
+Alias: List(Sym(0))
 Write: WrappedArray(Sym(4))Def: HashMapSetSize(Sym(4),Const(2))
 NestedDeps: List()
 Reflect: Reflect(HashMapSetSize(Sym(4),Const(2)),Summary(false,false,false,false,false,List(),List(),List(Sym(4), Sym(0)),List(Sym(4), Sym(0)),List(Sym(4)),List(Sym(4))),List(Sym(0), Sym(4)))
@@ -13,37 +18,43 @@ Alias: List(Sym(0))
 NestedDeps: List()
 Reflect: Reflect(HashMapGetSize(Sym(0)),Summary(false,false,false,false,false,List(),List(),List(Sym(0)),List(Sym(0)),List(),List()),List(Sym(0)))
 NestedDeps: List()
-Reflect: Reflect(PrintLn(Sym(1)),Summary(true,true,false,false,false,List(),List(),List(),List(),List(),List()),List(Sym(2)))
+Reflect: Reflect(PrintLn(Sym(6)),Summary(true,true,false,false,false,List(),List(),List(),List(),List(),List()),List(Sym(2)))
 NestedDeps: List()
 Reflect: Reflect(NewHashMap(Int,Int),Summary(false,false,false,false,true,List(),List(),List(),List(),List(),List()),List())
 NestedDeps: List()
-Reflect: Reflect(HashMapGetSize(Sym(8)),Summary(false,false,false,false,false,List(),List(),List(Sym(8)),List(Sym(8)),List(),List()),List(Sym(8)))
+Reflect: Reflect(HashMapGetSize(Sym(9)),Summary(false,false,false,false,false,List(),List(),List(Sym(9)),List(Sym(9)),List(),List()),List(Sym(9)))
 NestedDeps: List()
-Reflect: Reflect(PrintLn(Sym(9)),Summary(true,true,false,false,false,List(),List(),List(),List(),List(),List()),List())
+Reflect: Reflect(PrintLn(Sym(10)),Summary(true,true,false,false,false,List(),List(),List(),List(),List(),List()),List())
 NestedDeps: List()
-Reflect: Reflect(NewVar(Sym(8)),Summary(false,false,false,false,true,List(),List(),List(Sym(8)),List(Sym(8)),List(),List()),List(Sym(8)))
+Reflect: Reflect(NewVar(Sym(9)),Summary(false,false,false,false,true,List(),List(),List(Sym(9)),List(Sym(9)),List(),List()),List(Sym(9)))
+Nested: WrappedArray(Sym(12)) Def: ReadVar(Variable(Sym(12)))
+Context: List(Sym(9), Sym(10), Sym(11), Sym(12))
+ReflectReadMutable repsW: List()
 NestedDeps: List()
-Reflect: Reflect(ReadVar(Variable(Sym(11))),Summary(false,false,false,false,false,List(),List(),List(Sym(11), Sym(8)),List(Sym(11), Sym(8)),List(),List()),List(Sym(8), Sym(11)))
-Write: WrappedArray(Sym(12))Def: HashMapSetSize(Sym(12),Const(2))
+Reflect: Reflect(ReadVar(Variable(Sym(12))),Summary(false,false,false,false,false,List((List(Sym(12)),List(ReadVar(Variable(Sym(12)))))),List(),List(Sym(12), Sym(9)),List(Sym(12), Sym(9)),List(),List()),List(Sym(9), Sym(12)))
+AliasRep: List(Sym(13)) deps: List(Sym(9), Sym(12))
+Alias: List(Sym(9))
+Write: WrappedArray(Sym(13))Def: HashMapSetSize(Sym(13),Const(2))
 NestedDeps: List()
-Reflect: Reflect(HashMapSetSize(Sym(12),Const(2)),Summary(false,false,false,false,false,List(),List(),List(Sym(12), Sym(8)),List(Sym(12), Sym(8)),List(Sym(12)),List(Sym(12))),List(Sym(8), Sym(12)))
-Alias: List(Sym(8))
+Reflect: Reflect(HashMapSetSize(Sym(13),Const(2)),Summary(false,false,false,false,false,List(),List(),List(Sym(13), Sym(9)),List(Sym(13), Sym(9)),List(Sym(13)),List(Sym(13))),List(Sym(9), Sym(13)))
+Alias: List(Sym(9))
 NestedDeps: List()
-Reflect: Reflect(HashMapGetSize(Sym(8)),Summary(false,false,false,false,false,List(),List(),List(Sym(8)),List(Sym(8)),List(),List()),List(Sym(8)))
+Reflect: Reflect(HashMapGetSize(Sym(9)),Summary(false,false,false,false,false,List(),List(),List(Sym(9)),List(Sym(9)),List(),List()),List(Sym(9)))
 NestedDeps: List()
-Reflect: Reflect(PrintLn(Sym(9)),Summary(true,true,false,false,false,List(),List(),List(),List(),List(),List()),List(Sym(10)))
+Reflect: Reflect(PrintLn(Sym(15)),Summary(true,true,false,false,false,List(),List(),List(),List(),List(),List()),List(Sym(11)))
 /*****************************************
   Emitting Generated Code                  
 *******************************************/
 class IntHashMapAssignmentProblem3 extends ((Int)=>(Unit)) {
-def apply(x7:Int): Unit = {
-val x8 = new HashMap[Int,Int]()
-val x9 = x8.size
-println(x9)
-var x11 = x8
-val x12 = x11
-x12.size = 2
-println(x9)
+def apply(x8:Int): Unit = {
+val x9 = new HashMap[Int,Int]()
+val x10 = x9.size
+println(x10)
+var x12 = x9
+val x13 = x12
+x13.size = 2
+val x15 = x9.size
+println(x15)
 }
 }
 /*****************************************
