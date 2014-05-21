@@ -704,7 +704,10 @@ class TestArrayOps extends FileDiffSuite {
           println(a.size)
 
           val n = var_new(a)
-          n.setSize(unit(2))
+          //n.setSize(unit(2))
+
+          val n2 = var_new(readVar(n))
+          n2.setSize(unit(3))
 
           println(a.size)
         }

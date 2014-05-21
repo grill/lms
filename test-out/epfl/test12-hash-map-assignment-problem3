@@ -11,50 +11,70 @@ NestedDeps: List()
 Reflect: Reflect(ReadVar(Variable(Sym(3))),Summary(false,false,false,false,false,List((List(Sym(3)),List(ReadVar(Variable(Sym(3)))))),List(),List(Sym(3), Sym(0)),List(Sym(3), Sym(0)),List(),List()),List(Sym(0), Sym(3)))
 AliasRep: List(Sym(4)) deps: List(Sym(0), Sym(3))
 Alias: List(Sym(0))
-Write: WrappedArray(Sym(4))Def: HashMapSetSize(Sym(4),Const(2))
 NestedDeps: List()
-Reflect: Reflect(HashMapSetSize(Sym(4),Const(2)),Summary(false,false,false,false,false,List(),List(),List(Sym(4), Sym(0)),List(Sym(4), Sym(0)),List(Sym(4)),List(Sym(4))),List(Sym(0), Sym(4)))
-Alias: List(Sym(0))
+Reflect: Reflect(NewVar(Sym(4)),Summary(false,false,false,false,true,List(),List(),List(Sym(4), Sym(0)),List(Sym(4), Sym(0)),List(),List()),List(Sym(0), Sym(4)))
+Nested: WrappedArray(Sym(5)) Def: ReadVar(Variable(Sym(5)))
+Context: List(Sym(0), Sym(1), Sym(2), Sym(3), Sym(4), Sym(5))
+ReflectReadMutable repsW: List()
+NestedDeps: List()
+Reflect: Reflect(ReadVar(Variable(Sym(5))),Summary(false,false,false,false,false,List((List(Sym(5)),List(ReadVar(Variable(Sym(5)))))),List(),List(Sym(5), Sym(4), Sym(0)),List(Sym(5), Sym(4), Sym(0)),List(),List()),List(Sym(0), Sym(4), Sym(5)))
+AliasRep: List(Sym(6)) deps: List(Sym(0), Sym(4), Sym(5))
+Alias: List(Sym(4), Sym(0))
+Write: WrappedArray(Sym(6))Def: HashMapSetSize(Sym(6),Const(3))
+NestedDeps: List()
+Reflect: Reflect(HashMapSetSize(Sym(6),Const(3)),Summary(false,false,false,false,false,List(),List(),List(Sym(6), Sym(4), Sym(0)),List(Sym(6), Sym(4), Sym(0)),List(Sym(6)),List(Sym(6))),List(Sym(0), Sym(4), Sym(6)))
+Alias: List(Sym(4), Sym(0))
 NestedDeps: List()
 Reflect: Reflect(HashMapGetSize(Sym(0)),Summary(false,false,false,false,false,List(),List(),List(Sym(0)),List(Sym(0)),List(),List()),List(Sym(0)))
 NestedDeps: List()
-Reflect: Reflect(PrintLn(Sym(6)),Summary(true,true,false,false,false,List(),List(),List(),List(),List(),List()),List(Sym(2)))
+Reflect: Reflect(PrintLn(Sym(8)),Summary(true,true,false,false,false,List(),List(),List(),List(),List(),List()),List(Sym(2)))
 NestedDeps: List()
 Reflect: Reflect(NewHashMap(Int,Int),Summary(false,false,false,false,true,List(),List(),List(),List(),List(),List()),List())
 NestedDeps: List()
-Reflect: Reflect(HashMapGetSize(Sym(9)),Summary(false,false,false,false,false,List(),List(),List(Sym(9)),List(Sym(9)),List(),List()),List(Sym(9)))
+Reflect: Reflect(HashMapGetSize(Sym(11)),Summary(false,false,false,false,false,List(),List(),List(Sym(11)),List(Sym(11)),List(),List()),List(Sym(11)))
 NestedDeps: List()
-Reflect: Reflect(PrintLn(Sym(10)),Summary(true,true,false,false,false,List(),List(),List(),List(),List(),List()),List())
+Reflect: Reflect(PrintLn(Sym(12)),Summary(true,true,false,false,false,List(),List(),List(),List(),List(),List()),List())
 NestedDeps: List()
-Reflect: Reflect(NewVar(Sym(9)),Summary(false,false,false,false,true,List(),List(),List(Sym(9)),List(Sym(9)),List(),List()),List(Sym(9)))
-Nested: WrappedArray(Sym(12)) Def: ReadVar(Variable(Sym(12)))
-Context: List(Sym(9), Sym(10), Sym(11), Sym(12))
+Reflect: Reflect(NewVar(Sym(11)),Summary(false,false,false,false,true,List(),List(),List(Sym(11)),List(Sym(11)),List(),List()),List(Sym(11)))
+Nested: WrappedArray(Sym(14)) Def: ReadVar(Variable(Sym(14)))
+Context: List(Sym(11), Sym(12), Sym(13), Sym(14))
 ReflectReadMutable repsW: List()
 NestedDeps: List()
-Reflect: Reflect(ReadVar(Variable(Sym(12))),Summary(false,false,false,false,false,List((List(Sym(12)),List(ReadVar(Variable(Sym(12)))))),List(),List(Sym(12), Sym(9)),List(Sym(12), Sym(9)),List(),List()),List(Sym(9), Sym(12)))
-AliasRep: List(Sym(13)) deps: List(Sym(9), Sym(12))
-Alias: List(Sym(9))
-Write: WrappedArray(Sym(13))Def: HashMapSetSize(Sym(13),Const(2))
+Reflect: Reflect(ReadVar(Variable(Sym(14))),Summary(false,false,false,false,false,List((List(Sym(14)),List(ReadVar(Variable(Sym(14)))))),List(),List(Sym(14), Sym(11)),List(Sym(14), Sym(11)),List(),List()),List(Sym(11), Sym(14)))
+AliasRep: List(Sym(15)) deps: List(Sym(11), Sym(14))
+Alias: List(Sym(11))
 NestedDeps: List()
-Reflect: Reflect(HashMapSetSize(Sym(13),Const(2)),Summary(false,false,false,false,false,List(),List(),List(Sym(13), Sym(9)),List(Sym(13), Sym(9)),List(Sym(13)),List(Sym(13))),List(Sym(9), Sym(13)))
-Alias: List(Sym(9))
+Reflect: Reflect(NewVar(Sym(15)),Summary(false,false,false,false,true,List(),List(),List(Sym(15), Sym(11)),List(Sym(15), Sym(11)),List(),List()),List(Sym(11), Sym(15)))
+Nested: WrappedArray(Sym(16)) Def: ReadVar(Variable(Sym(16)))
+Context: List(Sym(11), Sym(12), Sym(13), Sym(14), Sym(15), Sym(16))
+ReflectReadMutable repsW: List()
 NestedDeps: List()
-Reflect: Reflect(HashMapGetSize(Sym(9)),Summary(false,false,false,false,false,List(),List(),List(Sym(9)),List(Sym(9)),List(),List()),List(Sym(9)))
+Reflect: Reflect(ReadVar(Variable(Sym(16))),Summary(false,false,false,false,false,List((List(Sym(16)),List(ReadVar(Variable(Sym(16)))))),List(),List(Sym(16), Sym(15), Sym(11)),List(Sym(16), Sym(15), Sym(11)),List(),List()),List(Sym(11), Sym(15), Sym(16)))
+AliasRep: List(Sym(17)) deps: List(Sym(11), Sym(15), Sym(16))
+Alias: List(Sym(15), Sym(11))
+Write: WrappedArray(Sym(17))Def: HashMapSetSize(Sym(17),Const(3))
 NestedDeps: List()
-Reflect: Reflect(PrintLn(Sym(15)),Summary(true,true,false,false,false,List(),List(),List(),List(),List(),List()),List(Sym(11)))
+Reflect: Reflect(HashMapSetSize(Sym(17),Const(3)),Summary(false,false,false,false,false,List(),List(),List(Sym(17), Sym(15), Sym(11)),List(Sym(17), Sym(15), Sym(11)),List(Sym(17)),List(Sym(17))),List(Sym(11), Sym(15), Sym(17)))
+Alias: List(Sym(15), Sym(11))
+NestedDeps: List()
+Reflect: Reflect(HashMapGetSize(Sym(11)),Summary(false,false,false,false,false,List(),List(),List(Sym(11)),List(Sym(11)),List(),List()),List(Sym(11)))
+NestedDeps: List()
+Reflect: Reflect(PrintLn(Sym(19)),Summary(true,true,false,false,false,List(),List(),List(),List(),List(),List()),List(Sym(13)))
 /*****************************************
   Emitting Generated Code                  
 *******************************************/
 class IntHashMapAssignmentProblem3 extends ((Int)=>(Unit)) {
-def apply(x8:Int): Unit = {
-val x9 = new HashMap[Int,Int]()
-val x10 = x9.size
-println(x10)
-var x12 = x9
-val x13 = x12
-x13.size = 2
-val x15 = x9.size
-println(x15)
+def apply(x10:Int): Unit = {
+val x11 = new HashMap[Int,Int]()
+val x12 = x11.size
+println(x12)
+var x14 = x11
+val x15 = x14
+var x16 = x15
+val x17 = x16
+x17.size = 3
+val x19 = x11.size
+println(x19)
 }
 }
 /*****************************************
