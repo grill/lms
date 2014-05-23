@@ -402,8 +402,8 @@ trait Effects extends Expressions with Blocks with Utils {
       !currentNode.map(_.getClass).intersect(otherNode.map(_.getClass)).isEmpty
 
   def reflectReadMutable[A:Manifest](parent0: Exp[Any]*)(d: Def[A])(implicit pos: SourceContext): Exp[A] = {
-    println("Nested: " + parent0 + " Def: " + d)
-    println("Context: " + context)
+    //println("Nested: " + parent0 + " Def: " + d)
+    //println("Context: " + context)
     val parent = parent0.toList.asInstanceOf[List[Sym[Any]]]
 
 
@@ -456,26 +456,26 @@ trait Effects extends Expressions with Blocks with Utils {
         }
     }
 
-    println("ReflectReadMutable repsW: " + repsW)
+    //println("ReflectReadMutable repsW: " + repsW)
     pW = prevWrites
     val z = reflectEffect(d, ReadMutable(parent, List(d), repsW))
     pW = Nil
 
-    println("AliasRep: " + (findDefinition(z.asInstanceOf[Sym[Any]]) match {
+    /*println("AliasRep: " + (findDefinition(z.asInstanceOf[Sym[Any]]) match {
       //TODO: either write to get or alloc ??
       //case Some(TP(_, Reflect(_, u, _))) if (mustOnlyAlloc(u)) => List(x)
       case Some(TP(_, Reflect(_, u, deps))) => "" + u.aliasRep + " deps: " + deps
       case _ => ""
-    }))
+    }))*/
 
     val mutableAliases = mutableTransitiveAliases(d) filterNot (parent contains _)
-    println("Alias: " + mutableAliases)
+    //println("Alias: " + mutableAliases)
     checkIllegalSharing(z, mutableAliases)
     z
   }
 
   def reflectWriteMutable[A:Manifest](write0: Exp[Any]*)(read0: Exp[Any]*)(d: Def[A])(implicit pos: SourceContext): Exp[A] = {
-    println("Write: " + write0 + "Def: " + d)
+    //println("Write: " + write0 + "Def: " + d)
     val write = write0.toList.asInstanceOf[List[Sym[Any]]] // should check...
     //val read = read0.toList.asInstanceOf[List[Sym[Any]]] // should check...
 
@@ -506,9 +506,10 @@ trait Effects extends Expressions with Blocks with Utils {
       //TODO: either write to get or alloc ??
       //case Some(TP(_, Reflect(_, u, _))) if (mustOnlyAlloc(u)) => List(x)
       case Some(TP(_, Reflect(_, u, _))) => u.aliasRep
+      case _ => None
     }}
 
-    println("reflectWriteMutable repsW: " + repsW + ", repsR: " + repsR)
+    //println("reflectWriteMutable repsW: " + repsW + ", repsR: " + repsR)
     val z = reflectEffect(d, WriteMutable(write, repsR ++ repsW))
 
     println("AliasRep: " + (findDefinition(z.asInstanceOf[Sym[Any]]) match {
@@ -527,14 +528,14 @@ trait Effects extends Expressions with Blocks with Utils {
   }
 
   def reflectWrite[A:Manifest](write0: Exp[Any]*)(d: Def[A])(implicit pos: SourceContext): Exp[A] = {
-    println("Write: " + write0 + "Def: " + d)
+    //println("Write: " + write0 + "Def: " + d)
     val write = write0.toList.asInstanceOf[List[Sym[Any]]] // should check...
 
 
     val z = reflectEffect(d, Write(write))
 
     val mutableAliases = mutableTransitiveAliases(d) filterNot (write contains _)
-    println("Alias: " + mutableAliases)
+    //println("Alias: " + mutableAliases)
     checkIllegalSharing(z, mutableAliases)
     z
   }
@@ -581,7 +582,7 @@ trait Effects extends Expressions with Blocks with Utils {
       //effect tracking
       val deps = calculateDependencies(u)
       var zd = Reflect(x,u,deps)
-      println("Reflect: " + zd)
+      //println("Reflect: " + zd)
 
       //CSE
       if (mustIdempotent(u)) {  
@@ -696,7 +697,7 @@ trait Effects extends Expressions with Blocks with Utils {
       } else {
         Nil
       }*/
-      println("NestedDeps: " + nestedDeps)
+      //println("NestedDeps: " + nestedDeps)
 
       // TODO: write-on-read deps should be weak
       // TODO: optimize!!

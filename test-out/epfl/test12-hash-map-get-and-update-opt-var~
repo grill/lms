@@ -1,0 +1,459 @@
+AliasRep: List(Sym(1)) deps: List(Sym(1))
+AliasRep: List(Sym(26), Sym(27)) deps: List(Sym(0), Sym(4), Sym(26), Sym(27))
+AliasRep: List(Sym(42)) deps: List(Sym(41), Sym(42))
+AliasRep: List(Sym(3), Sym(50)) deps: List(Sym(0), Sym(4), Sym(19), Sym(49), Sym(50))
+AliasRep: List(Sym(54), Sym(55), Sym(56)) deps: List(Sym(0), Sym(4), Sym(19), Sym(53), Sym(54), Sym(55), Sym(56))
+AliasRep: List(Sym(82)) deps: List(Sym(82))
+AliasRep: List(Sym(104), Sym(105), Sym(106)) deps: List(Sym(103), Sym(104), Sym(105), Sym(106))
+AliasRep: List(Sym(108), Sym(109)) deps: List(Sym(108), Sym(109))
+AliasRep: List(Sym(102)) deps: List(Sym(87), Sym(101), Sym(102), Sym(103), Sym(108))
+AliasRep: List(Sym(129), Sym(130), Sym(131)) deps: List(Sym(77), Sym(128), Sym(129), Sym(130), Sym(131))
+AliasRep: List(Sym(133), Sym(134)) deps: List(Sym(77), Sym(133), Sym(134))
+AliasRep: List(Sym(71)) deps: List(Sym(76), Sym(137), Sym(138))
+AliasRep: List(Sym(70), Sym(143)) deps: List(Sym(0), Sym(62), Sym(70), Sym(143))
+AliasRep: List(Sym(183)) deps: List(Sym(182), Sym(183))
+AliasRep: List(Sym(219), Sym(220)) deps: List(Sym(0), Sym(62), Sym(197), Sym(219), Sym(220))
+AliasRep: List(Sym(235)) deps: List(Sym(234), Sym(235))
+AliasRep: List(Sym(243)) deps: List(Sym(0), Sym(62), Sym(197), Sym(212), Sym(242), Sym(243))
+AliasRep: List(Sym(247), Sym(248), Sym(249)) deps: List(Sym(0), Sym(62), Sym(197), Sym(212), Sym(246), Sym(247), Sym(248), Sym(249))
+AliasRep: List(Sym(274)) deps: List(Sym(274))
+AliasRep: List(Sym(296), Sym(297), Sym(298)) deps: List(Sym(295), Sym(296), Sym(297), Sym(298))
+AliasRep: List(Sym(300), Sym(301)) deps: List(Sym(300), Sym(301))
+AliasRep: List(Sym(294)) deps: List(Sym(279), Sym(293), Sym(294), Sym(295), Sym(300))
+AliasRep: List(Sym(321), Sym(322), Sym(323)) deps: List(Sym(269), Sym(320), Sym(321), Sym(322), Sym(323))
+AliasRep: List(Sym(325), Sym(326)) deps: List(Sym(269), Sym(325), Sym(326))
+AliasRep: List(Sym(263)) deps: List(Sym(268), Sym(329), Sym(330))
+AliasRep: List(Sym(262), Sym(335)) deps: List(Sym(0), Sym(62), Sym(255), Sym(262), Sym(335))
+AliasRep: List(Sym(346)) deps: List(Sym(352))
+AliasRep: List(Sym(356), Sym(347)) deps: List(Sym(356))
+AliasRep: List(Sym(364), Sym(347)) deps: List(Sym(363), Sym(364))
+AliasRep: List(Sym(376)) deps: List(Sym(376))
+AliasRep: List(Sym(390), Sym(391)) deps: List(Sym(375), Sym(379), Sym(390), Sym(391))
+AliasRep: List(Sym(406)) deps: List(Sym(405), Sym(406))
+AliasRep: List(Sym(378), Sym(414)) deps: List(Sym(375), Sym(379), Sym(383), Sym(413), Sym(414))
+AliasRep: List(Sym(418), Sym(419), Sym(420)) deps: List(Sym(375), Sym(379), Sym(383), Sym(417), Sym(418), Sym(419), Sym(420))
+AliasRep: List(Sym(445)) deps: List(Sym(445))
+AliasRep: List(Sym(467), Sym(468), Sym(469)) deps: List(Sym(466), Sym(467), Sym(468), Sym(469))
+AliasRep: List(Sym(471), Sym(472)) deps: List(Sym(471), Sym(472))
+AliasRep: List(Sym(465)) deps: List(Sym(450), Sym(464), Sym(465), Sym(466), Sym(471))
+AliasRep: List(Sym(492), Sym(493), Sym(494)) deps: List(Sym(440), Sym(491), Sym(492), Sym(493), Sym(494))
+AliasRep: List(Sym(496), Sym(497)) deps: List(Sym(440), Sym(496), Sym(497))
+AliasRep: List(Sym(434)) deps: List(Sym(439), Sym(500), Sym(501))
+AliasRep: List(Sym(433), Sym(506)) deps: List(Sym(375), Sym(426), Sym(433), Sym(506))
+AliasRep: List(Sym(546)) deps: List(Sym(545), Sym(546))
+AliasRep: List(Sym(571), Sym(572)) deps: List(Sym(375), Sym(426), Sym(560), Sym(571), Sym(572))
+AliasRep: List(Sym(587)) deps: List(Sym(586), Sym(587))
+AliasRep: List(Sym(595)) deps: List(Sym(375), Sym(426), Sym(560), Sym(564), Sym(594), Sym(595))
+AliasRep: List(Sym(599), Sym(600), Sym(601)) deps: List(Sym(375), Sym(426), Sym(560), Sym(564), Sym(598), Sym(599), Sym(600), Sym(601))
+AliasRep: List(Sym(626)) deps: List(Sym(626))
+AliasRep: List(Sym(648), Sym(649), Sym(650)) deps: List(Sym(647), Sym(648), Sym(649), Sym(650))
+AliasRep: List(Sym(652), Sym(653)) deps: List(Sym(652), Sym(653))
+AliasRep: List(Sym(646)) deps: List(Sym(631), Sym(645), Sym(646), Sym(647), Sym(652))
+AliasRep: List(Sym(673), Sym(674), Sym(675)) deps: List(Sym(621), Sym(672), Sym(673), Sym(674), Sym(675))
+AliasRep: List(Sym(677), Sym(678)) deps: List(Sym(621), Sym(677), Sym(678))
+AliasRep: List(Sym(615)) deps: List(Sym(620), Sym(681), Sym(682))
+AliasRep: List(Sym(614), Sym(687)) deps: List(Sym(375), Sym(426), Sym(607), Sym(614), Sym(687))
+AliasRep: List(Sym(698)) deps: List(Sym(704))
+AliasRep: List(Sym(708), Sym(699)) deps: List(Sym(708))
+AliasRep: List(Sym(716), Sym(699)) deps: List(Sym(715), Sym(716))
+/*****************************************
+  Emitting Generated Code                  
+*******************************************/
+class IntHashMapGetAndUpdateOptVar extends ((Int)=>(Unit)) {
+def apply(x374:Int): Unit = {
+val x375 = new HashMap[Int,Int](1)
+var x376 = 1
+x376 = 2
+val x378 = x376
+val x379 = x375.table
+val x380 = x379.length
+val x5 = 2.hashCode
+val x6 = x5.toLong
+val x7 = x6 >>> 20
+val x8 = x6 >>> 12
+val x9 = x7 ^ x8
+val x10 = x9 ^ x6
+val x11 = x10 >>> 7
+val x12 = x10 ^ x11
+val x13 = x10 >>> 4
+val x14 = x12 ^ x13
+val x15 = x14.toInt
+val x381 = x380 - 1
+val x382 = x15 & x381
+val x383 = x379(x382)
+var x384 = x383
+val x385 = x375.size
+val x386 = x375.threshold
+val x387 = x375.MAXIMUM_CAPACITY
+val x388 = x384
+val x389 = x388 == null
+val x393 = x385 + 1
+if (x389) {
+val x390 = new Entry(2, x378)
+val x391 = x379(x382)
+x379(x382) = x390
+x375.size = x393
+
+} else {
+while ({
+val x396 = x384
+val x397 = x396.hasNext
+val x403 = if (x397) {
+val x398 = x384
+val x399 = x398.key
+val x400 = x399 != 2
+
+x400
+} else false
+
+x403
+}) {
+val x405 = x384
+val x406 = x405.next
+x384 = x406
+()
+}
+val x410 = x384
+val x411 = x410.key
+val x412 = x411 == 2
+if (x412) {
+val x413 = x384
+val x414 = x413.value
+x413.value = x378
+
+} else {
+val x417 = x384
+val x418 = new Entry(2, x378)
+val x419 = x417.next
+val x420 = x417.hasNext
+x417.next = x418
+x375.size = x393
+
+}
+
+}
+val x427 = x385 >= x386
+val x66 = scala.Int.MaxValue
+if (x427) {
+val x428 = x379.length
+val x429 = x428 == x387
+if (x429) {
+x375.threshold = x66
+
+} else {
+val x432 = 2 * x428
+val x433 = new Array[Entry[Int, Int]](x432)
+var x434 = 0
+val x462 = x432 - 1
+val x463 = x15 & x462
+while ({
+val x435 = x434
+val x436 = x379.length
+val x437 = x435 < x436
+x437
+}) {
+val x439 = x434
+val x440 = x379(x439)
+var x441 = x440
+val x442 = x441
+val x443 = x442 != null
+if (x443) {
+val x444 = x434
+val x445 = x379(x444)
+x379(x444) = null
+while ({
+val x447 = x441
+val x448 = x447.hasNext
+x448
+}) {
+val x450 = x441
+val x451 = x450.key
+val x464 = x441
+val x465 = x464.next
+val x466 = x441
+val x467 = x433(x463)
+val x468 = x466.next
+val x469 = x466.hasNext
+x466.next = x467
+val x471 = x441
+val x472 = x433(x463)
+x433(x463) = x471
+x441 = x465
+()
+}
+val x477 = x441
+val x478 = x477.key
+val x489 = x441
+val x490 = x489.next
+val x491 = x441
+val x492 = x433(x463)
+val x493 = x491.next
+val x494 = x491.hasNext
+x491.next = x492
+val x496 = x441
+val x497 = x433(x463)
+x433(x463) = x496
+
+} else {
+()
+}
+val x501 = x434
+val x502 = x501 + 1
+x434 = x502
+()
+}
+val x506 = x375.table
+x375.table = x433
+val x508 = x375.loadFactor
+val x509 = x508 * x432
+val x510 = x509.asInstanceOf[Int]
+x375.threshold = x510
+
+}
+
+} else {
+()
+}
+val x516 = x376
+val x517 = x375.table
+val x529 = x517.length
+val x518 = x516.hashCode
+val x519 = x518.toLong
+val x520 = x519 >>> 20
+val x521 = x519 >>> 12
+val x522 = x520 ^ x521
+val x523 = x522 ^ x519
+val x524 = x523 >>> 7
+val x525 = x523 ^ x524
+val x526 = x523 >>> 4
+val x527 = x525 ^ x526
+val x528 = x527.toInt
+val x530 = x529 - 1
+val x531 = x528 & x530
+val x532 = x517(x531)
+var x533 = x532
+val x534 = x533
+val x535 = x534 == null
+val x558 = if (x535) {
+0
+} else {
+while ({
+val x536 = x533
+val x537 = x536.hasNext
+val x543 = if (x537) {
+val x538 = x533
+val x539 = x538.key
+val x540 = x539 != x516
+
+x540
+} else false
+
+x543
+}) {
+val x545 = x533
+val x546 = x545.next
+x533 = x546
+()
+}
+val x550 = x533
+val x551 = x550.key
+val x552 = x551 == x516
+val x556 = if (x552) {
+val x553 = x533
+val x554 = x553.value
+x554
+} else {
+0
+}
+x556
+}
+val x560 = x375.table
+val x561 = x560.length
+val x198 = 3.hashCode
+val x199 = x198.toLong
+val x200 = x199 >>> 20
+val x201 = x199 >>> 12
+val x202 = x200 ^ x201
+val x203 = x202 ^ x199
+val x204 = x203 >>> 7
+val x205 = x203 ^ x204
+val x206 = x203 >>> 4
+val x207 = x205 ^ x206
+val x208 = x207.toInt
+val x562 = x561 - 1
+val x563 = x208 & x562
+val x564 = x560(x563)
+var x565 = x564
+val x566 = x375.size
+val x567 = x375.threshold
+val x568 = x375.MAXIMUM_CAPACITY
+val x569 = x565
+val x570 = x569 == null
+val x559 = x558 + 1
+val x574 = x566 + 1
+if (x570) {
+val x571 = new Entry(3, x559)
+val x572 = x560(x563)
+x560(x563) = x571
+x375.size = x574
+
+} else {
+while ({
+val x577 = x565
+val x578 = x577.hasNext
+val x584 = if (x578) {
+val x579 = x565
+val x580 = x579.key
+val x581 = x580 != 3
+
+x581
+} else false
+
+x584
+}) {
+val x586 = x565
+val x587 = x586.next
+x565 = x587
+()
+}
+val x591 = x565
+val x592 = x591.key
+val x593 = x592 == 3
+if (x593) {
+val x594 = x565
+val x595 = x594.value
+x594.value = x559
+
+} else {
+val x598 = x565
+val x599 = new Entry(3, x559)
+val x600 = x598.next
+val x601 = x598.hasNext
+x598.next = x599
+x375.size = x574
+
+}
+
+}
+val x608 = x566 >= x567
+if (x608) {
+val x609 = x560.length
+val x610 = x609 == x568
+if (x610) {
+x375.threshold = x66
+
+} else {
+val x613 = 2 * x609
+val x614 = new Array[Entry[Int, Int]](x613)
+var x615 = 0
+val x643 = x613 - 1
+val x644 = x208 & x643
+while ({
+val x616 = x615
+val x617 = x560.length
+val x618 = x616 < x617
+x618
+}) {
+val x620 = x615
+val x621 = x560(x620)
+var x622 = x621
+val x623 = x622
+val x624 = x623 != null
+if (x624) {
+val x625 = x615
+val x626 = x560(x625)
+x560(x625) = null
+while ({
+val x628 = x622
+val x629 = x628.hasNext
+x629
+}) {
+val x631 = x622
+val x632 = x631.key
+val x645 = x622
+val x646 = x645.next
+val x647 = x622
+val x648 = x614(x644)
+val x649 = x647.next
+val x650 = x647.hasNext
+x647.next = x648
+val x652 = x622
+val x653 = x614(x644)
+x614(x644) = x652
+x622 = x646
+()
+}
+val x658 = x622
+val x659 = x658.key
+val x670 = x622
+val x671 = x670.next
+val x672 = x622
+val x673 = x614(x644)
+val x674 = x672.next
+val x675 = x672.hasNext
+x672.next = x673
+val x677 = x622
+val x678 = x614(x644)
+x614(x644) = x677
+
+} else {
+()
+}
+val x682 = x615
+val x683 = x682 + 1
+x615 = x683
+()
+}
+val x687 = x375.table
+x375.table = x614
+val x689 = x375.loadFactor
+val x690 = x689 * x613
+val x691 = x690.asInstanceOf[Int]
+x375.threshold = x691
+
+}
+
+} else {
+()
+}
+val x697 = x375.table
+var x698 = 0
+var x699: Entry[K,V] = null
+while ({
+val x700 = x698
+val x701 = x697.length
+val x702 = x700 < x701
+x702
+}) {
+val x704 = x698
+val x705 = x704 + 1
+x698 = x705
+val x707 = x698
+val x708 = x697(x707)
+val x709 = x708 != null
+if (x709) {
+x699 = x708
+println(x708)
+while ({
+val x712 = x699
+val x713 = x712.hasNext
+x713
+}) {
+val x715 = x699
+val x716 = x715.next
+x699 = x716
+val x718 = x699
+println(x718)
+
+}
+
+} else {
+()
+}
+
+}
+}
+}
+/*****************************************
+  End of Generated Code                  
+*******************************************/

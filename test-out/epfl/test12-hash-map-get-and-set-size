@@ -1,35 +1,9 @@
-NestedDeps: List()
-Reflect: Reflect(HashMapGetSize(Sym(0)),Summary(false,false,false,false,false,List(),List(),List(Sym(0)),List(Sym(0)),List(),List()),List(Sym(0)))
-NestedDeps: List()
-Reflect: Reflect(PrintLn(Sym(1)),Summary(true,true,false,false,false,List(),List(),List(),List(),List(),List()),List())
-Write: WrappedArray(Sym(0))Def: HashMapSetSize(Sym(0),Const(3))
-NestedDeps: List()
-Reflect: Reflect(HashMapSetSize(Sym(0),Const(3)),Summary(false,false,false,false,false,List(),List(),List(Sym(0)),List(Sym(0)),List(Sym(0)),List(Sym(0))),List(Sym(0), Sym(1)))
-Alias: List()
-NestedDeps: List()
-Reflect: Reflect(HashMapGetSize(Sym(0)),Summary(false,false,false,false,false,List(),List(),List(Sym(0)),List(Sym(0)),List(),List()),List(Sym(0), Sym(3)))
-NestedDeps: List()
-Reflect: Reflect(PrintLn(Sym(4)),Summary(true,true,false,false,false,List(),List(),List(),List(),List(),List()),List(Sym(2)))
-NestedDeps: List()
-Reflect: Reflect(NewHashMap(Int,Int),Summary(false,false,false,false,true,List(),List(),List(),List(),List(),List()),List())
-NestedDeps: List()
-Reflect: Reflect(HashMapGetSize(Sym(7)),Summary(false,false,false,false,false,List(),List(),List(Sym(7)),List(Sym(7)),List(),List()),List(Sym(7)))
-NestedDeps: List()
-Reflect: Reflect(PrintLn(Sym(8)),Summary(true,true,false,false,false,List(),List(),List(),List(),List(),List()),List())
-Write: WrappedArray(Sym(7))Def: HashMapSetSize(Sym(7),Const(3))
-NestedDeps: List()
-Reflect: Reflect(HashMapSetSize(Sym(7),Const(3)),Summary(false,false,false,false,false,List(),List(),List(Sym(7)),List(Sym(7)),List(Sym(7)),List(Sym(7))),List(Sym(7), Sym(8)))
-Alias: List()
-NestedDeps: List()
-Reflect: Reflect(HashMapGetSize(Sym(7)),Summary(false,false,false,false,false,List(),List(),List(Sym(7)),List(Sym(7)),List(),List()),List(Sym(7), Sym(10)))
-NestedDeps: List()
-Reflect: Reflect(PrintLn(Sym(11)),Summary(true,true,false,false,false,List(),List(),List(),List(),List(),List()),List(Sym(9)))
 /*****************************************
   Emitting Generated Code                  
 *******************************************/
 class IntHashMapGetAndSetSize extends ((Int)=>(Unit)) {
 def apply(x6:Int): Unit = {
-val x7 = new HashMap[Int,Int]()
+val x7 = new HashMap[Int,Int](200)
 val x8 = x7.size
 println(x8)
 x7.size = 3

@@ -77,17 +77,6 @@ trait ScalaGenVariablesNested extends ScalaGenVariables {
   }
 }
 
-
-  class HashMap[K,V] {
-    val DEFAULT_INITIAL_CAPACITY = 16
-    val MAXIMUM_CAPACITY = 1 << 30
-    val DEFAULT_LOAD_FACTOR = 0.75f
-    var table: Array[Entry[K,V]] = new Array[Entry[K,V]] (DEFAULT_INITIAL_CAPACITY)
-    var loadFactor: Float = DEFAULT_LOAD_FACTOR
-    var threshold = (DEFAULT_INITIAL_CAPACITY * DEFAULT_LOAD_FACTOR).toInt
-    var size = 0
-  }
-
   class Entry[K,V](val key: K, var value: V, var next: Entry[K,V] = null) {
 
    def hasNext = next != null
@@ -101,6 +90,15 @@ trait ScalaGenVariablesNested extends ScalaGenVariables {
     override def toString(): String = {
       key + "=" + value
     } 
+  }
+
+  class HashMap[K,V] (capacity: Int = 16) {
+    val MAXIMUM_CAPACITY = 1 << 30
+    val DEFAULT_LOAD_FACTOR = 0.75f
+    var table: Array[Entry[K,V]] = new Array[Entry[K,V]] (capacity)
+    var loadFactor: Float = DEFAULT_LOAD_FACTOR
+    var threshold = (capacity * DEFAULT_LOAD_FACTOR).toInt
+    var size = 0
   }
 
   trait EntryOps extends Base with Variables {
@@ -142,12 +140,12 @@ trait ScalaGenVariablesNested extends ScalaGenVariables {
     case class EntrySetValue[K:Manifest,V:Manifest](x: Rep[Entry[K,V]], v: Rep[V]) extends Def[Unit]
 
     def entry_new[K:Manifest,V:Manifest](key: Rep[K], value: Rep[V]) = reflectMutable(EntryCreate(key,value))
-    def entryHasNext[K:Manifest,V:Manifest](x: Rep[Entry[K,V]]) = EntryHasNext(x)
-    def entryNext[K:Manifest,V:Manifest](x: Rep[Entry[K,V]]) = EntryNext(x)
-    def entrySetNext[K:Manifest,V:Manifest](x: Rep[Entry[K,V]], n: Rep[Entry[K,V]]) = reflectWrite(x)(EntrySetNext(x,n))
-    def entryGetKey[K:Manifest,V:Manifest](x: Rep[Entry[K,V]]) = EntryGetKey(x)
-    def entryGetValue[K:Manifest,V:Manifest](x: Rep[Entry[K,V]]) = EntryGetValue(x)
-    def entrySetValue[K:Manifest,V:Manifest](x: Rep[Entry[K,V]], v: Rep[V]) = reflectWrite(x)(EntrySetValue(x,v))
+    def entryHasNext[K:Manifest,V:Manifest](x: Rep[Entry[K,V]]) = reflectReadMutable(x)(EntryHasNext(x))
+    def entryNext[K:Manifest,V:Manifest](x: Rep[Entry[K,V]]) = reflectReadMutable(x)(EntryNext(x))
+    def entrySetNext[K:Manifest,V:Manifest](x: Rep[Entry[K,V]], n: Rep[Entry[K,V]]) = reflectWriteMutable (reflectReadMutable(x)(EntryNext(x)), reflectReadMutable(x)(EntryHasNext(x))) (n) (EntrySetNext(x,n))
+    def entryGetKey[K:Manifest,V:Manifest](x: Rep[Entry[K,V]]) = reflectReadMutable(x)(EntryGetKey(x))
+    def entryGetValue[K:Manifest,V:Manifest](x: Rep[Entry[K,V]]) = reflectReadMutable(x) (EntryGetValue(x))
+    def entrySetValue[K:Manifest,V:Manifest](x: Rep[Entry[K,V]], v: Rep[V]) = reflectWriteMutable (reflectReadMutable(x)(EntryGetValue(x))) (v) (EntrySetValue(x,v))
   }
 
   trait ScalaGenEntry extends ScalaGenBase {
@@ -169,6 +167,62 @@ trait ScalaGenVariablesNested extends ScalaGenVariables {
         emitValDef(sym, quote(x) + ".value")
       case EntrySetValue(x, v) =>
         emitValDef(sym, quote(x) + ".value = " + quote(v))
+
+      case _ => super.emitNode(sym, rhs)
+    }
+  }
+
+  trait OptionOps extends Base with Variables {
+
+    object SomeO {
+      def apply[V:Manifest](value: Rep[V])(implicit pos: SourceContext) =
+        option_new[V](value)
+    }
+
+    object NoneO {
+      def apply[V:Manifest](implicit pos: SourceContext) =
+        option_new[V]()
+    }
+
+    class optionOpsCls[V:Manifest](x: Rep[Option[V]]) {
+      def isEmpty() = optionIsEmpty(x)
+      def get() = optiponGet(x)
+    }
+
+    implicit def repOptionToOptionOps[V:Manifest](x: Rep[Option[V]]) = new optionOpsCls[V](x)
+    implicit def varOptionToOptionOps[V:Manifest](x: Var[Option[V]]) = new optionOpsCls[V](readVar(x))
+
+    def option_new[V:Manifest](): Rep[Option[V]]
+    def option_new[V:Manifest](value: Rep[V]): Rep[Option[V]]
+    def optionIsEmpty[V:Manifest](x: Rep[Option[V]]): Rep[Boolean]
+    def optiponGet[V:Manifest](x: Rep[Option[V]]): Rep[V]
+  }
+
+ trait OptionOpsExp extends OptionOps with BaseExp with Effects /*with VariablesExp*/ {
+    case class OptionSome[V:Manifest](value: Rep[V]) extends Def[Option[V]]
+    case class OptionNone[V:Manifest] extends Def[Option[V]]
+    case class OptionIsEmpty[V:Manifest](x: Rep[Option[V]]) extends Def[Boolean]
+    case class OptionGet[V:Manifest](x: Rep[Option[V]]) extends Def[V]
+
+    def option_new[V:Manifest]() = OptionNone[V]
+    def option_new[V:Manifest](value: Rep[V]) = OptionSome(value)
+    def optionIsEmpty[V:Manifest](x: Rep[Option[V]]) = OptionIsEmpty(x)
+    def optiponGet[V:Manifest](x: Rep[Option[V]]) = OptionGet(x)
+  }
+
+  trait ScalaGenOption extends ScalaGenBase {
+    val IR: OptionOpsExp
+    import IR._
+
+    override def emitNode(sym: Sym[Any], rhs: Def[Any]) = rhs match {
+      case OptionSome(v) =>
+        emitValDef(sym, "Some(" + quote(v) + ")")
+      case OptionNone() =>
+        emitValDef(sym, "None")
+      case OptionIsEmpty(x) =>
+        emitValDef(sym, quote(x) + ".isEmpty")
+      case OptionGet(x) =>
+        emitValDef(sym, quote(x) + ".get")
 
       case _ => super.emitNode(sym, rhs)
     }
@@ -204,7 +258,7 @@ trait ScalaGenVariablesNested extends ScalaGenVariables {
     }
 
     def hashmap_new[K:Manifest,V:Manifest](n: Rep[Int], specializedKey: String = "", specializedValue: String = "")(implicit pos: SourceContext) : Rep[HashMap[K,V]]
-    def hashmap_apply[K:Manifest,V:Manifest](m: Rep[HashMap[K,V]], k: Rep[K])(implicit pos: SourceContext): Rep[V]
+    def hashmap_apply[K:Manifest,V:Manifest](m: Rep[HashMap[K,V]], k: Rep[K])(implicit pos: SourceContext): Rep[Option[V]]
     def hashmap_update[K:Manifest,V:Manifest](m: Rep[HashMap[K,V]], k: Rep[K], v: Rep[V])(implicit pos: SourceContext): Rep[Unit]
     def hashmap_contains[K:Manifest,V:Manifest](m: Rep[HashMap[K,V]], i: Rep[K])(implicit pos: SourceContext): Rep[Boolean]
     def hashmap_size[K:Manifest,V:Manifest](m: Rep[HashMap[K,V]])(implicit pos: SourceContext): Rep[Int]
@@ -225,10 +279,10 @@ trait ScalaGenVariablesNested extends ScalaGenVariables {
   with HashCodeOpsExp with BooleanOpsExp with PrimitiveOpsExp with ListOpsExp with FunctionsExp with VariablesExp
   with NumericOpsExp with EqualExp with WhileExp with OrderingOpsExp with IfThenElseExp
    with SeqOpsExp with MathOpsExp with CastingOpsExp with SetOpsExp with ObjectOpsExp
-   with Blocks with MiscOpsExp
+   with Blocks with MiscOpsExp with OptionOpsExp
    with VariablesNested
   {
-  case class NewHashMap[K, V](mK: Manifest[K], mV: Manifest[V]) extends Def[HashMap[K, V]]
+  case class NewHashMap[K, V](mK: Manifest[K], mV: Manifest[V], size: Exp[Int]) extends Def[HashMap[K, V]]
   case class HashMapGetSize[K, V](x: Exp[HashMap[K, V]]) extends Def[Int]
   case class HashMapGetTable[K, V](x: Exp[HashMap[K, V]]) extends Def[Array[Entry[K, V]]]
   case class HashMapGetThreshold[K, V](x: Exp[HashMap[K, V]]) extends Def[Int]
@@ -237,19 +291,6 @@ trait ScalaGenVariablesNested extends ScalaGenVariables {
   case class HashMapSetSize[K, V](x: Exp[HashMap[K, V]], newSz: Exp[Int]) extends Def[Unit]
   case class HashMapSetTable[K, V](x: Exp[HashMap[K, V]], newTable: Exp[Array[Entry[K, V]]]) extends Def[Unit]
   case class HashMapSetThreshold[K: Manifest, V](x: Exp[HashMap[K, V]], newThreshold: Exp[Int]) extends Def[Unit]
-
-    def hashmap_table[K:Manifest,V:Manifest](m: Rep[HashMap[K,V]])(implicit pos: SourceContext): Rep[Array[Entry[K, V]]] = {
-      reflectReadMutable (m) ( HashMapGetTable(m) )
-    }
-    def hashmap_setTable[K:Manifest,V:Manifest](m: Rep[HashMap[K,V]], newTable: Rep[Array[Entry[K, V]]])(implicit pos: SourceContext): Rep[Unit] = {
-      //reflectMutableWrite multiple cases:
-      //clean and add -> replace references contained (equals sym)
-      //add -> references contained (contains sym)
-      //clone -> create new representative (clone sym)
-      //extract??? => Read and Write at the same time
-      reflectWriteMutable( reflectReadMutable(m) (HashMapGetTable(m)) ) (newTable) (HashMapSetTable(m, newTable))
-    }
-
 
   override def containSyms(e: Any): List[Sym[Any]] = e match {
     case HashMapSetTable(m,t) => syms(t)
@@ -262,60 +303,68 @@ trait ScalaGenVariablesNested extends ScalaGenVariables {
     case HashMapGetTable(m) => syms(m)
     case _ => super.extractSyms(e)
   }
+
     def hashmap_new[K:Manifest,V:Manifest](n: Exp[Int], specializedKey: String = "", specializedValue: String = "")(implicit pos: SourceContext) : Rep[HashMap[K,V]] =
       //NewHashMap(manifest[K], manifest[V])
-      reflectMutable(NewHashMap(manifest[K], manifest[V]))
+      reflectMutable(NewHashMap(manifest[K], manifest[V], n))
       //array_obj_new[Entry[K,V]](n)
 
-    def hashmap_apply[K:Manifest,V:Manifest](x: Rep[HashMap[K,V]], k: Rep[K])(implicit pos: SourceContext): Rep[V] = {
+    def hashmap_apply[K:Manifest,V:Manifest](x: Rep[HashMap[K,V]], k: Rep[K])(implicit pos: SourceContext): Rep[Option[V]] = {
       //tuple2_get2(ArrayApply(m, k))
-      val m: Rep[Array[Entry[K,V]]] = reflectReadMutable (x) ( HashMapGetTable(x) )
+      val m: Rep[Array[Entry[K,V]]] = hashmap_table(x)//reflectReadMutable (x) ( HashMapGetTable(x) )
 
       val h1 = int_tolong(__hashCode(k))
       val h2 = (h1 >>> unit(20)) ^ (h1 >>> unit(12)) ^ h1
       val h3 = h2 ^ (h2 >>> unit(7)) ^ (h2 >>> unit(4))
       val idx = int_binaryand(long_toint(h3), m.length - unit(1))
-      val n = var_new(
-        reflectReadMutable (m) ( ArrayApply(m, idx) )
+      val el = hashmap_array_apply(m, idx)
+      val n = var_new(el)
+        //reflectReadMutable (m) ( ArrayApply(m, idx) )
         //array_apply(m, idx)
-      )
+      //)
 
       if(readVar(n) == unit(null)) {
-        unit(null).asInstanceOf[Rep[V]]
+        NoneO[V]
+        //unit(0).asInstanceOf[Rep[V]]
+        //unit(null).asInstanceOf[Rep[V]]
       } else {
         while(boolean_and(n.hasNext(), notequals(n.getKey(), k) )) {
          var_assign(n, n.next())
         }
 
         if(n.getKey() == k) {
-          n.getValue()
+          SomeO(n.getValue())
         } else {
-          unit(null).asInstanceOf[Rep[V]]
+          NoneO[V]
+          //unit(0).asInstanceOf[Rep[V]]
+          //unit(null).asInstanceOf[Rep[V]]
         }
       }
     }
 
     def hashmap_update[K:Manifest,V:Manifest](x: Rep[HashMap[K,V]], k: Rep[K], v: Rep[V])(implicit pos: SourceContext): Rep[Unit] = {
-      val m: Rep[Array[Entry[K,V]]] = reflectReadMutable (x) { HashMapGetTable(x) }
+      val m = hashmap_table(x)//reflectReadMutable (x) { HashMapGetTable(x) }
 
       val h1 = int_tolong(__hashCode(k))
       val h2 = (h1 >>> unit(20)) ^ (h1 >>> unit(12)) ^ h1
       val h3 = h2 ^ (h2 >>> unit(7)) ^ (h2 >>> unit(4))
       val idx = int_binaryand(long_toint(h3), m.length - unit(1))
-      val el = 
-        reflectReadMutable (m) ( ArrayApply(m, idx) )
+      val el = hashmap_array_apply(m, idx)
+        //reflectReadMutable (m) ( ArrayApply(m, idx) )
         //array_apply(m, idx)
       val n = var_new(el)
       
       val size = hashmap_size(x) //map.size   //reflectNested
 
-      //val threshold = HashMapGetThreshold(x)
-      //val max_capacity = HashMapMAXIMUM_CAPACITY(x)
+      val threshold = hashmap_threshold(x)
+      val max_capacity = hashmap_maximumCapacity(x)
 
       if(readVar(n) == unit(null)) {
 
         //reflectWrite(el) ( ArrayUpdate(m, idx, entry_new(k,v)) )
-        reflectWrite(reflectReadMutable (m) ( ArrayApply(m, idx) ))( ArrayUpdate(m, idx, entry_new(k,v)) )
+        //val new_entry = 
+        hashmap_array_update(m, idx, entry_new(k,v))
+        //reflectWriteMutable(reflectReadMutable (m) ( ArrayApply(m, idx) )) (new_entry) ( ArrayUpdate(m, idx, new_entry) )
         //array_update(m, idx, entry_new(k,v))
 
         // reflectWrite(m) ==> backTracking      --> update calculate dependencies
@@ -336,10 +385,10 @@ trait ScalaGenVariablesNested extends ScalaGenVariables {
       }
 
       //var_assign(size, size + 1)
-  /*    if (ordering_gteq(size, threshold)) {
+      if (ordering_gteq(size, threshold)) {
         val oldCapacity = m.length
-        if(ordering_equiv(oldCapacity, max_capacity)) {
-          HashMapSetThreshold(x, Int.MaxValue)
+        if(oldCapacity == max_capacity) {
+          hashmap_setThreshold(x, Int.MaxValue)
           //var_assign(threshold, unit(Int.MaxValue))
         } else {
           val newCapacity = unit(2) * oldCapacity
@@ -349,9 +398,10 @@ trait ScalaGenVariablesNested extends ScalaGenVariables {
           val j: Var[Int] = var_new(unit(0))
 
           while(j < m.length) {
-            val e = var_new(m(j))
+            val e: Var[Entry[K, V]] = var_new(hashmap_array_apply(m,j))
             if(e != unit(null)) {
-              array_update(m, j, unit(null))
+              //array_update(m, j, unit(null))
+              hashmap_array_update(m, j, unit(null))
 
               while(e.hasNext()) {
                 val ht1 = int_tolong(__hashCode(e.getKey()))
@@ -360,20 +410,35 @@ trait ScalaGenVariablesNested extends ScalaGenVariables {
                 val z = int_binaryand(long_toint(h3), newCapacity - unit(1))
 
                 val next = e.next
-                e.setNext(newTable(z))
-                newTable.update(z, e)
+                e.setNext(hashmap_array_apply(newTable, z))
+                //newTable.update(z, e)
+                hashmap_array_update(newTable, z, readVar(e))
+                
                 var_assign(e, next)
               }
+
+                val ht1 = int_tolong(__hashCode(e.getKey()))
+                val ht2 = (ht1 >>> unit(20)) ^ (ht1 >>> unit(12)) ^ ht1
+                val ht3 = ht2 ^ (ht2 >>> unit(7)) ^ (ht2 >>> unit(4))
+                val z = int_binaryand(long_toint(h3), newCapacity - unit(1))
+
+                val next = e.next
+                e.setNext(hashmap_array_apply(newTable, z))
+                //newTable.update(z, e)
+                hashmap_array_update(newTable, z, readVar(e))
+            
             }
-            var_assign(j, j + unit(1))
+            var_assign(j, readVar(j) + unit(1))
+            //var_plusequals(j, unit(1))
           }
 
-          reflectWrite(x)(HashMapSetTable(x, newTable))
-          val loadFactor: Rep[Float] = HashMapGetLoadFactor(x)
-          HashMapSetThreshold(x, numeric_times(loadFactor, newCapacity.asInstanceOf[Rep[Float]]).asInstanceOf[Rep[Int]])
+          hashmap_setTable(x, newTable)
+          val loadFactor: Rep[Float] = hashmap_loadFactor(x)
+          hashmap_setThreshold(x, (new CastingOpsCls(numeric_times(loadFactor, newCapacity.asInstanceOf[Rep[Float]])))
+            .AsInstanceOf[Int])
           //var_assign(threshold, newCapacity*HashMapGetLoadFactor(x))
         }
-      }*/
+      }
     }
 
     def hashmap_contains[K:Manifest,V:Manifest](x: Rep[HashMap[K,V]], k: Rep[K])(implicit pos: SourceContext): Rep[Boolean] = { 
@@ -394,11 +459,55 @@ trait ScalaGenVariablesNested extends ScalaGenVariables {
       }
     }
 
+    def hashmap_array_update[K:Manifest,V:Manifest](m: Rep[Array[Entry[K,V]]], idx: Rep[Int], new_entry: Rep[Entry[K,V]])(implicit pos: SourceContext): Rep[Unit] = {
+        reflectWriteMutable (reflectReadMutable (m) ( ArrayApply(m, idx) )) (new_entry) ( ArrayUpdate(m, idx, new_entry) )
+    }
+
+    def hashmap_array_apply[K:Manifest,V:Manifest](m: Rep[Array[Entry[K,V]]], idx: Rep[Int])(implicit pos: SourceContext): Rep[Entry[K,V]] = {
+        reflectReadMutable (m) ( ArrayApply(m, idx) )
+    }
+
+    def hashmap_loadFactor[K:Manifest,V:Manifest](m: Rep[HashMap[K,V]])(implicit pos: SourceContext): Rep[Float] = {
+      //reflectReadMutable (m) ( HashMapGetSize(m) )
+      reflectReadMutable (m) ( HashMapGetLoadFactor(m) )
+      //HashMapGetSize(m)
+    }
+
+    def hashmap_threshold[K:Manifest,V:Manifest](m: Rep[HashMap[K,V]])(implicit pos: SourceContext): Rep[Int] = {
+      //reflectReadMutable (m) ( HashMapGetSize(m) )
+      reflectReadMutable (m) ( HashMapGetThreshold(m) )
+      //HashMapGetSize(m)
+    }
+    
+    def hashmap_maximumCapacity[K:Manifest,V:Manifest](m: Rep[HashMap[K,V]])(implicit pos: SourceContext): Rep[Int] = {
+      //reflectReadMutable (m) ( HashMapGetSize(m) )
+      reflectReadMutable (m) ( HashMapMAXIMUM_CAPACITY(m) )
+      //HashMapGetSize(m)
+    }
+
+    def hashmap_setThreshold[K:Manifest,V:Manifest](m: Rep[HashMap[K,V]], i: Rep[Int])(implicit pos: SourceContext): Rep[Unit] = {
+      reflectReadMutable (m) ( HashMapSetThreshold(m, i) )
+    }
+
+    def hashmap_table[K:Manifest,V:Manifest](m: Rep[HashMap[K,V]])(implicit pos: SourceContext): Rep[Array[Entry[K, V]]] = {
+      reflectReadMutable (m) ( HashMapGetTable(m) )
+    }
+
+    def hashmap_setTable[K:Manifest,V:Manifest](m: Rep[HashMap[K,V]], newTable: Rep[Array[Entry[K, V]]])(implicit pos: SourceContext): Rep[Unit] = {
+      //reflectMutableWrite multiple cases:
+      //clean and add -> replace references contained (equals sym)
+      //add -> references contained (contains sym)
+      //clone -> create new representative (clone sym)
+      //extract??? => Read and Write at the same time
+      reflectWriteMutable( reflectReadMutable(m) (HashMapGetTable(m)) ) (newTable) (HashMapSetTable(m, newTable))
+    }
+
     def hashmap_size[K:Manifest,V:Manifest](m: Rep[HashMap[K,V]])(implicit pos: SourceContext): Rep[Int] = {
       //reflectReadMutable (m) ( HashMapGetSize(m) )
-      //reflectReadMutable (m) ( HashMapGetSize(m) )
-      HashMapGetSize(m)
+      reflectReadMutable (m) ( HashMapGetSize(m) )
+      //HashMapGetSize(m)
     }
+
     def hashmap_setSize[K:Manifest,V:Manifest](m: Rep[HashMap[K,V]], i: Rep[Int])(implicit pos: SourceContext): Rep[Unit] = {
       reflectWrite(m)(HashMapSetSize(m, i))
       //reflectWrite( reflectReadMutable(m) (HashMapGetSize(m)) ) (HashMapSetSize(m, i))
@@ -415,50 +524,53 @@ trait ScalaGenVariablesNested extends ScalaGenVariables {
     }*/
 
     def hashmap_foreach[K:Manifest,V:Manifest](x: Rep[HashMap[K,V]], f: Rep[Entry[K,V]] => Rep[Unit])(implicit pos: SourceContext): Rep[Unit] = {
-      val m: Rep[Array[Entry[K,V]]] = HashMapGetTable(x)
+      val m: Rep[Array[Entry[K,V]]] = hashmap_table(x)
       val i = var_new(unit(0))
-      val n: Var[Entry[K,V]] = var_new(unit(null))
+      val n = var_new(unit(null).AsInstanceOf[Entry[K,V]])
 
       while(i < m.length) {
-        i = i + unit(1)
-        if(array_apply(m,i) != unit(null)) {
-          var_assign(n, array_apply(m, i))
-          f(readVar(n))
+        val el = hashmap_array_apply(m,i)
+        if(el != unit(null)) {
+          var_assign(n, el)
+          f(el)
           while(n.hasNext()) {
             var_assign(n, n.next())
             f(readVar(n))
           }
         }
+
+        i = i + unit(1)
       }
     }
 
     def hashmap_clear[K:Manifest,V:Manifest](x: Rep[HashMap[K,V]])(implicit pos: SourceContext): Rep[Unit] = {
-      val m: Rep[Array[Entry[K,V]]] = HashMapGetTable(x)
+      val m = hashmap_table(x)
       val i = var_new(unit(0))
 
       while(i < m.length) {
+        hashmap_array_update(m, i, unit(null))
         var_assign(i, readVar(i) + unit(1))
-        array_update(m, i, unit(null))
       }
     }
 
     def hashmap_-=[K: Manifest, V: Manifest](x: Rep[HashMap[K,V]], k: Rep[K])(implicit pos: SourceContext): Rep[Unit] = {
-      val m: Rep[Array[Entry[K,V]]] = HashMapGetTable(x)
+      val m = hashmap_table(x)
       val h1 = int_tolong(__hashCode(k))
       val h2 = (h1 >>> unit(20)) ^ (h1 >>> unit(12)) ^ h1
       val h3 = h2 ^ (h2 >>> unit(7)) ^ (h2 >>> unit(4))
       val idx = int_binaryand(long_toint(h3), m.length - unit(1))
-      val p: Var[Entry[K,V]] = var_new(unit(null))
-      val n = var_new(array_apply(m, idx))
 
-      if(notequals(readVar(n), unit(null))) {
+      val p = var_new(unit(null).AsInstanceOf[Entry[K,V]])
+      val n = var_new(hashmap_array_apply(m, idx))
+
+      if(readVar(n) != unit(null)) {
         while(readVar(n).hasNext() && readVar(n).getKey() != k) {
           var_assign(p, readVar(n))
           var_assign(n, readVar(n).next())
         }
 
         if(readVar(p) == unit(null))
-          array_update(m, idx, unit(null))
+          hashmap_array_update(m, idx, unit(null))
         else if(readVar(n).getKey() == k) {
           p.setNext(readVar(n).next())
         }
@@ -473,7 +585,7 @@ trait ScalaGenHashMap extends ScalaGenBase with ScalaGenMiscOps {
   import IR._
 
   override def emitNode(sym: Sym[Any], rhs: Def[Any]) = rhs match {
-    case NewHashMap(mK, mV) => emitValDef(sym, "new HashMap[" + mK + "," + mV + "]()")
+    case NewHashMap(mK, mV, n) => emitValDef(sym, "new HashMap[" + mK + "," + mV + "](" + quote(n) + ")")
     case HashMapGetSize(x) => emitValDef(sym, "" + quote(x) + ".size")
     case HashMapGetTable(x) => emitValDef(sym, "" + quote(x) + ".table")
     //case HashMapGetTableIndex(x, index) => emitValDef(sym, "" + quote(x) + ".table(" + quote(index) + ")")
@@ -522,7 +634,7 @@ class TestArrayOps extends FileDiffSuite {
       }
 
       val codegen = new ScalaGenArrayOps with ScalaGenMiscOps
-      with ScalaGenEntry with ScalaCodeGenPkg with ScalaGenHashCodeOps
+      with ScalaGenEntry with ScalaCodeGenPkg with ScalaGenHashCodeOps with ScalaGenOption
       with ScalaGenHashMap { val IR: prog.type = prog }
       codegen.emitSource1(prog.f, "IntHashMapNestedMutability", new PrintWriter(System.out))
     }
@@ -564,14 +676,13 @@ class TestArrayOps extends FileDiffSuite {
       }
 
       val codegen = new ScalaGenArrayOps with ScalaGenMiscOps
-      with ScalaGenEntry with ScalaCodeGenPkg with ScalaGenHashCodeOps
+      with ScalaGenEntry with ScalaCodeGenPkg with ScalaGenHashCodeOps with ScalaGenOption
       with ScalaGenHashMap { val IR: prog.type = prog }
       codegen.emitSource1(prog.f, "IntHashMapGetAndSetSize", new PrintWriter(System.out))
     }
     //assertFileEqualsCheck(prefix+"hash-map-creation")
   }
 
-  //Fails because: val x114 = x113 == null (where x113 is from the update)
   it("testGetAndUpdate") {
     withOutFile(prefix+"hash-map-get-and-update") {
       val prog = new HashMapArrOps with MiscOps with HashMapArrOpsExp
@@ -585,15 +696,13 @@ class TestArrayOps extends FileDiffSuite {
       }
 
       val codegen = new ScalaGenArrayOps with ScalaGenMiscOps
-      with ScalaGenEntry with ScalaCodeGenPkg with ScalaGenHashCodeOps
+      with ScalaGenEntry with ScalaCodeGenPkg with ScalaGenHashCodeOps with ScalaGenOption
       with ScalaGenHashMap { val IR: prog.type = prog }
       codegen.emitSource1(prog.f, "IntHashMapGetAndUpdate", new PrintWriter(System.out))
     }
     //assertFileEqualsCheck(prefix+"hash-map-creation")
   }
 
-
-  //Fails because: val x114 = x113 == null (where x113 is from the update)
   it("testGetAndUpdateOpt") {
     withOutFile(prefix+"hash-map-get-and-update-opt") {
       val prog = new HashMapArrOps with MiscOps with HashMapArrOpsExp
@@ -603,41 +712,44 @@ class TestArrayOps extends FileDiffSuite {
           a.update(unit(1), unit(2))
           a.update(unit(2), unit(3))
 
-          a.update(unit(1), a(unit(1)) + unit(1))
+          val v = (a(unit(1)).AsInstanceOf[Int]) + unit(1)
+          a.update(unit(1), v)
           println(a(unit(1)))
         }
         f(unit(1))
       }
 
       val codegen = new ScalaGenArrayOps with ScalaGenMiscOps
-      with ScalaGenEntry with ScalaCodeGenPkg with ScalaGenHashCodeOps
+      with ScalaGenEntry with ScalaCodeGenPkg with ScalaGenHashCodeOps with ScalaGenOption
       with ScalaGenHashMap { val IR: prog.type = prog }
       codegen.emitSource1(prog.f, "IntHashMapGetAndUpdateOpt", new PrintWriter(System.out))
     }
     //assertFileEqualsCheck(prefix+"hash-map-creation")
   }
 
-  //Fails because: val x114 = x113 == null (where x113 is from the update)
   it("testGetAndUpdateOptVar") {
     withOutFile(prefix+"hash-map-get-and-update-opt-var") {
       val prog = new HashMapArrOps with MiscOps with HashMapArrOpsExp
         with MiscOpsExp with ScalaOpsPkgExp with VariablesNested {
         def f(i : Rep[Int]): Rep[Unit] = {
-          val a = hashmap_new[Int, Int](unit(200))
+          val a = hashmap_new[Int, Int](unit(1))
           val n = var_new(unit(1))
           var_assign(n, unit(2))
           
           a.update(unit(2), readVar(n))
 
-          a.update(n, a(readVar(n)) + unit(1))
+          a.update(unit(3), a(readVar(n)).get() + unit(1))
 
-          println(a(unit(2)))
+          a.foreach( {x => println(x)} )
+          a.clear()
+          //why is there a new table used each time??
+          a.foreach( {x => println(x)} )
         }
         f(unit(1))
       }
 
       val codegen = new ScalaGenArrayOps with ScalaGenMiscOps
-      with ScalaGenEntry with ScalaCodeGenPkg with ScalaGenHashCodeOps
+      with ScalaGenEntry with ScalaCodeGenPkg with ScalaGenHashCodeOps with ScalaGenOption
       with ScalaGenHashMap { val IR: prog.type = prog }
       codegen.emitSource1(prog.f, "IntHashMapGetAndUpdateOptVar", new PrintWriter(System.out))
     }
@@ -661,7 +773,7 @@ class TestArrayOps extends FileDiffSuite {
       }
 
       val codegen = new ScalaGenArrayOps with ScalaGenMiscOps
-      with ScalaGenEntry with ScalaCodeGenPkg with ScalaGenHashCodeOps
+      with ScalaGenEntry with ScalaCodeGenPkg with ScalaGenHashCodeOps with ScalaGenOption
       with ScalaGenHashMap /*with ScalaGenVariablesNested */{ val IR: prog.type = prog }
       codegen.emitSource1(prog.f, "IntHashMapAssignmentProblem1", new PrintWriter(System.out))
     }
@@ -686,7 +798,7 @@ class TestArrayOps extends FileDiffSuite {
       }
 
       val codegen = new ScalaGenArrayOps with ScalaGenMiscOps
-      with ScalaGenEntry with ScalaCodeGenPkg with ScalaGenHashCodeOps
+      with ScalaGenEntry with ScalaCodeGenPkg with ScalaGenHashCodeOps with ScalaGenOption
       with ScalaGenHashMap /*with ScalaGenVariablesNested */ { val IR: prog.type = prog }
       codegen.emitSource1(prog.f, "IntHashMapAssignmentProblem2", new PrintWriter(System.out))
     }
@@ -715,7 +827,7 @@ class TestArrayOps extends FileDiffSuite {
       }
 
       val codegen = new ScalaGenArrayOps with ScalaGenMiscOps
-      with ScalaGenEntry with ScalaCodeGenPkg with ScalaGenHashCodeOps
+      with ScalaGenEntry with ScalaCodeGenPkg with ScalaGenHashCodeOps with ScalaGenOption
       with ScalaGenHashMap /*with ScalaGenVariablesNested */ { val IR: prog.type = prog }
       codegen.emitSource1(prog.f, "IntHashMapAssignmentProblem3", new PrintWriter(System.out))
     }

@@ -12,13 +12,18 @@
 	"buffers":
 	[
 		{
-			"contents": "package scala.virtualization.lms\npackage epfl\npackage test12\n\nimport common._\nimport internal._\nimport java.io.PrintWriter\nimport scala.reflect.SourceContext\n\n  trait VariablesNested extends VariablesExpOpt {\n    override  def var_new[T:Manifest](init: Exp[T])(implicit pos: SourceContext): Var[T] = {\n      //reflectEffect(NewVar(init)).asInstanceOf[Var[T]]\n      Variable(reflectMutable(NewVar(p,init)))\n    }\n\n    override  def var_assign[T:Manifest](lhs: Var[T], rhs: Exp[T])(implicit pos: SourceContext): Exp[Unit] = {\n      reflectWriteMutable(lhs.e)(rhs)(Assign(lhs, rhs))\n      Const()\n    }\n\n    override  def var_plusequals[T:Manifest](lhs: Var[T], rhs: Exp[T])(implicit pos: SourceContext): Exp[Unit] = {\n      reflectWriteMutable(lhs.e)(rhs)(VarPlusEquals(lhs, rhs))\n      Const()\n    }\n\n    override  def var_minusequals[T:Manifest](lhs: Var[T], rhs: Exp[T])(implicit pos: SourceContext): Exp[Unit] = {\n      reflectWriteMutable(lhs.e)(rhs)(VarMinusEquals(lhs, rhs))\n      Const()\n    }\n  \n    override  def var_timesequals[T:Manifest](lhs: Var[T], rhs: Exp[T])(implicit pos: SourceContext): Exp[Unit] = {\n      reflectWriteMutable(lhs.e)(rhs)(VarTimesEquals(lhs, rhs))\n      Const()\n    }\n  \n    override  def var_divideequals[T:Manifest](lhs: Var[T], rhs: Exp[T])(implicit pos: SourceContext): Exp[Unit] = {\n      reflectWriteMutable(lhs.e)(rhs)(VarDivideEquals(lhs, rhs))\n      Const()\n    }\n\n    override def readVar[T:Manifest](v: Var[T])(implicit pos: SourceContext) : Exp[T] = reflectReadMutable(v.e) { ReadVar(v) }\n  }\n\n\ntrait ScalaGenVariablesNested extends ScalaGenVariables {\n  val IR: VariablesExp\n  import IR._\n\n  override def emitNode(sym: Sym[Any], rhs: Def[Any]) = rhs match {\n    case ReadVar(a) => emitValDef(sym, quote(a))\n    case NewVar(init) => {\n      if (sym.tp != manifest[Variable[Nothing]]) {\n        val obj = sym.asInstanceOf[Sym[Variable[Any]]]\n            emitVarDef(obj, quote(init))\n      }\n    }\n    case ReadVar(null) => {} // emitVarDef(sym.asInstanceOf[Sym[Variable[Any]]], \"null\")\n    case Assign(a, b) => {\n        val lhsIsNull = a match {\n            case Def(Reflect(NewVar(y: Exp[_]),_,_)) => \n                if (y.tp == manifest[Nothing]) true\n                else false\n            case y@_ => false\n        }\n        val obj = a.asInstanceOf[Sym[Variable[Any]]]\n        if (lhsIsNull) {\n            emitVarDef(obj, quote(b))\n        }\n        else emitAssignment(sym, quote(a), quote(b))\n    }\n    //case Assign(a, b) => emitAssignment(quote(a), quote(b))\n    case VarPlusEquals(a, b) => stream.println(quote(a) + \" += \" + quote(b))\n    case VarMinusEquals(a, b) => stream.println(quote(a) + \" -= \" + quote(b))\n    case VarTimesEquals(a, b) => stream.println(quote(a) + \" *= \" + quote(b))\n    case VarDivideEquals(a, b) => stream.println(quote(a) + \" /= \" + quote(b))\n    case _ => super.emitNode(sym, rhs)\n  }\n}\n\n\n  class HashMap[K,V] {\n    val DEFAULT_INITIAL_CAPACITY = 16\n    val MAXIMUM_CAPACITY = 1 << 30\n    val DEFAULT_LOAD_FACTOR = 0.75f\n    var table: Array[Entry[K,V]] = new Array[Entry[K,V]] (DEFAULT_INITIAL_CAPACITY)\n    var loadFactor: Float = DEFAULT_LOAD_FACTOR\n    var threshold = (DEFAULT_INITIAL_CAPACITY * DEFAULT_LOAD_FACTOR).toInt\n    var size = 0\n  }\n\n  class Entry[K,V](val key: K, var value: V, var next: Entry[K,V] = null) {\n\n   def hasNext = next != null\n\n   override def equals(obj:Any) = {\n      obj.isInstanceOf[Entry[K,V]] &&\n        obj.asInstanceOf[Entry[K,V]].key == key && key != null &&\n        obj.asInstanceOf[Entry[K,V]].value == value && value != null\n    }\n\n    override def toString(): String = {\n      key + \"=\" + value\n    } \n  }\n\n  trait EntryOps extends Base with Variables {\n\n    object EntryO {\n      def apply[K:Manifest,V:Manifest](key: Rep[K], value: Rep[V])(implicit pos: SourceContext) =\n        entry_new[K,V](key, value)\n    }\n\n    class entryOpsCls[K:Manifest,V:Manifest](x: Rep[Entry[K,V]]) {\n      def hasNext() = entryHasNext(x)\n      def next() = entryNext(x)\n      def setNext(n: Rep[Entry[K,V]]) = entrySetNext(x, n)\n      def getKey() = entryGetKey(x)\n      def getValue() = entryGetValue(x) // Usefull for debugging but consumes all elements\n      def setValue(v: Rep[V]) = entrySetValue(x, v)\n    }\n\n    implicit def EntryToEntryOps[K:Manifest,V:Manifest](x: Entry[K,V]) = new entryOpsCls[K,V](unit(x))\n    implicit def repEntryToEntryOps[K:Manifest,V:Manifest](x: Rep[Entry[K,V]]) = new entryOpsCls[K,V](x)\n    implicit def varEntryToEntryOps[K:Manifest,V:Manifest](x: Var[Entry[K,V]]) = new entryOpsCls[K,V](readVar(x))\n\n    def entry_new[K:Manifest,V:Manifest](key: Rep[K], value: Rep[V]): Rep[Entry[K,V]]\n    def entryHasNext[K:Manifest,V:Manifest](x: Rep[Entry[K,V]]): Rep[Boolean]\n    def entryNext[K:Manifest,V:Manifest](x: Rep[Entry[K,V]]): Rep[Entry[K,V]]\n    def entrySetNext[K:Manifest,V:Manifest](x: Rep[Entry[K,V]], n: Rep[Entry[K,V]]): Rep[Unit]\n    def entryGetKey[K:Manifest,V:Manifest](x: Rep[Entry[K,V]]): Rep[K]\n    def entryGetValue[K:Manifest,V:Manifest](x: Rep[Entry[K,V]]): Rep[V]\n    def entrySetValue[K:Manifest,V:Manifest](x: Rep[Entry[K,V]], v: Rep[V]): Rep[Unit]\n  }\n\n  trait EntryOpsExp extends EntryOps with BaseExp with Effects /*with VariablesExp*/ {\n    case class EntryCreate[K:Manifest,V:Manifest](key: Rep[K], value: Rep[V]) extends Def[Entry[K,V]]\n    case class EntryHasNext[K:Manifest,V:Manifest](x: Rep[Entry[K,V]]) extends Def[Boolean]\n    case class EntryNext[K:Manifest,V:Manifest](x: Rep[Entry[K,V]]) extends Def[Entry[K,V]]\n    case class EntrySetNext[K:Manifest,V:Manifest](x: Rep[Entry[K,V]], n: Rep[Entry[K,V]]) extends Def[Unit]\n    case class EntryGetKey[K:Manifest,V:Manifest](x: Rep[Entry[K,V]]) extends Def[K]\n    case class EntryGetValue[K:Manifest,V:Manifest](x: Rep[Entry[K,V]]) extends Def[V]\n    case class EntrySetValue[K:Manifest,V:Manifest](x: Rep[Entry[K,V]], v: Rep[V]) extends Def[Unit]\n\n    def entry_new[K:Manifest,V:Manifest](key: Rep[K], value: Rep[V]) = reflectMutable(EntryCreate(key,value))\n    def entryHasNext[K:Manifest,V:Manifest](x: Rep[Entry[K,V]]) = EntryHasNext(x)\n    def entryNext[K:Manifest,V:Manifest](x: Rep[Entry[K,V]]) = EntryNext(x)\n    def entrySetNext[K:Manifest,V:Manifest](x: Rep[Entry[K,V]], n: Rep[Entry[K,V]]) = reflectWrite(x)(EntrySetNext(x,n))\n    def entryGetKey[K:Manifest,V:Manifest](x: Rep[Entry[K,V]]) = EntryGetKey(x)\n    def entryGetValue[K:Manifest,V:Manifest](x: Rep[Entry[K,V]]) = EntryGetValue(x)\n    def entrySetValue[K:Manifest,V:Manifest](x: Rep[Entry[K,V]], v: Rep[V]) = reflectWrite(x)(EntrySetValue(x,v))\n  }\n\n  trait ScalaGenEntry extends ScalaGenBase {\n    val IR: EntryOpsExp\n    import IR._\n   \n    override def emitNode(sym: Sym[Any], rhs: Def[Any]) = rhs match {\n      case EntryCreate(k, v) =>\n        emitValDef(sym, \"new Entry(\" + quote(k) + \", \" + quote(v) + \")\")\n      case EntryHasNext(x) =>\n        emitValDef(sym, quote(x) + \".hasNext\")\n      case EntryNext(x) =>\n        emitValDef(sym, quote(x) + \".next\")\n      case EntrySetNext(x, n) =>\n        emitValDef(sym, quote(x) + \".next = \" + quote(n))\n      case EntryGetKey(x) =>\n        emitValDef(sym, quote(x) + \".key\")\n      case EntryGetValue(x) =>\n        emitValDef(sym, quote(x) + \".value\")\n      case EntrySetValue(x, v) =>\n        emitValDef(sym, quote(x) + \".value = \" + quote(v))\n\n      case _ => super.emitNode(sym, rhs)\n    }\n  }\n\n  trait HashMapArrOps extends Base with Variables with TupleOps {\n\n    object HashMap {\n      def apply[K:Manifest,V:Manifest](n: Rep[Int], specializedKey: String = \"\", specializedValue:String = \"\")(implicit pos: SourceContext) =\n        hashmap_new[K,V](n, specializedKey, specializedValue)\n    }\n\n    //type Entry[K,V] = List[(K,V)]\n\n    implicit def HashMapToRepHashMapOps[K:Manifest,V:Manifest](m: HashMap[K,V]) = new hashmapOpsCls[K,V](unit(m))\n    implicit def repHashMapToHashMapOps[K:Manifest,V:Manifest](m: Rep[HashMap[K,V]]) = new hashmapOpsCls[K,V](m)\n    implicit def varrepHashMapToHashMapOps[K:Manifest,V:Manifest](m: Var[HashMap[K,V]]) = new hashmapOpsCls[K,V](readVar(m))\n\n    class hashmapOpsCls[K:Manifest,V:Manifest](m: Rep[HashMap[K,V]]) {\n      def apply(k: Rep[K])(implicit pos: SourceContext) = hashmap_apply(m, k)\n      def update(k: Rep[K], v: Rep[V])(implicit pos: SourceContext) = hashmap_update(m,k,v)\n      def contains(k: Rep[K])(implicit pos: SourceContext) = hashmap_contains(m, k)\n      def size(implicit pos: SourceContext) = hashmap_size(m)\n      //added for testing nested mutability with simple data types\n      def setSize(i: Rep[Int])(implicit pos: SourceContext) = hashmap_setSize(m, i)\n      def foreach(block: Rep[Entry[K,V]] => Rep[Unit])(implicit pos: SourceContext) = hashmap_foreach(m, block)\n      def clear()(implicit pos: SourceContext) = hashmap_clear(m)\n      def -=(v: Rep[K])(implicit pos:SourceContext) = hashmap_-=(m,v)\n\n      //added for testing nested mutability with complex datatypes\n      def table(implicit pos: SourceContext) = hashmap_table(m)\n      def setTable(newTable: Rep[Array[Entry[K, V]]])(implicit pos: SourceContext) = hashmap_setTable(m, newTable)\n    }\n\n    def hashmap_new[K:Manifest,V:Manifest](n: Rep[Int], specializedKey: String = \"\", specializedValue: String = \"\")(implicit pos: SourceContext) : Rep[HashMap[K,V]]\n    def hashmap_apply[K:Manifest,V:Manifest](m: Rep[HashMap[K,V]], k: Rep[K])(implicit pos: SourceContext): Rep[V]\n    def hashmap_update[K:Manifest,V:Manifest](m: Rep[HashMap[K,V]], k: Rep[K], v: Rep[V])(implicit pos: SourceContext): Rep[Unit]\n    def hashmap_contains[K:Manifest,V:Manifest](m: Rep[HashMap[K,V]], i: Rep[K])(implicit pos: SourceContext): Rep[Boolean]\n    def hashmap_size[K:Manifest,V:Manifest](m: Rep[HashMap[K,V]])(implicit pos: SourceContext): Rep[Int]\n    //added for testing\n    def hashmap_setSize[K:Manifest,V:Manifest](m: Rep[HashMap[K,V]], i: Rep[Int])(implicit pos: SourceContext): Rep[Unit]\n    //def hashmap_map[K:Manifest,V:Manifest, A:Manifest, B:Manifest](m: Rep[HashMap[K,V]], f: Rep[Entry[K,V]]=>Rep[Entry[A,B]]): Rep[Array[Entry[A,B]]]\n    def hashmap_foreach[K:Manifest,V:Manifest](x: Rep[HashMap[K,V]], block: Rep[Entry[K,V]] => Rep[Unit])(implicit pos: SourceContext): Rep[Unit]\n    def hashmap_clear[K:Manifest,V:Manifest](m: Rep[HashMap[K,V]])(implicit pos: SourceContext): Rep[Unit]\n    def hashmap_-=[K: Manifest, V: Manifest](m: Rep[HashMap[K,V]], v: Rep[K])(implicit pos: SourceContext): Rep[Unit]\n\n    //added for testing\n    def hashmap_table[K:Manifest,V:Manifest](m: Rep[HashMap[K,V]])(implicit pos: SourceContext): Rep[Array[Entry[K, V]]]\n    def hashmap_setTable[K:Manifest,V:Manifest](m: Rep[HashMap[K,V]], newTable: Rep[Array[Entry[K, V]]])(implicit pos: SourceContext): Rep[Unit]\n\n  }\n\n  trait HashMapArrOpsExp extends HashMapArrOps with ArrayOpsExp with EffectExp with TupleOpsExp with EntryOpsExp\n  with HashCodeOpsExp with BooleanOpsExp with PrimitiveOpsExp with ListOpsExp with FunctionsExp with VariablesExp\n  with NumericOpsExp with EqualExp with WhileExp with OrderingOpsExp with IfThenElseExp\n   with SeqOpsExp with MathOpsExp with CastingOpsExp with SetOpsExp with ObjectOpsExp\n   with Blocks with MiscOpsExp\n   with VariablesNested\n  {\n  case class NewHashMap[K, V](mK: Manifest[K], mV: Manifest[V]) extends Def[HashMap[K, V]]\n  case class HashMapGetSize[K, V](x: Exp[HashMap[K, V]]) extends Def[Int]\n  case class HashMapGetTable[K, V](x: Exp[HashMap[K, V]]) extends Def[Array[Entry[K, V]]]\n  case class HashMapGetThreshold[K, V](x: Exp[HashMap[K, V]]) extends Def[Int]\n  case class HashMapGetLoadFactor[K, V](x: Exp[HashMap[K, V]]) extends Def[Float]\n  case class HashMapMAXIMUM_CAPACITY[K, V](x: Exp[HashMap[K, V]]) extends Def[Int]\n  case class HashMapSetSize[K, V](x: Exp[HashMap[K, V]], newSz: Exp[Int]) extends Def[Unit]\n  case class HashMapSetTable[K, V](x: Exp[HashMap[K, V]], newTable: Exp[Array[Entry[K, V]]]) extends Def[Unit]\n  case class HashMapSetThreshold[K: Manifest, V](x: Exp[HashMap[K, V]], newThreshold: Exp[Int]) extends Def[Unit]\n\n    def hashmap_table[K:Manifest,V:Manifest](m: Rep[HashMap[K,V]])(implicit pos: SourceContext): Rep[Array[Entry[K, V]]] = {\n      reflectReadMutable (m) ( HashMapGetTable(m) )\n    }\n    def hashmap_setTable[K:Manifest,V:Manifest](m: Rep[HashMap[K,V]], newTable: Rep[Array[Entry[K, V]]])(implicit pos: SourceContext): Rep[Unit] = {\n      //reflectMutableWrite multiple cases:\n      //clean and add -> replace references contained (equals sym)\n      //add -> references contained (contains sym)\n      //clone -> create new representative (clone sym)\n      //extract??? => Read and Write at the same time\n      reflectWriteMutable( reflectReadMutable(m) (HashMapGetTable(m)) ) (newTable) (HashMapSetTable(m, newTable))\n    }\n\n\n  override def containSyms(e: Any): List[Sym[Any]] = e match {\n    case HashMapSetTable(m,t) => syms(t)\n    case HashMapGetTable(m) => Nil\n    case _ => super.containSyms(e)\n  }\n\n  override def extractSyms(e: Any): List[Sym[Any]] = e match {\n    case HashMapSetTable(m,t) => Nil\n    case HashMapGetTable(m) => syms(m)\n    case _ => super.extractSyms(e)\n  }\n    def hashmap_new[K:Manifest,V:Manifest](n: Exp[Int], specializedKey: String = \"\", specializedValue: String = \"\")(implicit pos: SourceContext) : Rep[HashMap[K,V]] =\n      //NewHashMap(manifest[K], manifest[V])\n      reflectMutable(NewHashMap(manifest[K], manifest[V]))\n      //array_obj_new[Entry[K,V]](n)\n\n    def hashmap_apply[K:Manifest,V:Manifest](x: Rep[HashMap[K,V]], k: Rep[K])(implicit pos: SourceContext): Rep[V] = {\n      //tuple2_get2(ArrayApply(m, k))\n      val m: Rep[Array[Entry[K,V]]] = reflectReadMutable (x) ( HashMapGetTable(x) )\n\n      val h1 = int_tolong(__hashCode(k))\n      val h2 = (h1 >>> unit(20)) ^ (h1 >>> unit(12)) ^ h1\n      val h3 = h2 ^ (h2 >>> unit(7)) ^ (h2 >>> unit(4))\n      val idx = int_binaryand(long_toint(h3), m.length - unit(1))\n      val n = var_new(\n        reflectReadMutable (m) ( ArrayApply(m, idx) )\n        //array_apply(m, idx)\n      )\n\n      if(readVar(n) == unit(null)) {\n        unit(null).asInstanceOf[Rep[V]]\n      } else {\n        while(boolean_and(n.hasNext(), notequals(n.getKey(), k) )) {\n         var_assign(n, n.next())\n        }\n\n        if(n.getKey() == k) {\n          n.getValue()\n        } else {\n          unit(null).asInstanceOf[Rep[V]]\n        }\n      }\n    }\n\n    def hashmap_update[K:Manifest,V:Manifest](x: Rep[HashMap[K,V]], k: Rep[K], v: Rep[V])(implicit pos: SourceContext): Rep[Unit] = {\n      val m: Rep[Array[Entry[K,V]]] = reflectReadMutable (x) { HashMapGetTable(x) }\n\n      val h1 = int_tolong(__hashCode(k))\n      val h2 = (h1 >>> unit(20)) ^ (h1 >>> unit(12)) ^ h1\n      val h3 = h2 ^ (h2 >>> unit(7)) ^ (h2 >>> unit(4))\n      val idx = int_binaryand(long_toint(h3), m.length - unit(1))\n      val el = \n        reflectReadMutable (m) ( ArrayApply(m, idx) )\n        //array_apply(m, idx)\n      val n = var_new(el)\n      \n      val size = hashmap_size(x) //map.size   //reflectNested\n\n      //val threshold = HashMapGetThreshold(x)\n      //val max_capacity = HashMapMAXIMUM_CAPACITY(x)\n\n      if(readVar(n) == unit(null)) {\n\n        //reflectWrite(el) ( ArrayUpdate(m, idx, entry_new(k,v)) )\n        reflectWrite(reflectReadMutable (m) ( ArrayApply(m, idx) ))( ArrayUpdate(m, idx, entry_new(k,v)) )\n        //array_update(m, idx, entry_new(k,v))\n\n        // reflectWrite(m) ==> backTracking      --> update calculate dependencies\n        //--> possible update reflectWrite(ArrayApply(x,i))\n \n        hashmap_setSize(x, numeric_plus(size, unit(1)))  //reflectWrite(HashMapGetSize(x))  --> overloaded reflectWrite,\n      } else {\n        while(n.hasNext() && n.getKey() != k) {\n          var_assign(n, n.next())\n        }\n\n        if(n.getKey() == k) {\n          n.setValue(v)\n        } else {\n          n.setNext(entry_new(k,v))\n          hashmap_setSize(x, numeric_plus(size, unit(1)))\n        }\n      }\n\n      //var_assign(size, size + 1)\n  /*    if (ordering_gteq(size, threshold)) {\n        val oldCapacity = m.length\n        if(ordering_equiv(oldCapacity, max_capacity)) {\n          HashMapSetThreshold(x, Int.MaxValue)\n          //var_assign(threshold, unit(Int.MaxValue))\n        } else {\n          val newCapacity = unit(2) * oldCapacity\n          val newTable = array_obj_new[Entry[K, V]](newCapacity)\n\n          //transfer table\n          val j: Var[Int] = var_new(unit(0))\n\n          while(j < m.length) {\n            val e = var_new(m(j))\n            if(e != unit(null)) {\n              array_update(m, j, unit(null))\n\n              while(e.hasNext()) {\n                val ht1 = int_tolong(__hashCode(e.getKey()))\n                val ht2 = (ht1 >>> unit(20)) ^ (ht1 >>> unit(12)) ^ ht1\n                val ht3 = ht2 ^ (ht2 >>> unit(7)) ^ (ht2 >>> unit(4))\n                val z = int_binaryand(long_toint(h3), newCapacity - unit(1))\n\n                val next = e.next\n                e.setNext(newTable(z))\n                newTable.update(z, e)\n                var_assign(e, next)\n              }\n            }\n            var_assign(j, j + unit(1))\n          }\n\n          reflectWrite(x)(HashMapSetTable(x, newTable))\n          val loadFactor: Rep[Float] = HashMapGetLoadFactor(x)\n          HashMapSetThreshold(x, numeric_times(loadFactor, newCapacity.asInstanceOf[Rep[Float]]).asInstanceOf[Rep[Int]])\n          //var_assign(threshold, newCapacity*HashMapGetLoadFactor(x))\n        }\n      }*/\n    }\n\n    def hashmap_contains[K:Manifest,V:Manifest](x: Rep[HashMap[K,V]], k: Rep[K])(implicit pos: SourceContext): Rep[Boolean] = { \n      val m: Rep[Array[Entry[K,V]]] = HashMapGetTable(x)\n      val h1 = int_tolong(__hashCode(k))\n      val h2 = (h1 >>> unit(20)) ^ (h1 >>> unit(12)) ^ h1\n      val h3 = h2 ^ (h2 >>> unit(7)) ^ (h2 >>> unit(4))\n      val n = var_new(array_apply(m, int_binaryand(long_toint(h3), m.length - unit(1))))\n\n      if(readVar(n) == unit(null)) {\n        unit(false)\n      } else {\n        while(n.hasNext() && n.getKey() != k) {\n          var_assign(n, n.next())\n        }\n\n        n.getKey() == k\n      }\n    }\n\n    def hashmap_size[K:Manifest,V:Manifest](m: Rep[HashMap[K,V]])(implicit pos: SourceContext): Rep[Int] = {\n      //reflectReadMutable (m) ( HashMapGetSize(m) )\n      //reflectReadMutable (m) ( HashMapGetSize(m) )\n      HashMapGetSize(m)\n    }\n    def hashmap_setSize[K:Manifest,V:Manifest](m: Rep[HashMap[K,V]], i: Rep[Int])(implicit pos: SourceContext): Rep[Unit] = {\n      reflectWrite(m)(HashMapSetSize(m, i))\n      //reflectWrite( reflectReadMutable(m) (HashMapGetSize(m)) ) (HashMapSetSize(m, i))\n      //reflectWrite(HashMapGetSize(m)) (HashMapSetSize(m, i))\n    }\n\n    /*def hashmap_map[K:Manifest,V:Manifest, A:Manifest, B:Manifest](m: Rep[HashMap[K,V]], f: Rep[Entry[K,V]]=>Rep[Entry[A,B]]): Rep[Array[Entry[A,B]]] = {\n      var i = unit(0)\n      var n: Rep[Entry[K,V]] = unit(null)\n      val nmap = hashmap_new[A,B](m.length)\n\n      hashmap_foreach(m, {e => val n = f(e); hashmap_update(nmap, e.key, e.value)})\n      nmap\n    }*/\n\n    def hashmap_foreach[K:Manifest,V:Manifest](x: Rep[HashMap[K,V]], f: Rep[Entry[K,V]] => Rep[Unit])(implicit pos: SourceContext): Rep[Unit] = {\n      val m: Rep[Array[Entry[K,V]]] = HashMapGetTable(x)\n      val i = var_new(unit(0))\n      val n: Var[Entry[K,V]] = var_new(unit(null))\n\n      while(i < m.length) {\n        i = i + unit(1)\n        if(array_apply(m,i) != unit(null)) {\n          var_assign(n, array_apply(m, i))\n          f(readVar(n))\n          while(n.hasNext()) {\n            var_assign(n, n.next())\n            f(readVar(n))\n          }\n        }\n      }\n    }\n\n    def hashmap_clear[K:Manifest,V:Manifest](x: Rep[HashMap[K,V]])(implicit pos: SourceContext): Rep[Unit] = {\n      val m: Rep[Array[Entry[K,V]]] = HashMapGetTable(x)\n      val i = var_new(unit(0))\n\n      while(i < m.length) {\n        var_assign(i, readVar(i) + unit(1))\n        array_update(m, i, unit(null))\n      }\n    }\n\n    def hashmap_-=[K: Manifest, V: Manifest](x: Rep[HashMap[K,V]], k: Rep[K])(implicit pos: SourceContext): Rep[Unit] = {\n      val m: Rep[Array[Entry[K,V]]] = HashMapGetTable(x)\n      val h1 = int_tolong(__hashCode(k))\n      val h2 = (h1 >>> unit(20)) ^ (h1 >>> unit(12)) ^ h1\n      val h3 = h2 ^ (h2 >>> unit(7)) ^ (h2 >>> unit(4))\n      val idx = int_binaryand(long_toint(h3), m.length - unit(1))\n      val p: Var[Entry[K,V]] = var_new(unit(null))\n      val n = var_new(array_apply(m, idx))\n\n      if(notequals(readVar(n), unit(null))) {\n        while(readVar(n).hasNext() && readVar(n).getKey() != k) {\n          var_assign(p, readVar(n))\n          var_assign(n, readVar(n).next())\n        }\n\n        if(readVar(p) == unit(null))\n          array_update(m, idx, unit(null))\n        else if(readVar(n).getKey() == k) {\n          p.setNext(readVar(n).next())\n        }\n      }\n    }\n\n    \n  }\n\ntrait ScalaGenHashMap extends ScalaGenBase with ScalaGenMiscOps {\n  val IR: HashMapArrOpsExp\n  import IR._\n\n  override def emitNode(sym: Sym[Any], rhs: Def[Any]) = rhs match {\n    case NewHashMap(mK, mV) => emitValDef(sym, \"new HashMap[\" + mK + \",\" + mV + \"]()\")\n    case HashMapGetSize(x) => emitValDef(sym, \"\" + quote(x) + \".size\")\n    case HashMapGetTable(x) => emitValDef(sym, \"\" + quote(x) + \".table\")\n    //case HashMapGetTableIndex(x, index) => emitValDef(sym, \"\" + quote(x) + \".table(\" + quote(index) + \")\")\n    case HashMapGetThreshold(x) => emitValDef(sym, \"\" + quote(x) + \".threshold\")\n    case HashMapGetLoadFactor(x) => emitValDef(sym, \"\" + quote(x) + \".loadFactor\")\n    case HashMapMAXIMUM_CAPACITY(x) => emitValDef(sym, \"\" + quote(x) + \".MAXIMUM_CAPACITY\")\n    case HashMapSetSize(x, newSz) => emitAssignment(sym, \"\" + quote(x) + \".size\", quote(newSz))\n    case HashMapSetTable(x, newTable) => emitAssignment(sym, \"\" + quote(x) + \".table\", quote(newTable))\n    //case HashMapSetTableIndex(x, tbl, index, value) => emitAssignment(\"\" + quote(x) + \".table(\" + quote(index) + \")\", quote(value))\n    case HashMapSetThreshold(x, newThreshold) => emitAssignment(sym, \"\" + quote(x) + \".threshold\", quote(newThreshold))\n    case _ => super.emitNode(sym, rhs)\n  }\n}\n\n\nclass TestArrayOps extends FileDiffSuite {\n\n  val prefix = \"test-out/epfl/test12-\"\n\n\n  it(\"testNestedMutability\") {\n    withOutFile(prefix+\"hash-map-nested-mutability\") {\n      val prog = new HashMapArrOps with MiscOps with HashMapArrOpsExp\n        with MiscOpsExp with ScalaOpsPkgExp {\n        def f(i : Rep[Int]): Rep[Unit] = {\n          val m = hashmap_new[Int, Int](unit(200))\n          val t1 = NewArray[Entry[Int,Int]](unit(10))//Array(unit(1), unit(2), unit(3))\n          //val t2 = m.table\n\n          //val rN1 = reflectReadMutable (m.table) ( ArrayApply(m.table, unit(0)) )\n          //reflectWrite(rN1)( ArrayUpdate(t1, unit(0), entry_new(unit(0),unit(1))) )\n\n          //println(reflectReadMutable (m.table) ( ArrayApply(m.table, unit(0)) ))\n\n          m.setTable(t1)\n          println(reflectReadMutable (m.table) ( ArrayApply(m.table, unit(0)) ))\n\n          //TODO: find out why DCE doesn't work here --> should have no side effects\n          val rN2 = reflectReadMutable (t1) ( ArrayApply(t1, unit(0)) )\n          val entry = entry_new(unit(0),unit(1))\n          reflectWriteMutable(rN2)(entry)( ArrayUpdate(t1, unit(0), entry) )\n\n          println(reflectReadMutable (m.table) ( ArrayApply(m.table, unit(0)) ))\n        }\n        f(unit(1))\n      }\n\n      val codegen = new ScalaGenArrayOps with ScalaGenMiscOps\n      with ScalaGenEntry with ScalaCodeGenPkg with ScalaGenHashCodeOps\n      with ScalaGenHashMap { val IR: prog.type = prog }\n      codegen.emitSource1(prog.f, \"IntHashMapNestedMutability\", new PrintWriter(System.out))\n    }\n    //assertFileEqualsCheck(prefix+\"hash-map-creation\")\n  }\n\n /* it(\"testIntArrayCreation\") {\n    withOutFile(prefix+\"array-seq-creation\") {\n      val prog = new ArrayOps with MiscOps with ArrayOpsExp with MiscOpsExp{\n        def f(i : Rep[Int]): Rep[Unit] = {\n          val a = Array(unit(1), unit(2), unit(3))\n          println(a(unit(0)))\n        }\n\n        def g(i : Rep[Int]): Rep[Unit] = {\n          val a = Array(unit('a'), unit('b'), unit('c'))\n          println(a(unit(0)))\n        }\n      }\n\n      val codegen = new ScalaGenArrayOps with ScalaGenMiscOps{ val IR: prog.type = prog }\n      codegen.emitSource1(prog.f, \"IntArrayCreation\", new PrintWriter(System.out))\n      codegen.emitSource1(prog.g, \"CharArrayCreation\", new PrintWriter(System.out))\n    }\n    assertFileEqualsCheck(prefix+\"array-seq-creation\")\n  }*/\n\n    it(\"testGetAndSetSize\") {\n    withOutFile(prefix+\"hash-map-get-and-set-size\") {\n      val prog = new HashMapArrOps with MiscOps with HashMapArrOpsExp\n        with MiscOpsExp with ScalaOpsPkgExp {\n        def f(i : Rep[Int]): Rep[Unit] = {\n          val a = hashmap_new[Int, Int](unit(200))\n          println(a.size)\n          a.setSize(unit(3))\n          println(a.size)\n        }\n        f(unit(1))\n      }\n\n      val codegen = new ScalaGenArrayOps with ScalaGenMiscOps\n      with ScalaGenEntry with ScalaCodeGenPkg with ScalaGenHashCodeOps\n      with ScalaGenHashMap { val IR: prog.type = prog }\n      codegen.emitSource1(prog.f, \"IntHashMapGetAndSetSize\", new PrintWriter(System.out))\n    }\n    //assertFileEqualsCheck(prefix+\"hash-map-creation\")\n  }\n\n  //Fails because: val x114 = x113 == null (where x113 is from the update)\n  it(\"testGetAndUpdate\") {\n    withOutFile(prefix+\"hash-map-get-and-update\") {\n      val prog = new HashMapArrOps with MiscOps with HashMapArrOpsExp\n        with MiscOpsExp with ScalaOpsPkgExp {\n        def f(i : Rep[Int]): Rep[Unit] = {\n          val a = hashmap_new[Int, Int](unit(200))\n          a.update(unit(1), unit(2))\n          println(a(unit(1)))\n        }\n        f(unit(1))\n      }\n\n      val codegen = new ScalaGenArrayOps with ScalaGenMiscOps\n      with ScalaGenEntry with ScalaCodeGenPkg with ScalaGenHashCodeOps\n      with ScalaGenHashMap { val IR: prog.type = prog }\n      codegen.emitSource1(prog.f, \"IntHashMapGetAndUpdate\", new PrintWriter(System.out))\n    }\n    //assertFileEqualsCheck(prefix+\"hash-map-creation\")\n  }\n\n\n  //Fails because: val x114 = x113 == null (where x113 is from the update)\n  it(\"testGetAndUpdateOpt\") {\n    withOutFile(prefix+\"hash-map-get-and-update-opt\") {\n      val prog = new HashMapArrOps with MiscOps with HashMapArrOpsExp\n        with MiscOpsExp with ScalaOpsPkgExp {\n        def f(i : Rep[Int]): Rep[Unit] = {\n          val a = hashmap_new[Int, Int](unit(200))\n          a.update(unit(1), unit(2))\n          a.update(unit(2), unit(3))\n\n          a.update(unit(1), a(unit(1)) + unit(1))\n          println(a(unit(1)))\n        }\n        f(unit(1))\n      }\n\n      val codegen = new ScalaGenArrayOps with ScalaGenMiscOps\n      with ScalaGenEntry with ScalaCodeGenPkg with ScalaGenHashCodeOps\n      with ScalaGenHashMap { val IR: prog.type = prog }\n      codegen.emitSource1(prog.f, \"IntHashMapGetAndUpdateOpt\", new PrintWriter(System.out))\n    }\n    //assertFileEqualsCheck(prefix+\"hash-map-creation\")\n  }\n\n  //Fails because: val x114 = x113 == null (where x113 is from the update)\n  it(\"testGetAndUpdateOptVar\") {\n    withOutFile(prefix+\"hash-map-get-and-update-opt-var\") {\n      val prog = new HashMapArrOps with MiscOps with HashMapArrOpsExp\n        with MiscOpsExp with ScalaOpsPkgExp with VariablesNested {\n        def f(i : Rep[Int]): Rep[Unit] = {\n          val a = hashmap_new[Int, Int](unit(200))\n          val n = var_new(unit(1))\n          var_assign(n, unit(2))\n          \n          a.update(unit(2), readVar(n))\n\n          a.update(n, a(readVar(n)) + unit(1))\n\n          println(a(unit(2)))\n        }\n        f(unit(1))\n      }\n\n      val codegen = new ScalaGenArrayOps with ScalaGenMiscOps\n      with ScalaGenEntry with ScalaCodeGenPkg with ScalaGenHashCodeOps\n      with ScalaGenHashMap { val IR: prog.type = prog }\n      codegen.emitSource1(prog.f, \"IntHashMapGetAndUpdateOptVar\", new PrintWriter(System.out))\n    }\n    //assertFileEqualsCheck(prefix+\"hash-map-creation\")\n  }\n\n  it(\"testAssignmentProblem1\") {\n    withOutFile(prefix+\"hash-map-assignment-problem1\") {\n      val prog = new HashMapArrOps with MiscOps with HashMapArrOpsExp\n        with MiscOpsExp with ScalaOpsPkgExp\n        with VariablesNested {\n        def f(i : Rep[Int]): Rep[Unit] = {\n          val a = hashmap_new[Int, Int](unit(200))\n          a.update(unit(1), unit(2))\n\n          val n = var_new(a)\n          n.update(unit(1), unit(3))\n          println(n(unit(1)))\n        }\n        f(unit(1))\n      }\n\n      val codegen = new ScalaGenArrayOps with ScalaGenMiscOps\n      with ScalaGenEntry with ScalaCodeGenPkg with ScalaGenHashCodeOps\n      with ScalaGenHashMap /*with ScalaGenVariablesNested */{ val IR: prog.type = prog }\n      codegen.emitSource1(prog.f, \"IntHashMapAssignmentProblem1\", new PrintWriter(System.out))\n    }\n    //assertFileEqualsCheck(prefix+\"hash-map-creation\")\n  }\n\n  it(\"testAssignmentProblem2\") {\n    withOutFile(prefix+\"hash-map-assignment-problem2\") {\n      val prog = new HashMapArrOps with MiscOps with HashMapArrOpsExp\n        with MiscOpsExp with ScalaOpsPkgExp\n        with VariablesNested {\n        def f(i : Rep[Int]): Rep[Unit] = {\n          val a = hashmap_new[Int, Int](unit(200))\n          a.update(unit(1), unit(2))\n\n          val n = var_new(a)\n          n.update(unit(1), unit(3))\n\n          println(a(unit(1)))\n        }\n        f(unit(1))\n      }\n\n      val codegen = new ScalaGenArrayOps with ScalaGenMiscOps\n      with ScalaGenEntry with ScalaCodeGenPkg with ScalaGenHashCodeOps\n      with ScalaGenHashMap /*with ScalaGenVariablesNested */ { val IR: prog.type = prog }\n      codegen.emitSource1(prog.f, \"IntHashMapAssignmentProblem2\", new PrintWriter(System.out))\n    }\n    //assertFileEqualsCheck(prefix+\"hash-map-creation\")\n  }\n\n  it(\"testAssignmentProblem3\") {\n    withOutFile(prefix+\"hash-map-assignment-problem3\") {\n      val prog = new HashMapArrOps with MiscOps with HashMapArrOpsExp\n        with MiscOpsExp with ScalaOpsPkgExpOpt \n        with VariablesNested {\n        def f(i : Rep[Int]): Rep[Unit] = {\n          val a = hashmap_new[Int, Int](unit(200))\n\n          println(a.size)\n\n          val n = var_new(a)\n          n.setSize(unit(2))\n\n          println(a.size)\n        }\n        f(unit(1))\n      }\n\n      val codegen = new ScalaGenArrayOps with ScalaGenMiscOps\n      with ScalaGenEntry with ScalaCodeGenPkg with ScalaGenHashCodeOps\n      with ScalaGenHashMap /*with ScalaGenVariablesNested */ { val IR: prog.type = prog }\n      codegen.emitSource1(prog.f, \"IntHashMapAssignmentProblem3\", new PrintWriter(System.out))\n    }\n    //assertFileEqualsCheck(prefix+\"hash-map-creation\")\n  }\n\n  /*it(\"testNewArray\") {\n    withOutFile(prefix+\"hash-map-get-and-update\") {\n      val prog = new HashMapArrOps with MiscOps with HashMapArrOpsExp\n        with MiscOpsExp with ScalaOpsPkgExp {\n        def f(i : Rep[Int]): Rep[Unit] = {\n          val a = hashmap_new[Int, Int](unit(200))\n          a.update(unit(1), unit(2))\n          println(a(unit(1)))\n        }\n        f(unit(1))\n      }\n\n      val codegen = new ScalaGenArrayOps with ScalaGenMiscOps\n      with ScalaGenEntry with ScalaCodeGenPkg with ScalaGenHashCodeOps\n      with ScalaGenHashMap { val IR: prog.type = prog }\n      codegen.emitSource1(prog.f, \"IntHashMapGetAndUpdate\", new PrintWriter(System.out))\n    }\n    //assertFileEqualsCheck(prefix+\"hash-map-creation\")\n  }\n\n  it(\"testUpdate\") {\n    withOutFile(prefix+\"hash-map-update\") {\n      val prog = new HashMapArrOps with MiscOps with HashMapArrOpsExp\n        with MiscOpsExp with ScalaOpsPkgExp {\n        def f(i : Rep[Int]): Rep[Unit] = {\n          val a = hashmap_new[Int, Array[Int]](unit(200))\n          val c = array_obj_new[Int](unit(5))\n          c.update(unit(0), unit(1))\n          c.update(unit(1), unit(2))\n          a.update(unit(1), c)\n          //mutable can not be added to HashMap\n          val b = a(unit(1)) //variables are not removed\n          b.update(unit(0), unit(10))\n          println(array_apply(a(unit(1)), unit(0)))\n\n        }\n        f(unit(1))\n      }\n\n      val codegen = new ScalaGenArrayOps with ScalaGenMiscOps\n      with ScalaGenEntry with ScalaCodeGenPkg with ScalaGenHashCodeOps\n      with ScalaGenHashMap { val IR: prog.type = prog }\n      codegen.emitSource1(prog.f, \"IntHashMapUpdate\", new PrintWriter(System.out))\n    }\n    //assertFileEqualsCheck(prefix+\"hash-map-creation\")\n  }\n\n  it(\"testContains\") {\n    withOutFile(prefix+\"hash-map-contains\") {\n      val prog = new HashMapArrOps with MiscOps with HashMapArrOpsExp\n        with MiscOpsExp with ScalaOpsPkgExp {\n        def f(i : Rep[Int]): Rep[Unit] = {\n          val a = hashmap_new[Int, Int](unit(200))\n          a.update(unit(1), unit(2))\n          println(a.contains(i))\n          println(a.contains(unit(0)))\n        }\n        f(unit(1))\n      }\n\n      val codegen = new ScalaGenArrayOps with ScalaGenMiscOps\n      with ScalaGenEntry with ScalaCodeGenPkg with ScalaGenHashCodeOps\n      with ScalaGenHashMap { val IR: prog.type = prog }\n      codegen.emitSource1(prog.f, \"IntHashMapContains\", new PrintWriter(System.out))\n    }\n  }\n\n  it(\"testSize\") {\n    withOutFile(prefix+\"hash-map-size\") {\n      val prog = new HashMapArrOps with MiscOps with HashMapArrOpsExp\n        with MiscOpsExp with ScalaOpsPkgExp {\n        def f(i : Rep[Int]): Rep[Unit] = {\n          val a = hashmap_new[Int, Int](unit(200))\n          a.update(unit(1), unit(2))\n          a.update(unit(1), unit(2))\n          a.update(unit(2), unit(3))\n          println(a.size)\n        }\n        f(unit(1))\n      }\n\n      val codegen = new ScalaGenArrayOps with ScalaGenMiscOps\n      with ScalaGenEntry with ScalaCodeGenPkg with ScalaGenHashCodeOps\n      with ScalaGenHashMap { val IR: prog.type = prog }\n      codegen.emitSource1(prog.f, \"IntHashMapSize\", new PrintWriter(System.out))\n    }\n  }\n\n  it(\"testForEach\") {\n    withOutFile(prefix+\"hash-map-for-each\") {\n      val prog = new HashMapArrOps with MiscOps with HashMapArrOpsExp\n        with MiscOpsExp with ScalaOpsPkgExp {\n        def f(i : Rep[Int]): Rep[Unit] = {\n          val a = hashmap_new[Int, Int](unit(200))\n          a.update(unit(1), unit(2))\n          a.update(unit(1), unit(2))\n          a.update(unit(2), unit(3))\n          a.foreach({e => println(e)})\n        }\n        f(unit(1))\n      }\n\n      val codegen = new ScalaGenArrayOps with ScalaGenMiscOps\n      with ScalaGenEntry with ScalaCodeGenPkg with ScalaGenHashCodeOps\n      with ScalaGenHashMap { val IR: prog.type = prog }\n      codegen.emitSource1(prog.f, \"IntHashMapForEach\", new PrintWriter(System.out))\n    }\n  }\n\n  it(\"testDelete\") {\n    withOutFile(prefix+\"hash-map-delete\") {\n      val prog = new HashMapArrOps with MiscOps with HashMapArrOpsExp\n        with MiscOpsExp with ScalaOpsPkgExp {\n        def f(i : Rep[Int]): Rep[Unit] = {\n          val a = hashmap_new[Int, Int](unit(200))\n          a.update(unit(1), unit(2))\n          a.update(unit(2), unit(3))\n          println(a.size)\n          a -= unit(2)\n          println(a.size)\n        }\n        f(unit(1))\n      }\n\n      val codegen = new ScalaGenArrayOps with ScalaGenMiscOps\n      with ScalaGenEntry with ScalaCodeGenPkg with ScalaGenHashCodeOps\n      with ScalaGenHashMap { val IR: prog.type = prog }\n      codegen.emitSource1(prog.f, \"IntHashMapDelete\", new PrintWriter(System.out))\n    }\n\n  }*/\n\n}\n\n/*\n object Test {\n  def main(args: Array[String]) = {\n    val prog = new HashMapArrOps with MiscOps with HashMapArrOpsExp\n        with MiscOpsExp with ScalaOpsPkgExp {\n        def f(i : Rep[Int]): Rep[Unit] = {\n          val a = hashmap_new[Int, Int](unit(200))\n          a.update(unit(1), unit(2))\n          println(a(unit(1)))\n        }\n        f(unit(1))\n      }\n\n      val codegen = new ScalaGenArrayOps with ScalaGenMiscOps with ScalaCodeGenPkg with ScalaGenEntry with ScalaGenHashCodeOps { val IR: prog.type = prog }\n      codegen.emitSource1(prog.f, \"IntHashMapGetAndUpdate\", new PrintWriter(System.out))\n  }\n }*/\n\n /*\n Ideas:\n\n * \n * \n\n */",
 			"file": "test-src/epfl/test12-collections/TestArrayOps.scala",
-			"file_size": 35805,
-			"file_write_time": 1400251772000000,
 			"settings":
 			{
-				"buffer_size": 35807,
+				"buffer_size": 42676,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/common/CastingOps.scala",
+			"settings":
+			{
+				"buffer_size": 2769,
 				"line_ending": "Unix"
 			}
 		},
@@ -34,15 +39,7 @@
 			"file": "src/internal/Effects.scala",
 			"settings":
 			{
-				"buffer_size": 32155,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "src/common/CastingOps.scala",
-			"settings":
-			{
-				"buffer_size": 2769,
+				"buffer_size": 32200,
 				"line_ending": "Unix"
 			}
 		},
@@ -114,6 +111,7 @@
 	},
 	"file_history":
 	[
+		"/home/gabriel/workspace/lms/src/internal/ScalaCodegen.scala",
 		"/home/gabriel/workspace/lms/src/common/MiscOps.scala",
 		"/home/gabriel/workspace/lms/src/common/Packages.scala",
 		"/home/gabriel/workspace/lms/src/common/CastingOps.scala"
@@ -124,9 +122,10 @@
 	},
 	"find_in_files":
 	{
-		"height": 0.0,
+		"height": 90.0,
 		"where_history":
 		[
+			""
 		]
 	},
 	"find_state":
@@ -134,6 +133,9 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"Option",
+			"def quote",
+			"def emitVarDef",
 			"ScalaGenVariablesNested",
 			"assignmen"
 		],
@@ -161,15 +163,15 @@
 					"file": "test-src/epfl/test12-collections/TestArrayOps.scala",
 					"settings":
 					{
-						"buffer_size": 35807,
+						"buffer_size": 42676,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								20514,
-								20514
+								9049,
+								9049
 							]
 						],
 						"settings":
@@ -179,13 +181,41 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 6427.0,
+						"translation.y": 2470.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 1,
+					"file": "src/common/CastingOps.scala",
+					"settings":
+					{
+						"buffer_size": 2769,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								695,
+								695
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Scala/Scala.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
 					"file": "src/common/ArrayOps.scala",
 					"settings":
 					{
@@ -213,19 +243,19 @@
 					"type": "text"
 				},
 				{
-					"buffer": 2,
+					"buffer": 3,
 					"file": "src/internal/Effects.scala",
 					"settings":
 					{
-						"buffer_size": 32155,
+						"buffer_size": 32200,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								20433,
-								20433
+								16478,
+								16478
 							]
 						],
 						"settings":
@@ -235,35 +265,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 5892.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 3,
-					"file": "src/common/CastingOps.scala",
-					"settings":
-					{
-						"buffer_size": 2769,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1034,
-								1034
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Scala/Scala.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 90.0,
+						"translation.y": 626.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -280,8 +282,8 @@
 						"selection":
 						[
 							[
-								6517,
-								6517
+								13437,
+								13437
 							]
 						],
 						"settings":
@@ -291,7 +293,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 3420.0,
+						"translation.y": 2250.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
