@@ -1,3 +1,15 @@
+reflectReadMutable: WrappedArray(Sym(0)) Def: HashMapGetSize(Sym(0))
+Context: List(Sym(0))
+ReflectReadMutable: List(Sym(1)) deps: List(Sym(0))
+reflectReadMutable: WrappedArray(Sym(0)) Def: HashMapGetSize(Sym(0))
+Context: List(Sym(0), Sym(1), Sym(2), Sym(3))
+ReflectReadMutable: List(Sym(4)) deps: List(Sym(0), Sym(3))
+reflectReadMutable: WrappedArray(Sym(7)) Def: HashMapGetSize(Sym(7))
+Context: List(Sym(7))
+ReflectReadMutable: List(Sym(8)) deps: List(Sym(7))
+reflectReadMutable: WrappedArray(Sym(7)) Def: HashMapGetSize(Sym(7))
+Context: List(Sym(7), Sym(8), Sym(9), Sym(10))
+ReflectReadMutable: List(Sym(11)) deps: List(Sym(7), Sym(10))
 /*****************************************
   Emitting Generated Code                  
 *******************************************/

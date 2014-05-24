@@ -343,6 +343,11 @@ trait ScalaGenVariablesNested extends ScalaGenVariables {
     }
 
     def hashmap_update[K:Manifest,V:Manifest](x: Rep[HashMap[K,V]], k: Rep[K], v: Rep[V])(implicit pos: SourceContext): Rep[Unit] = {
+      hashmap_add(x, k, v)
+      hashmap_resize(x)
+    }
+
+    def hashmap_add[K:Manifest,V:Manifest](x: Rep[HashMap[K,V]], k: Rep[K], v: Rep[V])(implicit pos: SourceContext): Rep[Unit] = {
       val m = hashmap_table(x)//reflectReadMutable (x) { HashMapGetTable(x) }
 
       val h1 = int_tolong(__hashCode(k))
@@ -355,9 +360,6 @@ trait ScalaGenVariablesNested extends ScalaGenVariables {
       val n = var_new(el)
       
       val size = hashmap_size(x) //map.size   //reflectNested
-
-      val threshold = hashmap_threshold(x)
-      val max_capacity = hashmap_maximumCapacity(x)
 
       if(readVar(n) == unit(null)) {
 
@@ -384,6 +386,14 @@ trait ScalaGenVariablesNested extends ScalaGenVariables {
         }
       }
 
+    }
+
+    def hashmap_resize[K:Manifest,V:Manifest](x: Rep[HashMap[K,V]])(implicit pos: SourceContext): Rep[Unit] = {
+      val m = hashmap_table(x)//reflectReadMutable (x) { HashMapGetTable(x) }
+      val threshold = hashmap_threshold(x)
+      val max_capacity = hashmap_maximumCapacity(x)
+      val size = hashmap_size(x) 
+
       //var_assign(size, size + 1)
       if (ordering_gteq(size, threshold)) {
         val oldCapacity = m.length
@@ -403,11 +413,11 @@ trait ScalaGenVariablesNested extends ScalaGenVariables {
               //array_update(m, j, unit(null))
               hashmap_array_update(m, j, unit(null))
 
-              while(e.hasNext()) {
+              while(e != unit(null)) {
                 val ht1 = int_tolong(__hashCode(e.getKey()))
                 val ht2 = (ht1 >>> unit(20)) ^ (ht1 >>> unit(12)) ^ ht1
                 val ht3 = ht2 ^ (ht2 >>> unit(7)) ^ (ht2 >>> unit(4))
-                val z = int_binaryand(long_toint(h3), newCapacity - unit(1))
+                val z = int_binaryand(long_toint(ht3), newCapacity - unit(1))
 
                 val next = e.next
                 e.setNext(hashmap_array_apply(newTable, z))
@@ -416,16 +426,6 @@ trait ScalaGenVariablesNested extends ScalaGenVariables {
                 
                 var_assign(e, next)
               }
-
-                val ht1 = int_tolong(__hashCode(e.getKey()))
-                val ht2 = (ht1 >>> unit(20)) ^ (ht1 >>> unit(12)) ^ ht1
-                val ht3 = ht2 ^ (ht2 >>> unit(7)) ^ (ht2 >>> unit(4))
-                val z = int_binaryand(long_toint(h3), newCapacity - unit(1))
-
-                val next = e.next
-                e.setNext(hashmap_array_apply(newTable, z))
-                //newTable.update(z, e)
-                hashmap_array_update(newTable, z, readVar(e))
             
             }
             var_assign(j, readVar(j) + unit(1))
@@ -434,7 +434,7 @@ trait ScalaGenVariablesNested extends ScalaGenVariables {
 
           hashmap_setTable(x, newTable)
           val loadFactor: Rep[Float] = hashmap_loadFactor(x)
-          hashmap_setThreshold(x, (new CastingOpsCls(numeric_times(loadFactor, newCapacity.asInstanceOf[Rep[Float]])))
+          hashmap_setThreshold(x, (numeric_times(loadFactor, newCapacity.asInstanceOf[Rep[Float]]))
             .AsInstanceOf[Int])
           //var_assign(threshold, newCapacity*HashMapGetLoadFactor(x))
         }
@@ -741,7 +741,9 @@ class TestArrayOps extends FileDiffSuite {
           a.update(unit(3), a(readVar(n)).get() + unit(1))
 
           a.foreach( {x => println(x)} )
-          a.clear()
+          a -= unit(2)
+
+          //a.clear()
           //why is there a new table used each time??
           a.foreach( {x => println(x)} )
         }

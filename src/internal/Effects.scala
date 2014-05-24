@@ -402,8 +402,8 @@ trait Effects extends Expressions with Blocks with Utils {
       !currentNode.map(_.getClass).intersect(otherNode.map(_.getClass)).isEmpty
 
   def reflectReadMutable[A:Manifest](parent0: Exp[Any]*)(d: Def[A])(implicit pos: SourceContext): Exp[A] = {
-    //println("Nested: " + parent0 + " Def: " + d)
-    //println("Context: " + context)
+    println("reflectReadMutable: " + parent0 + " Def: " + d)
+    println("Context: " + context)
     val parent = parent0.toList.asInstanceOf[List[Sym[Any]]]
 
 
@@ -423,10 +423,12 @@ trait Effects extends Expressions with Blocks with Utils {
     val pp = List(((parent ++ repsOther).toSet.toList, List(d)))
 
     val prevWrites = (context filter ({ case e@Def(Reflect(x, u, _)) =>
-          //println("x: " + x + " u.p: " + u.parentSym + " p: " + parent + " u.acc: " + u.acctype + " acc: " + acctype);
-          u.readFrom.exists({ uRF => pp.exists( rF =>
-            !rF._1.intersect(uRF._1).isEmpty &&
-            equalReadOperation(rF._2, uRF._2)
+          //1. finde nodes which have the same parent and the same read operation
+          u.readFrom.exists({
+            uRF => pp.exists( rF =>
+              !rF._1.intersect(uRF._1).isEmpty &&
+               equalReadOperation(rF._2, uRF._2)
+          //2. find all symbols of statements writing to at least one of the prev. yielded symbols
           )})   }) flatMap ({ e =>
             context filter { case Def(Reflect(_, u, _)) => u.mayWrite.contains(e) }
           })).asInstanceOf[List[Sym[Any]]]
@@ -461,12 +463,12 @@ trait Effects extends Expressions with Blocks with Utils {
     val z = reflectEffect(d, ReadMutable(parent, List(d), repsW))
     pW = Nil
 
-    /*println("AliasRep: " + (findDefinition(z.asInstanceOf[Sym[Any]]) match {
+    println("ReflectReadMutable: " + (findDefinition(z.asInstanceOf[Sym[Any]]) match {
       //TODO: either write to get or alloc ??
       //case Some(TP(_, Reflect(_, u, _))) if (mustOnlyAlloc(u)) => List(x)
       case Some(TP(_, Reflect(_, u, deps))) => "" + u.aliasRep + " deps: " + deps
       case _ => ""
-    }))*/
+    }))
 
     val mutableAliases = mutableTransitiveAliases(d) filterNot (parent contains _)
     //println("Alias: " + mutableAliases)
@@ -512,12 +514,12 @@ trait Effects extends Expressions with Blocks with Utils {
     //println("reflectWriteMutable repsW: " + repsW + ", repsR: " + repsR)
     val z = reflectEffect(d, WriteMutable(write, repsR ++ repsW))
 
-    println("AliasRep: " + (findDefinition(z.asInstanceOf[Sym[Any]]) match {
+    /*println("AliasRep: " + (findDefinition(z.asInstanceOf[Sym[Any]]) match {
       //TODO: either write to get or alloc ??
       //case Some(TP(_, Reflect(_, u, _))) if (mustOnlyAlloc(u)) => List(x)
       case Some(TP(_, Reflect(_, u, deps))) => "" + u.aliasRep + " deps: " + deps
       case _ => ""
-    }))
+    }))*/
 
     //generate fresh symbols after write for reads
 
