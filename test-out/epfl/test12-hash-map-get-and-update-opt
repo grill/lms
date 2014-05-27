@@ -1170,7 +1170,7 @@ x237
 }
 x626
 }
-val x629 = x628.asInstanceOf[Int]
+val x629 = x628.get
 var x631 = x602
 val x632 = x631
 val x633 = x632 == null

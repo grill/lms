@@ -618,7 +618,7 @@ class TestArrayOps extends FileDiffSuite {
 
   val prefix = "test-out/epfl/test12-"
 
-
+  //old
   it("testNestedMutability") {
     withOutFile(prefix+"hash-map-nested-mutability") {
       val prog = new HashMapArrOps with MiscOps with HashMapArrOpsExp
@@ -696,6 +696,69 @@ class TestArrayOps extends FileDiffSuite {
     //assertFileEqualsCheck(prefix+"hash-map-creation")
   }
 
+  it("testComplexNested") {
+    withOutFile(prefix+"hash-map-complex-nested") {
+      val prog = new HashMapArrOps with MiscOps with HashMapArrOpsExp
+        with MiscOpsExp with ScalaOpsPkgExp {
+        def f(i : Rep[Int]): Rep[Unit] = {
+          val a = hashmap_new[Int, HashMap[Int,Int]](unit(1))
+          val a1 = hashmap_new[Int,Int](unit(1))
+          val a2 = hashmap_new[Int,Int](unit(1))
+
+          a.update(unit(1), a1)
+          a.update(unit(2), a2)
+
+          a1.update(unit(1), unit(1))
+          a(unit(1)).get().update(unit(1), unit(2))
+
+          a.foreach({x => println(x); x.getValue().foreach({println(_)}) })
+          a.foreach({x => a.update(x.getKey(), unit(null).AsInstanceOf[HashMap[Int, Int]])  })
+          a.foreach({x => println(x)})
+          a.foreach({x => a -= x.getKey()})
+          a.update(unit(3), a1)
+          a.foreach({x => println(x); x.getValue().foreach({println(_)}) })
+        }
+        f(unit(1))
+      }
+
+      val codegen = new ScalaGenArrayOps with ScalaGenMiscOps
+      with ScalaGenEntry with ScalaCodeGenPkg with ScalaGenHashCodeOps with ScalaGenOption
+      with ScalaGenHashMap { val IR: prog.type = prog }
+      codegen.emitSource1(prog.f, "IntHashMapComplexNested", new PrintWriter(System.out))
+    }
+    //assertFileEqualsCheck(prefix+"hash-map-creation")
+  }
+
+  it("testComplex") {
+    withOutFile(prefix+"hash-map-complex") {
+      val prog = new HashMapArrOps with MiscOps with HashMapArrOpsExp
+        with MiscOpsExp with ScalaOpsPkgExp {
+        def f(i : Rep[Int]): Rep[Unit] = {
+          val a = hashmap_new[Int, Int](unit(1))
+          a.update(unit(1), unit(2))
+          a.update(unit(2), unit(3))
+
+          val v = a(unit(1)).get() + unit(1)
+          a.update(unit(1), v)
+
+          a.foreach({x => println(x)})
+          a.foreach({x => a.update(x.getKey(), unit(0))})
+          a.foreach({x => println(x)})
+          a.foreach({x => a -= x.getKey()})
+          a.update(unit(3), unit(4))
+          a.foreach({x => println(x)})
+        }
+        f(unit(1))
+      }
+
+      val codegen = new ScalaGenArrayOps with ScalaGenMiscOps
+      with ScalaGenEntry with ScalaCodeGenPkg with ScalaGenHashCodeOps with ScalaGenOption
+      with ScalaGenHashMap { val IR: prog.type = prog }
+      codegen.emitSource1(prog.f, "IntHashMapComplex", new PrintWriter(System.out))
+    }
+    //assertFileEqualsCheck(prefix+"hash-map-creation")
+  }
+
   it("testGetAndUpdate") {
     withOutFile(prefix+"hash-map-get-and-update") {
       val prog = new HashMapArrOps with MiscOps with HashMapArrOpsExp
@@ -725,7 +788,7 @@ class TestArrayOps extends FileDiffSuite {
           a.update(unit(1), unit(2))
           a.update(unit(2), unit(3))
 
-          val v = (a(unit(1)).AsInstanceOf[Int]) + unit(1)
+          val v = a(unit(1)).get() + unit(1)
           a.update(unit(1), v)
           println(a(unit(1)))
         }
