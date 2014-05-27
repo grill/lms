@@ -1,26 +1,54 @@
-reflectReadMutable: WrappedArray(Sym(0)) Def: HashMapGetSize(Sym(0))
-Context: List(Sym(0))
+reflectReadMutable: WrappedArray(Sym(0)) Def: HashMapGetTable(Sym(0))
 ReflectReadMutable: List(Sym(1)) deps: List(Sym(0))
 reflectReadMutable: WrappedArray(Sym(0)) Def: HashMapGetSize(Sym(0))
-Context: List(Sym(0), Sym(1), Sym(2), Sym(3))
-ReflectReadMutable: List(Sym(4)) deps: List(Sym(0), Sym(3))
-reflectReadMutable: WrappedArray(Sym(7)) Def: HashMapGetSize(Sym(7))
-Context: List(Sym(7))
-ReflectReadMutable: List(Sym(8)) deps: List(Sym(7))
-reflectReadMutable: WrappedArray(Sym(7)) Def: HashMapGetSize(Sym(7))
-Context: List(Sym(7), Sym(8), Sym(9), Sym(10))
-ReflectReadMutable: List(Sym(11)) deps: List(Sym(7), Sym(10))
+ReflectReadMutable: List(Sym(2)) deps: List(Sym(0))
+reflectReadMutable: WrappedArray(Sym(0)) Def: HashMapGetLoadFactor(Sym(0))
+ReflectReadMutable: List(Sym(3)) deps: List(Sym(0))
+reflectReadMutable: WrappedArray(Sym(0)) Def: HashMapMAXIMUM_CAPACITY(Sym(0))
+ReflectReadMutable: List(Sym(4)) deps: List(Sym(0))
+reflectReadMutable: WrappedArray(Sym(0)) Def: HashMapGetThreshold(Sym(0))
+ReflectReadMutable: List(Sym(5)) deps: List(Sym(0))
+reflectReadMutable: WrappedArray(Sym(0)) Def: HashMapGetSize(Sym(0))
+ReflectReadMutable: List(Sym(2)) deps: List(Sym(0))
+reflectReadMutable: WrappedArray(Sym(0)) Def: HashMapGetSize(Sym(0))
+ReflectReadMutable: List(Sym(2)) deps: List(Sym(0))
+Write: WrappedArray(Sym(2))Def: HashMapSetSize(Sym(0),Const(3))
+AliasRep: List(Sym(2)) deps: List(Sym(0), Sym(2))
+reflectReadMutable: WrappedArray(Sym(0)) Def: HashMapGetSize(Sym(0))
+ReflectReadMutable: List(Sym(2)) deps: List(Sym(0), Sym(7))
+reflectReadMutable: WrappedArray(Sym(11)) Def: HashMapGetTable(Sym(11))
+ReflectReadMutable: List(Sym(12)) deps: List(Sym(11))
+reflectReadMutable: WrappedArray(Sym(11)) Def: HashMapGetSize(Sym(11))
+ReflectReadMutable: List(Sym(13)) deps: List(Sym(11))
+reflectReadMutable: WrappedArray(Sym(11)) Def: HashMapGetLoadFactor(Sym(11))
+ReflectReadMutable: List(Sym(14)) deps: List(Sym(11))
+reflectReadMutable: WrappedArray(Sym(11)) Def: HashMapMAXIMUM_CAPACITY(Sym(11))
+ReflectReadMutable: List(Sym(15)) deps: List(Sym(11))
+reflectReadMutable: WrappedArray(Sym(11)) Def: HashMapGetThreshold(Sym(11))
+ReflectReadMutable: List(Sym(16)) deps: List(Sym(11))
+reflectReadMutable: WrappedArray(Sym(11)) Def: HashMapGetSize(Sym(11))
+ReflectReadMutable: List(Sym(13)) deps: List(Sym(11))
+reflectReadMutable: WrappedArray(Sym(11)) Def: HashMapGetSize(Sym(11))
+ReflectReadMutable: List(Sym(13)) deps: List(Sym(11))
+Write: WrappedArray(Sym(13))Def: HashMapSetSize(Sym(11),Const(3))
+AliasRep: List(Sym(13)) deps: List(Sym(11), Sym(13))
+reflectReadMutable: WrappedArray(Sym(11)) Def: HashMapGetSize(Sym(11))
+ReflectReadMutable: List(Sym(13)) deps: List(Sym(11), Sym(18))
 /*****************************************
   Emitting Generated Code                  
 *******************************************/
 class IntHashMapGetAndSetSize extends ((Int)=>(Unit)) {
-def apply(x6:Int): Unit = {
-val x7 = new HashMap[Int,Int](200)
-val x8 = x7.size
-println(x8)
-x7.size = 3
-val x11 = x7.size
-println(x11)
+def apply(x10:Int): Unit = {
+val x11 = new HashMap[Int,Int](200)
+val x12 = x11.table
+val x13 = x11.size
+val x14 = x11.loadFactor
+val x15 = x11.MAXIMUM_CAPACITY
+val x16 = x11.threshold
+println(x13)
+x11.size = 3
+val x19 = x11.size
+println(x19)
 }
 }
 /*****************************************

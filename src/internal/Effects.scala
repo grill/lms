@@ -403,7 +403,7 @@ trait Effects extends Expressions with Blocks with Utils {
 
   def reflectReadMutable[A:Manifest](parent0: Exp[Any]*)(d: Def[A])(implicit pos: SourceContext): Exp[A] = {
     println("reflectReadMutable: " + parent0 + " Def: " + d)
-    println("Context: " + context)
+    //println("Context: " + context)
     val parent = parent0.toList.asInstanceOf[List[Sym[Any]]]
 
 
@@ -477,7 +477,7 @@ trait Effects extends Expressions with Blocks with Utils {
   }
 
   def reflectWriteMutable[A:Manifest](write0: Exp[Any]*)(read0: Exp[Any]*)(d: Def[A])(implicit pos: SourceContext): Exp[A] = {
-    //println("Write: " + write0 + "Def: " + d)
+    println("Write: " + write0 + "Def: " + d)
     val write = write0.toList.asInstanceOf[List[Sym[Any]]] // should check...
     //val read = read0.toList.asInstanceOf[List[Sym[Any]]] // should check...
 
@@ -514,12 +514,12 @@ trait Effects extends Expressions with Blocks with Utils {
     //println("reflectWriteMutable repsW: " + repsW + ", repsR: " + repsR)
     val z = reflectEffect(d, WriteMutable(write, repsR ++ repsW))
 
-    /*println("AliasRep: " + (findDefinition(z.asInstanceOf[Sym[Any]]) match {
+    println("AliasRep: " + (findDefinition(z.asInstanceOf[Sym[Any]]) match {
       //TODO: either write to get or alloc ??
       //case Some(TP(_, Reflect(_, u, _))) if (mustOnlyAlloc(u)) => List(x)
       case Some(TP(_, Reflect(_, u, deps))) => "" + u.aliasRep + " deps: " + deps
       case _ => ""
-    }))*/
+    }))
 
     //generate fresh symbols after write for reads
 
@@ -591,7 +591,7 @@ trait Effects extends Expressions with Blocks with Utils {
 
         //reflectRead -- reflectNested
      //   if(isNested(u)) {
-              context find { case Def(d) => d == zd } map { _.asInstanceOf[Exp[A]] } getOrElse {
+              context find { case Def(Reflect(x1, u1, d1)) => x1 == x && deps == d1} map { _.asInstanceOf[Exp[A]] } getOrElse {
     //        findDefinition(zd) map (_.sym) filter (context contains _) getOrElse { // local cse TODO: turn around and look at context first??
               val z = fresh[A]
               zd = if(mustOnlyAlloc(u) || (mustIdempotent(u) && u.aliasRep.isEmpty))

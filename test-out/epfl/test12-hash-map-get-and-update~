@@ -1,80 +1,567 @@
+reflectReadMutable: WrappedArray(Sym(0)) Def: HashMapGetTable(Sym(0))
+Context: List(Sym(0))
+ReflectReadMutable: List(Sym(1)) deps: List(Sym(0))
+reflectReadMutable: WrappedArray(Sym(0)) Def: HashMapGetSize(Sym(0))
+Context: List(Sym(0), Sym(1))
+ReflectReadMutable: List(Sym(2)) deps: List(Sym(0))
+reflectReadMutable: WrappedArray(Sym(0)) Def: HashMapGetLoadFactor(Sym(0))
+Context: List(Sym(0), Sym(1), Sym(2))
+ReflectReadMutable: List(Sym(3)) deps: List(Sym(0))
+reflectReadMutable: WrappedArray(Sym(0)) Def: HashMapMAXIMUM_CAPACITY(Sym(0))
+Context: List(Sym(0), Sym(1), Sym(2), Sym(3))
+ReflectReadMutable: List(Sym(4)) deps: List(Sym(0))
+reflectReadMutable: WrappedArray(Sym(0)) Def: HashMapGetThreshold(Sym(0))
+Context: List(Sym(0), Sym(1), Sym(2), Sym(3), Sym(4))
+ReflectReadMutable: List(Sym(5)) deps: List(Sym(0))
+reflectReadMutable: WrappedArray(Sym(0)) Def: HashMapGetTable(Sym(0))
+Context: List(Sym(0), Sym(1), Sym(2), Sym(3), Sym(4), Sym(5))
+ReflectReadMutable: List(Sym(1)) deps: List(Sym(0))
+reflectReadMutable: WrappedArray(Sym(1)) Def: ArrayApply(Sym(1),Sym(19))
+Context: List(Sym(0), Sym(1), Sym(2), Sym(3), Sym(4), Sym(5), Sym(17))
+ReflectReadMutable: List(Sym(20)) deps: List(Sym(0), Sym(1))
+reflectReadMutable: WrappedArray(Sym(0)) Def: HashMapGetSize(Sym(0))
+Context: List(Sym(0), Sym(1), Sym(2), Sym(3), Sym(4), Sym(5), Sym(17), Sym(20), Sym(21))
+ReflectReadMutable: List(Sym(2)) deps: List(Sym(0))
+reflectReadMutable: WrappedArray(Sym(21)) Def: ReadVar(Variable(Sym(21)))
+Context: List(Sym(0), Sym(1), Sym(2), Sym(3), Sym(4), Sym(5), Sym(17), Sym(20), Sym(21))
+ReflectReadMutable: List(Sym(22)) deps: List(Sym(0), Sym(1), Sym(20), Sym(21))
+reflectReadMutable: WrappedArray(Sym(1)) Def: ArrayApply(Sym(1),Sym(19))
+Context: List(Sym(0), Sym(1), Sym(2), Sym(3), Sym(4), Sym(5), Sym(17), Sym(20), Sym(21), Sym(22), Sym(23), Sym(24))
+ReflectReadMutable: List(Sym(20)) deps: List(Sym(0), Sym(1))
+reflectReadMutable: WrappedArray(Sym(21)) Def: ReadVar(Variable(Sym(21)))
+Context: List()
+ReflectReadMutable: List(Sym(29)) deps: List()
+reflectReadMutable: WrappedArray(Sym(29)) Def: EntryHasNext(Sym(29))
+Context: List(Sym(29))
+ReflectReadMutable: List(Sym(30)) deps: List(Sym(29))
+reflectReadMutable: WrappedArray(Sym(21)) Def: ReadVar(Variable(Sym(21)))
+Context: List()
+ReflectReadMutable: List(Sym(31)) deps: List()
+reflectReadMutable: WrappedArray(Sym(31)) Def: EntryGetKey(Sym(31))
+Context: List(Sym(31))
+ReflectReadMutable: List(Sym(32)) deps: List(Sym(31))
+reflectReadMutable: WrappedArray(Sym(21)) Def: ReadVar(Variable(Sym(21)))
+Context: List()
+ReflectReadMutable: List(Sym(38)) deps: List()
+reflectReadMutable: WrappedArray(Sym(38)) Def: EntryNext(Sym(38))
+Context: List(Sym(38))
+ReflectReadMutable: List(Sym(39)) deps: List(Sym(38))
+reflectReadMutable: WrappedArray(Sym(21)) Def: ReadVar(Variable(Sym(21)))
+Context: List(Sym(0), Sym(1), Sym(2), Sym(3), Sym(4), Sym(5), Sym(17), Sym(20), Sym(21), Sym(22), Sym(23), Sym(42))
+ReflectReadMutable: List(Sym(43)) deps: List(Sym(0), Sym(1), Sym(20), Sym(21), Sym(42))
+reflectReadMutable: WrappedArray(Sym(43)) Def: EntryGetKey(Sym(43))
+Context: List(Sym(0), Sym(1), Sym(2), Sym(3), Sym(4), Sym(5), Sym(17), Sym(20), Sym(21), Sym(22), Sym(23), Sym(42), Sym(43))
+ReflectReadMutable: List(Sym(44)) deps: List(Sym(0), Sym(1), Sym(20), Sym(43))
+reflectReadMutable: WrappedArray(Sym(21)) Def: ReadVar(Variable(Sym(21)))
+Context: List(Sym(0), Sym(1), Sym(2), Sym(3), Sym(4), Sym(5), Sym(17), Sym(20), Sym(21), Sym(22), Sym(23), Sym(42), Sym(43), Sym(44))
+ReflectReadMutable: List(Sym(43)) deps: List(Sym(0), Sym(1), Sym(20), Sym(21), Sym(42))
+reflectReadMutable: WrappedArray(Sym(43)) Def: EntryGetValue(Sym(43))
+Context: List(Sym(0), Sym(1), Sym(2), Sym(3), Sym(4), Sym(5), Sym(17), Sym(20), Sym(21), Sym(22), Sym(23), Sym(42), Sym(43), Sym(44))
+ReflectReadMutable: List(Sym(46)) deps: List(Sym(0), Sym(1), Sym(20), Sym(43))
+reflectReadMutable: WrappedArray(Sym(21)) Def: ReadVar(Variable(Sym(21)))
+Context: List(Sym(0), Sym(1), Sym(2), Sym(3), Sym(4), Sym(5), Sym(17), Sym(20), Sym(21), Sym(22), Sym(23), Sym(42), Sym(43), Sym(44))
+ReflectReadMutable: List(Sym(43)) deps: List(Sym(0), Sym(1), Sym(20), Sym(21), Sym(42))
+reflectReadMutable: WrappedArray(Sym(43)) Def: EntryNext(Sym(43))
+Context: List(Sym(0), Sym(1), Sym(2), Sym(3), Sym(4), Sym(5), Sym(17), Sym(20), Sym(21), Sym(22), Sym(23), Sym(42), Sym(43), Sym(44), Sym(49))
+ReflectReadMutable: List(Sym(50)) deps: List(Sym(0), Sym(1), Sym(20), Sym(43))
+reflectReadMutable: WrappedArray(Sym(43)) Def: EntryHasNext(Sym(43))
+Context: List(Sym(0), Sym(1), Sym(2), Sym(3), Sym(4), Sym(5), Sym(17), Sym(20), Sym(21), Sym(22), Sym(23), Sym(42), Sym(43), Sym(44), Sym(49), Sym(50))
+ReflectReadMutable: List(Sym(51)) deps: List(Sym(0), Sym(1), Sym(20), Sym(43))
+reflectReadMutable: WrappedArray(Sym(0)) Def: HashMapGetTable(Sym(0))
+Context: List(Sym(0), Sym(1), Sym(2), Sym(3), Sym(4), Sym(5), Sym(17), Sym(20), Sym(21), Sym(22), Sym(23), Sym(57))
+ReflectReadMutable: List(Sym(58)) deps: List(Sym(0), Sym(57))
+reflectReadMutable: WrappedArray(Sym(0)) Def: HashMapGetThreshold(Sym(0))
+Context: List(Sym(0), Sym(1), Sym(2), Sym(3), Sym(4), Sym(5), Sym(17), Sym(20), Sym(21), Sym(22), Sym(23), Sym(57), Sym(58))
+ReflectReadMutable: List(Sym(59)) deps: List(Sym(0), Sym(57))
+reflectReadMutable: WrappedArray(Sym(0)) Def: HashMapMAXIMUM_CAPACITY(Sym(0))
+Context: List(Sym(0), Sym(1), Sym(2), Sym(3), Sym(4), Sym(5), Sym(17), Sym(20), Sym(21), Sym(22), Sym(23), Sym(57), Sym(58), Sym(59))
+ReflectReadMutable: List(Sym(60)) deps: List(Sym(0), Sym(57))
+reflectReadMutable: WrappedArray(Sym(0)) Def: HashMapGetSize(Sym(0))
+Context: List(Sym(0), Sym(1), Sym(2), Sym(3), Sym(4), Sym(5), Sym(17), Sym(20), Sym(21), Sym(22), Sym(23), Sym(57), Sym(58), Sym(59), Sym(60))
+ReflectReadMutable: List(Sym(61)) deps: List(Sym(0), Sym(57))
+reflectReadMutable: WrappedArray(Sym(0)) Def: HashMapSetThreshold(Sym(0),Sym(65))
+Context: List(Sym(0), Sym(1), Sym(2), Sym(3), Sym(4), Sym(5), Sym(17), Sym(20), Sym(21), Sym(22), Sym(23), Sym(57), Sym(58), Sym(59), Sym(60), Sym(61), Sym(63))
+ReflectReadMutable: List(Sym(66)) deps: List(Sym(0), Sym(57))
+reflectReadMutable: WrappedArray(Sym(70)) Def: ReadVar(Variable(Sym(70)))
+Context: List()
+ReflectReadMutable: List(Sym(71)) deps: List()
+reflectReadMutable: WrappedArray(Sym(70)) Def: ReadVar(Variable(Sym(70)))
+Context: List()
+ReflectReadMutable: List(Sym(75)) deps: List()
+reflectReadMutable: WrappedArray(Sym(58)) Def: ArrayApply(Sym(58),Sym(75))
+Context: List(Sym(75))
+ReflectReadMutable: List(Sym(76)) deps: List()
+reflectReadMutable: WrappedArray(Sym(77)) Def: ReadVar(Variable(Sym(77)))
+Context: List(Sym(75), Sym(76), Sym(77))
+ReflectReadMutable: List(Sym(78)) deps: List(Sym(76), Sym(77))
+reflectReadMutable: WrappedArray(Sym(70)) Def: ReadVar(Variable(Sym(70)))
+Context: List(Sym(75), Sym(76), Sym(77), Sym(78), Sym(79))
+ReflectReadMutable: List(Sym(75)) deps: List()
+reflectReadMutable: WrappedArray(Sym(58)) Def: ArrayApply(Sym(58),Sym(75))
+Context: List(Sym(75), Sym(76), Sym(77), Sym(78), Sym(79))
+ReflectReadMutable: List(Sym(76)) deps: List()
+reflectReadMutable: WrappedArray(Sym(77)) Def: ReadVar(Variable(Sym(77)))
+Context: List()
+ReflectReadMutable: List(Sym(81)) deps: List()
+reflectReadMutable: WrappedArray(Sym(77)) Def: ReadVar(Variable(Sym(77)))
+Context: List()
+ReflectReadMutable: List(Sym(84)) deps: List()
+reflectReadMutable: WrappedArray(Sym(84)) Def: EntryGetKey(Sym(84))
+Context: List(Sym(84))
+ReflectReadMutable: List(Sym(85)) deps: List(Sym(84))
+reflectReadMutable: WrappedArray(Sym(77)) Def: ReadVar(Variable(Sym(77)))
+Context: List(Sym(84), Sym(85))
+ReflectReadMutable: List(Sym(84)) deps: List()
+reflectReadMutable: WrappedArray(Sym(84)) Def: EntryNext(Sym(84))
+Context: List(Sym(84), Sym(85))
+ReflectReadMutable: List(Sym(99)) deps: List(Sym(84))
+reflectReadMutable: WrappedArray(Sym(77)) Def: ReadVar(Variable(Sym(77)))
+Context: List(Sym(84), Sym(85), Sym(99))
+ReflectReadMutable: List(Sym(84)) deps: List()
+reflectReadMutable: WrappedArray(Sym(69)) Def: ArrayApply(Sym(69),Sym(98))
+Context: List(Sym(84), Sym(85), Sym(99))
+ReflectReadMutable: List(Sym(100)) deps: List()
+reflectReadMutable: WrappedArray(Sym(84)) Def: EntryNext(Sym(84))
+Context: List(Sym(84), Sym(85), Sym(99), Sym(100))
+ReflectReadMutable: List(Sym(99)) deps: List(Sym(84))
+reflectReadMutable: WrappedArray(Sym(84)) Def: EntryHasNext(Sym(84))
+Context: List(Sym(84), Sym(85), Sym(99), Sym(100))
+ReflectReadMutable: List(Sym(101)) deps: List(Sym(84))
+reflectReadMutable: WrappedArray(Sym(77)) Def: ReadVar(Variable(Sym(77)))
+Context: List(Sym(84), Sym(85), Sym(99), Sym(100), Sym(101), Sym(102))
+ReflectReadMutable: List(Sym(84)) deps: List()
+reflectReadMutable: WrappedArray(Sym(69)) Def: ArrayApply(Sym(69),Sym(98))
+Context: List(Sym(84), Sym(85), Sym(99), Sym(100), Sym(101), Sym(102))
+ReflectReadMutable: List(Sym(100)) deps: List()
+reflectReadMutable: WrappedArray(Sym(70)) Def: ReadVar(Variable(Sym(70)))
+Context: List(Sym(75), Sym(76), Sym(77), Sym(78), Sym(79), Sym(108))
+ReflectReadMutable: List(Sym(75)) deps: List()
+reflectReadMutable: WrappedArray(Sym(0)) Def: HashMapGetTable(Sym(0))
+Context: List(Sym(0), Sym(1), Sym(2), Sym(3), Sym(4), Sym(5), Sym(17), Sym(20), Sym(21), Sym(22), Sym(23), Sym(57), Sym(58), Sym(59), Sym(60), Sym(61), Sym(63), Sym(69), Sym(70), Sym(112))
+ReflectReadMutable: List(Sym(58)) deps: List(Sym(0), Sym(57))
+reflectReadMutable: WrappedArray(Sym(0)) Def: HashMapGetLoadFactor(Sym(0))
+Context: List(Sym(0), Sym(1), Sym(2), Sym(3), Sym(4), Sym(5), Sym(17), Sym(20), Sym(21), Sym(22), Sym(23), Sym(57), Sym(58), Sym(59), Sym(60), Sym(61), Sym(63), Sym(69), Sym(70), Sym(112), Sym(113))
+ReflectReadMutable: List(Sym(114)) deps: List(Sym(0), Sym(57))
+reflectReadMutable: WrappedArray(Sym(0)) Def: HashMapSetThreshold(Sym(0),Sym(116))
+Context: List(Sym(0), Sym(1), Sym(2), Sym(3), Sym(4), Sym(5), Sym(17), Sym(20), Sym(21), Sym(22), Sym(23), Sym(57), Sym(58), Sym(59), Sym(60), Sym(61), Sym(63), Sym(69), Sym(70), Sym(112), Sym(113), Sym(114))
+ReflectReadMutable: List(Sym(117)) deps: List(Sym(0), Sym(57))
+reflectReadMutable: WrappedArray(Sym(0)) Def: HashMapGetTable(Sym(0))
+Context: List(Sym(0), Sym(1), Sym(2), Sym(3), Sym(4), Sym(5), Sym(17), Sym(20), Sym(21), Sym(22), Sym(23), Sym(57), Sym(58), Sym(59), Sym(60), Sym(61), Sym(121))
+ReflectReadMutable: List(Sym(63), Sym(66), Sym(69), Sym(70), Sym(71), Sym(72), Sym(75), Sym(76), Sym(78), Sym(79), Sym(81), Sym(82), Sym(84), Sym(85), Sym(99), Sym(100), Sym(101), Sym(58), Sym(114), Sym(117)) deps: List(Sym(0), Sym(57), Sym(121))
+reflectReadMutable: WrappedArray(Sym(122)) Def: ArrayApply(Sym(122),Sym(125))
+Context: List(Sym(0), Sym(1), Sym(2), Sym(3), Sym(4), Sym(5), Sym(17), Sym(20), Sym(21), Sym(22), Sym(23), Sym(57), Sym(58), Sym(59), Sym(60), Sym(61), Sym(121), Sym(122), Sym(123))
+ReflectReadMutable: List(Sym(126)) deps: List(Sym(0), Sym(57), Sym(122))
+reflectReadMutable: WrappedArray(Sym(127)) Def: ReadVar(Variable(Sym(127)))
+Context: List(Sym(0), Sym(1), Sym(2), Sym(3), Sym(4), Sym(5), Sym(17), Sym(20), Sym(21), Sym(22), Sym(23), Sym(57), Sym(58), Sym(59), Sym(60), Sym(61), Sym(121), Sym(122), Sym(123), Sym(126), Sym(127))
+ReflectReadMutable: List(Sym(128)) deps: List(Sym(0), Sym(57), Sym(122), Sym(126), Sym(127))
+reflectReadMutable: WrappedArray(Sym(127)) Def: ReadVar(Variable(Sym(127)))
+Context: List()
+ReflectReadMutable: List(Sym(131)) deps: List()
+reflectReadMutable: WrappedArray(Sym(131)) Def: EntryHasNext(Sym(131))
+Context: List(Sym(131))
+ReflectReadMutable: List(Sym(132)) deps: List(Sym(131))
+reflectReadMutable: WrappedArray(Sym(127)) Def: ReadVar(Variable(Sym(127)))
+Context: List()
+ReflectReadMutable: List(Sym(133)) deps: List()
+reflectReadMutable: WrappedArray(Sym(133)) Def: EntryGetKey(Sym(133))
+Context: List(Sym(133))
+ReflectReadMutable: List(Sym(134)) deps: List(Sym(133))
+reflectReadMutable: WrappedArray(Sym(127)) Def: ReadVar(Variable(Sym(127)))
+Context: List()
+ReflectReadMutable: List(Sym(140)) deps: List()
+reflectReadMutable: WrappedArray(Sym(140)) Def: EntryNext(Sym(140))
+Context: List(Sym(140))
+ReflectReadMutable: List(Sym(141)) deps: List(Sym(140))
+reflectReadMutable: WrappedArray(Sym(127)) Def: ReadVar(Variable(Sym(127)))
+Context: List(Sym(0), Sym(1), Sym(2), Sym(3), Sym(4), Sym(5), Sym(17), Sym(20), Sym(21), Sym(22), Sym(23), Sym(57), Sym(58), Sym(59), Sym(60), Sym(61), Sym(121), Sym(122), Sym(123), Sym(126), Sym(127), Sym(128), Sym(129), Sym(144))
+ReflectReadMutable: List(Sym(145)) deps: List(Sym(0), Sym(57), Sym(122), Sym(126), Sym(127), Sym(144))
+reflectReadMutable: WrappedArray(Sym(145)) Def: EntryGetKey(Sym(145))
+Context: List(Sym(0), Sym(1), Sym(2), Sym(3), Sym(4), Sym(5), Sym(17), Sym(20), Sym(21), Sym(22), Sym(23), Sym(57), Sym(58), Sym(59), Sym(60), Sym(61), Sym(121), Sym(122), Sym(123), Sym(126), Sym(127), Sym(128), Sym(129), Sym(144), Sym(145))
+ReflectReadMutable: List(Sym(146)) deps: List(Sym(0), Sym(57), Sym(122), Sym(126), Sym(145))
+reflectReadMutable: WrappedArray(Sym(127)) Def: ReadVar(Variable(Sym(127)))
+Context: List(Sym(0), Sym(1), Sym(2), Sym(3), Sym(4), Sym(5), Sym(17), Sym(20), Sym(21), Sym(22), Sym(23), Sym(57), Sym(58), Sym(59), Sym(60), Sym(61), Sym(121), Sym(122), Sym(123), Sym(126), Sym(127), Sym(128), Sym(129), Sym(144), Sym(145), Sym(146))
+ReflectReadMutable: List(Sym(145)) deps: List(Sym(0), Sym(57), Sym(122), Sym(126), Sym(127), Sym(144))
+reflectReadMutable: WrappedArray(Sym(145)) Def: EntryGetValue(Sym(145))
+Context: List(Sym(0), Sym(1), Sym(2), Sym(3), Sym(4), Sym(5), Sym(17), Sym(20), Sym(21), Sym(22), Sym(23), Sym(57), Sym(58), Sym(59), Sym(60), Sym(61), Sym(121), Sym(122), Sym(123), Sym(126), Sym(127), Sym(128), Sym(129), Sym(144), Sym(145), Sym(146))
+ReflectReadMutable: List(Sym(148)) deps: List(Sym(0), Sym(57), Sym(122), Sym(126), Sym(145))
+reflectReadMutable: WrappedArray(Sym(156)) Def: HashMapGetTable(Sym(156))
+Context: List(Sym(156))
+ReflectReadMutable: List(Sym(157)) deps: List(Sym(156))
+reflectReadMutable: WrappedArray(Sym(156)) Def: HashMapGetSize(Sym(156))
+Context: List(Sym(156), Sym(157))
+ReflectReadMutable: List(Sym(158)) deps: List(Sym(156))
+reflectReadMutable: WrappedArray(Sym(156)) Def: HashMapGetLoadFactor(Sym(156))
+Context: List(Sym(156), Sym(157), Sym(158))
+ReflectReadMutable: List(Sym(159)) deps: List(Sym(156))
+reflectReadMutable: WrappedArray(Sym(156)) Def: HashMapMAXIMUM_CAPACITY(Sym(156))
+Context: List(Sym(156), Sym(157), Sym(158), Sym(159))
+ReflectReadMutable: List(Sym(160)) deps: List(Sym(156))
+reflectReadMutable: WrappedArray(Sym(156)) Def: HashMapGetThreshold(Sym(156))
+Context: List(Sym(156), Sym(157), Sym(158), Sym(159), Sym(160))
+ReflectReadMutable: List(Sym(161)) deps: List(Sym(156))
+reflectReadMutable: WrappedArray(Sym(156)) Def: HashMapGetTable(Sym(156))
+Context: List(Sym(156), Sym(157), Sym(158), Sym(159), Sym(160), Sym(161))
+ReflectReadMutable: List(Sym(157)) deps: List(Sym(156))
+reflectReadMutable: WrappedArray(Sym(157)) Def: ArrayApply(Sym(157),Sym(164))
+Context: List(Sym(156), Sym(157), Sym(158), Sym(159), Sym(160), Sym(161), Sym(162))
+ReflectReadMutable: List(Sym(165)) deps: List(Sym(156), Sym(157))
+reflectReadMutable: WrappedArray(Sym(156)) Def: HashMapGetSize(Sym(156))
+Context: List(Sym(156), Sym(157), Sym(158), Sym(159), Sym(160), Sym(161), Sym(162), Sym(165), Sym(166))
+ReflectReadMutable: List(Sym(158)) deps: List(Sym(156))
+reflectReadMutable: WrappedArray(Sym(166)) Def: ReadVar(Variable(Sym(166)))
+Context: List(Sym(156), Sym(157), Sym(158), Sym(159), Sym(160), Sym(161), Sym(162), Sym(165), Sym(166))
+ReflectReadMutable: List(Sym(167)) deps: List(Sym(156), Sym(157), Sym(165), Sym(166))
+reflectReadMutable: WrappedArray(Sym(157)) Def: ArrayApply(Sym(157),Sym(164))
+Context: List(Sym(156), Sym(157), Sym(158), Sym(159), Sym(160), Sym(161), Sym(162), Sym(165), Sym(166), Sym(167), Sym(168), Sym(169))
+ReflectReadMutable: List(Sym(165)) deps: List(Sym(156), Sym(157))
+reflectReadMutable: WrappedArray(Sym(166)) Def: ReadVar(Variable(Sym(166)))
+Context: List()
+ReflectReadMutable: List(Sym(174)) deps: List()
+reflectReadMutable: WrappedArray(Sym(174)) Def: EntryHasNext(Sym(174))
+Context: List(Sym(174))
+ReflectReadMutable: List(Sym(175)) deps: List(Sym(174))
+reflectReadMutable: WrappedArray(Sym(166)) Def: ReadVar(Variable(Sym(166)))
+Context: List()
+ReflectReadMutable: List(Sym(176)) deps: List()
+reflectReadMutable: WrappedArray(Sym(176)) Def: EntryGetKey(Sym(176))
+Context: List(Sym(176))
+ReflectReadMutable: List(Sym(177)) deps: List(Sym(176))
+reflectReadMutable: WrappedArray(Sym(166)) Def: ReadVar(Variable(Sym(166)))
+Context: List()
+ReflectReadMutable: List(Sym(183)) deps: List()
+reflectReadMutable: WrappedArray(Sym(183)) Def: EntryNext(Sym(183))
+Context: List(Sym(183))
+ReflectReadMutable: List(Sym(184)) deps: List(Sym(183))
+reflectReadMutable: WrappedArray(Sym(166)) Def: ReadVar(Variable(Sym(166)))
+Context: List(Sym(156), Sym(157), Sym(158), Sym(159), Sym(160), Sym(161), Sym(162), Sym(165), Sym(166), Sym(167), Sym(168), Sym(187))
+ReflectReadMutable: List(Sym(188)) deps: List(Sym(156), Sym(157), Sym(165), Sym(166), Sym(187))
+reflectReadMutable: WrappedArray(Sym(188)) Def: EntryGetKey(Sym(188))
+Context: List(Sym(156), Sym(157), Sym(158), Sym(159), Sym(160), Sym(161), Sym(162), Sym(165), Sym(166), Sym(167), Sym(168), Sym(187), Sym(188))
+ReflectReadMutable: List(Sym(189)) deps: List(Sym(156), Sym(157), Sym(165), Sym(188))
+reflectReadMutable: WrappedArray(Sym(166)) Def: ReadVar(Variable(Sym(166)))
+Context: List(Sym(156), Sym(157), Sym(158), Sym(159), Sym(160), Sym(161), Sym(162), Sym(165), Sym(166), Sym(167), Sym(168), Sym(187), Sym(188), Sym(189))
+ReflectReadMutable: List(Sym(188)) deps: List(Sym(156), Sym(157), Sym(165), Sym(166), Sym(187))
+reflectReadMutable: WrappedArray(Sym(188)) Def: EntryGetValue(Sym(188))
+Context: List(Sym(156), Sym(157), Sym(158), Sym(159), Sym(160), Sym(161), Sym(162), Sym(165), Sym(166), Sym(167), Sym(168), Sym(187), Sym(188), Sym(189))
+ReflectReadMutable: List(Sym(191)) deps: List(Sym(156), Sym(157), Sym(165), Sym(188))
+reflectReadMutable: WrappedArray(Sym(166)) Def: ReadVar(Variable(Sym(166)))
+Context: List(Sym(156), Sym(157), Sym(158), Sym(159), Sym(160), Sym(161), Sym(162), Sym(165), Sym(166), Sym(167), Sym(168), Sym(187), Sym(188), Sym(189))
+ReflectReadMutable: List(Sym(188)) deps: List(Sym(156), Sym(157), Sym(165), Sym(166), Sym(187))
+reflectReadMutable: WrappedArray(Sym(188)) Def: EntryNext(Sym(188))
+Context: List(Sym(156), Sym(157), Sym(158), Sym(159), Sym(160), Sym(161), Sym(162), Sym(165), Sym(166), Sym(167), Sym(168), Sym(187), Sym(188), Sym(189), Sym(194))
+ReflectReadMutable: List(Sym(195)) deps: List(Sym(156), Sym(157), Sym(165), Sym(188))
+reflectReadMutable: WrappedArray(Sym(188)) Def: EntryHasNext(Sym(188))
+Context: List(Sym(156), Sym(157), Sym(158), Sym(159), Sym(160), Sym(161), Sym(162), Sym(165), Sym(166), Sym(167), Sym(168), Sym(187), Sym(188), Sym(189), Sym(194), Sym(195))
+ReflectReadMutable: List(Sym(196)) deps: List(Sym(156), Sym(157), Sym(165), Sym(188))
+reflectReadMutable: WrappedArray(Sym(156)) Def: HashMapGetTable(Sym(156))
+Context: List(Sym(156), Sym(157), Sym(158), Sym(159), Sym(160), Sym(161), Sym(162), Sym(165), Sym(166), Sym(167), Sym(168), Sym(202))
+ReflectReadMutable: List(Sym(203)) deps: List(Sym(156), Sym(202))
+reflectReadMutable: WrappedArray(Sym(156)) Def: HashMapGetThreshold(Sym(156))
+Context: List(Sym(156), Sym(157), Sym(158), Sym(159), Sym(160), Sym(161), Sym(162), Sym(165), Sym(166), Sym(167), Sym(168), Sym(202), Sym(203))
+ReflectReadMutable: List(Sym(204)) deps: List(Sym(156), Sym(202))
+reflectReadMutable: WrappedArray(Sym(156)) Def: HashMapMAXIMUM_CAPACITY(Sym(156))
+Context: List(Sym(156), Sym(157), Sym(158), Sym(159), Sym(160), Sym(161), Sym(162), Sym(165), Sym(166), Sym(167), Sym(168), Sym(202), Sym(203), Sym(204))
+ReflectReadMutable: List(Sym(205)) deps: List(Sym(156), Sym(202))
+reflectReadMutable: WrappedArray(Sym(156)) Def: HashMapGetSize(Sym(156))
+Context: List(Sym(156), Sym(157), Sym(158), Sym(159), Sym(160), Sym(161), Sym(162), Sym(165), Sym(166), Sym(167), Sym(168), Sym(202), Sym(203), Sym(204), Sym(205))
+ReflectReadMutable: List(Sym(206)) deps: List(Sym(156), Sym(202))
+reflectReadMutable: WrappedArray(Sym(156)) Def: HashMapSetThreshold(Sym(156),Sym(65))
+Context: List(Sym(156), Sym(157), Sym(158), Sym(159), Sym(160), Sym(161), Sym(162), Sym(165), Sym(166), Sym(167), Sym(168), Sym(202), Sym(203), Sym(204), Sym(205), Sym(206), Sym(208))
+ReflectReadMutable: List(Sym(210)) deps: List(Sym(156), Sym(202))
+reflectReadMutable: WrappedArray(Sym(214)) Def: ReadVar(Variable(Sym(214)))
+Context: List()
+ReflectReadMutable: List(Sym(215)) deps: List()
+reflectReadMutable: WrappedArray(Sym(214)) Def: ReadVar(Variable(Sym(214)))
+Context: List()
+ReflectReadMutable: List(Sym(219)) deps: List()
+reflectReadMutable: WrappedArray(Sym(203)) Def: ArrayApply(Sym(203),Sym(219))
+Context: List(Sym(219))
+ReflectReadMutable: List(Sym(220)) deps: List()
+reflectReadMutable: WrappedArray(Sym(221)) Def: ReadVar(Variable(Sym(221)))
+Context: List(Sym(219), Sym(220), Sym(221))
+ReflectReadMutable: List(Sym(222)) deps: List(Sym(220), Sym(221))
+reflectReadMutable: WrappedArray(Sym(214)) Def: ReadVar(Variable(Sym(214)))
+Context: List(Sym(219), Sym(220), Sym(221), Sym(222), Sym(223))
+ReflectReadMutable: List(Sym(219)) deps: List()
+reflectReadMutable: WrappedArray(Sym(203)) Def: ArrayApply(Sym(203),Sym(219))
+Context: List(Sym(219), Sym(220), Sym(221), Sym(222), Sym(223))
+ReflectReadMutable: List(Sym(220)) deps: List()
+reflectReadMutable: WrappedArray(Sym(221)) Def: ReadVar(Variable(Sym(221)))
+Context: List()
+ReflectReadMutable: List(Sym(225)) deps: List()
+reflectReadMutable: WrappedArray(Sym(221)) Def: ReadVar(Variable(Sym(221)))
+Context: List()
+ReflectReadMutable: List(Sym(228)) deps: List()
+reflectReadMutable: WrappedArray(Sym(228)) Def: EntryGetKey(Sym(228))
+Context: List(Sym(228))
+ReflectReadMutable: List(Sym(229)) deps: List(Sym(228))
+reflectReadMutable: WrappedArray(Sym(221)) Def: ReadVar(Variable(Sym(221)))
+Context: List(Sym(228), Sym(229))
+ReflectReadMutable: List(Sym(228)) deps: List()
+reflectReadMutable: WrappedArray(Sym(228)) Def: EntryNext(Sym(228))
+Context: List(Sym(228), Sym(229))
+ReflectReadMutable: List(Sym(243)) deps: List(Sym(228))
+reflectReadMutable: WrappedArray(Sym(221)) Def: ReadVar(Variable(Sym(221)))
+Context: List(Sym(228), Sym(229), Sym(243))
+ReflectReadMutable: List(Sym(228)) deps: List()
+reflectReadMutable: WrappedArray(Sym(213)) Def: ArrayApply(Sym(213),Sym(242))
+Context: List(Sym(228), Sym(229), Sym(243))
+ReflectReadMutable: List(Sym(244)) deps: List()
+reflectReadMutable: WrappedArray(Sym(228)) Def: EntryNext(Sym(228))
+Context: List(Sym(228), Sym(229), Sym(243), Sym(244))
+ReflectReadMutable: List(Sym(243)) deps: List(Sym(228))
+reflectReadMutable: WrappedArray(Sym(228)) Def: EntryHasNext(Sym(228))
+Context: List(Sym(228), Sym(229), Sym(243), Sym(244))
+ReflectReadMutable: List(Sym(245)) deps: List(Sym(228))
+reflectReadMutable: WrappedArray(Sym(221)) Def: ReadVar(Variable(Sym(221)))
+Context: List(Sym(228), Sym(229), Sym(243), Sym(244), Sym(245), Sym(246))
+ReflectReadMutable: List(Sym(228)) deps: List()
+reflectReadMutable: WrappedArray(Sym(213)) Def: ArrayApply(Sym(213),Sym(242))
+Context: List(Sym(228), Sym(229), Sym(243), Sym(244), Sym(245), Sym(246))
+ReflectReadMutable: List(Sym(244)) deps: List()
+reflectReadMutable: WrappedArray(Sym(214)) Def: ReadVar(Variable(Sym(214)))
+Context: List(Sym(219), Sym(220), Sym(221), Sym(222), Sym(223), Sym(252))
+ReflectReadMutable: List(Sym(219)) deps: List()
+reflectReadMutable: WrappedArray(Sym(156)) Def: HashMapGetTable(Sym(156))
+Context: List(Sym(156), Sym(157), Sym(158), Sym(159), Sym(160), Sym(161), Sym(162), Sym(165), Sym(166), Sym(167), Sym(168), Sym(202), Sym(203), Sym(204), Sym(205), Sym(206), Sym(208), Sym(213), Sym(214), Sym(256))
+ReflectReadMutable: List(Sym(203)) deps: List(Sym(156), Sym(202))
+reflectReadMutable: WrappedArray(Sym(156)) Def: HashMapGetLoadFactor(Sym(156))
+Context: List(Sym(156), Sym(157), Sym(158), Sym(159), Sym(160), Sym(161), Sym(162), Sym(165), Sym(166), Sym(167), Sym(168), Sym(202), Sym(203), Sym(204), Sym(205), Sym(206), Sym(208), Sym(213), Sym(214), Sym(256), Sym(257))
+ReflectReadMutable: List(Sym(258)) deps: List(Sym(156), Sym(202))
+reflectReadMutable: WrappedArray(Sym(156)) Def: HashMapSetThreshold(Sym(156),Sym(260))
+Context: List(Sym(156), Sym(157), Sym(158), Sym(159), Sym(160), Sym(161), Sym(162), Sym(165), Sym(166), Sym(167), Sym(168), Sym(202), Sym(203), Sym(204), Sym(205), Sym(206), Sym(208), Sym(213), Sym(214), Sym(256), Sym(257), Sym(258))
+ReflectReadMutable: List(Sym(261)) deps: List(Sym(156), Sym(202))
+reflectReadMutable: WrappedArray(Sym(156)) Def: HashMapGetTable(Sym(156))
+Context: List(Sym(156), Sym(157), Sym(158), Sym(159), Sym(160), Sym(161), Sym(162), Sym(165), Sym(166), Sym(167), Sym(168), Sym(202), Sym(203), Sym(204), Sym(205), Sym(206), Sym(265))
+ReflectReadMutable: List(Sym(208), Sym(210), Sym(213), Sym(214), Sym(215), Sym(216), Sym(219), Sym(220), Sym(222), Sym(223), Sym(225), Sym(226), Sym(228), Sym(229), Sym(243), Sym(244), Sym(245), Sym(203), Sym(258), Sym(261)) deps: List(Sym(156), Sym(202), Sym(265))
+reflectReadMutable: WrappedArray(Sym(266)) Def: ArrayApply(Sym(266),Sym(269))
+Context: List(Sym(156), Sym(157), Sym(158), Sym(159), Sym(160), Sym(161), Sym(162), Sym(165), Sym(166), Sym(167), Sym(168), Sym(202), Sym(203), Sym(204), Sym(205), Sym(206), Sym(265), Sym(266), Sym(267))
+ReflectReadMutable: List(Sym(270)) deps: List(Sym(156), Sym(202), Sym(266))
+reflectReadMutable: WrappedArray(Sym(271)) Def: ReadVar(Variable(Sym(271)))
+Context: List(Sym(156), Sym(157), Sym(158), Sym(159), Sym(160), Sym(161), Sym(162), Sym(165), Sym(166), Sym(167), Sym(168), Sym(202), Sym(203), Sym(204), Sym(205), Sym(206), Sym(265), Sym(266), Sym(267), Sym(270), Sym(271))
+ReflectReadMutable: List(Sym(272)) deps: List(Sym(156), Sym(202), Sym(266), Sym(270), Sym(271))
+reflectReadMutable: WrappedArray(Sym(271)) Def: ReadVar(Variable(Sym(271)))
+Context: List()
+ReflectReadMutable: List(Sym(274)) deps: List()
+reflectReadMutable: WrappedArray(Sym(274)) Def: EntryHasNext(Sym(274))
+Context: List(Sym(274))
+ReflectReadMutable: List(Sym(275)) deps: List(Sym(274))
+reflectReadMutable: WrappedArray(Sym(271)) Def: ReadVar(Variable(Sym(271)))
+Context: List()
+ReflectReadMutable: List(Sym(276)) deps: List()
+reflectReadMutable: WrappedArray(Sym(276)) Def: EntryGetKey(Sym(276))
+Context: List(Sym(276))
+ReflectReadMutable: List(Sym(277)) deps: List(Sym(276))
+reflectReadMutable: WrappedArray(Sym(271)) Def: ReadVar(Variable(Sym(271)))
+Context: List()
+ReflectReadMutable: List(Sym(283)) deps: List()
+reflectReadMutable: WrappedArray(Sym(283)) Def: EntryNext(Sym(283))
+Context: List(Sym(283))
+ReflectReadMutable: List(Sym(284)) deps: List(Sym(283))
+reflectReadMutable: WrappedArray(Sym(271)) Def: ReadVar(Variable(Sym(271)))
+Context: List(Sym(156), Sym(157), Sym(158), Sym(159), Sym(160), Sym(161), Sym(162), Sym(165), Sym(166), Sym(167), Sym(168), Sym(202), Sym(203), Sym(204), Sym(205), Sym(206), Sym(265), Sym(266), Sym(267), Sym(270), Sym(271), Sym(272), Sym(273), Sym(287))
+ReflectReadMutable: List(Sym(288)) deps: List(Sym(156), Sym(202), Sym(266), Sym(270), Sym(271), Sym(287))
+reflectReadMutable: WrappedArray(Sym(288)) Def: EntryGetKey(Sym(288))
+Context: List(Sym(156), Sym(157), Sym(158), Sym(159), Sym(160), Sym(161), Sym(162), Sym(165), Sym(166), Sym(167), Sym(168), Sym(202), Sym(203), Sym(204), Sym(205), Sym(206), Sym(265), Sym(266), Sym(267), Sym(270), Sym(271), Sym(272), Sym(273), Sym(287), Sym(288))
+ReflectReadMutable: List(Sym(289)) deps: List(Sym(156), Sym(202), Sym(266), Sym(270), Sym(288))
+reflectReadMutable: WrappedArray(Sym(271)) Def: ReadVar(Variable(Sym(271)))
+Context: List(Sym(156), Sym(157), Sym(158), Sym(159), Sym(160), Sym(161), Sym(162), Sym(165), Sym(166), Sym(167), Sym(168), Sym(202), Sym(203), Sym(204), Sym(205), Sym(206), Sym(265), Sym(266), Sym(267), Sym(270), Sym(271), Sym(272), Sym(273), Sym(287), Sym(288), Sym(289))
+ReflectReadMutable: List(Sym(288)) deps: List(Sym(156), Sym(202), Sym(266), Sym(270), Sym(271), Sym(287))
+reflectReadMutable: WrappedArray(Sym(288)) Def: EntryGetValue(Sym(288))
+Context: List(Sym(156), Sym(157), Sym(158), Sym(159), Sym(160), Sym(161), Sym(162), Sym(165), Sym(166), Sym(167), Sym(168), Sym(202), Sym(203), Sym(204), Sym(205), Sym(206), Sym(265), Sym(266), Sym(267), Sym(270), Sym(271), Sym(272), Sym(273), Sym(287), Sym(288), Sym(289))
+ReflectReadMutable: List(Sym(291)) deps: List(Sym(156), Sym(202), Sym(266), Sym(270), Sym(288))
 /*****************************************
   Emitting Generated Code                  
 *******************************************/
 class IntHashMapGetAndUpdate extends ((Int)=>(Unit)) {
-def apply(x62:Int): Unit = {
-val x0 = new HashMap[Int,Int]()
-val x1 = x0.table
-val x2 = 1.hashCode
-val x3 = x2.toLong
-val x4 = x3 >>> 20
-val x5 = x3 >>> 12
-val x6 = x4 ^ x5
-val x7 = x6 ^ x3
-val x8 = x7 >>> 7
-val x9 = x7 ^ x8
-val x10 = x7 >>> 4
-val x11 = x9 ^ x10
-val x12 = x11.toInt
-val x13 = x1.length
-val x14 = x13 - 1
-val x15 = x12 & x14
-val x16 = x1(x15)
-var x63 = x16
-val x64 = x63
-val x65 = x64 == null
-if (x65) {
-val x66 = new Entry(1, 2)
-x1(x15) = x66
+def apply(x155:Int): Unit = {
+val x156 = new HashMap[Int,Int](200)
+val x157 = x156.table
+val x158 = x156.size
+val x159 = x156.loadFactor
+val x160 = x156.MAXIMUM_CAPACITY
+val x161 = x156.threshold
+val x162 = x157.length
+val x6 = 1.hashCode
+val x7 = x6.toLong
+val x8 = x7 >>> 20
+val x9 = x7 >>> 12
+val x10 = x8 ^ x9
+val x11 = x10 ^ x7
+val x12 = x11 >>> 7
+val x13 = x11 ^ x12
+val x14 = x11 >>> 4
+val x15 = x13 ^ x14
+val x16 = x15.toInt
+val x163 = x162 - 1
+val x164 = x16 & x163
+val x165 = x157(x164)
+var x166 = x165
+val x167 = x166
+val x168 = x167 == null
+if (x168) {
+val x169 = new Entry(1, 2)
+x157(x164) = x169
+val x171 = x158 + 1
+x156.size = x171
 
 } else {
 while ({
-val x69 = x63
-val x70 = x69.hasNext
-val x76 = if (x70) {
-val x71 = x63
-val x72 = x71.key
-val x73 = x72 != 1
+val x174 = x166
+val x175 = x174.hasNext
+val x181 = if (x175) {
+val x176 = x166
+val x177 = x176.key
+val x178 = x177 != 1
 
-x73
+x178
 } else false
 
-x76
+x181
 }) {
-val x78 = x63
-val x79 = x78.next
-x63 = x79
+val x183 = x166
+val x184 = x183.next
+x166 = x184
 ()
 }
-val x83 = x63
-val x84 = x83.key
-val x85 = x84 == 1
-if (x85) {
-x83.value = 2
+val x188 = x166
+val x189 = x188.key
+val x190 = x189 == 1
+if (x190) {
+val x191 = x188.value
+x188.value = 2
 
 } else {
-val x88 = new Entry(1, 2)
-x83.next = x88
+val x194 = new Entry(1, 2)
+val x195 = x188.next
+val x196 = x188.hasNext
+x188.next = x194
+val x171 = x158 + 1
+x156.size = x171
 
 }
 
 }
-val x48 = x16 == null
-val x60 = if (x48) {
-null
+val x203 = x156.table
+val x204 = x156.threshold
+val x205 = x156.MAXIMUM_CAPACITY
+val x206 = x156.size
+val x207 = x206 >= x204
+if (x207) {
+val x208 = x203.length
+val x209 = x208 == x205
+if (x209) {
+val x65 = scala.Int.MaxValue
+x156.threshold = x65
+
 } else {
-val x54 = x16.next
-val x56 = x54.key
-val x57 = x56 == 1
-val x59 = if (x57) {
-val x58 = x54.value
-x58
+val x212 = 2 * x208
+val x213 = new Array[scala.virtualization.lms.epfl.test12.Entry[Int, Int]](x212)
+var x214 = 0
+val x241 = x212 - 1
+while ({
+val x215 = x214
+val x216 = x203.length
+val x217 = x215 < x216
+x217
+}) {
+val x219 = x214
+val x220 = x203(x219)
+var x221 = x220
+val x222 = x221
+val x223 = x222 != null
+if (x223) {
+x203(x219) = null
+while ({
+val x225 = x221
+val x226 = x225 != null
+x226
+}) {
+val x228 = x221
+val x229 = x228.key
+val x243 = x228.next
+val x230 = x229.hashCode
+val x231 = x230.toLong
+val x232 = x231 >>> 20
+val x233 = x231 >>> 12
+val x234 = x232 ^ x233
+val x235 = x234 ^ x231
+val x236 = x235 >>> 7
+val x237 = x235 ^ x236
+val x238 = x235 >>> 4
+val x239 = x237 ^ x238
+val x240 = x239.toInt
+val x242 = x240 & x241
+val x244 = x213(x242)
+val x245 = x228.hasNext
+x228.next = x244
+x213(x242) = x228
+x221 = x243
+()
+}
+
 } else {
-null
+()
 }
-x59
+val x253 = x219 + 1
+x214 = x253
+()
 }
-println(x60)
+x156.table = x213
+val x258 = x156.loadFactor
+val x259 = x258 * x212
+val x260 = x259.asInstanceOf[Int]
+x156.threshold = x260
+
+}
+
+} else {
+()
+}
+val x266 = x156.table
+val x267 = x266.length
+val x268 = x267 - 1
+val x269 = x16 & x268
+val x270 = x266(x269)
+var x271 = x270
+val x272 = x271
+val x273 = x272 == null
+val x296 = if (x273) {
+val x130 = None
+x130
+} else {
+while ({
+val x274 = x271
+val x275 = x274.hasNext
+val x281 = if (x275) {
+val x276 = x271
+val x277 = x276.key
+val x278 = x277 != 1
+
+x278
+} else false
+
+x281
+}) {
+val x283 = x271
+val x284 = x283.next
+x271 = x284
+()
+}
+val x288 = x271
+val x289 = x288.key
+val x290 = x289 == 1
+val x294 = if (x290) {
+val x291 = x288.value
+val x292 = Some(x291)
+x292
+} else {
+val x130 = None
+x130
+}
+x294
+}
+println(x296)
 }
 }
 /*****************************************

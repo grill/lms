@@ -92,15 +92,6 @@ trait ScalaGenVariablesNested extends ScalaGenVariables {
     } 
   }
 
-  class HashMap[K,V] (capacity: Int = 16) {
-    val MAXIMUM_CAPACITY = 1 << 30
-    val DEFAULT_LOAD_FACTOR = 0.75f
-    var table: Array[Entry[K,V]] = new Array[Entry[K,V]] (capacity)
-    var loadFactor: Float = DEFAULT_LOAD_FACTOR
-    var threshold = (capacity * DEFAULT_LOAD_FACTOR).toInt
-    var size = 0
-  }
-
   trait EntryOps extends Base with Variables {
 
     object EntryO {
@@ -275,6 +266,17 @@ trait ScalaGenVariablesNested extends ScalaGenVariables {
 
   }
 
+
+
+  class HashMap[K,V] (capacity: Int = 16) {
+    val MAXIMUM_CAPACITY = 1 << 30
+    val DEFAULT_LOAD_FACTOR = 0.75f
+    var table: Array[Entry[K,V]] = new Array[Entry[K,V]] (capacity)
+    var loadFactor: Float = DEFAULT_LOAD_FACTOR
+    var threshold = (capacity * DEFAULT_LOAD_FACTOR).toInt
+    var size = 0
+  }
+  
   trait HashMapArrOpsExp extends HashMapArrOps with ArrayOpsExp with EffectExp with TupleOpsExp with EntryOpsExp
   with HashCodeOpsExp with BooleanOpsExp with PrimitiveOpsExp with ListOpsExp with FunctionsExp with VariablesExp
   with NumericOpsExp with EqualExp with WhileExp with OrderingOpsExp with IfThenElseExp
@@ -283,14 +285,16 @@ trait ScalaGenVariablesNested extends ScalaGenVariables {
    with VariablesNested
   {
   case class NewHashMap[K, V](mK: Manifest[K], mV: Manifest[V], size: Exp[Int]) extends Def[HashMap[K, V]]
+  //mutable
   case class HashMapGetSize[K, V](x: Exp[HashMap[K, V]]) extends Def[Int]
-  case class HashMapGetTable[K, V](x: Exp[HashMap[K, V]]) extends Def[Array[Entry[K, V]]]
-  case class HashMapGetThreshold[K, V](x: Exp[HashMap[K, V]]) extends Def[Int]
+  case class HashMapSetSize[K, V](x: Exp[HashMap[K, V]], newSz: Exp[Int]) extends Def[Unit]
   case class HashMapGetLoadFactor[K, V](x: Exp[HashMap[K, V]]) extends Def[Float]
   case class HashMapMAXIMUM_CAPACITY[K, V](x: Exp[HashMap[K, V]]) extends Def[Int]
-  case class HashMapSetSize[K, V](x: Exp[HashMap[K, V]], newSz: Exp[Int]) extends Def[Unit]
-  case class HashMapSetTable[K, V](x: Exp[HashMap[K, V]], newTable: Exp[Array[Entry[K, V]]]) extends Def[Unit]
+  case class HashMapGetThreshold[K, V](x: Exp[HashMap[K, V]]) extends Def[Int]
   case class HashMapSetThreshold[K: Manifest, V](x: Exp[HashMap[K, V]], newThreshold: Exp[Int]) extends Def[Unit]
+  //nested mutable
+  case class HashMapGetTable[K, V](x: Exp[HashMap[K, V]]) extends Def[Array[Entry[K, V]]]
+  case class HashMapSetTable[K, V](x: Exp[HashMap[K, V]], newTable: Exp[Array[Entry[K, V]]]) extends Def[Unit]
 
   override def containSyms(e: Any): List[Sym[Any]] = e match {
     case HashMapSetTable(m,t) => syms(t)
@@ -304,10 +308,19 @@ trait ScalaGenVariablesNested extends ScalaGenVariables {
     case _ => super.extractSyms(e)
   }
 
-    def hashmap_new[K:Manifest,V:Manifest](n: Exp[Int], specializedKey: String = "", specializedValue: String = "")(implicit pos: SourceContext) : Rep[HashMap[K,V]] =
+    def hashmap_new[K:Manifest,V:Manifest](n: Exp[Int], specializedKey: String = "", specializedValue: String = "")(implicit pos: SourceContext) : Rep[HashMap[K,V]] = {
       //NewHashMap(manifest[K], manifest[V])
-      reflectMutable(NewHashMap(manifest[K], manifest[V], n))
+      val m = reflectMutable(NewHashMap(manifest[K], manifest[V], n))
       //array_obj_new[Entry[K,V]](n)
+
+      reflectReadMutable(m)(HashMapGetTable(m))
+      reflectReadMutable(m)(HashMapGetSize(m))
+      reflectReadMutable(m)(HashMapGetLoadFactor(m))
+      reflectReadMutable(m)(HashMapMAXIMUM_CAPACITY(m))
+      reflectReadMutable(m)(HashMapGetThreshold(m))
+
+      m
+    }
 
     def hashmap_apply[K:Manifest,V:Manifest](x: Rep[HashMap[K,V]], k: Rep[K])(implicit pos: SourceContext): Rep[Option[V]] = {
       //tuple2_get2(ArrayApply(m, k))
@@ -486,7 +499,7 @@ trait ScalaGenVariablesNested extends ScalaGenVariables {
     }
 
     def hashmap_setThreshold[K:Manifest,V:Manifest](m: Rep[HashMap[K,V]], i: Rep[Int])(implicit pos: SourceContext): Rep[Unit] = {
-      reflectReadMutable (m) ( HashMapSetThreshold(m, i) )
+      reflectWriteMutable (reflectReadMutable (m) ( HashMapGetThreshold(m) )) (i) ( HashMapSetThreshold(m, i) )
     }
 
     def hashmap_table[K:Manifest,V:Manifest](m: Rep[HashMap[K,V]])(implicit pos: SourceContext): Rep[Array[Entry[K, V]]] = {
@@ -509,7 +522,7 @@ trait ScalaGenVariablesNested extends ScalaGenVariables {
     }
 
     def hashmap_setSize[K:Manifest,V:Manifest](m: Rep[HashMap[K,V]], i: Rep[Int])(implicit pos: SourceContext): Rep[Unit] = {
-      reflectWrite(m)(HashMapSetSize(m, i))
+      reflectWriteMutable(reflectReadMutable (m) ( HashMapGetSize(m) ))(i)(HashMapSetSize(m, i))
       //reflectWrite( reflectReadMutable(m) (HashMapGetSize(m)) ) (HashMapSetSize(m, i))
       //reflectWrite(HashMapGetSize(m)) (HashMapSetSize(m, i))
     }
