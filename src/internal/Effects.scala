@@ -512,7 +512,7 @@ trait Effects extends Expressions with Blocks with Utils {
       case _ => None
     }}
 
-    //TODO: impl. loop problem detection
+    //TODO: impl. loop problem detection!!
     //if( inLoop && repsW.contains( mutable which was defined before loop ) && repsR.contains( mutable which was defined before loop ) )
 
     //println("reflectWriteMutable repsW: " + repsW + ", repsR: " + repsR)
