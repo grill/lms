@@ -402,7 +402,7 @@ trait Effects extends Expressions with Blocks with Utils {
       !currentNode.map(_.getClass).intersect(otherNode.map(_.getClass)).isEmpty
 
   def reflectReadMutable[A:Manifest](parent0: Exp[Any]*)(d: Def[A])(implicit pos: SourceContext): Exp[A] = {
-    println("reflectReadMutable: " + parent0 + " Def: " + d)
+    //println("reflectReadMutable: " + parent0 + " Def: " + d)
     //println("Context: " + context)
     val parent = parent0.toList.asInstanceOf[List[Sym[Any]]]
 
@@ -463,12 +463,12 @@ trait Effects extends Expressions with Blocks with Utils {
     val z = reflectEffect(d, ReadMutable(parent, List(d), repsW))
     pW = Nil
 
-    println("ReflectReadMutable: " + (findDefinition(z.asInstanceOf[Sym[Any]]) match {
+    /*println("ReflectReadMutable: " + (findDefinition(z.asInstanceOf[Sym[Any]]) match {
       //TODO: either write to get or alloc ??
       //case Some(TP(_, Reflect(_, u, _))) if (mustOnlyAlloc(u)) => List(x)
       case Some(TP(_, Reflect(_, u, deps))) => "" + u.aliasRep + " deps: " + deps
       case _ => ""
-    }))
+    }))*/
 
     val mutableAliases = mutableTransitiveAliases(d) filterNot (parent contains _)
     //println("Alias: " + mutableAliases)
@@ -477,7 +477,7 @@ trait Effects extends Expressions with Blocks with Utils {
   }
 
   def reflectWriteMutable[A:Manifest](write0: Exp[Any]*)(read0: Exp[Any]*)(d: Def[A])(implicit pos: SourceContext): Exp[A] = {
-    println("Write: " + write0 + "Def: " + d)
+    //println("Write: " + write0 + "Def: " + d)
     val write = write0.toList.asInstanceOf[List[Sym[Any]]] // should check...
     //val read = read0.toList.asInstanceOf[List[Sym[Any]]] // should check...
 
@@ -499,6 +499,7 @@ trait Effects extends Expressions with Blocks with Utils {
       case Some(TP(_, Reflect(_, u, _))) => u.aliasRep
       case _ => None
     }}
+
     //TODO: remove the old ones when reassign happens
 
     //get all reps from written exprs --> get alias
@@ -511,15 +512,18 @@ trait Effects extends Expressions with Blocks with Utils {
       case _ => None
     }}
 
+    //TODO: impl. loop problem detection
+    //if( inLoop && repsW.contains( mutable which was defined before loop ) && repsR.contains( mutable which was defined before loop ) )
+
     //println("reflectWriteMutable repsW: " + repsW + ", repsR: " + repsR)
     val z = reflectEffect(d, WriteMutable(write, repsR ++ repsW))
 
-    println("AliasRep: " + (findDefinition(z.asInstanceOf[Sym[Any]]) match {
+    /*println("AliasRep: " + (findDefinition(z.asInstanceOf[Sym[Any]]) match {
       //TODO: either write to get or alloc ??
       //case Some(TP(_, Reflect(_, u, _))) if (mustOnlyAlloc(u)) => List(x)
       case Some(TP(_, Reflect(_, u, deps))) => "" + u.aliasRep + " deps: " + deps
       case _ => ""
-    }))
+    }))*/
 
     //generate fresh symbols after write for reads
 
