@@ -2,7 +2,7 @@ package scala.virtualization.lms
 package common
 
 import java.io.{File, FileReader, FileWriter, BufferedReader, BufferedWriter, PrintWriter, FileOutputStream, ObjectOutputStream, FileInputStream, ObjectInputStream}
-import scala.virtualization.lms.internal.{GenerationFailedException}
+import scala.virtualization.lms.internal.{GenerationFailedException, GenericNestedCodegen}
 import util.OverloadHack
 import scala.reflect.SourceContext
 
@@ -116,6 +116,11 @@ trait IOOps extends Variables with OverloadHack {
   }
   def obj_fos_apply(s: Rep[File])(implicit pos: SourceContext): Rep[FileOutputStream]
 
+  object FileLineCount {
+	def apply(s: Rep[String])(implicit pos: SourceContext) = file_line_count(s)
+  }
+  def file_line_count(s: Rep[String])(implicit pos: SourceContext): Rep[Int]
+
 }
 
 trait IOOpsExp extends IOOps with DSLOpsExp {
@@ -143,6 +148,9 @@ trait IOOpsExp extends IOOps with DSLOpsExp {
   case class BwClose(b: Exp[BufferedWriter]) extends Def[Unit]
   case class BrReadline(b: Exp[BufferedReader]) extends Def[String]
   case class BrClose(b: Exp[BufferedReader]) extends Def[Unit]
+  case class CountFileLines(b: Exp[String]) extends Def[Int] {
+	val f = fresh[java.io.File] // used in c code gen
+  }
 
   def obj_file_apply(dir: Exp[String])(implicit pos: SourceContext): Exp[File] = reflectEffect(ObjFileApply(dir))
   def file_getcanonicalfile(f: Exp[File])(implicit pos: SourceContext) = FileGetCanonicalFile(f)
@@ -168,6 +176,7 @@ trait IOOpsExp extends IOOps with DSLOpsExp {
   def bw_close(b: Exp[BufferedWriter])(implicit pos: SourceContext) = reflectEffect(BwClose(b))
   def br_readline(b: Exp[BufferedReader])(implicit pos: SourceContext) : Exp[String] = reflectEffect(BrReadline(b))
   def br_close(b: Exp[BufferedReader])(implicit pos: SourceContext) : Exp[Unit] = reflectEffect(BrClose(b))
+  def file_line_count(s: Rep[String])(implicit pos: SourceContext) = reflectEffect(CountFileLines(s))
   
   override def mirror[A:Manifest](e: Def[A], f: Transformer)(implicit pos: SourceContext): Exp[A] = ({
     e match {
@@ -221,13 +230,21 @@ trait ScalaGenIOOps extends ScalaGenBase {
     case BwClose(b) => emitValDef(sym, src"$b.close()")
     case BrReadline(b) => emitValDef(sym, src"$b.readLine()")
     case BrClose(b) => emitValDef(sym, src"$b.close()")
+    case CountFileLines(b) => emitValDef(sym, "{import scala.sys.process._; Integer.parseInt(((\"wc -l \" +" + quote(b) + ") #| \"awk {print($1)}\" !!).replaceAll(\"\\\\s+$\", \"\"))}")
     case _ => super.emitNode(sym, rhs)
   }
 }
 
-trait CLikeGenIOOps extends CLikeGenBase {
+trait CLikeGenIOOps extends CLikeGenBase with GenericNestedCodegen {
   val IR: IOOpsExp
   import IR._
+
+  override def remap[A](m: Manifest[A]) = {
+	m match {
+		case s if s == manifest[File] => "FILE*"
+		case _ => super.remap(m)
+	}
+  }
 
   override def emitNode(sym: Sym[Any], rhs: Def[Any]) = rhs match {
     case ObjFileApply(dir) => emitValDef(sym, "fopen(" + quote(dir) + ", \"rw\")")
@@ -238,11 +255,15 @@ trait CLikeGenIOOps extends CLikeGenBase {
     case ObjFrApply(s) => throw new GenerationFailedException("CLikeGenIOOps: Java IO operations are not supported")
     case BrReadline(b) => throw new GenerationFailedException("CLikeGenIOOps: Java IO operations are not supported")
     case BrClose(b) => throw new GenerationFailedException("CLikeGenIOOps: Java IO operations are not supported")
+    case c@CountFileLines(b) => {
+		emitValDef(c.f, "popen(\"wc -l " + quote(b).replace("\"","") + "\",\"r\");")
+		stream.println("int " + quote(sym) + " = 0;")
+		stream.println("fscanf(" + quote(c.f) + ",\"%d\", &" + quote(sym) + ");")
+		stream.println("pclose(" + quote(c.f) + ");")
+	}
     case _ => super.emitNode(sym, rhs)
   }
 }
 trait CudaGenIOOps extends CudaGenBase with CLikeGenIOOps
 trait OpenCLGenIOOps extends OpenCLGenBase with CLikeGenIOOps
-trait CGenIOOps extends CGenBase with CLikeGenIOOps
-
-
+trait CGenIOOps extends CGenBase with CLikeGenIOOps 

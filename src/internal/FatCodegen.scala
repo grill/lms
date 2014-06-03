@@ -5,7 +5,7 @@ import util.GraphUtil
 import java.io.{File, PrintWriter}
 
 trait GenericFatCodegen extends GenericNestedCodegen with FatBlockTraversal {
-  val IR: Expressions with Effects with FatExpressions
+  val IR: Expressions with Effects with FatExpressions with LoweringTransform
   import IR._  
   
   

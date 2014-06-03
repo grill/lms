@@ -1,4 +1,4 @@
-package scala.virtualization.lms
+/*package scala.virtualization.lms
 package epfl
 package test4
 
@@ -7,18 +7,18 @@ import test1._
 import test2._
 import test3._
 
-/*
-TODO:
-+implement dfa_trans
-+automata 
-+compile and run
 
-benchmark
-cleanup
-parsing / tree construction?
-http parser??
-iteratee interface?
-*/
+// TODO:
+// +implement dfa_trans
+// +automata 
+// +compile and run
+
+// benchmark
+// cleanup
+// parsing / tree construction?
+// http parser??
+// iteratee interface?
+
 
 
 // careful with @specialized blowup
@@ -68,23 +68,23 @@ trait ScalaGenDFAOps extends ScalaGenBase {
 
 trait NFAtoDFA extends DFAOps { this: Arith with Functions with Equal with IfThenElse =>
 
-/*
-case class Automaton[I,O](out: O, next: I => Automaton[I,O])
-type DIO = Rep[Automaton[Char,List[Any]]]
 
-type NIO = List[NFATrans[Char,Any]]
-case class NFATrans[I,O](out: Rep[O], in: Set[I], s: () => NIO)
+// case class Automaton[I,O](out: O, next: I => Automaton[I,O])
+// type DIO = Rep[Automaton[Char,List[Any]]]
 
-def convertNFAtoDFA(in: NIO): DIO = {
-  def iterate(state: NIO): DIO = 
-    dfa_trans(state map (_.out)) { c: Rep[Char] =>
-      exploreNFA(state, c) { next =>
-        iterate(next)
-      }
-    }
-  iterate(in)
-}
-*/
+// type NIO = List[NFATrans[Char,Any]]
+// case class NFATrans[I,O](out: Rep[O], in: Set[I], s: () => NIO)
+
+// def convertNFAtoDFA(in: NIO): DIO = {
+//   def iterate(state: NIO): DIO = 
+//     dfa_trans(state map (_.out)) { c: Rep[Char] =>
+//       exploreNFA(state, c) { next =>
+//         iterate(next)
+//       }
+//     }
+//   iterate(in)
+// }
+
 
 
 
@@ -214,7 +214,7 @@ trait ScalaGenGAOps extends ScalaGenBase {
   import IR._
   
   override def emitNode(sym: Sym[Any], rhs: Def[Any]) = rhs match {
-    case GTrans(e,f) => emitValDef(sym, "List(" + remap(sym.tp.typeArguments(0)) + /*scala.virtualization.lms.epfl.test4.NAutomaton*/ "(" + quote(e) + "," + quote(f) + "))")
+    case GTrans(e,f) => emitValDef(sym, "List(" + remap(sym.tp.typeArguments(0)) + "(" + quote(e) + "," + quote(f) + "))")
     case GCall(f,c) => emitValDef(sym, quote(f) + ".flatMap(_.next.apply(" + quote(c) + "))")
     case GFlags(f) => emitValDef(sym, quote(f) + ".flatMap(_.out)")
     case _ => super.emitNode(sym, rhs)
@@ -223,7 +223,8 @@ trait ScalaGenGAOps extends ScalaGenBase {
 
 
 
-trait StepperOps extends DFAOps with Util { this: IfThenElse with ListOps with TupleOps with /*While with Variables with*/ Functions =>
+trait StepperOps extends DFAOps with Util { this: IfThenElse with ListOps with TupleOps //with While with Variables
+ with Functions =>
   
   // Producers: produce values by executing state transitions
   
@@ -249,10 +250,10 @@ trait StepperOps extends DFAOps with Util { this: IfThenElse with ListOps with T
     }
 
     def until(p: Rep[O] => Rep[Boolean]) = { // TODO: may want to bundle output with state to avoid recomputation
-    /*  Prod2[(S,O),O](Stepper2((st.s,st.res(st.s)),
-        { ss => band(st.cond(ss._1),p(ss._2)) },
-        { ss=> val s1 = st.step(ss._1); (s1,st.res(s1)) },
-        { ss=> ss._2}))*/
+      // Prod2[(S,O),O](Stepper2((st.s,st.res(st.s)),
+      //   { ss => band(st.cond(ss._1),p(ss._2)) },
+      //   { ss=> val s1 = st.step(ss._1); (s1,st.res(s1)) },
+      //   { ss=> ss._2}))
       Prod2[S,O](Stepper2(st.s,
             { s => bandnot(st.cond(s), p(st.res(s))) },
             st.yld, st.res))
@@ -355,9 +356,9 @@ trait StepperOps extends DFAOps with Util { this: IfThenElse with ListOps with T
     def map[U:Manifest](f: Rep[T] => Rep[U]) = new Stream[U] {
       type XI[I] = o.XI[T]
       type XS[S] = o.XS[S]
-      /*def into[S:Manifest](x: Foreach[U,S]) = {
-        o.into(x.premap(f))
-      }*/
+      // def into[S:Manifest](x: Foreach[U,S]) = {
+      //   o.into(x.premap(f))
+      // }
       def into[S:Manifest,O:Manifest](k: Stepper2[U,S,O]) = {
         o.into(k.copy(yld = { x => k.yld(f(x)) }))
       }
@@ -366,9 +367,9 @@ trait StepperOps extends DFAOps with Util { this: IfThenElse with ListOps with T
     def flatMap[S1,U:Manifest](f: Rep[T] => Prod2[S1,U]) = new Stream[U] {
       type XI[I] = o.XI[T]
       type XS[S] = o.XS[S]
-      /*def into[S:Manifest](x: Foreach[U,S]) = {
-        o.into(x.preflatMap(f))
-      }*/
+      // def into[S:Manifest](x: Foreach[U,S]) = {
+      //   o.into(x.preflatMap(f))
+      // }
       def into[S:Manifest,O:Manifest](k: Stepper2[U,S,O]) = {
         o.into(Stepper2(k.s, k.cond, { x => f(x).foreach(k.yld) }, k.res))
       }
@@ -387,21 +388,21 @@ trait StepperOps extends DFAOps with Util { this: IfThenElse with ListOps with T
       }
     }
     
-    /*def into[U:Manifest](b: Stream[U]): Stream[U] = new Stream[U] { // not in general: b may have wrong input type
-      type XI[I] = o.XI[T]
-      type XS[S] = o.XS[S]
-      def into[S:Manifest,O:Manifest](k: Stepper2[U,S,O]) = {
-        val k1 = b.into(k)
-        o.into(k)
-      }
-    }*/
+    // def into[U:Manifest](b: Stream[U]): Stream[U] = new Stream[U] { // not in general: b may have wrong input type
+    //   type XI[I] = o.XI[T]
+    //   type XS[S] = o.XS[S]
+    //   def into[S:Manifest,O:Manifest](k: Stepper2[U,S,O]) = {
+    //     val k1 = b.into(k)
+    //     o.into(k)
+    //   }
+    // }
 
-    /*def zip[U](b: Stream[U]) = new Stream[(T,U)] { // not in general: one stream may skip elements (or create more)
-      type FE[S] = (o.FE[S],b.FE[S])
-      def into[S:Manifest](x: Foreach[(T,U),S]) = {
-        //o.into(x) zip b.into(x)
-      }
-    }*/
+    // def zip[U](b: Stream[U]) = new Stream[(T,U)] { // not in general: one stream may skip elements (or create more)
+    //   type FE[S] = (o.FE[S],b.FE[S])
+    //   def into[S:Manifest](x: Foreach[(T,U),S]) = {
+    //     //o.into(x) zip b.into(x)
+    //   }
+    // }
 
 
   }
@@ -427,7 +428,7 @@ trait StepperOps extends DFAOps with Util { this: IfThenElse with ListOps with T
 }
 
 
-
+*/
 /*
 trait Stream
 case class EOF(err: Option[String]) extends Stream

@@ -1,4 +1,4 @@
-package scala.virtualization.lms
+/*package scala.virtualization.lms
 package epfl
 package test11
 
@@ -31,7 +31,8 @@ class TestHMM extends FileDiffSuite {
     Config.verbosity = 0
     val codegen = new ScalaGenNumericOps with ScalaGenStaticData with ScalaGenOrderingOps with ScalaGenArrayOps with ScalaGenRangeOps
       with ScalaGenVariables with ScalaGenIfThenElse
-      with ScalaGenPrint /*with LivenessOpt*/ { val IR: self.type = self }
+      with ScalaGenPrint with LivenessOpt
+      { val IR: self.type = self }
     codegen.emitSource1(test, "Test", new PrintWriter(System.out))
     run()
   }
@@ -148,3 +149,4 @@ class TestHMM extends FileDiffSuite {
 
 
 }
+*/

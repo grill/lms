@@ -1,4 +1,4 @@
-package scala.virtualization.lms
+/*package scala.virtualization.lms
 package epfl
 package test3
 
@@ -47,13 +47,13 @@ class TestMatch extends FileDiffSuite {
 
   val prefix = "test-out/epfl/test3-"
 
-  /*
-      println {
-        object TestMatchString extends TestMatch with Matching with Extractors with MatchingExtractorsRepString
-        import TestMatchString._
-        test(SuccessR("7"))
-      }
-  */
+  
+      // println {
+      //   object TestMatchString extends TestMatch with Matching with Extractors with MatchingExtractorsRepString
+      //   import TestMatchString._
+      //   test(SuccessR("7"))
+      // }
+  
 
   it("testMatch1") {
     withOutFile(prefix+"match1") {
@@ -90,3 +90,4 @@ class TestMatch extends FileDiffSuite {
   }
 
 }
+*/

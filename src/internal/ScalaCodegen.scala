@@ -35,6 +35,7 @@ trait ScalaCodegen extends GenericCodegen {
       // TODO: separate concerns, should not hard code "pxX" name scheme for static data here
       stream.print("class "+className+(if (staticData.isEmpty) "" else "("+staticData.map(p=>"p"+quote(p._1)+":"+p._1.tp).mkString(",")+")")+" extends (("+args.map( a => remap(a.tp)).mkString(", ")+")=>("+sA+"))")
       if (serializable) stream.println("with Serializable {") else stream.println(" {")
+      emitFunctions()
       stream.println("def apply("+args.map(a => quote(a, true) + ":" + remap(a.tp)).mkString(", ")+"): "+sA+" = {")
       emitBlock(transformedBody)
       if (sA != "Unit") stream.println(quote(getBlockResult(transformedBody)))
@@ -96,15 +97,15 @@ trait ScalaCodegen extends GenericCodegen {
   }
 
   def emitVarDef(sym: Sym[Variable[Any]], rhs: String): Unit = {
-//    stream.println("var " + quote(sym) + ": " + remap(sym.tp) + " = " + rhs)
-    stream.println("var " + quote(sym) + " = " + rhs)
+    stream.println("var " + quote(sym) + ": " + remap(sym.tp) + " = " + rhs)
+//    stream.println("var " + quote(sym) + " = " + rhs)
   }
 
   def emitAssignment(sym: Sym[Any], lhs: String, rhs: String): Unit = emitValDef(sym, lhs + " = " + rhs)
 }
 
 trait ScalaNestedCodegen extends GenericNestedCodegen with ScalaCodegen {
-  val IR: Expressions with Effects
+  val IR: Expressions with Effects with LoweringTransform
   import IR._
 
   // emit forward decls for recursive vals
@@ -143,7 +144,7 @@ trait ScalaNestedCodegen extends GenericNestedCodegen with ScalaCodegen {
 }
 
 trait ScalaFatCodegen extends GenericFatCodegen with ScalaCodegen {
-  val IR: Expressions with Effects with FatExpressions
+  val IR: Expressions with Effects with FatExpressions with LoweringTransform
   import IR._
 
   def emitKernelExtra(syms: List[Sym[Any]]): Unit = {

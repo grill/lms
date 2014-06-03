@@ -174,7 +174,7 @@ trait CudaCodegen extends GPUCodegen {
 
 // TODO: do we need this for each target?
 trait CudaNestedCodegen extends CLikeNestedCodegen with CudaCodegen {
-  val IR: Expressions with Effects
+  val IR: Expressions with Effects with LoweringTransform
   import IR._
 
   def CudaConsts(x:Exp[Any], s:String): String = {
@@ -196,7 +196,7 @@ trait CudaNestedCodegen extends CLikeNestedCodegen with CudaCodegen {
 }
 
 trait CudaFatCodegen extends CLikeFatCodegen with CudaCodegen {
-  val IR: Expressions with Effects with FatExpressions
+  val IR: Expressions with Effects with FatExpressions with LoweringTransform
   import IR._
 
   def emitMultiLoopCond(sym: Sym[Any], funcs:List[Block[Any]], idx: Sym[Int], postfix: String="", stream:PrintWriter):(String,List[Exp[Any]]) = {

@@ -31,6 +31,7 @@ trait CGenHashCodeOps extends CGenBase {
  
 	override def emitNode(sym: Sym[Any], rhs: Def[Any]) =  { 
         rhs match {
+            case HashCode(x) => emitValDef(sym, "(int)" + quote(x))
 		    case _ => super.emitNode(sym, rhs)
         }
     }

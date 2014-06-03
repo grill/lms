@@ -13,7 +13,7 @@ import scala.reflect.SourceContext
  *
  * @author Mohammad Dashti (mohammad.dashti@epfl.ch)
  */
-trait ScalaConciseCodegen extends ScalaNestedCodegen { self =>
+trait CConciseCodegen extends CNestedCodegen { self =>
   val IR: ExtendedExpressions with Effects with LoweringTransform
   import IR._
 
@@ -48,7 +48,9 @@ trait ScalaConciseCodegen extends ScalaNestedCodegen { self =>
     // }
   }
 
-  override def emitForwardDef(sym: Sym[Any]): Unit = if(!isVoidType(sym.tp)) super.emitForwardDef(sym)
+  override def emitForwardDef[A:Manifest](args: List[Manifest[_]], functionName: String, out: PrintWriter) = {
+    out.println(remap(manifest[A])+" "+functionName+"("+args.map(a => remap(a)).mkString(", ")+");")
+  }
 
   override def traverseStm(stm: Stm) = stm match {
     case TP(sym, rhs) => if(!sym.possibleToInline && sym.refCount > 0 /*for eliminating read-only effect-ful statements*/) emitNode(sym,rhs)

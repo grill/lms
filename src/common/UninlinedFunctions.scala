@@ -1,4 +1,4 @@
-package scala.virtualization.lms
+/*package scala.virtualization.lms
 package common
 
 import java.io.PrintWriter
@@ -45,7 +45,7 @@ trait UninlinedFunctionsExp extends UninlinedFunctions with BaseExp with EffectE
   case class UninlinedFuncApply1[A:Manifest,B:Manifest](f: Exp[A => B], arg: Exp[A]) extends Def[B]
   case class UninlinedFuncApply2[A1:Manifest,A2:Manifest,B:Manifest](f: Exp[(A1,A2) => B], arg: Exp[A1], arg2: Exp[A2]) extends Def[B]
 
-  /* si stands for State Initializer */
+  // si stands for State Initializer
   override def createUninlinedFunc0[B:Manifest](f: () => Exp[B], dRet: String = "", si: () => Exp[Unit] = null)(implicit pos: SourceContext): Exp[()=>B] = {
     val res = fresh[B] // overcomes the fact that the list has B = Any
     val l = UninlinedFunc0(f, res, dRet, si)
@@ -114,7 +114,7 @@ trait ScalaGenUninlinedFunctions extends ScalaGenEffect {
     z.map(x => if (x._2 != "") x._2 else remap(x._1.tp))
   }
 
-  private def getReturnType(res: Sym[Any], dRet: String) = if (dRet != "") dRet else res.tp
+  private def getReturnType(res: Sym[Any], dRet: String) = if (dRet != "") dRet else remap(res.tp)
 
   override def emitFileHeader() = {
     emitEnabled = true
@@ -136,8 +136,9 @@ trait ScalaGenUninlinedFunctions extends ScalaGenEffect {
             emitEnabled = false
             printState(si)
             // Now print function
+			val f = reifyEffects(fun())
             stream.println("def apply(): " + retType + " = {")
-            printUninlinedFuncBody(reifyEffects(fun()))
+            printUninlinedFuncBody(f)
             emitEnabled = true
         }
     }
@@ -276,7 +277,13 @@ trait CGenUninlinedFunctions extends CGenEffect {
             printState(si)
             // Now print function
             stream.println(retType + " " + quote(sym) + "(" + argsToStr(syms, argTypes) + ") {")
-            stream.println(printUninlinedFuncBody(reifyEffects(fun(e1,e2))))
+            var str = printUninlinedFuncBody(reifyEffects(fun(e1,e2)))
+			// HACK -- STUPID GLIB!
+			if (argType.contains("**")) {
+				str = str.replace(quote(e1),"(*" + quote(e1) + ")")
+				str = str.replace(quote(e2),"(*" + quote(e2) + ")")
+			}
+			stream.println(str)
             emitEnabled = true
         }
     }
@@ -289,4 +296,4 @@ trait CGenUninlinedFunctions extends CGenEffect {
 
     case _ => super.emitNode(sym, rhs)
   }
-}
+}*/

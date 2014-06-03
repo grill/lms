@@ -3,7 +3,7 @@ package common
 
 import java.io.PrintWriter
 import scala.virtualization.lms.util.OverloadHack
-import scala.virtualization.lms.internal.{GenerationFailedException}
+import scala.virtualization.lms.internal.{GenerationFailedException,CNestedCodegen}
 import scala.reflect.SourceContext
 
 trait LiftString {
@@ -37,6 +37,7 @@ trait StringOps extends Variables with OverloadHack {
   def infix_+[T:Manifest](s1: Var[T], s2: Rep[String])(implicit o: Overloaded12, pos: SourceContext) = string_plus(readVar(s1), s2)
   def infix_+[T:Manifest](s1: Var[T], s2: Var[String])(implicit o: Overloaded13, pos: SourceContext) = string_plus(readVar(s1), readVar(s2))
   def infix_+[T:Manifest](s1: Var[T], s2: String)(implicit o: Overloaded14, pos: SourceContext) = string_plus(readVar(s1), unit(s2))
+  def infix_getBytes(s1: Rep[String])(implicit pos: SourceContext) = string_getBytes(s1)
   
   // these are necessary to be more specific than arithmetic/numeric +. is there a more generic form of this that will work?
   //def infix_+[R:Manifest](s1: Rep[String], s2: R)(implicit c: R => Rep[Any], o: Overloaded15, pos: SourceContext) = string_plus(s1, c(s2))  
@@ -47,6 +48,8 @@ trait StringOps extends Variables with OverloadHack {
   def infix_+(s1: Rep[String], s2: Short)(implicit o: Overloaded19, pos: SourceContext) = string_plus(s1, unit(s2))  
   
   def infix_startsWith(s1: Rep[String], s2: Rep[String])(implicit pos: SourceContext) = string_startswith(s1,s2)
+  def infix_endsWith(s1: Rep[String], s2: Rep[String])(implicit pos: SourceContext) = string_endswith(s1,s2)
+  def infix_replaceAll(s1: Rep[String], d1: Rep[String], d2: Rep[String])(implicit pos: SourceContext) = string_replaceAll(s1,d1,d2)
   def infix_trim(s: Rep[String])(implicit pos: SourceContext) = string_trim(s)
   def infix_contains(s: Rep[String], searchStr: Rep[String])(implicit pos: SourceContext) = string_contains(s, searchStr)
   def infix_format(s: Rep[String], params:Rep[Any]*)(implicit pos: SourceContext) = string_format(s, params)
@@ -66,6 +69,8 @@ trait StringOps extends Variables with OverloadHack {
   def string_new(s: Rep[Any]): Rep[String]
   def string_plus(s: Rep[Any], o: Rep[Any])(implicit pos: SourceContext): Rep[String]
   def string_startswith(s1: Rep[String], s2: Rep[String])(implicit pos: SourceContext): Rep[Boolean]
+  def string_endswith(s1: Rep[String], s2: Rep[String])(implicit pos: SourceContext): Rep[Boolean]
+  def string_replaceAll(s1: Rep[String], d1: Rep[String], d2: Rep[String])(implicit pos: SourceContext): Rep[String]
   def string_trim(s: Rep[String])(implicit pos: SourceContext): Rep[String]
   def string_contains(s: Rep[String], searchStr: Rep[String])(implicit pos: SourceContext): Rep[Boolean]
   def string_format(s: Rep[String], params:Seq[Rep[Any]])(implicit pos: SourceContext): Rep[String]
@@ -78,12 +83,21 @@ trait StringOps extends Variables with OverloadHack {
   def string_substring(s: Rep[String], beginIndex: Rep[Int])(implicit pos: SourceContext): Rep[String]
   def string_substring(s: Rep[String], beginIndex: Rep[Int], endIndex: Rep[Int])(implicit pos: SourceContext): Rep[String]
   def string_length(s: Rep[String])(implicit pos: SourceContext): Rep[Int]
+  def string_getBytes(s1: Rep[String])(implicit pos: SourceContext): Rep[Array[Byte]]
+  def string_containsSlice(s1: Rep[String],s2:Rep[String])(implicit pos: SourceContext): Rep[Boolean]
+  def string_compareTo(s1: Rep[String],s2:Rep[String])(implicit pos: SourceContext): Rep[Int]
+  def string_indexOfSlice(s1: Rep[String],s2:Rep[String],idx:Rep[Int])(implicit pos: SourceContext): Rep[Int]
 }
 
-trait StringOpsExp extends StringOps with VariablesExp {
-  case class StringNew(s: Exp[Any]) extends Def[String]
+trait StringOpsExp extends StringOps with VariablesExp with Structs {
+  case class StringNew(s: Rep[Any]) extends Def[String]
   case class StringPlus(s: Exp[Any], o: Exp[Any]) extends Def[String]
   case class StringStartsWith(s1: Exp[String], s2: Exp[String]) extends Def[Boolean]
+  case class StringEndsWith(s1: Exp[String], s2: Exp[String]) extends Def[Boolean] {
+    val lensuf = fresh[Int]
+    val lenstr = fresh[Int]
+  }
+  case class StringReplaceAll(s1: Exp[String], d1: Exp[String], d2: Exp[String]) extends Def[String]
   case class StringTrim(s: Exp[String]) extends Def[String]
   case class StringContains(s: Exp[String], searchStr: Exp[String]) extends Def[Boolean]
   case class StringFormat(s: Exp[String], params:Seq[Rep[Any]]) extends Def[String]
@@ -94,16 +108,22 @@ trait StringOpsExp extends StringOps with VariablesExp {
   case class StringToInt(s: Exp[String]) extends Def[Int]
   case class StringToLong(s: Exp[String]) extends Def[Long]
   case class StringSubstring(s: Exp[String], beginIndex: Exp[Int]) extends Def[String]
+  case class StringGetBytes(s: Exp[String]) extends Def[Array[Byte]]
   case class StringSubstringWithEndIndex(s: Exp[String], beginIndex: Exp[Int], endIndex: Exp[Int]) extends Def[String]
   case class StringLength(s: Exp[String]) extends Def[Int]
+  case class StringContainsSlice(s1: Exp[String], s2: Exp[String]) extends Def[Boolean]
+  case class StringCompareTo(s1: Exp[String], s2: Exp[String]) extends Def[Int]
+  case class StringIndexOfSlice(s1: Exp[String], s2: Exp[String], idx: Exp[Int]) extends Def[Int]
 
   def string_new(s: Exp[Any]) = StringNew(s)
   def string_plus(s: Exp[Any], o: Exp[Any])(implicit pos: SourceContext): Exp[String] = StringPlus(s,o)
   def string_startswith(s1: Exp[String], s2: Exp[String])(implicit pos: SourceContext) = StringStartsWith(s1,s2)
-  def string_trim(s: Exp[String])(implicit pos: SourceContext) : Exp[String] = StringTrim(s)
+  def string_endswith(s1: Exp[String], s2: Exp[String])(implicit pos: SourceContext) = StringEndsWith(s1,s2)
+  def string_replaceAll(s1: Exp[String], d1: Exp[String], d2: Exp[String])(implicit pos: SourceContext) = StringReplaceAll(s1,d1,d2)
+  def string_trim(s: Exp[String])(implicit pos: SourceContext) : Rep[String] = StringTrim(s)
   def string_contains(s: Exp[String], searchStr: Exp[String])(implicit pos: SourceContext): Exp[Boolean] = StringContains(s, searchStr)
   def string_format(s: Exp[String], params:Seq[Exp[Any]])(implicit pos: SourceContext): Exp[String] = StringFormat(s, params)
-  def string_split(s: Exp[String], separators: Exp[String])(implicit pos: SourceContext) : Exp[Array[String]] = StringSplit(s, separators)
+  def string_split(s: Exp[String], separators: Exp[String])(implicit pos: SourceContext) : Rep[Array[String]] = StringSplit(s, separators)
   def string_valueof(a: Exp[Any])(implicit pos: SourceContext) = StringValueOf(a)
   def string_todouble(s: Exp[String])(implicit pos: SourceContext) = StringToDouble(s)
   def string_tofloat(s: Exp[String])(implicit pos: SourceContext) = StringToFloat(s)
@@ -112,8 +132,13 @@ trait StringOpsExp extends StringOps with VariablesExp {
   def string_substring(s: Exp[String], beginIndex: Exp[Int])(implicit pos: SourceContext) = StringSubstring(s, beginIndex)
   def string_substring(s: Exp[String], beginIndex: Exp[Int], endIndex: Exp[Int])(implicit pos: SourceContext) = StringSubstringWithEndIndex(s, beginIndex, endIndex)
   def string_length(s: Exp[String])(implicit pos: SourceContext) = StringLength(s)
+  def string_getBytes(s1: Rep[String])(implicit pos: SourceContext) = StringGetBytes(s1)
+  def string_containsSlice(s1: Rep[String], s2:Rep[String])(implicit pos: SourceContext) = StringContainsSlice(s1,s2)
+  def string_compareTo(s1: Rep[String],s2:Rep[String])(implicit pos: SourceContext) = StringCompareTo(s1,s2)
+  def string_indexOfSlice(s1: Rep[String], s2:Rep[String], idx: Rep[Int])(implicit pos: SourceContext) = StringIndexOfSlice(s1,s2,idx)
 
   override def mirror[A:Manifest](e: Def[A], f: Transformer)(implicit pos: SourceContext): Exp[A] = (e match {
+	case StringNew(a) => string_new(f(a))
     case StringPlus(a,b) => string_plus(f(a),f(b))
     case StringTrim(s) => string_trim(f(s))
     case StringContains(s, searchStr) => string_contains(f(s), f(searchStr))
@@ -126,6 +151,7 @@ trait StringOpsExp extends StringOps with VariablesExp {
     case StringSubstring(s, beginIndex) => string_substring(f(s), f(beginIndex))
     case StringSubstringWithEndIndex(s, beginIndex, endIndex) => string_substring(f(s), f(beginIndex), f(endIndex))
     case StringLength(s) => string_length(f(s))
+    case StringContainsSlice(s1,s2) => string_containsSlice(f(s1), f(s2))
     case _ => super.mirror(e,f)
   }).asInstanceOf[Exp[A]]
 }
@@ -138,6 +164,8 @@ trait ScalaGenStringOps extends ScalaGenBase {
     case StringNew(s1) => emitValDef(sym, src"new String($s1)")
     case StringPlus(s1,s2) => emitValDef(sym, src"$s1+$s2")
     case StringStartsWith(s1,s2) => emitValDef(sym, src"$s1.startsWith($s2)")
+    case StringEndsWith(s1,s2) => emitValDef(sym, src"$s1.endsWith($s2)")
+    case StringReplaceAll(s1,d1,d2) => emitValDef(sym, src"$s1.replaceAll($d1,$d2)")
     case StringTrim(s) => emitValDef(sym, src"$s.trim()")
     case StringContains(s,searchStr) => emitValDef(sym, src"$s.contains($searchStr)")
     case StringFormat(s,params) => emitValDef(sym, src"$s.format($params)")
@@ -147,6 +175,7 @@ trait ScalaGenStringOps extends ScalaGenBase {
     case StringToFloat(s) => emitValDef(sym, src"$s.toFloat")
     case StringToInt(s) => emitValDef(sym, src"$s.toInt")
     case StringToLong(s) => emitValDef(sym, src"$s.toLong")
+    case StringGetBytes(s) => emitValDef(sym, src"$s.getBytes")
     case StringSubstring(s, beginIndex) => emitValDef(sym, src"$s.substring($beginIndex)")
     case StringSubstringWithEndIndex(s, beginIndex, endIndex) => emitValDef(sym, src"$s.substring($beginIndex, $endIndex)")
     case StringLength(s) => emitValDef(sym, src"$s.length")
@@ -177,12 +206,48 @@ trait OpenCLGenStringOps extends OpenCLGenBase {
     case _ => super.emitNode(sym, rhs)
   }
 }
-trait CGenStringOps extends CGenBase {
+
+trait CGenStringOps extends CGenBase with CNestedCodegen {
   val IR: StringOpsExp
   import IR._
+  
+  override def lowerNode[A:Manifest](sym: Sym[A], rhs: Def[A]) = rhs match {
+	case StringNew(s) => sym.atPhase(LIRLowering) { 
+		// TODO: Find a better way than this. It assumes that the argument is an array of byte and it also assumes its implicit lowering
+        val ar = field[Array[Byte]](LIRLowering(s), "array")
+		ar.asInstanceOf[Exp[A]] 
+	}
+	case _ => super.lowerNode(sym,rhs)
+  }
 
   override def emitNode(sym: Sym[Any], rhs: Def[Any]) = rhs match {
-    case StringPlus(s1,s2) => emitValDef(sym,src"strcat($s1,$s2);")
+    case StringNew(s1) => emitValDef(sym, src"$s1")
+    case StringStartsWith(s1,s2) => emitValDef(sym, "strncmp(" + quote(s1) + "," + quote(s2) + ", strlen(" + quote(s2) + ")) == 0;")
+    case sew@StringEndsWith(s1,s2) => {
+      emitValDef(sew.lenstr,"strlen("+quote(s1)+")")
+      emitValDef(sew.lensuf,"strlen("+quote(s2)+")")
+      emitValDef(sym, "strncmp(" + quote(s1) + "+" + quote(sew.lenstr) + "-" + quote(sew.lensuf) + "," + quote(s2) + ", " + quote(sew.lensuf) + ") == 0;")
+    }
+    case StringContainsSlice(s1,s2) => 
+		emitValDef(sym, "strstr(" + quote(s1) + "," + quote(s2) + ") != NULL")
+    case StringCompareTo(s1,s2) => 
+		emitValDef(sym, "strcmp(" + quote(s1) + "," + quote(s2) + ")")
+    case StringIndexOfSlice(s1,s2,idx) => 
+		emitValDef(sym, "strstr(&" + quote(s1) + "[" + quote(idx) + "]," + quote(s2) + ") - " + quote(s1))
+		stream.println("if (" + quote(sym) + " < 0) " + quote(sym) + " = -1;") 
+    case StringToInt(s) => emitValDef(sym,src"atoi($s)")
+    case StringToLong(s) => emitValDef(sym,src"atol($s)")
+    case StringToFloat(s) => emitValDef(sym,src"atof($s)")
+    case StringToDouble(s) => emitValDef(sym,src"atof($s)")
+    case StringSubstringWithEndIndex(s,a,b) => emitValDef(sym, src"({ int l=$b-$a; char* r=(char*)malloc(l); memcpy(r,((char*)$s)+$a,l); r[l]=0; r; })")
+    case StringLength(s) => emitValDef(sym, src"strlen($s)")
+    // case StringPlus(s1,s2) => emitValDef(sym,src"strcat($s1,$s2);")
+    case StringPlus(s1,s2) => s2.tp.toString match {
+      // Warning: memory leaks. We need a global mechanism like reference counting, possibly release pool(*) wrapping functions.
+      // (*) See https://developer.apple.com/library/mac/documentation/Cocoa/Reference/Foundation/Classes/NSAutoreleasePool_Class/Reference/Reference.html
+      case "java.lang.String" => emitValDef(sym,src"({ int l1=strlen($s1),l2=strlen($s2); char* r=(char*)malloc(l1+l2+1); memcpy(r,$s1,l1); memcpy(r+l1,$s2,l2); r[l1+l2]=0; r; })")
+      case "Char" => emitValDef(sym,src"({ int l1=strlen($s1); char* r=(char*)malloc(l1+2); memcpy(r,$s1,l1); r[l1]=$s2; r[l1+2]=0; r; })")
+    }
     case StringTrim(s) => throw new GenerationFailedException("CGenStringOps: StringTrim not implemented yet")
     case StringSplit(s, sep) => throw new GenerationFailedException("CGenStringOps: StringSplit not implemented yet")
     case _ => super.emitNode(sym, rhs)

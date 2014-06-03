@@ -4,6 +4,7 @@ package internal
 import util.OverloadHack
 import scala.collection.{immutable,mutable}
 import scala.reflect.SourceContext
+import scala.virtualization.lms.common.WorklistTransformer
 
 trait AbstractTransformer {
   val IR: Expressions with Blocks with OverloadHack
@@ -96,4 +97,28 @@ trait FatTransforming extends Transforming with FatExpressions {
 
   //def mirror[A:Manifest](e: FatDef, f: Transformer): Exp[A] = sys.error("don't know how to mirror " + e)
 
+}
+
+/* Lewis: adapted from LMS TestWorklistTransform2.scala */
+trait LoweringTransform extends FatTransforming with Effects { self =>  
+  trait LoweringTransformer extends WorklistTransformer { val IR: self.type = self }
+
+  // ---------- Exp api
+  implicit def toAfter[A:Manifest](x: Def[A]) = new { def atPhase(t: LoweringTransformer)(y: => Exp[A]) = transformAtPhase(x)(t)(y) }
+  implicit def toAfter[A](x: Exp[A]) = new { def atPhase(t: LoweringTransformer)(y: => Exp[A]) = transformAtPhase(x)(t)(y) }
+
+  // transform x to y at the *next* iteration of t. 
+  // note: if t is currently active, it will continue the current pass with x = x.
+  // do we need a variant that replaces x -> y immediately if t is active?
+  def transformAtPhase[A](x: Exp[A])(t: LoweringTransformer)(y: => Exp[A]): Exp[A] = {
+    t.register(x)(y)
+    x
+  }
+    
+  def onCreate[A:Manifest](s: Sym[A], d: Def[A]): Exp[A] = s
+  
+  override def createDefinition[T](s: Sym[T], d: Def[T]): Stm = {
+    onCreate(s,d)(s.tp)
+    super.createDefinition(s,d)
+  }
 }

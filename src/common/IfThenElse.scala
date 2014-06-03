@@ -40,7 +40,7 @@ trait IfThenElseExp extends IfThenElse with EffectExp {
     val a = reifyEffectsHere(thenp)
     val b = reifyEffectsHere(elsep)
 
-    ifThenElse(cond,a,b)
+    ifThenElse[T](cond,a,b)
   }
 
   def ifThenElse[T:Manifest](cond: Rep[Boolean], thenp: Block[T], elsep: Block[T])(implicit pos: SourceContext) = {
@@ -54,7 +54,7 @@ trait IfThenElseExp extends IfThenElse with EffectExp {
     // (see TestMutation, for now sticking to old behavior)
     
     ////reflectEffect(IfThenElse(cond,thenp,elsep), ae orElse be)
-    reflectEffectInternal(IfThenElse(cond,thenp,elsep), ae orElse be)
+    reflectEffectInternal(IfThenElse[T](cond,thenp,elsep), ae orElse be)
   }
   
   override def mirrorDef[A:Manifest](e: Def[A], f: Transformer)(implicit pos: SourceContext): Def[A] = e match {
@@ -240,10 +240,10 @@ trait ScalaGenIfThenElse extends ScalaGenEffect with BaseGenIfThenElse {
       withStream(localStream) {
         stream.println("if (" + quote(c) + ") {")
         emitBlock(a)
-		emitBlockResult(a)
+		    emitBlockResult(a)
         stream.println("} else {")
         emitBlock(b)
-		emitBlockResult(b)
+		    emitBlockResult(b)
         stream.print("}")
       }
       emitValDef(sym, strWriter.toString)
@@ -403,10 +403,24 @@ trait OpenCLGenIfThenElseFat extends OpenCLGenIfThenElse with OpenCLGenFat with 
 trait CGenIfThenElse extends CGenEffect with BaseGenIfThenElse {
   import IR._
 
+  override def lowerNode[T:Manifest](sym: Sym[T], rhs: Def[T]) = rhs match {
+    case IfThenElse(c,a,b) => {
+        LIRTraversal(a)
+        LIRTraversal(b)
+        sym.atPhase(LIRLowering) {
+			val tc = LIRLowering(c)
+            val ta = LIRLowering(a)
+            val tb = LIRLowering(b)
+            reflectEffect(IfThenElse(tc, ta, tb)(tb.tp.asInstanceOf[Manifest[T]])).asInstanceOf[Exp[T]]
+        }
+    }
+    case _ => super.lowerNode(sym, rhs)
+  }
+
   override def emitNode(sym: Sym[Any], rhs: Def[Any]) = {
     rhs match {
       case IfThenElse(c,a,b) =>
-        //TODO: using if-else does not work 
+        //TODO: using if-else does noIIIt work 
         isVoidType(sym.tp) match {
           case true =>
             stream.println("if (" + quote(c) + ") {")
@@ -415,13 +429,13 @@ trait CGenIfThenElse extends CGenEffect with BaseGenIfThenElse {
             emitBlock(b)
             stream.println("}")
           case false =>
-            stream.println("%s %s;".format(remap(sym.tp),quote(sym)))
+            stream.println("%s %s;".format(remap(getBlockResult(a).tp),quote(sym,true)))
             stream.println("if (" + quote(c) + ") {")
             emitBlock(a)
-            stream.println("%s = %s;".format(quote(sym),quote(getBlockResult(a))))
+            stream.println("%s = %s;".format(quote(sym,true),quote(getBlockResult(a))))
             stream.println("} else {")
             emitBlock(b)
-            stream.println("%s = %s;".format(quote(sym),quote(getBlockResult(b))))
+            stream.println("%s = %s;".format(quote(sym,true),quote(getBlockResult(b))))
             stream.println("}")
         }
         /*
@@ -454,7 +468,8 @@ trait CGenIfThenElseFat extends CGenIfThenElse with CGenFat with BaseGenIfThenEl
 
   override def emitFatNode(symList: List[Sym[Any]], rhs: FatDef) = rhs match {
     case SimpleFatIfThenElse(c,as,bs) => 
-	  def quoteList[T](xs: List[Exp[T]]) = if (xs.length > 1) xs.map(x => quote(x, true)).mkString("(",",",")").replace("()","") else xs.map(x => quote(x,true)).mkString(",").replace("()","")
+  	  def quoteList[T](xs: List[Exp[T]]) = if (xs.length > 1) xs.map(x => quote(x, true)).mkString("(",",",")").replace("()","") else xs.map(x => quote(x,true)).mkString(",").replace("()","")
+      
       if (symList.length > 1) stream.println("// TODO: use vars instead of tuples to return multiple values")
       stream.println("if (" + quote(c) + ") {")
       emitFatBlock(as)

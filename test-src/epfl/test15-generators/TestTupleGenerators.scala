@@ -1,4 +1,4 @@
-package scala.virtualization.lms
+/*package scala.virtualization.lms
 package epfl
 package test15
 
@@ -20,9 +20,9 @@ trait TupledGeneratorProg extends K3PersistentCollectionOps with NumericOps
     val _var___prod_ret__30:Rep[Double] = MST_mASKS2_E1_1_L2_1.map((y:Rep[Tuple2[(Double),Double]]) => {
       val v: Rep[Tuple2[Double,Double]] = ({
         (x:Rep[Tuple2[(Double), Double]]) => {
-          val var_B2_PRICE:Rep[Double] = x._1 /* Rep[Double] => Rep[Double] */;
+          val var_B2_PRICE:Rep[Double] = x._1; // Rep[Double] => Rep[Double]
 
-          val var___map_ret__18:Rep[Double] = x._2 /* Rep[Double] => Rep[Double] */;
+          val var___map_ret__18:Rep[Double] = x._2; // Rep[Double] => Rep[Double]
 
           ((var_B2_PRICE),({
             val an331 = (var___map_ret__18);
@@ -47,9 +47,9 @@ trait TupledGeneratorProg extends K3PersistentCollectionOps with NumericOps
     }
     ).fold(unit(0.0), {
       (x:Rep[Tuple2[((Double)), Double]]) => {
-        val var_B2_PRICE:Rep[Double] = x._1 /* Rep[Double] => Rep[Double] */;
+        val var_B2_PRICE:Rep[Double] = x._1; // Rep[Double] => Rep[Double]
 
-        val var___prod_ret__30:Rep[Double] = x._2 /* Rep[Double] => Rep[Double] */;
+        val var___prod_ret__30:Rep[Double] = x._2; // Rep[Double] => Rep[Double]
 
         (var___accv_9:Rep[Double]) => {                                                            {
             val an330 = (var___accv_9);
@@ -67,18 +67,18 @@ trait TupledGeneratorProg extends K3PersistentCollectionOps with NumericOps
     //val var_B_BROKER_ID: Rep[Long] = unit(44L)
     val v = ({
     (x:Rep[Tuple2[(Double), Long]]) => {
-      val var___sql_inline_agg_1:Rep[Double] = x._1 /* Rep[Double] => Rep[Double] */;
+      val var___sql_inline_agg_1:Rep[Double] = x._1; // Rep[Double] => Rep[Double]
 
-      val var___lift_ret__16:Rep[Long] = x._2 /* Rep[Long] => Rep[Long] */;
+      val var___lift_ret__16:Rep[Long] = x._2; // Rep[Long] => Rep[Long]
 
       MST_mASKS2_E1_1.slice((var_B_BROKER_ID), NewList(unit(0))).map((y:Rep[Tuple2[Tuple2[Long,Double],Double]]) => {
         val v: Rep[Tuple2[Double,Double]] = ({
           (x:Rep[Tuple2[Tuple2[Long,Double], Double]]) => {
-            val var_B_BROKER_ID:Rep[Long] = x._1._1 /* Rep[Long] => Rep[Long] */;
+            val var_B_BROKER_ID:Rep[Long] = x._1._1; // Rep[Long] => Rep[Long]
 
-            val var_B0_PRICE:Rep[Double] = x._1._2 /* Rep[Double] => Rep[Double] */;
+            val var_B0_PRICE:Rep[Double] = x._1._2; // Rep[Double] => Rep[Double]
 
-            val var___map_ret__23:Rep[Double] = x._2 /* Rep[Double] => Rep[Double] */;
+            val var___map_ret__23:Rep[Double] = x._2; // Rep[Double] => Rep[Double]
 
             ((var_B0_PRICE),(var___map_ret__23))
           }
@@ -90,9 +90,9 @@ trait TupledGeneratorProg extends K3PersistentCollectionOps with NumericOps
       ).map((y:Rep[Tuple2[(Double),Double]]) => {
         val v: Rep[Tuple3[Double,Double,Double]] = ({
           (x:Rep[Tuple2[(Double), Double]]) => {
-            val var_B0_PRICE:Rep[Double] = x._1 /* Rep[Double] => Rep[Double] */;
+            val var_B0_PRICE:Rep[Double] = x._1; // Rep[Double] => Rep[Double]
 
-            val var___map_ret__23:Rep[Double] = x._2 /* Rep[Double] => Rep[Double] */;
+            val var___map_ret__23:Rep[Double] = x._2; // Rep[Double] => Rep[Double]
 
             ((var___sql_inline_agg_1),(var_B0_PRICE),({
               val an318 = ((var___lift_ret__16).asInstanceOf[Rep[Double]]);
@@ -113,9 +113,9 @@ trait TupledGeneratorProg extends K3PersistentCollectionOps with NumericOps
   }
   )(make_tuple2(unit(3.14),unit(200L))).fold(unit(0.0), {
     (x:Rep[Tuple2[(Double, Double), Double]]) => {
-      val var_B2_PRICE:Rep[Double] = x._1._1 /* Rep[Double] => Rep[Double] */;
+      val var_B2_PRICE:Rep[Double] = x._1._1; // Rep[Double] => Rep[Double]
 
-      val var___prod_ret__30:Rep[Double] = x._2 /* Rep[Double] => Rep[Double] */;
+      val var___prod_ret__30:Rep[Double] = x._2; // Rep[Double] => Rep[Double]
 
       (var___accv_9:Rep[Double]) => {                                                            {
           val an330 = (var___accv_9);
@@ -170,3 +170,4 @@ class TestTupledGeneratorOps extends FileDiffSuite {
     assertFileEqualsCheck(prefix+"tupled-generator-simple")
   }
 }
+*/

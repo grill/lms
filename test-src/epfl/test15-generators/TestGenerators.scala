@@ -1,4 +1,4 @@
-package scala.virtualization.lms
+/*package scala.virtualization.lms
 package epfl
 package test15
 
@@ -286,7 +286,7 @@ trait ArrayProg extends ExtendedGeneratorOps {
 
         val p = single(i,j) ++ concat(i,j)
 
-        var s/*: Rep[Matres]*/ = Matres(unit(0), unit(0), unit(10000))
+        var s = Matres(unit(0), unit(0), unit(10000))
         p{  x: Rep[Matres] =>
           if(x.mults < readVar(s).mults){s = x}
         }
@@ -413,3 +413,4 @@ class TestGeneratorOps extends FileDiffSuite {
     assertFileEqualsCheck(prefix+"generator-array")
   }
 }
+*/

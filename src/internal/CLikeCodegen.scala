@@ -65,17 +65,19 @@ trait CLikeCodegen extends GenericCodegen {
     case _ => throw new GenerationFailedException("Undefined GPU type")
   }
 
-
-
+  override def quote(x: Exp[Any]) : String = x match {
+    case Const(null) => "NULL"
+    case _ => super.quote(x)
+  }
 }
 
 trait CLikeNestedCodegen extends GenericNestedCodegen with CLikeCodegen {
-  val IR: Expressions with Effects
+  val IR: Expressions with Effects with LoweringTransform
   import IR._
 }
 
 trait CLikeFatCodegen extends GenericFatCodegen with CLikeCodegen {
-  val IR: Expressions with Effects with FatExpressions
+  val IR: Expressions with Effects with FatExpressions with LoweringTransform
   import IR._
 
   def emitMultiLoopCond(sym: Sym[Any], funcs:List[Block[Any]], idx: Sym[Int], postfix: String="", stream:PrintWriter):(String,List[Exp[Any]])

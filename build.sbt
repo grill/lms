@@ -41,7 +41,11 @@ scalaOrganization := "org.scala-lang.virtualized"
 
 scalaVersion := "2.10.2-RC2"
 
+scalacOptions += "-optimise"
+
 scalacOptions += "-Yvirtualize"
+
+scalacOptions += "-language:postfixOps"
 
 // needed for scala.tools, which is apparently not included in sbt's built in version
 libraryDependencies += "org.scala-lang.virtualized" % "scala-library" % virtScala
@@ -54,8 +58,8 @@ libraryDependencies += "org.scala-lang" % "scala-actors" % virtScala // for Scal
 // Compiling option 2 : Patched scala compiler as specified in ScalaCompilerPatches.txt */
 //***************************************************************************************/
 
-//scalaHome := Some(file("patched-scala/build/pack"))
+// scalaHome := Some(file("patched-scala/build/pack"))
 
-//unmanagedBase <<= baseDirectory { base => base / "patched-scala/build/pack" }
+// unmanagedBase <<= baseDirectory { base => base / "patched-scala/build/pack" }
 
-//unmanagedJars in Compile <<= baseDirectory map { base => (base ** "*.jar").classpath }
+// unmanagedJars in Compile <<= baseDirectory map { base => (base ** "*.jar").classpath }

@@ -55,6 +55,11 @@ trait Variables extends Base with OverloadHack with VariableImplicits with ReadV
   def var_minusequals[T:Manifest](lhs: Var[T], rhs: Rep[T])(implicit pos: SourceContext): Rep[Unit]
   def var_timesequals[T:Manifest](lhs: Var[T], rhs: Rep[T])(implicit pos: SourceContext): Rep[Unit]
   def var_divideequals[T:Manifest](lhs: Var[T], rhs: Rep[T])(implicit pos: SourceContext): Rep[Unit]
+  def var_tripleshift[T:Manifest](lhs: Var[T], rhs: Rep[T])(implicit pos: SourceContext): Rep[T]
+  def var_doubleshift[T:Manifest](lhs: Var[T], rhs: Rep[T])(implicit pos: SourceContext): Rep[T]
+  def var_leftshift[T:Manifest](lhs: Var[T], rhs: Rep[T])(implicit pos: SourceContext): Rep[T]
+  def var_logicalOr[T:Manifest](lhs: Var[T], rhs: Rep[T])(implicit pos: SourceContext): Rep[T]
+  def var_logicalAnd[T:Manifest](lhs: Var[T], rhs: Rep[T])(implicit pos: SourceContext): Rep[T]
   
   def __assign[T:Manifest](lhs: Var[T], rhs: T)(implicit pos: SourceContext) = var_assign(lhs, unit(rhs))
   def __assign[T](lhs: Var[T], rhs: Rep[T])(implicit o: Overloaded1, mT: Manifest[T], pos: SourceContext) = var_assign(lhs, rhs)
@@ -77,6 +82,12 @@ trait Variables extends Base with OverloadHack with VariableImplicits with ReadV
   def infix_/=[T](lhs: Var[T], rhs: T)(implicit o: Overloaded1, mT: Manifest[T], pos: SourceContext) = var_divideequals(lhs, unit(rhs))
   def infix_/=[T](lhs: Var[T], rhs: Rep[T])(implicit o: Overloaded2, mT: Manifest[T], pos: SourceContext) = var_divideequals(lhs,rhs)
   def infix_/=[T](lhs: Var[T], rhs: Var[T])(implicit o: Overloaded3, mT: Manifest[T], pos: SourceContext) = var_divideequals(lhs,readVar(rhs))
+  def infix_>>>[T](lhs: Var[T], rhs: Rep[T])(implicit o: Overloaded3, mT: Manifest[T], pos: SourceContext) = var_tripleshift(lhs,rhs)
+  def infix_>>[T](lhs: Var[T], rhs: Rep[T])(implicit o: Overloaded3, mT: Manifest[T], pos: SourceContext) = var_doubleshift(lhs,rhs)
+  def infix_>>[T](lhs: Var[T], rhs: Var[T])(implicit o: Overloaded4, mT: Manifest[T], pos: SourceContext) = var_doubleshift(lhs,readVar(rhs))
+  def infix_<<[T](lhs: Var[T], rhs: Rep[T])(implicit o: Overloaded3, mT: Manifest[T], pos: SourceContext) = var_leftshift(lhs,rhs)
+  def infix_|[T](lhs: Var[T], rhs: Var[T])(implicit o: Overloaded3, mT: Manifest[T], pos: SourceContext) = var_logicalOr(lhs,readVar(rhs))
+  def infix_&[T](lhs: Var[T], rhs: Var[T])(implicit o: Overloaded3, mT: Manifest[T], pos: SourceContext) = var_logicalAnd(lhs,readVar(rhs))
 }
 
 trait VariablesExp extends Variables with ImplicitOpsExp with VariableImplicits with ReadVarImplicitExp {
@@ -96,6 +107,11 @@ trait VariablesExp extends Variables with ImplicitOpsExp with VariableImplicits 
   case class VarMinusEquals[T:Manifest](lhs: Var[T], rhs: Exp[T]) extends Def[Unit]
   case class VarTimesEquals[T:Manifest](lhs: Var[T], rhs: Exp[T]) extends Def[Unit]
   case class VarDivideEquals[T:Manifest](lhs: Var[T], rhs: Exp[T]) extends Def[Unit]
+  case class VarDoubleShift[T:Manifest](lhs: Var[T], rhs: Exp[T]) extends Def[T]
+  case class VarTripleShift[T:Manifest](lhs: Var[T], rhs: Exp[T]) extends Def[T]
+  case class VarLeftShift[T:Manifest](lhs: Var[T], rhs: Exp[T]) extends Def[T]
+  case class VarLogicalOr[T:Manifest](lhs: Var[T], rhs: Exp[T]) extends Def[T]
+  case class VarLogicalAnd[T:Manifest](lhs: Var[T], rhs: Exp[T]) extends Def[T]
 
   def var_new[T:Manifest](init: Exp[T])(implicit pos: SourceContext): Var[T] = {
     //reflectEffect(NewVar(init)).asInstanceOf[Var[T]]
@@ -125,6 +141,22 @@ trait VariablesExp extends Variables with ImplicitOpsExp with VariableImplicits 
   def var_divideequals[T:Manifest](lhs: Var[T], rhs: Exp[T])(implicit pos: SourceContext): Exp[Unit] = {
     reflectWrite(lhs.e)(VarDivideEquals(lhs, rhs))
     Const()
+  }
+  
+  def var_tripleshift[T:Manifest](lhs: Var[T], rhs: Exp[T])(implicit pos: SourceContext): Exp[T] = {
+		reflectEffect(VarTripleShift(lhs,rhs))
+  }
+  def var_doubleshift[T:Manifest](lhs: Var[T], rhs: Exp[T])(implicit pos: SourceContext): Exp[T] = {
+		reflectEffect(VarDoubleShift(lhs,rhs))
+  }
+  def var_leftshift[T:Manifest](lhs: Var[T], rhs: Exp[T])(implicit pos: SourceContext): Exp[T] = {
+		reflectEffect(VarLeftShift(lhs,rhs))
+  }
+  def var_logicalOr[T:Manifest](lhs: Var[T], rhs: Exp[T])(implicit pos: SourceContext): Exp[T] = {
+		reflectEffect(VarLogicalOr(lhs,rhs))
+  }
+  def var_logicalAnd[T:Manifest](lhs: Var[T], rhs: Exp[T])(implicit pos: SourceContext): Exp[T] = {
+		reflectEffect(VarLogicalAnd(lhs,rhs))
   }
 
   override def aliasSyms(e: Any): List[Sym[Any]] = e match {
@@ -228,8 +260,27 @@ trait VariablesExpOpt extends VariablesExp {
     }
   }
   
-  // TODO: could eliminate redundant stores, too
-  // by overriding assign ...
+  // eliminate (some) redundant stores
+  // TODO: strong updates. overwriting a var makes previous stores unnecessary
+
+  override implicit def var_assign[T:Manifest](v: Var[T], e: Exp[T])(implicit pos: SourceContext) : Exp[Unit] = {
+    if (context ne null) {
+      // find the last modification of variable v
+      // if it is an assigment with the same value, we don't need to do anything
+      val vs = v.e.asInstanceOf[Sym[Variable[T]]]
+      //TODO: could use calculateDependencies(Read(v))
+      
+      context.reverse.foreach { 
+        case w @ Def(Reflect(NewVar(rhs: Exp[T]), _, _)) if w == vs => if (rhs == e) return ()
+        case Def(Reflect(Assign(`v`, rhs: Exp[T]), _, _)) => if (rhs == e) return ()
+        case Def(Reflect(_, u, _)) if mayWrite(u, List(vs)) =>  // not a simple assignment
+        case _ => // ...
+      }
+    }
+    super.var_assign(v,e)
+  }
+
+
 
 }
 
@@ -239,11 +290,12 @@ trait ScalaGenVariables extends ScalaGenEffect {
 
   override def emitNode(sym: Sym[Any], rhs: Def[Any]) = rhs match {
     case ReadVar(Variable(a)) => emitValDef(sym, quote(a))
-    case NewVar(init) => {
-        if (sym.tp != manifest[Variable[Nothing]]) {
-			val obj = sym.asInstanceOf[Sym[Variable[Any]]]
-            emitVarDef(obj, quote(init))
-		}
+    case y@NewVar(init) => {
+      if (sym.emitted == false && sym.tp != manifest[Variable[Nothing]] && sym.tp != manifest[Variable[Null]]) {
+  			val obj = sym.asInstanceOf[Sym[Variable[Any]]]
+              emitVarDef(obj, quote(init))
+  			sym.emitted = true;
+  		}
     }
     case ReadVar(null) => {} // emitVarDef(sym.asInstanceOf[Sym[Variable[Any]]], "null")
     case Assign(v @ Variable(a), b) => {
@@ -254,9 +306,9 @@ trait ScalaGenVariables extends ScalaGenEffect {
             case y@_ => false
         }
         val obj = a.asInstanceOf[Sym[Variable[Any]]]
-        if (lhsIsNull && !v.emitted) {
-            emitVarDef(obj, quote(b))
-		    v.emitted = true
+        if (!obj.emitted) {
+            stream.println("var " + quote(obj) + ": " + remap(b.tp) + " = " + quote(b))
+		    obj.emitted = true
         }
         else emitAssignment(sym, quote(a), quote(b))
     }
@@ -265,6 +317,11 @@ trait ScalaGenVariables extends ScalaGenEffect {
     case VarMinusEquals(Variable(a), b) => stream.println(quote(a) + " -= " + quote(b))
     case VarTimesEquals(Variable(a), b) => stream.println(quote(a) + " *= " + quote(b))
     case VarDivideEquals(Variable(a), b) => stream.println(quote(a) + " /= " + quote(b))
+  	case VarTripleShift(Variable(a),b) => emitValDef(sym,quote(a) + ">>>" + quote(b))
+  	case VarDoubleShift(Variable(a),b) => emitValDef(sym,quote(a) + ">>" + quote(b))
+  	case VarLeftShift(Variable(a),b) => emitValDef(sym,quote(a) + "<<" + quote(b))
+  	case VarLogicalOr(Variable(a),b) => emitValDef(sym,quote(a) + "|" + quote(b))
+  	case VarLogicalAnd(Variable(a),b) => emitValDef(sym,quote(a) + "&" + quote(b))
     case _ => super.emitNode(sym, rhs)
   }
 }
@@ -273,26 +330,42 @@ trait CLikeGenVariables extends CLikeGenBase {
   val IR: VariablesExp
   import IR._
 
-  override def emitNode(sym: Sym[Any], rhs: Def[Any]) = {
-      rhs match {
-        case ReadVar(Variable(a)) =>
-          emitValDef(sym, quote(a))
-    	case ReadVar(null) => {} // emitVarDef(sym.asInstanceOf[Sym[Variable[Any]]], "null")
-        case NewVar(init) =>
-          emitVarDef(sym.asInstanceOf[Sym[Variable[Any]]], quote(init))
-        case Assign(Variable(a), b) =>
-          emitAssignment(sym, quote(a), quote(b))
-        case VarPlusEquals(Variable(a), b) =>
-          emitAssignment(sym, quote(a), quote(a) + " + " + quote(b))
-        case VarMinusEquals(Variable(a), b) =>
-          emitAssignment(sym, quote(a), quote(a) + " - " + quote(b))
-        case VarTimesEquals(Variable(a), b) =>
-          emitAssignment(sym, quote(a), quote(a) + " * " + quote(b))
-        case VarDivideEquals(Variable(a), b) =>
-          emitAssignment(sym, quote(a), quote(a) + " / " + quote(b))
-        case _ => super.emitNode(sym, rhs)
+  override def emitNode(sym: Sym[Any], rhs: Def[Any]) = rhs match {
+    case ReadVar(Variable(a)) => emitValDef(sym, quote(a))
+    case y@NewVar(init) => {
+      if (sym.emitted == false && sym.tp != manifest[Variable[Nothing]] && sym.tp != manifest[Variable[Null]]) {
+        val obj = sym.asInstanceOf[Sym[Variable[Any]]]
+              emitVarDef(obj, quote(init))
+        sym.emitted = true;
       }
     }
+    case ReadVar(null) => {} // emitVarDef(sym.asInstanceOf[Sym[Variable[Any]]], "null")
+    case Assign(v @ Variable(a), b) => {
+        val lhsIsNull = a match {
+            case Def(Reflect(NewVar(y: Exp[_]),_,_)) => 
+                if (y.tp == manifest[Nothing]) true
+                else false
+            case y@_ => false
+        }
+        val obj = a.asInstanceOf[Sym[Variable[Any]]]
+        if (!obj.emitted) {
+            stream.println("var " + quote(obj) + ": " + remap(b.tp) + " = " + quote(b))
+        obj.emitted = true
+        }
+        else emitAssignment(sym, quote(a), quote(b))
+    }
+    //case Assign(a, b) => emitAssignment(quote(a), quote(b))
+    case VarPlusEquals(Variable(a), b) => stream.println(quote(a) + " += " + quote(b))
+    case VarMinusEquals(Variable(a), b) => stream.println(quote(a) + " -= " + quote(b))
+    case VarTimesEquals(Variable(a), b) => stream.println(quote(a) + " *= " + quote(b))
+    case VarDivideEquals(Variable(a), b) => stream.println(quote(a) + " /= " + quote(b))
+    case VarTripleShift(Variable(a),b) => emitValDef(sym,quote(a) + ">>>" + quote(b))
+    case VarDoubleShift(Variable(a),b) => emitValDef(sym,quote(a) + ">>" + quote(b))
+    case VarLeftShift(Variable(a),b) => emitValDef(sym,quote(a) + "<<" + quote(b))
+    case VarLogicalOr(Variable(a),b) => emitValDef(sym,quote(a) + "|" + quote(b))
+    case VarLogicalAnd(Variable(a),b) => emitValDef(sym,quote(a) + "&" + quote(b))
+    case _ => super.emitNode(sym, rhs)
+  }
 }
 
 trait CudaGenVariables extends CudaGenEffect with CLikeGenVariables

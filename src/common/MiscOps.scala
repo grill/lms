@@ -60,7 +60,10 @@ trait ScalaGenMiscOps extends ScalaGenEffect {
   import IR._
 
   override def emitNode(sym: Sym[Any], rhs: Def[Any]) = rhs match {
-    case PrintF(f,xs) => gen"printf(${f::xs})"
+    case PrintF(f,xs) => 
+		stream.print("printf(\"\"\"" + f.replace("\\n","\n") + "\"\"\"")
+		if (xs.size != 0) stream.print(xs.map(x => quote(x)).mkString(",",",",""))
+		stream.println(")")
     case PrintLn(s) => gen"println($s)"
     case Print(s) => gen"print($s)"
     case Exit(a) => gen"exit($a)"
@@ -71,14 +74,19 @@ trait ScalaGenMiscOps extends ScalaGenEffect {
 }
 
 
-trait CGenMiscOps extends CGenEffect {
+trait CGenMiscOps extends CGenEffect with GenericNestedCodegen {
   val IR: MiscOpsExp
   import IR._
+  
+  override def lowerNode[A:Manifest](sym: Sym[A], rhs: Def[A]) = rhs match {
+	case PrintLn(x) => sym.atPhase(LIRLowering) { println(LIRLowering(x)).asInstanceOf[Exp[A]] }
+	case _ => super.lowerNode(sym, rhs)
+  }
 
   override def emitNode(sym: Sym[Any], rhs: Def[Any]) = rhs match {
-    case PrintF(f,xs) => emitValDef(sym, src"printf(${Const(f:String)::xs})")
-    case PrintLn(s) => emitValDef(sym, src"""printf("%s\n",$s);""")
-    case Print(s) => emitValDef(sym, src"""printf("%s",$s);""")
+    case PrintF(f,xs) => gen"printf(${Const(f:String)::xs});"
+    case PrintLn(s) => gen"""printf("%s\n",$s);"""
+    case Print(s) => gen"""printf("%s",$s);"""
     case Exit(a) => gen"exit($a);"
     case _ => super.emitNode(sym, rhs)
   }

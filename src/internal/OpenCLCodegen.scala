@@ -202,7 +202,7 @@ trait OpenCLCodegen extends GPUCodegen {
 
 // TODO: do we need this for each target?
 trait OpenCLNestedCodegen extends CLikeNestedCodegen with OpenCLCodegen {
-  val IR: Expressions with Effects
+  val IR: Expressions with Effects with LoweringTransform
   import IR._
 
   def OpenCLConsts(x:Exp[Any], s:String): String = {
@@ -224,7 +224,7 @@ trait OpenCLNestedCodegen extends CLikeNestedCodegen with OpenCLCodegen {
 }
 
 trait OpenCLFatCodegen extends CLikeFatCodegen with OpenCLCodegen {
-  val IR: Expressions with Effects with FatExpressions
+  val IR: Expressions with Effects with FatExpressions with LoweringTransform
   import IR._
   
   def emitMultiLoopCond(sym: Sym[Any], funcs:List[Block[Any]], idx: Sym[Int], postfix: String="", stream:PrintWriter):(String,List[Exp[Any]]) = {

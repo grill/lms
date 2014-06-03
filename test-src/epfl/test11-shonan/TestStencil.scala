@@ -1,4 +1,4 @@
-package scala.virtualization.lms
+/*package scala.virtualization.lms
 package epfl
 package test11
 
@@ -411,3 +411,4 @@ class TestStencil extends FileDiffSuite {
     new Prog with Impl with SlidingExp
   }}
 }
+*/

@@ -16,8 +16,9 @@ import java.lang.{StackTraceElement,Thread}
 trait Expressions extends Utils {
 
   abstract class Exp[+T:Manifest] { // constants/symbols (atomic)
-    def tp: Manifest[T @uncheckedVariance] = manifest[T] //invariant position! but hey...
+    var tp: Manifest[T @uncheckedVariance] = manifest[T] //invariant position! but hey...
     def pos: List[SourceContext] = Nil
+    var emitted = false;
   }
 
   case class Const[+T:Manifest](x: T) extends Exp[T] {
@@ -130,7 +131,6 @@ trait Expressions extends Utils {
   }
 
   case class Variable[+T](val e: Exp[Variable[T]]) {
-     var emitted = false;
   } // TODO: decide whether it should stay here ... FIXME: should be invariant
 
   var nVars = 0
@@ -139,6 +139,7 @@ trait Expressions extends Utils {
     //if (nVars%1000 == 0) println("nVars="+nVars);  
     nVars - 1 
   }
+  def fresh[T:Manifest](id: Int): Sym[T] = Sym[T] { id } 
 
   def fresh[T:Manifest](pos: List[SourceContext]): Sym[T] = fresh[T].withPos(pos)
 

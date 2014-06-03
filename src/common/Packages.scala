@@ -44,7 +44,7 @@ trait COpsPkgExpOpt extends COpsPkgExp with ScalaOpsPkgExpOpt
 // Scala
 trait ScalaCodeGenPkg extends ScalaGenDSLOps with ScalaGenImplicitOps with ScalaGenNumericOps with ScalaGenFractionalOps with ScalaGenOrderingOps
     with ScalaGenStringOps with ScalaGenRangeOps with ScalaGenIOOps with ScalaGenArrayOps with ScalaGenBooleanOps
-    with ScalaGenPrimitiveOps with ScalaGenMiscOps with ScalaGenTupledFunctions with ScalaGenEqual with ScalaGenIfThenElse
+    with ScalaGenPrimitiveOps with ScalaGenMiscOps with ScalaGenFunctions with ScalaGenEqual with ScalaGenIfThenElse
     with ScalaGenVariables with ScalaGenWhile with ScalaGenTupleOps with ScalaGenListOps
     with ScalaGenSeqOps with ScalaGenMathOps with ScalaGenCastingOps with ScalaGenSetOps
     with ScalaGenObjectOps with ScalaGenArrayBufferOps with ScalaGenDate with ScalaGenGregorianCalendar

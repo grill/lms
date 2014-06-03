@@ -26,7 +26,7 @@ object ScalaCompile {
   // (To check, run java -XX:+PrintFlagsFinal -version | grep Huge) and check for the limit.
   val maximumHugeMethodLimit = 8000 
   // NOTE: Always disable these two flags when running the test suite
-  val byteCodeSizeCheckEnabled: Boolean = false
+  val byteCodeSizeCheckEnabled: Boolean =false
   var cleanerEnabled: Boolean = false 
   val source = new StringWriter()
   var writer = new PrintWriter(source)
@@ -47,7 +47,7 @@ object ScalaCompile {
       case _ => System.getProperty("sun.boot.class.path")
     }
     settings.encoding.value = "UTF-8"
-	settings.processArguments(List("-optimise", "-Yinline-warnings"), true)
+	settings.processArguments(List("-optimise", "-feature", "-deprecation", "-language:postfixOps", "-Yinline-warnings"), true)
 
     // Create output directory if it does not exist
     val f = new java.io.File(ScalaCompile.workingDir)
@@ -98,7 +98,7 @@ trait ScalaCompile extends Expressions {
         val size = cmd.!!.trim.toInt
         if (size > ScalaCompile.maximumHugeMethodLimit) {
             println("\n\n|------------------------------------------------------------------------------------|")
-            println("| CATASTROPHIC ERROR ENCOUNTERED!!! YOUR CODE IS TOO BIG TO BE COMPILED BY THE JVM   |")
+            println("| CATASTROPHIC ERROR ENCOUNTERED!!! YOUR CODE IS TOO BIG (" + size + ") TO BE COMPILED BY THE JVM   |")
             println("| AND WILL BE INTERPRETED INSTEAD. THIS WILL CAUSE A DRAMATIC PERFORMANCE DROP.      |")
             println("| THE DEVELOPERS WORRY ABOUT YOUR MENTAL HEALTH, AND CANNOT ALLOW YOU TO EXPERIENCE  |")
             println("| THAT. EXITING NOW!                                                                 |")
@@ -133,17 +133,18 @@ trait ScalaCompile extends Expressions {
 
     run.compileSources(List(new util.BatchSourceFile("<stdin>", parsedsrc)))
 
-    if (ScalaCompile.byteCodeSizeCheckEnabled) {
-        val size = checkByteCodeSize(className)
-        if (size != -1) println("ByteCode size of the compiled code is: " + size)
-    }
-
     ScalaCompile.reporter.printSummary()
     if (ScalaCompile.reporter.hasErrors) {
       println("compilation of the following code had errors:")
       println(src)
+	  System.exit(0)
     }
     ScalaCompile.reporter.reset
+
+    if (ScalaCompile.byteCodeSizeCheckEnabled) {
+        val size = checkByteCodeSize(className)
+        if (size != -1) println("ByteCode size of the compiled code is: " + size)
+    }
 
     val cls: Class[_] = ScalaCompile.loader.loadClass(className)
     cls

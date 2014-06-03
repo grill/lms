@@ -1,4 +1,4 @@
-package scala.virtualization.lms
+/*package scala.virtualization.lms
 package epfl
 package test15
 
@@ -27,7 +27,7 @@ trait TupledGeneratorHugeProg extends K3PersistentCollectionOps with ListContain
     {
       val _var_existing_out_tier:Rep[K3PersistentCollection[(Double), Double]] = VWAP_mBIDS1;
 
-      val var_existing_out_tier:Rep[K3PersistentCollection[(Double), Double]] = _var_existing_out_tier /* Rep[K3PersistentCollection[(Double), Double]] => Rep[K3PersistentCollection[(Double), Double]] */;
+      val var_existing_out_tier:Rep[K3PersistentCollection[(Double), Double]] = _var_existing_out_tier; // Rep[K3PersistentCollection[(Double), Double]] => Rep[K3PersistentCollection[(Double), Double]]
       {
         val _var___prod_ret__1:Rep[Double] = {
           val an0 = (var_BIDS_PRICE);
@@ -37,7 +37,7 @@ trait TupledGeneratorHugeProg extends K3PersistentCollectionOps with ListContain
           an0 * bn0
         };
 
-        val var___prod_ret__1:Rep[Double] = _var___prod_ret__1 /* Rep[Double] => Rep[Double] */;
+        val var___prod_ret__1:Rep[Double] = _var___prod_ret__1; // Rep[Double] => Rep[Double]
         {
           val nv = {
             val an1 = (if((var_existing_out_tier).contains((var_BIDS_PRICE))) {
@@ -60,11 +60,11 @@ trait TupledGeneratorHugeProg extends K3PersistentCollectionOps with ListContain
     {
       val _var_existing_out_tier:Rep[Double] = VWAP_mBIDS1_L1_1.get();
 
-      val var_existing_out_tier:Rep[Double] = _var_existing_out_tier /* Rep[Double] => Rep[Double] */;
+      val var_existing_out_tier:Rep[Double] = _var_existing_out_tier; // Rep[Double] => Rep[Double]
       {
         val _var___val_ret__3:Rep[Double] = var_BIDS_VOLUME;
 
-        val var___val_ret__3:Rep[Double] = _var___val_ret__3 /* Rep[Double] => Rep[Double] */;
+        val var___val_ret__3:Rep[Double] = _var___val_ret__3; // Rep[Double] => Rep[Double]
 
         VWAP_mBIDS1_L1_1.update({
           val an2 = (var_existing_out_tier);
@@ -79,11 +79,11 @@ trait TupledGeneratorHugeProg extends K3PersistentCollectionOps with ListContain
     {
       val _var_existing_out_tier:Rep[K3PersistentCollection[(Double), Double]] = VWAP_mBIDS1_L2_1;
 
-      val var_existing_out_tier:Rep[K3PersistentCollection[(Double), Double]] = _var_existing_out_tier /* Rep[K3PersistentCollection[(Double), Double]] => Rep[K3PersistentCollection[(Double), Double]] */;
+      val var_existing_out_tier:Rep[K3PersistentCollection[(Double), Double]] = _var_existing_out_tier; // Rep[K3PersistentCollection[(Double), Double]] => Rep[K3PersistentCollection[(Double), Double]]
       {
         val _var___val_ret__4:Rep[Double] = var_BIDS_VOLUME;
 
-        val var___val_ret__4:Rep[Double] = _var___val_ret__4 /* Rep[Double] => Rep[Double] */;
+        val var___val_ret__4:Rep[Double] = _var___val_ret__4; // Rep[Double] => Rep[Double]
         {
           val nv = {
             val an3 = (if((var_existing_out_tier).contains((var_BIDS_PRICE))) {
@@ -106,7 +106,7 @@ trait TupledGeneratorHugeProg extends K3PersistentCollectionOps with ListContain
     {
       val _var_existing_out_tier:Rep[Double] = VWAP.get();
 
-      val var_existing_out_tier:Rep[Double] = _var_existing_out_tier /* Rep[Double] => Rep[Double] */;
+      val var_existing_out_tier:Rep[Double] = _var_existing_out_tier; // Rep[Double] => Rep[Double]
       {
         val _var___prod_ret__6:Rep[Double] = (({
           val v = {
@@ -118,7 +118,7 @@ trait TupledGeneratorHugeProg extends K3PersistentCollectionOps with ListContain
               an5 * bn5
             };
 
-            val var___prod_ret__2:Rep[Double] = _var___prod_ret__2 /* Rep[Double] => Rep[Double] */;
+            val var___prod_ret__2:Rep[Double] = _var___prod_ret__2; // Rep[Double] => Rep[Double]
 
             ((var___prod_ret__2),(unit(1L)))
           };
@@ -128,16 +128,16 @@ trait TupledGeneratorHugeProg extends K3PersistentCollectionOps with ListContain
         .map((y:Rep[Tuple2[(Double),Long]]) => {
           val v = ({
             (x:Rep[Tuple2[(Double), Long]]) => {
-              val var___sql_inline_agg_1:Rep[Double] = x._1 /* Rep[Double] => Rep[Double] */;
+              val var___sql_inline_agg_1:Rep[Double] = x._1; // Rep[Double] => Rep[Double]
 
-              val var___lift_ret__1:Rep[Long] = x._2 /* Rep[Long] => Rep[Long] */;
+              val var___lift_ret__1:Rep[Long] = x._2; // Rep[Long] => Rep[Long]
 
               VWAP_mBIDS1.map((y:Rep[Tuple2[(Double),Double]]) => {
                 val v: Rep[Tuple3[Double,Double,Double]] = ({
                   (x:Rep[Tuple2[(Double), Double]]) => {
-                    val var_B1_PRICE:Rep[Double] = x._1 /* Rep[Double] => Rep[Double] */;
+                    val var_B1_PRICE:Rep[Double] = x._1; // Rep[Double] => Rep[Double]
 
-                    val var___map_ret__2:Rep[Double] = x._2 /* Rep[Double] => Rep[Double] */;
+                    val var___map_ret__2:Rep[Double] = x._2; // Rep[Double] => Rep[Double]
 
                     ((var___sql_inline_agg_1),(var_B1_PRICE),({
                       val an6 = ((var___lift_ret__1).asInstanceOf[Rep[Double]]);
@@ -163,19 +163,19 @@ trait TupledGeneratorHugeProg extends K3PersistentCollectionOps with ListContain
         )).flatten[Tuple2[Double,Double], Double].map((y:Rep[Tuple2[Tuple2[Double,Double],Double]]) => {
           val v = ({
             (x:Rep[Tuple2[Tuple2[Double,Double], Double]]) => {
-              val var___sql_inline_agg_1:Rep[Double] = x._1._1 /* Rep[Double] => Rep[Double] */;
+              val var___sql_inline_agg_1:Rep[Double] = x._1._1; // Rep[Double] => Rep[Double]
 
-              val var_B1_PRICE:Rep[Double] = x._1._2 /* Rep[Double] => Rep[Double] */;
+              val var_B1_PRICE:Rep[Double] = x._1._2; // Rep[Double] => Rep[Double]
 
-              val var___prod_ret__4:Rep[Double] = x._2 /* Rep[Double] => Rep[Double] */;
+              val var___prod_ret__4:Rep[Double] = x._2; // Rep[Double] => Rep[Double]
               {
                 val v = {
                   val _var___prod_ret__3:Rep[Double] = VWAP_mBIDS1_L2_1.map((y:Rep[Tuple2[(Double),Double]]) => {
                     val v: Rep[Tuple2[Double,Double]] = ({
                       (x:Rep[Tuple2[(Double), Double]]) => {
-                        val var_B2_PRICE:Rep[Double] = x._1 /* Rep[Double] => Rep[Double] */;
+                        val var_B2_PRICE:Rep[Double] = x._1; // Rep[Double] => Rep[Double]
 
-                        val var___map_ret__3:Rep[Double] = x._2 /* Rep[Double] => Rep[Double] */;
+                        val var___map_ret__3:Rep[Double] = x._2; // Rep[Double] => Rep[Double]
 
                         ((var_B2_PRICE),({
                           val an8 = (var___map_ret__3);
@@ -200,9 +200,9 @@ trait TupledGeneratorHugeProg extends K3PersistentCollectionOps with ListContain
                   }
                   ).fold(unit(0.0), {
                     (x:Rep[Tuple2[((Double)), Double]]) => {
-                      val var_B2_PRICE:Rep[Double] = x._1 /* Rep[Double] => Rep[Double] */;
+                      val var_B2_PRICE:Rep[Double] = x._1; // Rep[Double] => Rep[Double]
 
-                      val var___prod_ret__3:Rep[Double] = x._2 /* Rep[Double] => Rep[Double] */;
+                      val var___prod_ret__3:Rep[Double] = x._2; // Rep[Double] => Rep[Double]
 
                       (var___accv_1:Rep[Double]) => {                            {
                           val an7 = (var___accv_1);
@@ -216,7 +216,7 @@ trait TupledGeneratorHugeProg extends K3PersistentCollectionOps with ListContain
                   }
                   );
 
-                  val var___prod_ret__3:Rep[Double] = _var___prod_ret__3 /* Rep[Double] => Rep[Double] */;
+                  val var___prod_ret__3:Rep[Double] = _var___prod_ret__3; // Rep[Double] => Rep[Double]
 
                   ((var___prod_ret__3),(unit(1L)))
                 };
@@ -226,9 +226,9 @@ trait TupledGeneratorHugeProg extends K3PersistentCollectionOps with ListContain
               .map((y:Rep[Tuple2[(Double),Long]]) => {
                 val v: Rep[Tuple4[Double,Double,Double,Double]] = ({
                   (x:Rep[Tuple2[(Double), Long]]) => {
-                    val var___sql_inline_agg_2:Rep[Double] = x._1 /* Rep[Double] => Rep[Double] */;
+                    val var___sql_inline_agg_2:Rep[Double] = x._1; // Rep[Double] => Rep[Double]
 
-                    val var___lift_ret__2:Rep[Long] = x._2 /* Rep[Long] => Rep[Long] */;
+                    val var___lift_ret__2:Rep[Long] = x._2; // Rep[Long] => Rep[Long]
 
                     ((var___sql_inline_agg_1),(var_B1_PRICE),(var___sql_inline_agg_2),({
                       val an9 = (var___prod_ret__4);
@@ -254,13 +254,13 @@ trait TupledGeneratorHugeProg extends K3PersistentCollectionOps with ListContain
         )).flatten[Tuple3[Double,Double,Double], Double].map((y:Rep[Tuple2[Tuple3[Double,Double,Double],Double]]) => {
           val v: Rep[Tuple4[Double,Double,Double,Double]] = ({
             (x:Rep[Tuple2[Tuple3[Double,Double,Double], Double]]) => {
-              val var___sql_inline_agg_1:Rep[Double] = x._1._1 /* Rep[Double] => Rep[Double] */;
+              val var___sql_inline_agg_1:Rep[Double] = x._1._1; // Rep[Double] => Rep[Double]
 
-              val var_B1_PRICE:Rep[Double] = x._1._2 /* Rep[Double] => Rep[Double] */;
+              val var_B1_PRICE:Rep[Double] = x._1._2; // Rep[Double] => Rep[Double]
 
-              val var___sql_inline_agg_2:Rep[Double] = x._1._3 /* Rep[Double] => Rep[Double] */;
+              val var___sql_inline_agg_2:Rep[Double] = x._1._3; // Rep[Double] => Rep[Double]
 
-              val var___prod_ret__5:Rep[Double] = x._2 /* Rep[Double] => Rep[Double] */;
+              val var___prod_ret__5:Rep[Double] = x._2; // Rep[Double] => Rep[Double]
 
               ((var___sql_inline_agg_1),(var_B1_PRICE),(var___sql_inline_agg_2),({
                 val an10 = (var___prod_ret__5);
@@ -285,13 +285,13 @@ trait TupledGeneratorHugeProg extends K3PersistentCollectionOps with ListContain
         }
         ).fold(unit(0.0), {
           (x:Rep[Tuple2[(Tuple3[Double,Double,Double]), Double]]) => {
-            val var___sql_inline_agg_1:Rep[Double] = x._1._1 /* Rep[Double] => Rep[Double] */;
+            val var___sql_inline_agg_1:Rep[Double] = x._1._1; // Rep[Double] => Rep[Double]
 
-            val var_B1_PRICE:Rep[Double] = x._1._2 /* Rep[Double] => Rep[Double] */;
+            val var_B1_PRICE:Rep[Double] = x._1._2; // Rep[Double] => Rep[Double]
 
-            val var___sql_inline_agg_2:Rep[Double] = x._1._3 /* Rep[Double] => Rep[Double] */;
+            val var___sql_inline_agg_2:Rep[Double] = x._1._3; // Rep[Double] => Rep[Double]
 
-            val var___prod_ret__6:Rep[Double] = x._2 /* Rep[Double] => Rep[Double] */;
+            val var___prod_ret__6:Rep[Double] = x._2; // Rep[Double] => Rep[Double]
 
             (var___accv_2:Rep[Double]) => {                  {
                 val an4 = (var___accv_2);
@@ -305,7 +305,7 @@ trait TupledGeneratorHugeProg extends K3PersistentCollectionOps with ListContain
         }
         );
 
-        val var___prod_ret__6:Rep[Double] = _var___prod_ret__6 /* Rep[Double] => Rep[Double] */;
+        val var___prod_ret__6:Rep[Double] = _var___prod_ret__6; // Rep[Double] => Rep[Double]
 
         VWAP.update({
           val an11 = (unit(0.0));
@@ -330,7 +330,7 @@ trait TupledGeneratorHugeProg extends K3PersistentCollectionOps with ListContain
     {
       val _var_existing_out_tier:Rep[K3PersistentCollection[(Double), Double]] = VWAP_mBIDS1;
 
-      val var_existing_out_tier:Rep[K3PersistentCollection[(Double), Double]] = _var_existing_out_tier /* Rep[K3PersistentCollection[(Double), Double]] => Rep[K3PersistentCollection[(Double), Double]] */;
+      val var_existing_out_tier:Rep[K3PersistentCollection[(Double), Double]] = _var_existing_out_tier; // Rep[K3PersistentCollection[(Double), Double]] => Rep[K3PersistentCollection[(Double), Double]]
       {
         val _var___prod_ret__8:Rep[Double] = {
           val an13 = ({
@@ -347,7 +347,7 @@ trait TupledGeneratorHugeProg extends K3PersistentCollectionOps with ListContain
           an13 * bn13
         };
 
-        val var___prod_ret__8:Rep[Double] = _var___prod_ret__8 /* Rep[Double] => Rep[Double] */;
+        val var___prod_ret__8:Rep[Double] = _var___prod_ret__8; // Rep[Double] => Rep[Double]
         {
           val nv = {
             val an14 = (if((var_existing_out_tier).contains((var_BIDS_PRICE))) {
@@ -370,7 +370,7 @@ trait TupledGeneratorHugeProg extends K3PersistentCollectionOps with ListContain
     {
       val _var_existing_out_tier:Rep[Double] = VWAP_mBIDS1_L1_1.get();
 
-      val var_existing_out_tier:Rep[Double] = _var_existing_out_tier /* Rep[Double] => Rep[Double] */;
+      val var_existing_out_tier:Rep[Double] = _var_existing_out_tier; // Rep[Double] => Rep[Double]
       {
         val _var___prod_ret__9:Rep[Double] = {
           val an15 = ((unit(-1L)).asInstanceOf[Rep[Double]]);
@@ -380,7 +380,7 @@ trait TupledGeneratorHugeProg extends K3PersistentCollectionOps with ListContain
           an15 * bn15
         };
 
-        val var___prod_ret__9:Rep[Double] = _var___prod_ret__9 /* Rep[Double] => Rep[Double] */;
+        val var___prod_ret__9:Rep[Double] = _var___prod_ret__9; // Rep[Double] => Rep[Double]
 
         VWAP_mBIDS1_L1_1.update({
           val an16 = (var_existing_out_tier);
@@ -395,7 +395,7 @@ trait TupledGeneratorHugeProg extends K3PersistentCollectionOps with ListContain
     {
       val _var_existing_out_tier:Rep[K3PersistentCollection[(Double), Double]] = VWAP_mBIDS1_L2_1;
 
-      val var_existing_out_tier:Rep[K3PersistentCollection[(Double), Double]] = _var_existing_out_tier /* Rep[K3PersistentCollection[(Double), Double]] => Rep[K3PersistentCollection[(Double), Double]] */;
+      val var_existing_out_tier:Rep[K3PersistentCollection[(Double), Double]] = _var_existing_out_tier; // Rep[K3PersistentCollection[(Double), Double]] => Rep[K3PersistentCollection[(Double), Double]]
       {
         val _var___prod_ret__10:Rep[Double] = {
           val an17 = ((unit(-1L)).asInstanceOf[Rep[Double]]);
@@ -405,7 +405,7 @@ trait TupledGeneratorHugeProg extends K3PersistentCollectionOps with ListContain
           an17 * bn17
         };
 
-        val var___prod_ret__10:Rep[Double] = _var___prod_ret__10 /* Rep[Double] => Rep[Double] */;
+        val var___prod_ret__10:Rep[Double] = _var___prod_ret__10; // Rep[Double] => Rep[Double]
         {
           val nv = {
             val an18 = (if((var_existing_out_tier).contains((var_BIDS_PRICE))) {
@@ -428,7 +428,7 @@ trait TupledGeneratorHugeProg extends K3PersistentCollectionOps with ListContain
     {
       val _var_existing_out_tier:Rep[Double] = VWAP.get();
 
-      val var_existing_out_tier:Rep[Double] = _var_existing_out_tier /* Rep[Double] => Rep[Double] */;
+      val var_existing_out_tier:Rep[Double] = _var_existing_out_tier; // Rep[Double] => Rep[Double]
       {
         val _var___prod_ret__15:Rep[Double] = (({
           val v = {
@@ -440,7 +440,7 @@ trait TupledGeneratorHugeProg extends K3PersistentCollectionOps with ListContain
               an20 * bn20
             };
 
-            val var___prod_ret__11:Rep[Double] = _var___prod_ret__11 /* Rep[Double] => Rep[Double] */;
+            val var___prod_ret__11:Rep[Double] = _var___prod_ret__11; // Rep[Double] => Rep[Double]
 
             ((var___prod_ret__11),(unit(1L)))
           };
@@ -450,16 +450,16 @@ trait TupledGeneratorHugeProg extends K3PersistentCollectionOps with ListContain
         .map((y:Rep[Tuple2[(Double),Long]]) => {
           val v = ({
             (x:Rep[Tuple2[(Double), Long]]) => {
-              val var___sql_inline_agg_1:Rep[Double] = x._1 /* Rep[Double] => Rep[Double] */;
+              val var___sql_inline_agg_1:Rep[Double] = x._1; // Rep[Double] => Rep[Double]
 
-              val var___lift_ret__3:Rep[Long] = x._2 /* Rep[Long] => Rep[Long] */;
+              val var___lift_ret__3:Rep[Long] = x._2; // Rep[Long] => Rep[Long]
 
               VWAP_mBIDS1.map((y:Rep[Tuple2[(Double),Double]]) => {
                 val v: Rep[Tuple3[Double,Double,Double]] = ({
                   (x:Rep[Tuple2[(Double), Double]]) => {
-                    val var_B1_PRICE:Rep[Double] = x._1 /* Rep[Double] => Rep[Double] */;
+                    val var_B1_PRICE:Rep[Double] = x._1; // Rep[Double] => Rep[Double]
 
-                    val var___map_ret__5:Rep[Double] = x._2 /* Rep[Double] => Rep[Double] */;
+                    val var___map_ret__5:Rep[Double] = x._2; // Rep[Double] => Rep[Double]
 
                     ((var___sql_inline_agg_1),(var_B1_PRICE),({
                       val an21 = ((var___lift_ret__3).asInstanceOf[Rep[Double]]);
@@ -485,19 +485,19 @@ trait TupledGeneratorHugeProg extends K3PersistentCollectionOps with ListContain
         )).flatten[Tuple2[Double,Double], Double].map((y:Rep[Tuple2[Tuple2[Double,Double],Double]]) => {
           val v = ({
             (x:Rep[Tuple2[Tuple2[Double,Double], Double]]) => {
-              val var___sql_inline_agg_1:Rep[Double] = x._1._1 /* Rep[Double] => Rep[Double] */;
+              val var___sql_inline_agg_1:Rep[Double] = x._1._1; // Rep[Double] => Rep[Double]
 
-              val var_B1_PRICE:Rep[Double] = x._1._2 /* Rep[Double] => Rep[Double] */;
+              val var_B1_PRICE:Rep[Double] = x._1._2; // Rep[Double] => Rep[Double]
 
-              val var___prod_ret__13:Rep[Double] = x._2 /* Rep[Double] => Rep[Double] */;
+              val var___prod_ret__13:Rep[Double] = x._2; // Rep[Double] => Rep[Double]
               {
                 val v = {
                   val _var___prod_ret__12:Rep[Double] = VWAP_mBIDS1_L2_1.map((y:Rep[Tuple2[(Double),Double]]) => {
                     val v: Rep[Tuple2[Double,Double]] = ({
                       (x:Rep[Tuple2[(Double), Double]]) => {
-                        val var_B2_PRICE:Rep[Double] = x._1 /* Rep[Double] => Rep[Double] */;
+                        val var_B2_PRICE:Rep[Double] = x._1; // Rep[Double] => Rep[Double]
 
-                        val var___map_ret__6:Rep[Double] = x._2 /* Rep[Double] => Rep[Double] */;
+                        val var___map_ret__6:Rep[Double] = x._2; // Rep[Double] => Rep[Double]
 
                         ((var_B2_PRICE),({
                           val an23 = (var___map_ret__6);
@@ -522,9 +522,9 @@ trait TupledGeneratorHugeProg extends K3PersistentCollectionOps with ListContain
                   }
                   ).fold(unit(0.0), {
                     (x:Rep[Tuple2[((Double)), Double]]) => {
-                      val var_B2_PRICE:Rep[Double] = x._1 /* Rep[Double] => Rep[Double] */;
+                      val var_B2_PRICE:Rep[Double] = x._1; // Rep[Double] => Rep[Double]
 
-                      val var___prod_ret__12:Rep[Double] = x._2 /* Rep[Double] => Rep[Double] */;
+                      val var___prod_ret__12:Rep[Double] = x._2; // Rep[Double] => Rep[Double]
 
                       (var___accv_3:Rep[Double]) => {                            {
                           val an22 = (var___accv_3);
@@ -538,7 +538,7 @@ trait TupledGeneratorHugeProg extends K3PersistentCollectionOps with ListContain
                   }
                   );
 
-                  val var___prod_ret__12:Rep[Double] = _var___prod_ret__12 /* Rep[Double] => Rep[Double] */;
+                  val var___prod_ret__12:Rep[Double] = _var___prod_ret__12; // Rep[Double] => Rep[Double]
 
                   ((var___prod_ret__12),(unit(1L)))
                 };
@@ -548,9 +548,9 @@ trait TupledGeneratorHugeProg extends K3PersistentCollectionOps with ListContain
               .map((y:Rep[Tuple2[(Double),Long]]) => {
                 val v: Rep[Tuple4[Double,Double,Double,Double]] = ({
                   (x:Rep[Tuple2[(Double), Long]]) => {
-                    val var___sql_inline_agg_2:Rep[Double] = x._1 /* Rep[Double] => Rep[Double] */;
+                    val var___sql_inline_agg_2:Rep[Double] = x._1; // Rep[Double] => Rep[Double]
 
-                    val var___lift_ret__4:Rep[Long] = x._2 /* Rep[Long] => Rep[Long] */;
+                    val var___lift_ret__4:Rep[Long] = x._2; // Rep[Long] => Rep[Long]
 
                     ((var___sql_inline_agg_1),(var_B1_PRICE),(var___sql_inline_agg_2),({
                       val an24 = (var___prod_ret__13);
@@ -576,13 +576,13 @@ trait TupledGeneratorHugeProg extends K3PersistentCollectionOps with ListContain
         )).flatten[Tuple3[Double,Double,Double], Double].map((y:Rep[Tuple2[Tuple3[Double,Double,Double],Double]]) => {
           val v: Rep[Tuple4[Double,Double,Double,Double]] = ({
             (x:Rep[Tuple2[Tuple3[Double,Double,Double], Double]]) => {
-              val var___sql_inline_agg_1:Rep[Double] = x._1._1 /* Rep[Double] => Rep[Double] */;
+              val var___sql_inline_agg_1:Rep[Double] = x._1._1; // Rep[Double] => Rep[Double]
 
-              val var_B1_PRICE:Rep[Double] = x._1._2 /* Rep[Double] => Rep[Double] */;
+              val var_B1_PRICE:Rep[Double] = x._1._2; // Rep[Double] => Rep[Double]
 
-              val var___sql_inline_agg_2:Rep[Double] = x._1._3 /* Rep[Double] => Rep[Double] */;
+              val var___sql_inline_agg_2:Rep[Double] = x._1._3; // Rep[Double] => Rep[Double]
 
-              val var___prod_ret__14:Rep[Double] = x._2 /* Rep[Double] => Rep[Double] */;
+              val var___prod_ret__14:Rep[Double] = x._2; // Rep[Double] => Rep[Double]
 
               ((var___sql_inline_agg_1),(var_B1_PRICE),(var___sql_inline_agg_2),({
                 val an25 = (var___prod_ret__14);
@@ -607,13 +607,13 @@ trait TupledGeneratorHugeProg extends K3PersistentCollectionOps with ListContain
         }
         ).fold(unit(0.0), {
           (x:Rep[Tuple2[(Tuple3[Double,Double,Double]), Double]]) => {
-            val var___sql_inline_agg_1:Rep[Double] = x._1._1 /* Rep[Double] => Rep[Double] */;
+            val var___sql_inline_agg_1:Rep[Double] = x._1._1; // Rep[Double] => Rep[Double]
 
-            val var_B1_PRICE:Rep[Double] = x._1._2 /* Rep[Double] => Rep[Double] */;
+            val var_B1_PRICE:Rep[Double] = x._1._2; // Rep[Double] => Rep[Double]
 
-            val var___sql_inline_agg_2:Rep[Double] = x._1._3 /* Rep[Double] => Rep[Double] */;
+            val var___sql_inline_agg_2:Rep[Double] = x._1._3; // Rep[Double] => Rep[Double]
 
-            val var___prod_ret__15:Rep[Double] = x._2 /* Rep[Double] => Rep[Double] */;
+            val var___prod_ret__15:Rep[Double] = x._2; // Rep[Double] => Rep[Double]
 
             (var___accv_4:Rep[Double]) => {                  {
                 val an19 = (var___accv_4);
@@ -627,7 +627,7 @@ trait TupledGeneratorHugeProg extends K3PersistentCollectionOps with ListContain
         }
         );
 
-        val var___prod_ret__15:Rep[Double] = _var___prod_ret__15 /* Rep[Double] => Rep[Double] */;
+        val var___prod_ret__15:Rep[Double] = _var___prod_ret__15; // Rep[Double] => Rep[Double]
 
         VWAP.update({
           val an26 = (unit(0.0));
@@ -677,3 +677,4 @@ class TestTupledGeneratorHuge extends FileDiffSuite {
     assertFileEqualsCheck(prefix+"tupled-generator-huge")
   }
 }
+*/

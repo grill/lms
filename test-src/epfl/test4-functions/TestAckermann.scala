@@ -1,4 +1,4 @@
-package scala.virtualization.lms
+/*package scala.virtualization.lms
 package epfl
 package test4
 
@@ -26,18 +26,18 @@ trait AckProg { this: Arith with Functions with Equal with IfThenElse =>
     ack(m-1)(ack(m)(n-1))
   }
 
-  /* Example due to Neil Jones, via Oleg on LtU (http://lambda-the-ultimate.org/node/4039#comment-61431)
+  //  Example due to Neil Jones, via Oleg on LtU (http://lambda-the-ultimate.org/node/4039#comment-61431)
 
-  ack(2,n) should specialize to:
+  // ack(2,n) should specialize to:
 
-  ack_2(n) =  if n=0 then ack_1(1) else  ack_1(ack_2(n-1))
-  ack_1(n) =  if n=0 then ack_0(1) else  ack_0(ack_1(n-1))
-  ack_0(n) =  n+1
+  // ack_2(n) =  if n=0 then ack_1(1) else  ack_1(ack_2(n-1))
+  // ack_1(n) =  if n=0 then ack_0(1) else  ack_0(ack_1(n-1))
+  // ack_0(n) =  n+1
 
-  this actually "just works", modulo duplicating the definitions of ack_n in the then/else branches
-  due to code motion (TODO: can this be resolved by suitably overriding symsFreq?)
+  // this actually "just works", modulo duplicating the definitions of ack_n in the then/else branches
+  // due to code motion (TODO: can this be resolved by suitably overriding symsFreq?)
 
-  */
+  
 
 }
 
@@ -71,3 +71,4 @@ class TestAck extends FileDiffSuite {
 
 
 }
+*/

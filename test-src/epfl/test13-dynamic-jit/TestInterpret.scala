@@ -1,4 +1,4 @@
-package scala.virtualization.lms
+/*package scala.virtualization.lms
 package epfl
 package test13
 
@@ -114,14 +114,14 @@ class TestInterpret extends FileDiffSuite {
       })
     }
 
-    /*case class NotEqual(x: Fun, y: Fun) extends FunHolder {
-      spec(new Fun {
-        def exec(f: Frame) = {
-          val b = y.exec(f)
-          f.data(x) = b
-        }
-      })
-    }*/
+    // case class NotEqual(x: Fun, y: Fun) extends FunHolder {
+    //   spec(new Fun {
+    //     def exec(f: Frame) = {
+    //       val b = y.exec(f)
+    //       f.data(x) = b
+    //     }
+    //   })
+    // }
 
     case class AppN(x: Fun, y: Fun) extends FunHolder {
       spec(new Fun {
@@ -227,38 +227,38 @@ class TestInterpret extends FileDiffSuite {
         }
       })
 
-      /*spec(new Fun {
-        def exec(f: Frame) = {
-          val x = a.exec(f)
-          val y = b.exec(f)
-          (x,y) match {
-            case (x:Int, y: Int) => specializeInt(); x + y
-            case _ => specializeGeneric(); x.toString + y.toString
-          }
-        }
-      })
+      // spec(new Fun {
+      //   def exec(f: Frame) = {
+      //     val x = a.exec(f)
+      //     val y = b.exec(f)
+      //     (x,y) match {
+      //       case (x:Int, y: Int) => specializeInt(); x + y
+      //       case _ => specializeGeneric(); x.toString + y.toString
+      //     }
+      //   }
+      // })
 
-      def specializeInt() = spec(new Fun {
-        println("spec-add-int: " + AddN.this)
-        def exec(f: Frame) = execInt(f)
-        override def execInt(f: Frame): Int = {
-          val x = try { a.execInt(f) } catch { case Unexpected(x) => specializeGeneric(); throw Unexpected(x.toString + b.exec(f).toString) }
-          val y = try { b.execInt(f) } catch { case Unexpected(y) => specializeGeneric(); throw Unexpected(x.toString + y.toString) }
-          x + y
-        }
-      })
+      // def specializeInt() = spec(new Fun {
+      //   println("spec-add-int: " + AddN.this)
+      //   def exec(f: Frame) = execInt(f)
+      //   override def execInt(f: Frame): Int = {
+      //     val x = try { a.execInt(f) } catch { case Unexpected(x) => specializeGeneric(); throw Unexpected(x.toString + b.exec(f).toString) }
+      //     val y = try { b.execInt(f) } catch { case Unexpected(y) => specializeGeneric(); throw Unexpected(x.toString + y.toString) }
+      //     x + y
+      //   }
+      // })
 
-      def specializeGeneric() = spec(new Fun {
-        println("spec-add-int: " + AddN.this)
-        def exec(f: Frame) = {
-          val x = a.exec(f)
-          val y = b.exec(f)
-          (x,y) match {
-            case (x:Int, y: Int) => x + y
-            case _ => x.toString + y.toString
-          }
-        }
-      })*/
+      // def specializeGeneric() = spec(new Fun {
+      //   println("spec-add-int: " + AddN.this)
+      //   def exec(f: Frame) = {
+      //     val x = a.exec(f)
+      //     val y = b.exec(f)
+      //     (x,y) match {
+      //       case (x:Int, y: Int) => x + y
+      //       case _ => x.toString + y.toString
+      //     }
+      //   }
+      // })
 
     }
 
@@ -288,14 +288,14 @@ class TestInterpret extends FileDiffSuite {
       })
     }
 
-    /*case class NotEqual(x: Fun, y: Fun) extends FunHolder {
-      spec(new Fun {
-        def exec(f: Frame) = {
-          val b = y.exec(f)
-          f.data(x) = b
-        }
-      })
-    }*/
+    // case class NotEqual(x: Fun, y: Fun) extends FunHolder {
+    //   spec(new Fun {
+    //     def exec(f: Frame) = {
+    //       val b = y.exec(f)
+    //       f.data(x) = b
+    //     }
+    //   })
+    // }
 
     case class AppN(x: Fun, y: Fun) extends FunHolder {
       spec(new Fun {
@@ -357,11 +357,11 @@ class TestInterpret extends FileDiffSuite {
       val dfun: RCell[AnyRef] = new RCell("dyn - " + this.toString)
       def exec(f: Frame)(k: Rep[Any] => Continue[Any]): Continue[Any] = {
         val data = f.data
-        readOneValue(dfun) { ef => id(data)/*free var*/; ef.asInstanceOf[Fun].exec(f)(k) }
+        readOneValue(dfun) { ef => id(data); ef.asInstanceOf[Fun].exec(f)(k) }
       }
       override def execInt(f: Frame)(k: Rep[Int] => Continue[Any]): Continue[Any] = {
         val data = f.data
-        readOneValue(dfun) { ef => id(data)/*free var*/; ef.asInstanceOf[Fun].execInt(f)(k) }
+        readOneValue(dfun) { ef => id(data); ef.asInstanceOf[Fun].execInt(f)(k) }
       }
       def id(x:Any) = { println("-- " + x) } //ignore
       def spec(f: Fun) = {
@@ -429,14 +429,14 @@ class TestInterpret extends FileDiffSuite {
       })
     }
 
-    /*case class NotEqual(x: Fun, y: Fun) extends FunHolder {
-      spec(new Fun {
-        def exec(f: Frame) = {
-          val b = y.exec(f)
-          f.data(x) = b
-        }
-      })
-    }*/
+    // case class NotEqual(x: Fun, y: Fun) extends FunHolder {
+    //   spec(new Fun {
+    //     def exec(f: Frame) = {
+    //       val b = y.exec(f)
+    //       f.data(x) = b
+    //     }
+    //   })
+    // }
 
     case class AppN(x: Fun, y: Fun) extends FunHolder {
       spec(new Fun {
@@ -494,14 +494,15 @@ class TestInterpret extends FileDiffSuite {
 
     def dcompile(x: Rep[Compile], fA: Rep[HashMap[String,Any]]=>Rep[Any],
       fI: Rep[HashMap[String,Any]]=>Rep[Int]): Rep[RFun] =
-      unchecked("new ",manifest[RFun]," {\n"+/*}*/
+      unchecked("new ",manifest[RFun]," {\n"+//}
         "type Rep[T] = ",x,".Rep[T]\n"+
         "type HM = scala.collection.mutable.HashMap[String,Any]\n"+
         "val fAny = ",x,".compile(",staticData[AnyRef](fA),".asInstanceOf[Rep[HM]=>Rep[Any]])\n"+
         "val fInt = ",x,".compile(",staticData[AnyRef](fI),".asInstanceOf[Rep[HM]=>Rep[Int]])\n"+
         "def exec(f: HM): Any = fAny(f)\n"+
         "def execInt(f: HM): Int = fInt(f)\n"+
-        /*{*/"}")
+        //{
+        "}")
   }
 
   trait ScalaGenInterp extends ScalaGenBase {
@@ -517,16 +518,16 @@ class TestInterpret extends FileDiffSuite {
 
   trait ScalaGenInterp2 extends ScalaGenInterp {
     import IR._
-    /* Yannis: We need to override quote here because the API of LMS (or the
-     * data version of it :-)) does not output a symbol if it has type unit.
-     * However, this test uses a unified interface for its functions, which
-     * return always int. Thus, even if the function returns Unit, it casts the
-     * corresponding symbol to int and returns it! (that sucks btw, but I have
-     * to live with it). As a result, if you use the original quote you get the
-     * following:
-     *     val x40 = .asInstanceOf[Int]
-     * Solution: FOR THIS TEST ONLY override quote so that we print this symbol in all cases.
-     */
+     // Yannis: We need to override quote here because the API of LMS (or the
+     // * data version of it :-)) does not output a symbol if it has type unit.
+     // * However, this test uses a unified interface for its functions, which
+     // * return always int. Thus, even if the function returns Unit, it casts the
+     // * corresponding symbol to int and returns it! (that sucks btw, but I have
+     // * to live with it). As a result, if you use the original quote you get the
+     // * following:
+     // *     val x40 = .asInstanceOf[Int]
+     // * Solution: FOR THIS TEST ONLY override quote so that we print this symbol in all cases.
+     
     override def quote(x: Exp[Any], forcePrintSymbol: Boolean): String = {
 	x match {
 	    case s@Sym(n) => "x" + n
@@ -568,7 +569,7 @@ class TestInterpret extends FileDiffSuite {
     runner.run()
   }
 
-  /* For interpret 2 */
+  // For interpret 2
   trait ScalaGenPrint extends ScalaGenEffect {
     val IR: PrintExp
     import IR._
@@ -607,15 +608,15 @@ class TestInterpret extends FileDiffSuite {
     trait Prog extends DSL with InterpretPlain {
       def test() = {
 
-        /*
-        function f(a, n) {
-          var x = 0;
-          while (n-- > 0) {
-            x = x + a[n]
-          }
-          return x;
-        }
-        */
+        
+        // function f(a, n) {
+        //   var x = 0;
+        //   while (n-- > 0) {
+        //     x = x + a[n]
+        //   }
+        //   return x;
+        // }
+        
         val A = scala.Array
 
         val p = SeqN(List(
@@ -643,15 +644,15 @@ class TestInterpret extends FileDiffSuite {
     trait Prog extends DSL with InterpretStaged {
       def test() = {
 
-        /*
-        function f(a, n) {
-          var x = 0;
-          while (n-- > 0) {
-            x = x + a[n]
-          }
-          return x;
-        }
-        */
+        
+        // function f(a, n) {
+        //   var x = 0;
+        //   while (n-- > 0) {
+        //     x = x + a[n]
+        //   }
+        //   return x;
+        // }
+        
 
         val q = compile { env: Rep[scala.collection.mutable.HashMap[String,Any]] =>
 
@@ -680,29 +681,30 @@ class TestInterpret extends FileDiffSuite {
     trait Prog extends DSL with InterpretStagedReopt {
       def test() = {
 
-        /*
-        function f(a, n) {
-          var x = 0;
-          while (n-- > 0) {
-            x = x + a[n]
-          }
-          return x;
-        }
-        */
+        
+        // function f(a, n) {
+        //   var x = 0;
+        //   while (n-- > 0) {
+        //     x = x + a[n]
+        //   }
+        //   return x;
+        // }
+        
 
         val q = compileStable { env: Rep[scala.collection.mutable.HashMap[String,Any]] =>
 
           var x = env// go through a var, because we currently rely on def lookup which fails for free syms
           val env1 = x
 
-          val p = AddN(LookupN("n"), ConstN(-1))/*SeqN(List(
-            AssignN("x", ConstN(0)),
-            WhileN(LookupN("n"), SeqN(List(
-              AssignN("n", AddN(LookupN("n"), ConstN(-1))),
-              AssignN("x", AddN(LookupN("x"), AppN(LookupN("a"),LookupN("n"))))
-            ))),
-            LookupN("x")
-          ))*/
+          val p = AddN(LookupN("n"), ConstN(-1))
+          // SeqN(List(
+          //   AssignN("x", ConstN(0)),
+          //   WhileN(LookupN("n"), SeqN(List(
+          //     AssignN("n", AddN(LookupN("n"), ConstN(-1))),
+          //     AssignN("x", AddN(LookupN("x"), AppN(LookupN("a"),LookupN("n"))))
+          //   ))),
+          //   LookupN("x")
+          // ))
 
           p.exec(new Frame(env1))(r=>Done(r))
         }
@@ -720,3 +722,4 @@ class TestInterpret extends FileDiffSuite {
     new Prog with Impl with StableVarsExp
   }}
 }
+*/
