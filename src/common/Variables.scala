@@ -239,6 +239,39 @@ trait VariablesExp extends Variables with ImplicitOpsExp with VariableImplicits 
 
 }
 
+  trait VariablesNested extends VariablesExpOpt {
+    override  def var_new[T:Manifest](init: Exp[T])(implicit pos: SourceContext): Var[T] = {
+      //reflectEffect(NewVar(init)).asInstanceOf[Var[T]]
+      Variable(reflectMutable(NewVar(init)))
+    }
+
+    override  def var_assign[T:Manifest](lhs: Var[T], rhs: Exp[T])(implicit pos: SourceContext): Exp[Unit] = {
+      reflectWriteMutable(lhs.e)(rhs)(Assign(lhs, rhs))
+      Const()
+    }
+
+    override  def var_plusequals[T:Manifest](lhs: Var[T], rhs: Exp[T])(implicit pos: SourceContext): Exp[Unit] = {
+      reflectWriteMutable(lhs.e)(rhs)(VarPlusEquals(lhs, rhs))
+      Const()
+    }
+
+    override  def var_minusequals[T:Manifest](lhs: Var[T], rhs: Exp[T])(implicit pos: SourceContext): Exp[Unit] = {
+      reflectWriteMutable(lhs.e)(rhs)(VarMinusEquals(lhs, rhs))
+      Const()
+    }
+  
+    override  def var_timesequals[T:Manifest](lhs: Var[T], rhs: Exp[T])(implicit pos: SourceContext): Exp[Unit] = {
+      reflectWriteMutable(lhs.e)(rhs)(VarTimesEquals(lhs, rhs))
+      Const()
+    }
+  
+    override  def var_divideequals[T:Manifest](lhs: Var[T], rhs: Exp[T])(implicit pos: SourceContext): Exp[Unit] = {
+      reflectWriteMutable(lhs.e)(rhs)(VarDivideEquals(lhs, rhs))
+      Const()
+    }
+
+    override def readVar[T:Manifest](v: Var[T])(implicit pos: SourceContext) : Exp[T] = reflectReadMutable(v.e) { ReadVar(v) }
+  }
 
 trait VariablesExpOpt extends VariablesExp {
 
