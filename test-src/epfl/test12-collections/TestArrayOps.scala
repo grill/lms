@@ -314,6 +314,7 @@ trait ScalaGenVariablesNested extends ScalaGenVariables {
       //array_obj_new[Entry[K,V]](n)
 
       reflectReadMutable(m)(HashMapGetTable(m))
+      hashmap_array_apply(reflectReadMutable(m)(HashMapGetTable(m)), 0)
       reflectReadMutable(m)(HashMapGetSize(m))
       reflectReadMutable(m)(HashMapGetLoadFactor(m))
       reflectReadMutable(m)(HashMapMAXIMUM_CAPACITY(m))

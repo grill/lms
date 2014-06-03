@@ -4,6 +4,10 @@
 		"selected_items":
 		[
 			[
+				"reflectWr",
+				"reflectWriteMutable"
+			],
+			[
 				"eq",
 				"equalReadOperation"
 			]
@@ -15,7 +19,7 @@
 			"file": "test-src/epfl/test12-collections/TestArrayOps.scala",
 			"settings":
 			{
-				"buffer_size": 42676,
+				"buffer_size": 43513,
 				"line_ending": "Unix"
 			}
 		},
@@ -39,7 +43,7 @@
 			"file": "src/internal/Effects.scala",
 			"settings":
 			{
-				"buffer_size": 32200,
+				"buffer_size": 32516,
 				"line_ending": "Unix"
 			}
 		},
@@ -122,7 +126,7 @@
 	},
 	"find_in_files":
 	{
-		"height": 90.0,
+		"height": 0.0,
 		"where_history":
 		[
 			""
@@ -133,6 +137,7 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"AliasRep",
 			"Option",
 			"def quote",
 			"def emitVarDef",
@@ -155,7 +160,7 @@
 	"groups":
 	[
 		{
-			"selected": 0,
+			"selected": 3,
 			"sheets":
 			[
 				{
@@ -163,15 +168,15 @@
 					"file": "test-src/epfl/test12-collections/TestArrayOps.scala",
 					"settings":
 					{
-						"buffer_size": 42676,
+						"buffer_size": 43513,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								9049,
-								9049
+								5794,
+								5794
 							]
 						],
 						"settings":
@@ -181,7 +186,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 2470.0,
+						"translation.y": 4410.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -198,8 +203,8 @@
 						"selection":
 						[
 							[
-								695,
-								695
+								324,
+								324
 							]
 						],
 						"settings":
@@ -209,7 +214,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 975.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -237,7 +242,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 1620.0,
+						"translation.y": 135.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -247,15 +252,15 @@
 					"file": "src/internal/Effects.scala",
 					"settings":
 					{
-						"buffer_size": 32200,
+						"buffer_size": 32516,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								16478,
-								16478
+								20967,
+								20967
 							]
 						],
 						"settings":
@@ -265,7 +270,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 626.0,
+						"translation.y": 11904.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -293,7 +298,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 2250.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -473,6 +478,6 @@
 	"show_open_files": false,
 	"show_tabs": true,
 	"side_bar_visible": true,
-	"side_bar_width": 376.0,
+	"side_bar_width": 344.0,
 	"status_bar_visible": true
 }
