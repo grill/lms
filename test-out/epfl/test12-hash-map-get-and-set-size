@@ -2,17 +2,18 @@
   Emitting Generated Code                  
 *******************************************/
 class IntHashMapGetAndSetSize extends ((Int)=>(Unit)) {
-def apply(x10:Int): Unit = {
-val x11 = new HashMap[Int,Int](200)
-val x12 = x11.table
-val x13 = x11.size
-val x14 = x11.loadFactor
-val x15 = x11.MAXIMUM_CAPACITY
-val x16 = x11.threshold
-println(x13)
-x11.size = 3
-val x19 = x11.size
-println(x19)
+def apply(x11:Int): Unit = {
+val x12 = new HashMap[Int,Int](200)
+val x13 = x12.table
+val x14 = x13(0)
+val x15 = x12.size
+val x16 = x12.loadFactor
+val x17 = x12.MAXIMUM_CAPACITY
+val x18 = x12.threshold
+println(x15)
+x12.size = 3
+val x21 = x12.size
+println(x21)
 }
 }
 /*****************************************

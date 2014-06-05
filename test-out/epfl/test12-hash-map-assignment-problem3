@@ -2,21 +2,22 @@
   Emitting Generated Code                  
 *******************************************/
 class IntHashMapAssignmentProblem3 extends ((Int)=>(Unit)) {
-def apply(x14:Int): Unit = {
-val x15 = new HashMap[Int,Int](200)
-val x16 = x15.table
-val x17 = x15.size
-val x18 = x15.loadFactor
-val x19 = x15.MAXIMUM_CAPACITY
-val x20 = x15.threshold
-println(x17)
-var x22 = x15
-val x23 = x22
-var x24 = x23
+def apply(x15:Int): Unit = {
+val x16 = new HashMap[Int,Int](200)
+val x17 = x16.table
+val x18 = x17(0)
+val x19 = x16.size
+val x20 = x16.loadFactor
+val x21 = x16.MAXIMUM_CAPACITY
+val x22 = x16.threshold
+println(x19)
+var x24: scala.virtualization.lms.epfl.test12.HashMap[Int, Int] = x16
 val x25 = x24
-val x26 = x25.size
-x25.size = 3
-println(x17)
+var x26: scala.virtualization.lms.epfl.test12.HashMap[Int, Int] = x25
+val x27 = x26
+val x28 = x27.size
+x27.size = 3
+println(x19)
 }
 }
 /*****************************************

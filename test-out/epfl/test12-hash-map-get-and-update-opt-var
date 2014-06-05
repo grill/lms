@@ -2,451 +2,452 @@
   Emitting Generated Code                  
 *******************************************/
 class IntHashMapGetAndUpdateOptVar extends ((Int)=>(Unit)) {
-def apply(x370:Int): Unit = {
-val x371 = new HashMap[Int,Int](1)
-val x372 = x371.table
-val x373 = x371.size
-val x374 = x371.loadFactor
-val x375 = x371.MAXIMUM_CAPACITY
-val x376 = x371.threshold
-var x377 = 1
-x377 = 2
-val x379 = x377
-val x380 = x372.length
-val x9 = 2.hashCode
-val x10 = x9.toLong
-val x11 = x10 >>> 20
-val x12 = x10 >>> 12
-val x13 = x11 ^ x12
-val x14 = x13 ^ x10
-val x15 = x14 >>> 7
-val x16 = x14 ^ x15
-val x17 = x14 >>> 4
-val x18 = x16 ^ x17
-val x19 = x18.toInt
-val x381 = x380 - 1
-val x382 = x19 & x381
-val x383 = x372(x382)
-var x384 = x383
-val x385 = x384
-val x386 = x385 == null
-val x389 = x373 + 1
-if (x386) {
-val x387 = new Entry(2, x379)
-x372(x382) = x387
-x371.size = x389
+def apply(x371:Int): Unit = {
+val x372 = new HashMap[Int,Int](1)
+val x373 = x372.table
+val x374 = x373(0)
+val x375 = x372.size
+val x376 = x372.loadFactor
+val x377 = x372.MAXIMUM_CAPACITY
+val x378 = x372.threshold
+var x379: Int = 1
+x379 = 2
+val x381 = x379
+val x382 = x373.length
+val x10 = 2.hashCode
+val x11 = x10.toLong
+val x12 = x11 >>> 20
+val x13 = x11 >>> 12
+val x14 = x12 ^ x13
+val x15 = x14 ^ x11
+val x16 = x15 >>> 7
+val x17 = x15 ^ x16
+val x18 = x15 >>> 4
+val x19 = x17 ^ x18
+val x20 = x19.toInt
+val x383 = x382 - 1
+val x384 = x20 & x383
+val x385 = x373(x384)
+var x386: scala.virtualization.lms.epfl.test12.Entry[Int, Int] = x385
+val x387 = x386
+val x388 = x387 == null
+val x391 = x375 + 1
+if (x388) {
+val x389 = new Entry(2, x381)
+x373(x384) = x389
+x372.size = x391
 
 } else {
 while ({
-val x392 = x384
-val x393 = x392.hasNext
-val x399 = if (x393) {
-val x394 = x384
-val x395 = x394.key
-val x396 = x395 != 2
+val x394 = x386
+val x395 = x394.hasNext
+val x401 = if (x395) {
+val x396 = x386
+val x397 = x396.key
+val x398 = x397 != 2
 
-x396
+x398
 } else false
 
-x399
+x401
 }) {
-val x401 = x384
-val x402 = x401.next
-x384 = x402
+val x403 = x386
+val x404 = x403.next
+x386 = x404
 ()
 }
-val x406 = x384
-val x407 = x406.key
-val x408 = x407 == 2
-if (x408) {
-val x409 = x406.value
-x406.value = x379
+val x408 = x386
+val x409 = x408.key
+val x410 = x409 == 2
+if (x410) {
+val x411 = x408.value
+x408.value = x381
 
 } else {
-val x412 = new Entry(2, x379)
-val x413 = x406.next
-val x414 = x406.hasNext
-x406.next = x412
-x371.size = x389
+val x414 = new Entry(2, x381)
+val x415 = x408.next
+val x416 = x408.hasNext
+x408.next = x414
+x372.size = x391
 
 }
 
 }
-val x421 = x371.size
-val x422 = x421 >= x376
-val x423 = x380 == x375
-val x64 = scala.Int.MaxValue
-val x426 = 2 * x380
-val x455 = x426 - 1
-val x472 = x374 * x426
-val x473 = x472.asInstanceOf[Int]
-if (x422) {
-if (x423) {
-x371.threshold = x64
+val x423 = x372.size
+val x424 = x423 >= x378
+val x425 = x382 == x377
+val x65 = scala.Int.MaxValue
+val x428 = 2 * x382
+val x457 = x428 - 1
+val x474 = x376 * x428
+val x475 = x474.asInstanceOf[Int]
+if (x424) {
+if (x425) {
+x372.threshold = x65
 
 } else {
-val x427 = new Array[scala.virtualization.lms.epfl.test12.Entry[Int, Int]](x426)
-var x428 = 0
+val x429 = new Array[scala.virtualization.lms.epfl.test12.Entry[Int, Int]](x428)
+var x430: Int = 0
 while ({
-val x429 = x428
-val x430 = x372.length
-val x431 = x429 < x430
-x431
+val x431 = x430
+val x432 = x373.length
+val x433 = x431 < x432
+x433
 }) {
-val x433 = x428
-val x434 = x372(x433)
-var x435 = x434
-val x436 = x435
-val x437 = x436 != null
-if (x437) {
-x372(x433) = null
+val x435 = x430
+val x436 = x373(x435)
+var x437: scala.virtualization.lms.epfl.test12.Entry[Int, Int] = x436
+val x438 = x437
+val x439 = x438 != null
+if (x439) {
+x373(x435) = null
 while ({
-val x439 = x435
-val x440 = x439 != null
-x440
+val x441 = x437
+val x442 = x441 != null
+x442
 }) {
-val x442 = x435
-val x443 = x442.key
-val x457 = x442.next
-val x444 = x443.hashCode
-val x445 = x444.toLong
-val x446 = x445 >>> 20
-val x447 = x445 >>> 12
-val x448 = x446 ^ x447
-val x449 = x448 ^ x445
-val x450 = x449 >>> 7
-val x451 = x449 ^ x450
-val x452 = x449 >>> 4
+val x444 = x437
+val x445 = x444.key
+val x459 = x444.next
+val x446 = x445.hashCode
+val x447 = x446.toLong
+val x448 = x447 >>> 20
+val x449 = x447 >>> 12
+val x450 = x448 ^ x449
+val x451 = x450 ^ x447
+val x452 = x451 >>> 7
 val x453 = x451 ^ x452
-val x454 = x453.toInt
-val x456 = x454 & x455
-val x458 = x427(x456)
-val x459 = x442.hasNext
-x442.next = x458
-x427(x456) = x442
-x435 = x457
+val x454 = x451 >>> 4
+val x455 = x453 ^ x454
+val x456 = x455.toInt
+val x458 = x456 & x457
+val x460 = x429(x458)
+val x461 = x444.hasNext
+x444.next = x460
+x429(x458) = x444
+x437 = x459
 ()
 }
 
 } else {
 ()
 }
-val x467 = x433 + 1
-x428 = x467
+val x469 = x435 + 1
+x430 = x469
 ()
 }
-x371.table = x427
-x371.threshold = x473
+x372.table = x429
+x372.threshold = x475
 
 }
 
 } else {
 ()
 }
-val x479 = x371.table
-val x491 = x479.length
-val x480 = x379.hashCode
-val x481 = x480.toLong
-val x482 = x481 >>> 20
-val x483 = x481 >>> 12
-val x484 = x482 ^ x483
-val x485 = x484 ^ x481
-val x486 = x485 >>> 7
-val x487 = x485 ^ x486
-val x488 = x485 >>> 4
+val x481 = x372.table
+val x493 = x481.length
+val x482 = x381.hashCode
+val x483 = x482.toLong
+val x484 = x483 >>> 20
+val x485 = x483 >>> 12
+val x486 = x484 ^ x485
+val x487 = x486 ^ x483
+val x488 = x487 >>> 7
 val x489 = x487 ^ x488
-val x490 = x489.toInt
-val x492 = x491 - 1
-val x493 = x490 & x492
-val x494 = x479(x493)
-var x495 = x494
-val x496 = x495
-val x497 = x496 == null
-val x139 = None
-val x520 = if (x497) {
-x139
+val x490 = x487 >>> 4
+val x491 = x489 ^ x490
+val x492 = x491.toInt
+val x494 = x493 - 1
+val x495 = x492 & x494
+val x496 = x481(x495)
+var x497: scala.virtualization.lms.epfl.test12.Entry[Int, Int] = x496
+val x498 = x497
+val x499 = x498 == null
+val x140 = None
+val x522 = if (x499) {
+x140
 } else {
 while ({
-val x498 = x495
-val x499 = x498.hasNext
-val x505 = if (x499) {
-val x500 = x495
-val x501 = x500.key
-val x502 = x501 != x379
+val x500 = x497
+val x501 = x500.hasNext
+val x507 = if (x501) {
+val x502 = x497
+val x503 = x502.key
+val x504 = x503 != x381
 
-x502
+x504
 } else false
 
-x505
+x507
 }) {
-val x507 = x495
-val x508 = x507.next
-x495 = x508
+val x509 = x497
+val x510 = x509.next
+x497 = x510
 ()
 }
-val x512 = x495
-val x513 = x512.key
-val x514 = x513 == x379
-val x518 = if (x514) {
-val x515 = x512.value
-val x516 = Some(x515)
-x516
-} else {
-x139
-}
+val x514 = x497
+val x515 = x514.key
+val x516 = x515 == x381
+val x520 = if (x516) {
+val x517 = x514.value
+val x518 = Some(x517)
 x518
+} else {
+x140
 }
-val x521 = x520.get
-val x165 = 3.hashCode
-val x166 = x165.toLong
-val x167 = x166 >>> 20
-val x168 = x166 >>> 12
-val x169 = x167 ^ x168
-val x170 = x169 ^ x166
-val x171 = x170 >>> 7
-val x172 = x170 ^ x171
-val x173 = x170 >>> 4
-val x174 = x172 ^ x173
-val x175 = x174.toInt
-val x523 = x175 & x492
-val x524 = x479(x523)
-var x525 = x524
-val x526 = x525
-val x527 = x526 == null
-val x522 = x521 + 1
-val x530 = x421 + 1
-if (x527) {
-val x528 = new Entry(3, x522)
-x479(x523) = x528
-x371.size = x530
+x520
+}
+val x523 = x522.get
+val x166 = 3.hashCode
+val x167 = x166.toLong
+val x168 = x167 >>> 20
+val x169 = x167 >>> 12
+val x170 = x168 ^ x169
+val x171 = x170 ^ x167
+val x172 = x171 >>> 7
+val x173 = x171 ^ x172
+val x174 = x171 >>> 4
+val x175 = x173 ^ x174
+val x176 = x175.toInt
+val x525 = x176 & x494
+val x526 = x481(x525)
+var x527: scala.virtualization.lms.epfl.test12.Entry[Int, Int] = x526
+val x528 = x527
+val x529 = x528 == null
+val x524 = x523 + 1
+val x532 = x423 + 1
+if (x529) {
+val x530 = new Entry(3, x524)
+x481(x525) = x530
+x372.size = x532
 
 } else {
 while ({
-val x533 = x525
-val x534 = x533.hasNext
-val x540 = if (x534) {
-val x535 = x525
-val x536 = x535.key
-val x537 = x536 != 3
+val x535 = x527
+val x536 = x535.hasNext
+val x542 = if (x536) {
+val x537 = x527
+val x538 = x537.key
+val x539 = x538 != 3
 
-x537
+x539
 } else false
 
-x540
+x542
 }) {
-val x542 = x525
-val x543 = x542.next
-x525 = x543
+val x544 = x527
+val x545 = x544.next
+x527 = x545
 ()
 }
-val x547 = x525
-val x548 = x547.key
-val x549 = x548 == 3
-if (x549) {
-val x550 = x547.value
-x547.value = x522
+val x549 = x527
+val x550 = x549.key
+val x551 = x550 == 3
+if (x551) {
+val x552 = x549.value
+x549.value = x524
 
 } else {
-val x553 = new Entry(3, x522)
-val x554 = x547.next
-val x555 = x547.hasNext
-x547.next = x553
-x371.size = x530
+val x555 = new Entry(3, x524)
+val x556 = x549.next
+val x557 = x549.hasNext
+x549.next = x555
+x372.size = x532
 
 }
 
 }
-val x562 = x371.threshold
-val x563 = x371.size
-val x564 = x563 >= x562
-val x565 = x491 == x375
-val x568 = 2 * x491
-val x597 = x568 - 1
-val x614 = x374 * x568
-val x615 = x614.asInstanceOf[Int]
-if (x564) {
-if (x565) {
-x371.threshold = x64
+val x564 = x372.threshold
+val x565 = x372.size
+val x566 = x565 >= x564
+val x567 = x493 == x377
+val x570 = 2 * x493
+val x599 = x570 - 1
+val x616 = x376 * x570
+val x617 = x616.asInstanceOf[Int]
+if (x566) {
+if (x567) {
+x372.threshold = x65
 
 } else {
-val x569 = new Array[scala.virtualization.lms.epfl.test12.Entry[Int, Int]](x568)
-var x570 = 0
+val x571 = new Array[scala.virtualization.lms.epfl.test12.Entry[Int, Int]](x570)
+var x572: Int = 0
 while ({
-val x571 = x570
-val x572 = x479.length
-val x573 = x571 < x572
-x573
+val x573 = x572
+val x574 = x481.length
+val x575 = x573 < x574
+x575
 }) {
-val x575 = x570
-val x576 = x479(x575)
-var x577 = x576
-val x578 = x577
-val x579 = x578 != null
-if (x579) {
-x479(x575) = null
+val x577 = x572
+val x578 = x481(x577)
+var x579: scala.virtualization.lms.epfl.test12.Entry[Int, Int] = x578
+val x580 = x579
+val x581 = x580 != null
+if (x581) {
+x481(x577) = null
 while ({
-val x581 = x577
-val x582 = x581 != null
-x582
+val x583 = x579
+val x584 = x583 != null
+x584
 }) {
-val x584 = x577
-val x585 = x584.key
-val x599 = x584.next
-val x586 = x585.hashCode
-val x587 = x586.toLong
-val x588 = x587 >>> 20
-val x589 = x587 >>> 12
-val x590 = x588 ^ x589
-val x591 = x590 ^ x587
-val x592 = x591 >>> 7
-val x593 = x591 ^ x592
-val x594 = x591 >>> 4
+val x586 = x579
+val x587 = x586.key
+val x601 = x586.next
+val x588 = x587.hashCode
+val x589 = x588.toLong
+val x590 = x589 >>> 20
+val x591 = x589 >>> 12
+val x592 = x590 ^ x591
+val x593 = x592 ^ x589
+val x594 = x593 >>> 7
 val x595 = x593 ^ x594
-val x596 = x595.toInt
-val x598 = x596 & x597
-val x600 = x569(x598)
-val x601 = x584.hasNext
-x584.next = x600
-x569(x598) = x584
-x577 = x599
+val x596 = x593 >>> 4
+val x597 = x595 ^ x596
+val x598 = x597.toInt
+val x600 = x598 & x599
+val x602 = x571(x600)
+val x603 = x586.hasNext
+x586.next = x602
+x571(x600) = x586
+x579 = x601
 ()
 }
 
 } else {
 ()
 }
-val x609 = x575 + 1
-x570 = x609
+val x611 = x577 + 1
+x572 = x611
 ()
 }
-x371.table = x569
-x371.threshold = x615
+x372.table = x571
+x372.threshold = x617
 
 }
 
 } else {
 ()
 }
-val x621 = x371.table
-var x622 = 0
-val x276 = null.asInstanceOf[scala.virtualization.lms.epfl.test12.Entry[Int, Int]]
-var x623 = x276
+val x623 = x372.table
+var x624: Int = 0
+val x277 = null.asInstanceOf[scala.virtualization.lms.epfl.test12.Entry[Int, Int]]
+var x625: scala.virtualization.lms.epfl.test12.Entry[Int, Int] = x277
 while ({
-val x624 = x622
-val x625 = x621.length
-val x626 = x624 < x625
-x626
+val x626 = x624
+val x627 = x623.length
+val x628 = x626 < x627
+x628
 }) {
-val x628 = x622
-val x629 = x621(x628)
-val x630 = x629 != null
-if (x630) {
-x623 = x629
-println(x629)
+val x630 = x624
+val x631 = x623(x630)
+val x632 = x631 != null
+if (x632) {
+x625 = x631
+println(x631)
 while ({
-val x633 = x623
-val x634 = x633.hasNext
-x634
+val x635 = x625
+val x636 = x635.hasNext
+x636
 }) {
-val x636 = x623
-val x637 = x636.next
-x623 = x637
-val x639 = x623
-println(x639)
+val x638 = x625
+val x639 = x638.next
+x625 = x639
+val x641 = x625
+println(x641)
 
 }
 
 } else {
 ()
 }
-val x645 = x628 + 1
-x622 = x645
+val x647 = x630 + 1
+x624 = x647
 ()
 }
-val x649 = x621.length
-var x652 = x276
-val x650 = x649 - 1
-val x651 = x19 & x650
-val x653 = x621(x651)
-var x654 = x653
-val x655 = x654
-val x656 = x655 != null
-if (x656) {
+val x651 = x623.length
+var x654: scala.virtualization.lms.epfl.test12.Entry[Int, Int] = x277
+val x652 = x651 - 1
+val x653 = x20 & x652
+val x655 = x623(x653)
+var x656: scala.virtualization.lms.epfl.test12.Entry[Int, Int] = x655
+val x657 = x656
+val x658 = x657 != null
+if (x658) {
 while ({
-val x657 = x654
-val x658 = x657.hasNext
-val x664 = if (x658) {
-val x659 = x654
-val x660 = x659.key
-val x661 = x660 != 2
+val x659 = x656
+val x660 = x659.hasNext
+val x666 = if (x660) {
+val x661 = x656
+val x662 = x661.key
+val x663 = x662 != 2
 
-x661
+x663
 } else false
 
-x664
+x666
 }) {
-val x666 = x654
-x652 = x666
-val x668 = x666.next
+val x668 = x656
 x654 = x668
+val x670 = x668.next
+x656 = x670
 ()
 }
-val x672 = x652
-val x673 = x672 == null
-if (x673) {
-x621(x651) = null
+val x674 = x654
+val x675 = x674 == null
+if (x675) {
+x623(x653) = null
 
 } else {
-val x676 = x654
-val x677 = x676.key
-val x678 = x677 == 2
-if (x678) {
-val x679 = x676.next
-val x680 = x672.next
-val x681 = x672.hasNext
-x672.next = x679
-
-} else {
-()
-}
-
-}
+val x678 = x656
+val x679 = x678.key
+val x680 = x679 == 2
+if (x680) {
+val x681 = x678.next
+val x682 = x674.next
+val x683 = x674.hasNext
+x674.next = x681
 
 } else {
 ()
 }
-var x689 = 0
-var x690 = x276
+
+}
+
+} else {
+()
+}
+var x691: Int = 0
+var x692: scala.virtualization.lms.epfl.test12.Entry[Int, Int] = x277
 while ({
-val x691 = x689
-val x692 = x621.length
-val x693 = x691 < x692
-x693
+val x693 = x691
+val x694 = x623.length
+val x695 = x693 < x694
+x695
 }) {
-val x695 = x689
-val x696 = x621(x695)
-val x697 = x696 != null
-if (x697) {
-x690 = x696
-println(x696)
+val x697 = x691
+val x698 = x623(x697)
+val x699 = x698 != null
+if (x699) {
+x692 = x698
+println(x698)
 while ({
-val x700 = x690
-val x701 = x700.hasNext
-x701
+val x702 = x692
+val x703 = x702.hasNext
+x703
 }) {
-val x703 = x690
-val x704 = x703.next
-x690 = x704
-val x706 = x690
-println(x706)
+val x705 = x692
+val x706 = x705.next
+x692 = x706
+val x708 = x692
+println(x708)
 
 }
 
 } else {
 ()
 }
-val x712 = x695 + 1
-x689 = x712
+val x714 = x697 + 1
+x691 = x714
 ()
 }
 }

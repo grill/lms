@@ -19,7 +19,36 @@
 			"file": "test-src/epfl/test12-collections/TestArrayOps.scala",
 			"settings":
 			{
-				"buffer_size": 43513,
+				"buffer_size": 19484,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "Searching 590 files for \"TopLevel\"\n\n/home/gabriel/workspace/lms/old/test14-scratch/TestCGen.scala:\n   19    trait DSL extends ScalaOpsPkg with TupledFunctions with UncheckedOps with LiftPrimitives with LiftString with LiftVariables {\n   20      // keep track of top level functions\n   21:     case class TopLevel[A,B](name: String, mA: Manifest[A], mB:Manifest[B], f: Rep[A] => Rep[B])\n   22:     val rec = new scala.collection.mutable.HashMap[String,TopLevel[_,_]]\n   23:     def toplevel[A:Manifest,B:Manifest](name: String)(f: Rep[A] => Rep[B]): Rep[A] => Rep[B] = {\n   24        val g = (x: Rep[A]) => unchecked[B](name,\"(\",x,\")\")\n   25:       rec.getOrElseUpdate(name, TopLevel(name, manifest[A], manifest[B], f))\n   26        g\n   27      }\n   ..\n   47      withOutFile(prefix+\"cgen1\") {\n   48        trait Prog extends DSL {\n   49:         toplevel(\"main\") { x: Rep[Int] =>\n   50  \n   51            var i = 0\n   ..\n   69      withOutFile(prefix+\"cgen2\") {\n   70        trait Prog extends DSL {\n   71:         toplevel(\"main\") { x: Rep[Int] =>\n   72  \n   73            def fac: Rep[((Int,Int))=>Int] = fun { (n, dummy) =>\n   ..\n   89      withOutFile(prefix+\"cgen3\") {\n   90        trait Prog extends DSL {\n   91:         val main = toplevel(\"main\") { x: Rep[Int] =>\n   92            printf(\"Hello, world: main\\n\")\n   93            test1(x)\n   94          }\n   95  \n   96:         val test1 = toplevel(\"test1\") { x: Rep[Int] =>\n   97            printf(\"Hello, world: test1\\n\")\n   98            test2(x)\n   99          }\n  100  \n  101:         val test2 = toplevel(\"test2\") { x: Rep[Int] =>\n  102            printf(\"Hello, world: test2\\n\")\n  103            x\n\n/home/gabriel/workspace/lms/old/test14-scratch/TestDataOp.scala:\n   18    trait DSL extends ScalaOpsPkg with TupledFunctions with UncheckedOps with LiftPrimitives with LiftString with LiftVariables {\n   19      // keep track of top level functions\n   20:     case class TopLevel[A,B](name: String, mA: Manifest[A], mB:Manifest[B], f: Rep[A] => Rep[B])\n   21:     val rec = new scala.collection.mutable.HashMap[String,TopLevel[_,_]]\n   22:     def toplevel[A:Manifest,B:Manifest](name: String)(f: Rep[A] => Rep[B]): Rep[A] => Rep[B] = {\n   23        val g = (x: Rep[A]) => unchecked[B](name,\"(\",x,\")\")\n   24:       rec.getOrElseUpdate(name, TopLevel(name, manifest[A], manifest[B], f))\n   25        g\n   26      }\n   ..\n  158      withOutFile(prefix+\"dataop1\") {\n  159        trait Prog extends DSL {\n  160:         toplevel(\"main\") { x: Rep[Int] =>\n  161  \n  162            val table = ColBasedTable(\"table\",Schema(\"field1\",\"field2\",\"field3\"))\n  ...\n  180      withOutFile(prefix+\"dataop2\") {\n  181        trait Prog extends DSL {\n  182:         toplevel(\"main\") { x: Rep[Int] =>\n  183  \n  184            val table = RowBasedTable(\"table\",Schema(\"field1\",\"field2\",\"field3\"))\n\n/home/gabriel/workspace/lms/src/common/DSLBase.scala:\n    4  trait DSLBase extends BaseExp with UncheckedOps {\n    5    // keep track of top level functions\n    6:   abstract class TopLevel(n: String) {\n    7      val name = n;\n    8    }\n    9  \n   10:   val rec = new scala.collection.mutable.HashMap[String, TopLevel]\n   11  \n   12:   case class TopLevel1 [A1, B](n: String, mA1: Manifest[A1], mB: Manifest[B], f: (Rep[A1]) => Rep[B]) extends TopLevel(n)\n   13:   case class TopLevel2 [A1, A2, B](n: String, mA1: Manifest[A1], mA2: Manifest[A2], mB: Manifest[B], f: (Rep[A1], Rep[A2]) => Rep[B]) extends TopLevel(n)\n   14:   case class TopLevel3 [A1, A2, A3, B](n: String, mA1: Manifest[A1], mA2: Manifest[A2], mA3: Manifest[A3], mB: Manifest[B], f: (Rep[A1], Rep[A2], Rep[A3]) => Rep[B]) extends TopLevel(n)\n   15:   case class TopLevel4 [A1, A2, A3, A4, B](n: String, mA1: Manifest[A1], mA2: Manifest[A2], mA3: Manifest[A3], mA4: Manifest[A4], mB: Manifest[B], f: (Rep[A1], Rep[A2], Rep[A3], Rep[A4]) => Rep[B]) extends TopLevel(n)\n   16:   case class TopLevel5 [A1, A2, A3, A4, A5, B](n: String, mA1: Manifest[A1], mA2: Manifest[A2], mA3: Manifest[A3], mA4: Manifest[A4], mA5: Manifest[A5], mB: Manifest[B], f: (Rep[A1], Rep[A2], Rep[A3], Rep[A4], Rep[A5]) => Rep[B]) extends TopLevel(n)\n   17:   case class TopLevel6 [A1, A2, A3, A4, A5, A6, B](n: String, mA1: Manifest[A1], mA2: Manifest[A2], mA3: Manifest[A3], mA4: Manifest[A4], mA5: Manifest[A5], mA6: Manifest[A6], mB: Manifest[B], f: (Rep[A1], Rep[A2], Rep[A3], Rep[A4], Rep[A5], Rep[A6]) => Rep[B]) extends TopLevel(n)\n   18:   case class TopLevel7 [A1, A2, A3, A4, A5, A6, A7, B](n: String, mA1: Manifest[A1], mA2: Manifest[A2], mA3: Manifest[A3], mA4: Manifest[A4], mA5: Manifest[A5], mA6: Manifest[A6], mA7: Manifest[A7], mB: Manifest[B], f: (Rep[A1], Rep[A2], Rep[A3], Rep[A4], Rep[A5], Rep[A6], Rep[A7]) => Rep[B]) extends TopLevel(n)\n   19:   case class TopLevel8 [A1, A2, A3, A4, A5, A6, A7, A8, B](n: String, mA1: Manifest[A1], mA2: Manifest[A2], mA3: Manifest[A3], mA4: Manifest[A4], mA5: Manifest[A5], mA6: Manifest[A6], mA7: Manifest[A7], mA8: Manifest[A8], mB: Manifest[B], f: (Rep[A1], Rep[A2], Rep[A3], Rep[A4], Rep[A5], Rep[A6], Rep[A7], Rep[A8]) => Rep[B]) extends TopLevel(n)\n   20:   case class TopLevel9 [A1, A2, A3, A4, A5, A6, A7, A8, A9, B](n: String, mA1: Manifest[A1], mA2: Manifest[A2], mA3: Manifest[A3], mA4: Manifest[A4], mA5: Manifest[A5], mA6: Manifest[A6], mA7: Manifest[A7], mA8: Manifest[A8], mA9: Manifest[A9], mB: Manifest[B], f: (Rep[A1], Rep[A2], Rep[A3], Rep[A4], Rep[A5], Rep[A6], Rep[A7], Rep[A8], Rep[A9]) => Rep[B]) extends TopLevel(n)\n   21:   case class TopLevel10 [A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, B](n: String, mA1: Manifest[A1], mA2: Manifest[A2], mA3: Manifest[A3], mA4: Manifest[A4], mA5: Manifest[A5], mA6: Manifest[A6], mA7: Manifest[A7], mA8: Manifest[A8], mA9: Manifest[A9], mA10: Manifest[A10], mB: Manifest[B], f: (Rep[A1], Rep[A2], Rep[A3], Rep[A4], Rep[A5], Rep[A6], Rep[A7], Rep[A8], Rep[A9], Rep[A10]) => Rep[B]) extends TopLevel(n)\n   22:   case class TopLevel11 [A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, B](n: String, mA1: Manifest[A1], mA2: Manifest[A2], mA3: Manifest[A3], mA4: Manifest[A4], mA5: Manifest[A5], mA6: Manifest[A6], mA7: Manifest[A7], mA8: Manifest[A8], mA9: Manifest[A9], mA10: Manifest[A10], mA11: Manifest[A11], mB: Manifest[B], f: (Rep[A1], Rep[A2], Rep[A3], Rep[A4], Rep[A5], Rep[A6], Rep[A7], Rep[A8], Rep[A9], Rep[A10], Rep[A11]) => Rep[B]) extends TopLevel(n)\n   23:   case class TopLevel12 [A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, B](n: String, mA1: Manifest[A1], mA2: Manifest[A2], mA3: Manifest[A3], mA4: Manifest[A4], mA5: Manifest[A5], mA6: Manifest[A6], mA7: Manifest[A7], mA8: Manifest[A8], mA9: Manifest[A9], mA10: Manifest[A10], mA11: Manifest[A11], mA12: Manifest[A12], mB: Manifest[B], f: (Rep[A1], Rep[A2], Rep[A3], Rep[A4], Rep[A5], Rep[A6], Rep[A7], Rep[A8], Rep[A9], Rep[A10], Rep[A11], Rep[A12]) => Rep[B]) extends TopLevel(n)\n   24:   case class TopLevel13 [A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, B](n: String, mA1: Manifest[A1], mA2: Manifest[A2], mA3: Manifest[A3], mA4: Manifest[A4], mA5: Manifest[A5], mA6: Manifest[A6], mA7: Manifest[A7], mA8: Manifest[A8], mA9: Manifest[A9], mA10: Manifest[A10], mA11: Manifest[A11], mA12: Manifest[A12], mA13: Manifest[A13], mB: Manifest[B], f: (Rep[A1], Rep[A2], Rep[A3], Rep[A4], Rep[A5], Rep[A6], Rep[A7], Rep[A8], Rep[A9], Rep[A10], Rep[A11], Rep[A12], Rep[A13]) => Rep[B]) extends TopLevel(n)\n   25:   case class TopLevel14 [A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, B](n: String, mA1: Manifest[A1], mA2: Manifest[A2], mA3: Manifest[A3], mA4: Manifest[A4], mA5: Manifest[A5], mA6: Manifest[A6], mA7: Manifest[A7], mA8: Manifest[A8], mA9: Manifest[A9], mA10: Manifest[A10], mA11: Manifest[A11], mA12: Manifest[A12], mA13: Manifest[A13], mA14: Manifest[A14], mB: Manifest[B], f: (Rep[A1], Rep[A2], Rep[A3], Rep[A4], Rep[A5], Rep[A6], Rep[A7], Rep[A8], Rep[A9], Rep[A10], Rep[A11], Rep[A12], Rep[A13], Rep[A14]) => Rep[B]) extends TopLevel(n)\n   26:   case class TopLevel15 [A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, B](n: String, mA1: Manifest[A1], mA2: Manifest[A2], mA3: Manifest[A3], mA4: Manifest[A4], mA5: Manifest[A5], mA6: Manifest[A6], mA7: Manifest[A7], mA8: Manifest[A8], mA9: Manifest[A9], mA10: Manifest[A10], mA11: Manifest[A11], mA12: Manifest[A12], mA13: Manifest[A13], mA14: Manifest[A14], mA15: Manifest[A15], mB: Manifest[B], f: (Rep[A1], Rep[A2], Rep[A3], Rep[A4], Rep[A5], Rep[A6], Rep[A7], Rep[A8], Rep[A9], Rep[A10], Rep[A11], Rep[A12], Rep[A13], Rep[A14], Rep[A15]) => Rep[B]) extends TopLevel(n)\n   27:   case class TopLevel16 [A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, B](n: String, mA1: Manifest[A1], mA2: Manifest[A2], mA3: Manifest[A3], mA4: Manifest[A4], mA5: Manifest[A5], mA6: Manifest[A6], mA7: Manifest[A7], mA8: Manifest[A8], mA9: Manifest[A9], mA10: Manifest[A10], mA11: Manifest[A11], mA12: Manifest[A12], mA13: Manifest[A13], mA14: Manifest[A14], mA15: Manifest[A15], mA16: Manifest[A16], mB: Manifest[B], f: (Rep[A1], Rep[A2], Rep[A3], Rep[A4], Rep[A5], Rep[A6], Rep[A7], Rep[A8], Rep[A9], Rep[A10], Rep[A11], Rep[A12], Rep[A13], Rep[A14], Rep[A15], Rep[A16]) => Rep[B]) extends TopLevel(n)\n   28:   case class TopLevel17 [A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, B](n: String, mA1: Manifest[A1], mA2: Manifest[A2], mA3: Manifest[A3], mA4: Manifest[A4], mA5: Manifest[A5], mA6: Manifest[A6], mA7: Manifest[A7], mA8: Manifest[A8], mA9: Manifest[A9], mA10: Manifest[A10], mA11: Manifest[A11], mA12: Manifest[A12], mA13: Manifest[A13], mA14: Manifest[A14], mA15: Manifest[A15], mA16: Manifest[A16], mA17: Manifest[A17], mB: Manifest[B], f: (Rep[A1], Rep[A2], Rep[A3], Rep[A4], Rep[A5], Rep[A6], Rep[A7], Rep[A8], Rep[A9], Rep[A10], Rep[A11], Rep[A12], Rep[A13], Rep[A14], Rep[A15], Rep[A16], Rep[A17]) => Rep[B]) extends TopLevel(n)\n   29:   case class TopLevel18 [A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, B](n: String, mA1: Manifest[A1], mA2: Manifest[A2], mA3: Manifest[A3], mA4: Manifest[A4], mA5: Manifest[A5], mA6: Manifest[A6], mA7: Manifest[A7], mA8: Manifest[A8], mA9: Manifest[A9], mA10: Manifest[A10], mA11: Manifest[A11], mA12: Manifest[A12], mA13: Manifest[A13], mA14: Manifest[A14], mA15: Manifest[A15], mA16: Manifest[A16], mA17: Manifest[A17], mA18: Manifest[A18], mB: Manifest[B], f: (Rep[A1], Rep[A2], Rep[A3], Rep[A4], Rep[A5], Rep[A6], Rep[A7], Rep[A8], Rep[A9], Rep[A10], Rep[A11], Rep[A12], Rep[A13], Rep[A14], Rep[A15], Rep[A16], Rep[A17], Rep[A18]) => Rep[B]) extends TopLevel(n)\n   30:   case class TopLevel19 [A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, B](n: String, mA1: Manifest[A1], mA2: Manifest[A2], mA3: Manifest[A3], mA4: Manifest[A4], mA5: Manifest[A5], mA6: Manifest[A6], mA7: Manifest[A7], mA8: Manifest[A8], mA9: Manifest[A9], mA10: Manifest[A10], mA11: Manifest[A11], mA12: Manifest[A12], mA13: Manifest[A13], mA14: Manifest[A14], mA15: Manifest[A15], mA16: Manifest[A16], mA17: Manifest[A17], mA18: Manifest[A18], mA19: Manifest[A19], mB: Manifest[B], f: (Rep[A1], Rep[A2], Rep[A3], Rep[A4], Rep[A5], Rep[A6], Rep[A7], Rep[A8], Rep[A9], Rep[A10], Rep[A11], Rep[A12], Rep[A13], Rep[A14], Rep[A15], Rep[A16], Rep[A17], Rep[A18], Rep[A19]) => Rep[B]) extends TopLevel(n)\n   31  \n   32:   //case class TopLevel14_16 [A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24, A25, A26, A27, A28, A29, A30, B](n: String, (mA1: Manifest[A1], mA2: Manifest[A2], mA3: Manifest[A3], mA4: Manifest[A4], mA5: Manifest[A5], mA6: Manifest[A6], mA7: Manifest[A7], mA8: Manifest[A8], mA9: Manifest[A9], mA10: Manifest[A10], mA11: Manifest[A11], mA12: Manifest[A12], mA13: Manifest[A13], mA14: Manifest[A14]), (mA15: Manifest[A15], mA16: Manifest[A16], mA17: Manifest[A17], mA18: Manifest[A18], mA19: Manifest[A19], mA20: Manifest[A20], mA21: Manifest[A21], mA22: Manifest[A22], mA23: Manifest[A23], mA24: Manifest[A24], mA25: Manifest[A25], mA26: Manifest[A26], mA27: Manifest[A27], mA28: Manifest[A28], mA29: Manifest[A29], mA30: Manifest[A30]), mB: Manifest[B], f: (Rep[A1], Rep[A2], Rep[A3], Rep[A4], Rep[A5], Rep[A6], Rep[A7], Rep[A8], Rep[A9], Rep[A10], Rep[A11], Rep[A12], Rep[A13], Rep[A14])(Rep[A15], Rep[A16], Rep[A17], Rep[A18], Rep[A19], Rep[A20], Rep[A21], Rep[A22], Rep[A23], Rep[A24], Rep[A25], Rep[A26], Rep[A27], Rep[A28], Rep[A29], Rep[A30]) => Rep[B]) extends TopLevel(n)\n   33  \n   34:   def toplevel1[A1: Manifest, B: Manifest](name: String)(f: (Rep[A1]) => Rep[B]): (Rep[A1]) => Rep[B] = {\n   35      val g = (x1: Rep[A1]) => unchecked[B](name, \"(\", x1, \")\")\n   36:     rec.getOrElseUpdate(name, TopLevel1(name, manifest[A1], manifest[B], f))\n   37      g\n   38    }\n   39:   def toplevel2[A1: Manifest, A2: Manifest, B: Manifest](name: String)(f: (Rep[A1], Rep[A2]) => Rep[B]): (Rep[A1], Rep[A2]) => Rep[B] = {\n   40      val g = (x1: Rep[A1], x2: Rep[A2]) => unchecked[B](name, \"(\", x1, \",\", x2, \")\")\n   41:     rec.getOrElseUpdate(name, TopLevel2(name, manifest[A1], manifest[A2], manifest[B], f))\n   42      g\n   43    }\n   44:   def toplevel3[A1: Manifest, A2: Manifest, A3: Manifest, B: Manifest](name: String)(f: (Rep[A1], Rep[A2], Rep[A3]) => Rep[B]): (Rep[A1], Rep[A2], Rep[A3]) => Rep[B] = {\n   45      val g = (x1: Rep[A1], x2: Rep[A2], x3: Rep[A3]) => unchecked[B](name, \"(\", x1, \",\", x2, \",\", x3, \")\")\n   46:     rec.getOrElseUpdate(name, TopLevel3(name, manifest[A1], manifest[A2], manifest[A3], manifest[B], f))\n   47      g\n   48    }\n   49:   def toplevel4[A1: Manifest, A2: Manifest, A3: Manifest, A4: Manifest, B: Manifest](name: String)(f: (Rep[A1], Rep[A2], Rep[A3], Rep[A4]) => Rep[B]): (Rep[A1], Rep[A2], Rep[A3], Rep[A4]) => Rep[B] = {\n   50      val g = (x1: Rep[A1], x2: Rep[A2], x3: Rep[A3], x4: Rep[A4]) => unchecked[B](name, \"(\", x1, \",\", x2, \",\", x3, \",\", x4, \")\")\n   51:     rec.getOrElseUpdate(name, TopLevel4(name, manifest[A1], manifest[A2], manifest[A3], manifest[A4], manifest[B], f))\n   52      g\n   53    }\n   54:   def toplevel5[A1: Manifest, A2: Manifest, A3: Manifest, A4: Manifest, A5: Manifest, B: Manifest](name: String)(f: (Rep[A1], Rep[A2], Rep[A3], Rep[A4], Rep[A5]) => Rep[B]): (Rep[A1], Rep[A2], Rep[A3], Rep[A4], Rep[A5]) => Rep[B] = {\n   55      val g = (x1: Rep[A1], x2: Rep[A2], x3: Rep[A3], x4: Rep[A4], x5: Rep[A5]) => unchecked[B](name, \"(\", x1, \",\", x2, \",\", x3, \",\", x4, \",\", x5, \")\")\n   56:     rec.getOrElseUpdate(name, TopLevel5(name, manifest[A1], manifest[A2], manifest[A3], manifest[A4], manifest[A5], manifest[B], f))\n   57      g\n   58    }\n   59:   def toplevel6[A1: Manifest, A2: Manifest, A3: Manifest, A4: Manifest, A5: Manifest, A6: Manifest, B: Manifest](name: String)(f: (Rep[A1], Rep[A2], Rep[A3], Rep[A4], Rep[A5], Rep[A6]) => Rep[B]): (Rep[A1], Rep[A2], Rep[A3], Rep[A4], Rep[A5], Rep[A6]) => Rep[B] = {\n   60      val g = (x1: Rep[A1], x2: Rep[A2], x3: Rep[A3], x4: Rep[A4], x5: Rep[A5], x6: Rep[A6]) => unchecked[B](name, \"(\", x1, \",\", x2, \",\", x3, \",\", x4, \",\", x5, \",\", x6, \")\")\n   61:     rec.getOrElseUpdate(name, TopLevel6(name, manifest[A1], manifest[A2], manifest[A3], manifest[A4], manifest[A5], manifest[A6], manifest[B], f))\n   62      g\n   63    }\n   64:   def toplevel7[A1: Manifest, A2: Manifest, A3: Manifest, A4: Manifest, A5: Manifest, A6: Manifest, A7: Manifest, B: Manifest](name: String)(f: (Rep[A1], Rep[A2], Rep[A3], Rep[A4], Rep[A5], Rep[A6], Rep[A7]) => Rep[B]): (Rep[A1], Rep[A2], Rep[A3], Rep[A4], Rep[A5], Rep[A6], Rep[A7]) => Rep[B] = {\n   65      val g = (x1: Rep[A1], x2: Rep[A2], x3: Rep[A3], x4: Rep[A4], x5: Rep[A5], x6: Rep[A6], x7: Rep[A7]) => unchecked[B](name, \"(\", x1, \",\", x2, \",\", x3, \",\", x4, \",\", x5, \",\", x6, \",\", x7, \")\")\n   66:     rec.getOrElseUpdate(name, TopLevel7(name, manifest[A1], manifest[A2], manifest[A3], manifest[A4], manifest[A5], manifest[A6], manifest[A7], manifest[B], f))\n   67      g\n   68    }\n   69:   def toplevel8[A1: Manifest, A2: Manifest, A3: Manifest, A4: Manifest, A5: Manifest, A6: Manifest, A7: Manifest, A8: Manifest, B: Manifest](name: String)(f: (Rep[A1], Rep[A2], Rep[A3], Rep[A4], Rep[A5], Rep[A6], Rep[A7], Rep[A8]) => Rep[B]): (Rep[A1], Rep[A2], Rep[A3], Rep[A4], Rep[A5], Rep[A6], Rep[A7], Rep[A8]) => Rep[B] = {\n   70      val g = (x1: Rep[A1], x2: Rep[A2], x3: Rep[A3], x4: Rep[A4], x5: Rep[A5], x6: Rep[A6], x7: Rep[A7], x8: Rep[A8]) => unchecked[B](name, \"(\", x1, \",\", x2, \",\", x3, \",\", x4, \",\", x5, \",\", x6, \",\", x7, \",\", x8, \")\")\n   71:     rec.getOrElseUpdate(name, TopLevel8(name, manifest[A1], manifest[A2], manifest[A3], manifest[A4], manifest[A5], manifest[A6], manifest[A7], manifest[A8], manifest[B], f))\n   72      g\n   73    }\n   74:   def toplevel9[A1: Manifest, A2: Manifest, A3: Manifest, A4: Manifest, A5: Manifest, A6: Manifest, A7: Manifest, A8: Manifest, A9: Manifest, B: Manifest](name: String)(f: (Rep[A1], Rep[A2], Rep[A3], Rep[A4], Rep[A5], Rep[A6], Rep[A7], Rep[A8], Rep[A9]) => Rep[B]): (Rep[A1], Rep[A2], Rep[A3], Rep[A4], Rep[A5], Rep[A6], Rep[A7], Rep[A8], Rep[A9]) => Rep[B] = {\n   75      val g = (x1: Rep[A1], x2: Rep[A2], x3: Rep[A3], x4: Rep[A4], x5: Rep[A5], x6: Rep[A6], x7: Rep[A7], x8: Rep[A8], x9: Rep[A9]) => unchecked[B](name, \"(\", x1, \",\", x2, \",\", x3, \",\", x4, \",\", x5, \",\", x6, \",\", x7, \",\", x8, \",\", x9, \")\")\n   76:     rec.getOrElseUpdate(name, TopLevel9(name, manifest[A1], manifest[A2], manifest[A3], manifest[A4], manifest[A5], manifest[A6], manifest[A7], manifest[A8], manifest[A9], manifest[B], f))\n   77      g\n   78    }\n   79:   def toplevel10[A1: Manifest, A2: Manifest, A3: Manifest, A4: Manifest, A5: Manifest, A6: Manifest, A7: Manifest, A8: Manifest, A9: Manifest, A10: Manifest, B: Manifest](name: String)(f: (Rep[A1], Rep[A2], Rep[A3], Rep[A4], Rep[A5], Rep[A6], Rep[A7], Rep[A8], Rep[A9], Rep[A10]) => Rep[B]): (Rep[A1], Rep[A2], Rep[A3], Rep[A4], Rep[A5], Rep[A6], Rep[A7], Rep[A8], Rep[A9], Rep[A10]) => Rep[B] = {\n   80      val g = (x1: Rep[A1], x2: Rep[A2], x3: Rep[A3], x4: Rep[A4], x5: Rep[A5], x6: Rep[A6], x7: Rep[A7], x8: Rep[A8], x9: Rep[A9], x10: Rep[A10]) => unchecked[B](name, \"(\", x1, \",\", x2, \",\", x3, \",\", x4, \",\", x5, \",\", x6, \",\", x7, \",\", x8, \",\", x9, \",\", x10, \")\")\n   81:     rec.getOrElseUpdate(name, TopLevel10(name, manifest[A1], manifest[A2], manifest[A3], manifest[A4], manifest[A5], manifest[A6], manifest[A7], manifest[A8], manifest[A9], manifest[A10], manifest[B], f))\n   82      g\n   83    }\n   84:   def toplevel11[A1: Manifest, A2: Manifest, A3: Manifest, A4: Manifest, A5: Manifest, A6: Manifest, A7: Manifest, A8: Manifest, A9: Manifest, A10: Manifest, A11: Manifest, B: Manifest](name: String)(f: (Rep[A1], Rep[A2], Rep[A3], Rep[A4], Rep[A5], Rep[A6], Rep[A7], Rep[A8], Rep[A9], Rep[A10], Rep[A11]) => Rep[B]): (Rep[A1], Rep[A2], Rep[A3], Rep[A4], Rep[A5], Rep[A6], Rep[A7], Rep[A8], Rep[A9], Rep[A10], Rep[A11]) => Rep[B] = {\n   85      val g = (x1: Rep[A1], x2: Rep[A2], x3: Rep[A3], x4: Rep[A4], x5: Rep[A5], x6: Rep[A6], x7: Rep[A7], x8: Rep[A8], x9: Rep[A9], x10: Rep[A10], x11: Rep[A11]) => unchecked[B](name, \"(\", x1, \",\", x2, \",\", x3, \",\", x4, \",\", x5, \",\", x6, \",\", x7, \",\", x8, \",\", x9, \",\", x10, \",\", x11, \")\")\n   86:     rec.getOrElseUpdate(name, TopLevel11(name, manifest[A1], manifest[A2], manifest[A3], manifest[A4], manifest[A5], manifest[A6], manifest[A7], manifest[A8], manifest[A9], manifest[A10], manifest[A11], manifest[B], f))\n   87      g\n   88    }\n   89:   def toplevel12[A1: Manifest, A2: Manifest, A3: Manifest, A4: Manifest, A5: Manifest, A6: Manifest, A7: Manifest, A8: Manifest, A9: Manifest, A10: Manifest, A11: Manifest, A12: Manifest, B: Manifest](name: String)(f: (Rep[A1], Rep[A2], Rep[A3], Rep[A4], Rep[A5], Rep[A6], Rep[A7], Rep[A8], Rep[A9], Rep[A10], Rep[A11], Rep[A12]) => Rep[B]): (Rep[A1], Rep[A2], Rep[A3], Rep[A4], Rep[A5], Rep[A6], Rep[A7], Rep[A8], Rep[A9], Rep[A10], Rep[A11], Rep[A12]) => Rep[B] = {\n   90      val g = (x1: Rep[A1], x2: Rep[A2], x3: Rep[A3], x4: Rep[A4], x5: Rep[A5], x6: Rep[A6], x7: Rep[A7], x8: Rep[A8], x9: Rep[A9], x10: Rep[A10], x11: Rep[A11], x12: Rep[A12]) => unchecked[B](name, \"(\", x1, \",\", x2, \",\", x3, \",\", x4, \",\", x5, \",\", x6, \",\", x7, \",\", x8, \",\", x9, \",\", x10, \",\", x11, \",\", x12, \")\")\n   91:     rec.getOrElseUpdate(name, TopLevel12(name, manifest[A1], manifest[A2], manifest[A3], manifest[A4], manifest[A5], manifest[A6], manifest[A7], manifest[A8], manifest[A9], manifest[A10], manifest[A11], manifest[A12], manifest[B], f))\n   92      g\n   93    }\n   94:   def toplevel13[A1: Manifest, A2: Manifest, A3: Manifest, A4: Manifest, A5: Manifest, A6: Manifest, A7: Manifest, A8: Manifest, A9: Manifest, A10: Manifest, A11: Manifest, A12: Manifest, A13: Manifest, B: Manifest](name: String)(f: (Rep[A1], Rep[A2], Rep[A3], Rep[A4], Rep[A5], Rep[A6], Rep[A7], Rep[A8], Rep[A9], Rep[A10], Rep[A11], Rep[A12], Rep[A13]) => Rep[B]): (Rep[A1], Rep[A2], Rep[A3], Rep[A4], Rep[A5], Rep[A6], Rep[A7], Rep[A8], Rep[A9], Rep[A10], Rep[A11], Rep[A12], Rep[A13]) => Rep[B] = {\n   95      val g = (x1: Rep[A1], x2: Rep[A2], x3: Rep[A3], x4: Rep[A4], x5: Rep[A5], x6: Rep[A6], x7: Rep[A7], x8: Rep[A8], x9: Rep[A9], x10: Rep[A10], x11: Rep[A11], x12: Rep[A12], x13: Rep[A13]) => unchecked[B](name, \"(\", x1, \",\", x2, \",\", x3, \",\", x4, \",\", x5, \",\", x6, \",\", x7, \",\", x8, \",\", x9, \",\", x10, \",\", x11, \",\", x12, \",\", x13, \")\")\n   96:     rec.getOrElseUpdate(name, TopLevel13(name, manifest[A1], manifest[A2], manifest[A3], manifest[A4], manifest[A5], manifest[A6], manifest[A7], manifest[A8], manifest[A9], manifest[A10], manifest[A11], manifest[A12], manifest[A13], manifest[B], f))\n   97      g\n   98    }\n   99:   def toplevel14[A1: Manifest, A2: Manifest, A3: Manifest, A4: Manifest, A5: Manifest, A6: Manifest, A7: Manifest, A8: Manifest, A9: Manifest, A10: Manifest, A11: Manifest, A12: Manifest, A13: Manifest, A14: Manifest, B: Manifest](name: String)(f: (Rep[A1], Rep[A2], Rep[A3], Rep[A4], Rep[A5], Rep[A6], Rep[A7], Rep[A8], Rep[A9], Rep[A10], Rep[A11], Rep[A12], Rep[A13], Rep[A14]) => Rep[B]): (Rep[A1], Rep[A2], Rep[A3], Rep[A4], Rep[A5], Rep[A6], Rep[A7], Rep[A8], Rep[A9], Rep[A10], Rep[A11], Rep[A12], Rep[A13], Rep[A14]) => Rep[B] = {\n  100      val g = (x1: Rep[A1], x2: Rep[A2], x3: Rep[A3], x4: Rep[A4], x5: Rep[A5], x6: Rep[A6], x7: Rep[A7], x8: Rep[A8], x9: Rep[A9], x10: Rep[A10], x11: Rep[A11], x12: Rep[A12], x13: Rep[A13], x14: Rep[A14]) => unchecked[B](name, \"(\", x1, \",\", x2, \",\", x3, \",\", x4, \",\", x5, \",\", x6, \",\", x7, \",\", x8, \",\", x9, \",\", x10, \",\", x11, \",\", x12, \",\", x13, \",\", x14, \")\")\n  101:     rec.getOrElseUpdate(name, TopLevel14(name, manifest[A1], manifest[A2], manifest[A3], manifest[A4], manifest[A5], manifest[A6], manifest[A7], manifest[A8], manifest[A9], manifest[A10], manifest[A11], manifest[A12], manifest[A13], manifest[A14], manifest[B], f))\n  102      g\n  103    }\n  104:   def toplevel15[A1: Manifest, A2: Manifest, A3: Manifest, A4: Manifest, A5: Manifest, A6: Manifest, A7: Manifest, A8: Manifest, A9: Manifest, A10: Manifest, A11: Manifest, A12: Manifest, A13: Manifest, A14: Manifest, A15: Manifest, B: Manifest](name: String)(f: (Rep[A1], Rep[A2], Rep[A3], Rep[A4], Rep[A5], Rep[A6], Rep[A7], Rep[A8], Rep[A9], Rep[A10], Rep[A11], Rep[A12], Rep[A13], Rep[A14], Rep[A15]) => Rep[B]): (Rep[A1], Rep[A2], Rep[A3], Rep[A4], Rep[A5], Rep[A6], Rep[A7], Rep[A8], Rep[A9], Rep[A10], Rep[A11], Rep[A12], Rep[A13], Rep[A14], Rep[A15]) => Rep[B] = {\n  105      val g = (x1: Rep[A1], x2: Rep[A2], x3: Rep[A3], x4: Rep[A4], x5: Rep[A5], x6: Rep[A6], x7: Rep[A7], x8: Rep[A8], x9: Rep[A9], x10: Rep[A10], x11: Rep[A11], x12: Rep[A12], x13: Rep[A13], x14: Rep[A14], x15: Rep[A15]) => unchecked[B](name, \"(\", x1, \",\", x2, \",\", x3, \",\", x4, \",\", x5, \",\", x6, \",\", x7, \",\", x8, \",\", x9, \",\", x10, \",\", x11, \",\", x12, \",\", x13, \",\", x14, \",\", x15, \")\")\n  106:     rec.getOrElseUpdate(name, TopLevel15(name, manifest[A1], manifest[A2], manifest[A3], manifest[A4], manifest[A5], manifest[A6], manifest[A7], manifest[A8], manifest[A9], manifest[A10], manifest[A11], manifest[A12], manifest[A13], manifest[A14], manifest[A15], manifest[B], f))\n  107      g\n  108    }\n  109:   def toplevel16[A1: Manifest, A2: Manifest, A3: Manifest, A4: Manifest, A5: Manifest, A6: Manifest, A7: Manifest, A8: Manifest, A9: Manifest, A10: Manifest, A11: Manifest, A12: Manifest, A13: Manifest, A14: Manifest, A15: Manifest, A16: Manifest, B: Manifest](name: String)(f: (Rep[A1], Rep[A2], Rep[A3], Rep[A4], Rep[A5], Rep[A6], Rep[A7], Rep[A8], Rep[A9], Rep[A10], Rep[A11], Rep[A12], Rep[A13], Rep[A14], Rep[A15], Rep[A16]) => Rep[B]): (Rep[A1], Rep[A2], Rep[A3], Rep[A4], Rep[A5], Rep[A6], Rep[A7], Rep[A8], Rep[A9], Rep[A10], Rep[A11], Rep[A12], Rep[A13], Rep[A14], Rep[A15], Rep[A16]) => Rep[B] = {\n  110      val g = (x1: Rep[A1], x2: Rep[A2], x3: Rep[A3], x4: Rep[A4], x5: Rep[A5], x6: Rep[A6], x7: Rep[A7], x8: Rep[A8], x9: Rep[A9], x10: Rep[A10], x11: Rep[A11], x12: Rep[A12], x13: Rep[A13], x14: Rep[A14], x15: Rep[A15], x16: Rep[A16]) => unchecked[B](name, \"(\", x1, \",\", x2, \",\", x3, \",\", x4, \",\", x5, \",\", x6, \",\", x7, \",\", x8, \",\", x9, \",\", x10, \",\", x11, \",\", x12, \",\", x13, \",\", x14, \",\", x15, \",\", x16, \")\")\n  111:     rec.getOrElseUpdate(name, TopLevel16(name, manifest[A1], manifest[A2], manifest[A3], manifest[A4], manifest[A5], manifest[A6], manifest[A7], manifest[A8], manifest[A9], manifest[A10], manifest[A11], manifest[A12], manifest[A13], manifest[A14], manifest[A15], manifest[A16], manifest[B], f))\n  112      g\n  113    }\n  114:   def toplevel17[A1: Manifest, A2: Manifest, A3: Manifest, A4: Manifest, A5: Manifest, A6: Manifest, A7: Manifest, A8: Manifest, A9: Manifest, A10: Manifest, A11: Manifest, A12: Manifest, A13: Manifest, A14: Manifest, A15: Manifest, A16: Manifest, A17: Manifest, B: Manifest](name: String)(f: (Rep[A1], Rep[A2], Rep[A3], Rep[A4], Rep[A5], Rep[A6], Rep[A7], Rep[A8], Rep[A9], Rep[A10], Rep[A11], Rep[A12], Rep[A13], Rep[A14], Rep[A15], Rep[A16], Rep[A17]) => Rep[B]): (Rep[A1], Rep[A2], Rep[A3], Rep[A4], Rep[A5], Rep[A6], Rep[A7], Rep[A8], Rep[A9], Rep[A10], Rep[A11], Rep[A12], Rep[A13], Rep[A14], Rep[A15], Rep[A16], Rep[A17]) => Rep[B] = {\n  115      val g = (x1: Rep[A1], x2: Rep[A2], x3: Rep[A3], x4: Rep[A4], x5: Rep[A5], x6: Rep[A6], x7: Rep[A7], x8: Rep[A8], x9: Rep[A9], x10: Rep[A10], x11: Rep[A11], x12: Rep[A12], x13: Rep[A13], x14: Rep[A14], x15: Rep[A15], x16: Rep[A16], x17: Rep[A17]) => unchecked[B](name, \"(\", x1, \",\", x2, \",\", x3, \",\", x4, \",\", x5, \",\", x6, \",\", x7, \",\", x8, \",\", x9, \",\", x10, \",\", x11, \",\", x12, \",\", x13, \",\", x14, \",\", x15, \",\", x16, \",\", x17, \")\")\n  116:     rec.getOrElseUpdate(name, TopLevel17(name, manifest[A1], manifest[A2], manifest[A3], manifest[A4], manifest[A5], manifest[A6], manifest[A7], manifest[A8], manifest[A9], manifest[A10], manifest[A11], manifest[A12], manifest[A13], manifest[A14], manifest[A15], manifest[A16], manifest[A17], manifest[B], f))\n  117      g\n  118    }\n  119:   def toplevel18[A1: Manifest, A2: Manifest, A3: Manifest, A4: Manifest, A5: Manifest, A6: Manifest, A7: Manifest, A8: Manifest, A9: Manifest, A10: Manifest, A11: Manifest, A12: Manifest, A13: Manifest, A14: Manifest, A15: Manifest, A16: Manifest, A17: Manifest, A18: Manifest, B: Manifest](name: String)(f: (Rep[A1], Rep[A2], Rep[A3], Rep[A4], Rep[A5], Rep[A6], Rep[A7], Rep[A8], Rep[A9], Rep[A10], Rep[A11], Rep[A12], Rep[A13], Rep[A14], Rep[A15], Rep[A16], Rep[A17], Rep[A18]) => Rep[B]): (Rep[A1], Rep[A2], Rep[A3], Rep[A4], Rep[A5], Rep[A6], Rep[A7], Rep[A8], Rep[A9], Rep[A10], Rep[A11], Rep[A12], Rep[A13], Rep[A14], Rep[A15], Rep[A16], Rep[A17], Rep[A18]) => Rep[B] = {\n  120      val g = (x1: Rep[A1], x2: Rep[A2], x3: Rep[A3], x4: Rep[A4], x5: Rep[A5], x6: Rep[A6], x7: Rep[A7], x8: Rep[A8], x9: Rep[A9], x10: Rep[A10], x11: Rep[A11], x12: Rep[A12], x13: Rep[A13], x14: Rep[A14], x15: Rep[A15], x16: Rep[A16], x17: Rep[A17], x18: Rep[A18]) => unchecked[B](name, \"(\", x1, \",\", x2, \",\", x3, \",\", x4, \",\", x5, \",\", x6, \",\", x7, \",\", x8, \",\", x9, \",\", x10, \",\", x11, \",\", x12, \",\", x13, \",\", x14, \",\", x15, \",\", x16, \",\", x17, \",\", x18, \")\")\n  121:     rec.getOrElseUpdate(name, TopLevel18(name, manifest[A1], manifest[A2], manifest[A3], manifest[A4], manifest[A5], manifest[A6], manifest[A7], manifest[A8], manifest[A9], manifest[A10], manifest[A11], manifest[A12], manifest[A13], manifest[A14], manifest[A15], manifest[A16], manifest[A17], manifest[A18], manifest[B], f))\n  122      g\n  123    }\n  124:   def toplevel19[A1: Manifest, A2: Manifest, A3: Manifest, A4: Manifest, A5: Manifest, A6: Manifest, A7: Manifest, A8: Manifest, A9: Manifest, A10: Manifest, A11: Manifest, A12: Manifest, A13: Manifest, A14: Manifest, A15: Manifest, A16: Manifest, A17: Manifest, A18: Manifest, A19: Manifest, B: Manifest](name: String)(f: (Rep[A1], Rep[A2], Rep[A3], Rep[A4], Rep[A5], Rep[A6], Rep[A7], Rep[A8], Rep[A9], Rep[A10], Rep[A11], Rep[A12], Rep[A13], Rep[A14], Rep[A15], Rep[A16], Rep[A17], Rep[A18], Rep[A19]) => Rep[B]): (Rep[A1], Rep[A2], Rep[A3], Rep[A4], Rep[A5], Rep[A6], Rep[A7], Rep[A8], Rep[A9], Rep[A10], Rep[A11], Rep[A12], Rep[A13], Rep[A14], Rep[A15], Rep[A16], Rep[A17], Rep[A18], Rep[A19]) => Rep[B] = {\n  125      val g = (x1: Rep[A1], x2: Rep[A2], x3: Rep[A3], x4: Rep[A4], x5: Rep[A5], x6: Rep[A6], x7: Rep[A7], x8: Rep[A8], x9: Rep[A9], x10: Rep[A10], x11: Rep[A11], x12: Rep[A12], x13: Rep[A13], x14: Rep[A14], x15: Rep[A15], x16: Rep[A16], x17: Rep[A17], x18: Rep[A18], x19: Rep[A19]) => unchecked[B](name, \"(\", x1, \",\", x2, \",\", x3, \",\", x4, \",\", x5, \",\", x6, \",\", x7, \",\", x8, \",\", x9, \",\", x10, \",\", x11, \",\", x12, \",\", x13, \",\", x14, \",\", x15, \",\", x16, \",\", x17, \",\", x18, \",\", x19, \")\")\n  126:     rec.getOrElseUpdate(name, TopLevel19(name, manifest[A1], manifest[A2], manifest[A3], manifest[A4], manifest[A5], manifest[A6], manifest[A7], manifest[A8], manifest[A9], manifest[A10], manifest[A11], manifest[A12], manifest[A13], manifest[A14], manifest[A15], manifest[A16], manifest[A17], manifest[A18], manifest[A19], manifest[B], f))\n  127      g\n  128    }\n\n/home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala:\n  180    override def focusExactScopeFat[A](resultB: List[Block[Any]])(body: List[Stm] => A): A = {\n  181      val result0 = resultB.map(getBlockResultFull) flatMap { case Combine(xs) => xs case x => List(x) }\n  182:     val (scope,result) = fuseTopLevelLoops(innerScope)(result0)\n  183      innerScope = scope\n  184  \n  ...\n  249    */\n  250  \n  251:   def fuseTopLevelLoops(currentScope0: List[Stm])(result0: List[Exp[Any]]): (List[Stm], List[Exp[Any]]) = {\n  252      var result: List[Exp[Any]] = result0\n  253      var currentScope: List[Stm] = currentScope0\n  ...\n  480            printlog(\"try once more ...\")\n  481  \n  482:           return fuseTopLevelLoops(currentScope)(result)\n  483          }\n  484          printlog(\"no changes, we're done\")\n  ...\n  500  \n  501  \n  502: /*  def fuseTopLevelLoops(currentScope0: List[Stm])(result0: List[Exp[Any]]): (List[Stm], List[Exp[Any]]) = {\n  503      var result: List[Exp[Any]] = result0\n  504      var currentScope: List[Stm] = currentScope0\n\n/home/gabriel/workspace/lms/target/streams/compile/incCompileSetup/$global/inc_compile:\n  244  /home/gabriel/workspace/lms/src/common/DSLBase.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$$anonfun$8.class\n  245  /home/gabriel/workspace/lms/src/common/DSLBase.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$$anonfun$9.class\n  246: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$$anonfun$toplevel1$1.class\n  247: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$$anonfun$toplevel10$1.class\n  248: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$$anonfun$toplevel11$1.class\n  249: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$$anonfun$toplevel12$1.class\n  250: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$$anonfun$toplevel13$1.class\n  251: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$$anonfun$toplevel14$1.class\n  252: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$$anonfun$toplevel15$1.class\n  253: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$$anonfun$toplevel16$1.class\n  254: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$$anonfun$toplevel17$1.class\n  255: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$$anonfun$toplevel18$1.class\n  256: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$$anonfun$toplevel19$1.class\n  257: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$$anonfun$toplevel2$1.class\n  258: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$$anonfun$toplevel3$1.class\n  259: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$$anonfun$toplevel4$1.class\n  260: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$$anonfun$toplevel5$1.class\n  261: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$$anonfun$toplevel6$1.class\n  262: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$$anonfun$toplevel7$1.class\n  263: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$$anonfun$toplevel8$1.class\n  264: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$$anonfun$toplevel9$1.class\n  265: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$TopLevel.class\n  266: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$TopLevel1$.class\n  267: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$TopLevel1.class\n  268: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$TopLevel10$.class\n  269: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$TopLevel10.class\n  270: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$TopLevel11$.class\n  271: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$TopLevel11.class\n  272: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$TopLevel12$.class\n  273: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$TopLevel12.class\n  274: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$TopLevel13$.class\n  275: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$TopLevel13.class\n  276: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$TopLevel14$.class\n  277: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$TopLevel14.class\n  278: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$TopLevel15$.class\n  279: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$TopLevel15.class\n  280: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$TopLevel16$.class\n  281: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$TopLevel16.class\n  282: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$TopLevel17$.class\n  283: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$TopLevel17.class\n  284: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$TopLevel18$.class\n  285: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$TopLevel18.class\n  286: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$TopLevel19$.class\n  287: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$TopLevel19.class\n  288: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$TopLevel2$.class\n  289: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$TopLevel2.class\n  290: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$TopLevel3$.class\n  291: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$TopLevel3.class\n  292: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$TopLevel4$.class\n  293: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$TopLevel4.class\n  294: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$TopLevel5$.class\n  295: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$TopLevel5.class\n  296: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$TopLevel6$.class\n  297: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$TopLevel6.class\n  298: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$TopLevel7$.class\n  299: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$TopLevel7.class\n  300: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$TopLevel8$.class\n  301: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$TopLevel8.class\n  302: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$TopLevel9$.class\n  303: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$TopLevel9.class\n  304  /home/gabriel/workspace/lms/src/common/DSLBase.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$class.class\n  305  /home/gabriel/workspace/lms/src/common/DSLBase.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase.class\n  ...\n 1066  /home/gabriel/workspace/lms/src/common/LivenessOpt.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LivenessOpt.class\n 1067  /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$2.class\n 1068: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$1.class\n 1069: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$2.class\n 1070: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$3.class\n 1071: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$10.class\n 1072: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$11.class\n 1073: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$12.class\n 1074: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$13$$anonfun$apply$13$$anonfun$14$$anonfun$apply$14.class\n 1075: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$13$$anonfun$apply$13$$anonfun$14.class\n 1076: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$13$$anonfun$apply$13$$anonfun$apply$7.class\n 1077: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$13$$anonfun$apply$13$$anonfun$apply$8$$anonfun$apply$mcV$sp$9.class\n 1078: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$13$$anonfun$apply$13$$anonfun$apply$8.class\n 1079: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$13$$anonfun$apply$13$$anonfun$apply$9.class\n 1080: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$13$$anonfun$apply$13.class\n 1081: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$13.class\n 1082: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$15$$anonfun$apply$12.class\n 1083: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$15.class\n 1084: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$3.class\n 1085: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$8$$anonfun$apply$11.class\n 1086: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$8.class\n 1087: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$9.class\n 1088: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$10.class\n 1089: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$11.class\n 1090: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$12$$anonfun$1.class\n 1091: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$12$$anonfun$16.class\n 1092: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$12$$anonfun$17$$anonfun$apply$16.class\n 1093: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$12$$anonfun$17.class\n 1094: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$12$$anonfun$18$$anonfun$apply$10.class\n 1095: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$12$$anonfun$18$$anonfun$apply$17$$anonfun$apply$19.class\n 1096: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$12$$anonfun$18$$anonfun$apply$17.class\n 1097: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$12$$anonfun$18$$anonfun$apply$18$$anonfun$apply$20.class\n 1098: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$12$$anonfun$18$$anonfun$apply$18.class\n 1099: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$12$$anonfun$18.class\n 1100: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$12$$anonfun$19$$anonfun$apply$21.class\n 1101: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$12$$anonfun$19.class\n 1102: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$12$$anonfun$4.class\n 1103: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$12$$anonfun$5.class\n 1104: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$12$$anonfun$apply$15.class\n 1105: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$12.class\n 1106: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$13.class\n 1107: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$14$$anonfun$apply$22$$anonfun$20.class\n 1108: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$14$$anonfun$apply$22$$anonfun$apply$23.class\n 1109: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$14$$anonfun$apply$22$$anonfun$apply$24.class\n 1110: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$14$$anonfun$apply$22.class\n 1111: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$14$$anonfun$apply$25$$anonfun$21$$anonfun$apply$26.class\n 1112: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$14$$anonfun$apply$25$$anonfun$21.class\n 1113: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$14$$anonfun$apply$25$$anonfun$select$1$1.class\n 1114: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$14$$anonfun$apply$25.class\n 1115: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$14$$anonfun$apply$27.class\n 1116: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$14.class\n 1117: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$15.class\n 1118: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$4.class\n 1119: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$5.class\n 1120: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$canFuseIndirect$1$1.class\n 1121: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$scala$virtualization$lms$common$LoopFusionCore$class$$anonfun$$extendLoopWithCondition$1$1.class\n 1122: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$scala$virtualization$lms$common$LoopFusionCore$class$$anonfun$$iter$1$1.class\n 1123: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$scala$virtualization$lms$common$LoopFusionCore$class$$anonfun$$iter$1$2.class\n 1124: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$scala$virtualization$lms$common$LoopFusionCore$class$$anonfun$$iter$1$3.class\n 1125: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4.class\n 1126: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$5.class\n 1127: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$6.class\n 1128  /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$SimpleCollect$.class\n 1129  /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$SimpleCollectIf$.class\n ....\n 6710  /home/gabriel/workspace/lms/src/common/DSLBase.scala -> scala.virtualization.lms.common.DSLBase$$anonfun$8\n 6711  /home/gabriel/workspace/lms/src/common/DSLBase.scala -> scala.virtualization.lms.common.DSLBase$$anonfun$9\n 6712: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> scala.virtualization.lms.common.DSLBase$$anonfun$toplevel1$1\n 6713: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> scala.virtualization.lms.common.DSLBase$$anonfun$toplevel10$1\n 6714: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> scala.virtualization.lms.common.DSLBase$$anonfun$toplevel11$1\n 6715: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> scala.virtualization.lms.common.DSLBase$$anonfun$toplevel12$1\n 6716: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> scala.virtualization.lms.common.DSLBase$$anonfun$toplevel13$1\n 6717: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> scala.virtualization.lms.common.DSLBase$$anonfun$toplevel14$1\n 6718: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> scala.virtualization.lms.common.DSLBase$$anonfun$toplevel15$1\n 6719: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> scala.virtualization.lms.common.DSLBase$$anonfun$toplevel16$1\n 6720: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> scala.virtualization.lms.common.DSLBase$$anonfun$toplevel17$1\n 6721: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> scala.virtualization.lms.common.DSLBase$$anonfun$toplevel18$1\n 6722: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> scala.virtualization.lms.common.DSLBase$$anonfun$toplevel19$1\n 6723: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> scala.virtualization.lms.common.DSLBase$$anonfun$toplevel2$1\n 6724: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> scala.virtualization.lms.common.DSLBase$$anonfun$toplevel3$1\n 6725: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> scala.virtualization.lms.common.DSLBase$$anonfun$toplevel4$1\n 6726: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> scala.virtualization.lms.common.DSLBase$$anonfun$toplevel5$1\n 6727: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> scala.virtualization.lms.common.DSLBase$$anonfun$toplevel6$1\n 6728: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> scala.virtualization.lms.common.DSLBase$$anonfun$toplevel7$1\n 6729: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> scala.virtualization.lms.common.DSLBase$$anonfun$toplevel8$1\n 6730: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> scala.virtualization.lms.common.DSLBase$$anonfun$toplevel9$1\n 6731: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> scala.virtualization.lms.common.DSLBase$TopLevel\n 6732: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> scala.virtualization.lms.common.DSLBase$TopLevel1\n 6733: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> scala.virtualization.lms.common.DSLBase$TopLevel1$\n 6734: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> scala.virtualization.lms.common.DSLBase$TopLevel10\n 6735: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> scala.virtualization.lms.common.DSLBase$TopLevel10$\n 6736: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> scala.virtualization.lms.common.DSLBase$TopLevel11\n 6737: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> scala.virtualization.lms.common.DSLBase$TopLevel11$\n 6738: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> scala.virtualization.lms.common.DSLBase$TopLevel12\n 6739: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> scala.virtualization.lms.common.DSLBase$TopLevel12$\n 6740: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> scala.virtualization.lms.common.DSLBase$TopLevel13\n 6741: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> scala.virtualization.lms.common.DSLBase$TopLevel13$\n 6742: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> scala.virtualization.lms.common.DSLBase$TopLevel14\n 6743: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> scala.virtualization.lms.common.DSLBase$TopLevel14$\n 6744: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> scala.virtualization.lms.common.DSLBase$TopLevel15\n 6745: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> scala.virtualization.lms.common.DSLBase$TopLevel15$\n 6746: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> scala.virtualization.lms.common.DSLBase$TopLevel16\n 6747: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> scala.virtualization.lms.common.DSLBase$TopLevel16$\n 6748: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> scala.virtualization.lms.common.DSLBase$TopLevel17\n 6749: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> scala.virtualization.lms.common.DSLBase$TopLevel17$\n 6750: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> scala.virtualization.lms.common.DSLBase$TopLevel18\n 6751: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> scala.virtualization.lms.common.DSLBase$TopLevel18$\n 6752: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> scala.virtualization.lms.common.DSLBase$TopLevel19\n 6753: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> scala.virtualization.lms.common.DSLBase$TopLevel19$\n 6754: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> scala.virtualization.lms.common.DSLBase$TopLevel2\n 6755: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> scala.virtualization.lms.common.DSLBase$TopLevel2$\n 6756: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> scala.virtualization.lms.common.DSLBase$TopLevel3\n 6757: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> scala.virtualization.lms.common.DSLBase$TopLevel3$\n 6758: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> scala.virtualization.lms.common.DSLBase$TopLevel4\n 6759: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> scala.virtualization.lms.common.DSLBase$TopLevel4$\n 6760: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> scala.virtualization.lms.common.DSLBase$TopLevel5\n 6761: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> scala.virtualization.lms.common.DSLBase$TopLevel5$\n 6762: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> scala.virtualization.lms.common.DSLBase$TopLevel6\n 6763: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> scala.virtualization.lms.common.DSLBase$TopLevel6$\n 6764: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> scala.virtualization.lms.common.DSLBase$TopLevel7\n 6765: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> scala.virtualization.lms.common.DSLBase$TopLevel7$\n 6766: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> scala.virtualization.lms.common.DSLBase$TopLevel8\n 6767: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> scala.virtualization.lms.common.DSLBase$TopLevel8$\n 6768: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> scala.virtualization.lms.common.DSLBase$TopLevel9\n 6769: /home/gabriel/workspace/lms/src/common/DSLBase.scala -> scala.virtualization.lms.common.DSLBase$TopLevel9$\n 6770  /home/gabriel/workspace/lms/src/common/DSLBase.scala -> scala.virtualization.lms.common.DSLBase$class\n 6771  /home/gabriel/workspace/lms/src/common/DSLOps.scala -> scala.virtualization.lms.common.BaseGenDSLOps\n ....\n 7532  /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> scala.virtualization.lms.common.LoopFusionCore\n 7533  /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> scala.virtualization.lms.common.LoopFusionCore$$anonfun$2\n 7534: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> scala.virtualization.lms.common.LoopFusionCore$$anonfun$fuseTopLevelLoops$1\n 7535: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> scala.virtualization.lms.common.LoopFusionCore$$anonfun$fuseTopLevelLoops$2\n 7536: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> scala.virtualization.lms.common.LoopFusionCore$$anonfun$fuseTopLevelLoops$3\n 7537: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> scala.virtualization.lms.common.LoopFusionCore$$anonfun$fuseTopLevelLoops$4\n 7538: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> scala.virtualization.lms.common.LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$10\n 7539: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> scala.virtualization.lms.common.LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$11\n 7540: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> scala.virtualization.lms.common.LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$12\n 7541: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> scala.virtualization.lms.common.LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$13\n 7542: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> scala.virtualization.lms.common.LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$13$$anonfun$apply$13\n 7543: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> scala.virtualization.lms.common.LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$13$$anonfun$apply$13$$anonfun$14\n 7544: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> scala.virtualization.lms.common.LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$13$$anonfun$apply$13$$anonfun$14$$anonfun$apply$14\n 7545: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> scala.virtualization.lms.common.LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$13$$anonfun$apply$13$$anonfun$apply$7\n 7546: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> scala.virtualization.lms.common.LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$13$$anonfun$apply$13$$anonfun$apply$8\n 7547: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> scala.virtualization.lms.common.LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$13$$anonfun$apply$13$$anonfun$apply$8$$anonfun$apply$mcV$sp$9\n 7548: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> scala.virtualization.lms.common.LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$13$$anonfun$apply$13$$anonfun$apply$9\n 7549: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> scala.virtualization.lms.common.LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$15\n 7550: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> scala.virtualization.lms.common.LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$15$$anonfun$apply$12\n 7551: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> scala.virtualization.lms.common.LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$3\n 7552: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> scala.virtualization.lms.common.LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$8\n 7553: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> scala.virtualization.lms.common.LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$8$$anonfun$apply$11\n 7554: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> scala.virtualization.lms.common.LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$9\n 7555: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> scala.virtualization.lms.common.LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$10\n 7556: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> scala.virtualization.lms.common.LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$11\n 7557: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> scala.virtualization.lms.common.LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$12\n 7558: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> scala.virtualization.lms.common.LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$12$$anonfun$1\n 7559: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> scala.virtualization.lms.common.LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$12$$anonfun$16\n 7560: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> scala.virtualization.lms.common.LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$12$$anonfun$17\n 7561: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> scala.virtualization.lms.common.LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$12$$anonfun$17$$anonfun$apply$16\n 7562: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> scala.virtualization.lms.common.LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$12$$anonfun$18\n 7563: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> scala.virtualization.lms.common.LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$12$$anonfun$18$$anonfun$apply$10\n 7564: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> scala.virtualization.lms.common.LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$12$$anonfun$18$$anonfun$apply$17\n 7565: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> scala.virtualization.lms.common.LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$12$$anonfun$18$$anonfun$apply$17$$anonfun$apply$19\n 7566: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> scala.virtualization.lms.common.LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$12$$anonfun$18$$anonfun$apply$18\n 7567: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> scala.virtualization.lms.common.LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$12$$anonfun$18$$anonfun$apply$18$$anonfun$apply$20\n 7568: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> scala.virtualization.lms.common.LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$12$$anonfun$19\n 7569: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> scala.virtualization.lms.common.LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$12$$anonfun$19$$anonfun$apply$21\n 7570: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> scala.virtualization.lms.common.LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$12$$anonfun$4\n 7571: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> scala.virtualization.lms.common.LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$12$$anonfun$5\n 7572: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> scala.virtualization.lms.common.LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$12$$anonfun$apply$15\n 7573: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> scala.virtualization.lms.common.LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$13\n 7574: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> scala.virtualization.lms.common.LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$14\n 7575: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> scala.virtualization.lms.common.LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$14$$anonfun$apply$22\n 7576: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> scala.virtualization.lms.common.LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$14$$anonfun$apply$22$$anonfun$20\n 7577: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> scala.virtualization.lms.common.LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$14$$anonfun$apply$22$$anonfun$apply$23\n 7578: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> scala.virtualization.lms.common.LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$14$$anonfun$apply$22$$anonfun$apply$24\n 7579: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> scala.virtualization.lms.common.LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$14$$anonfun$apply$25\n 7580: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> scala.virtualization.lms.common.LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$14$$anonfun$apply$25$$anonfun$21\n 7581: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> scala.virtualization.lms.common.LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$14$$anonfun$apply$25$$anonfun$21$$anonfun$apply$26\n 7582: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> scala.virtualization.lms.common.LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$14$$anonfun$apply$25$$anonfun$select$1$1\n 7583: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> scala.virtualization.lms.common.LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$14$$anonfun$apply$27\n 7584: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> scala.virtualization.lms.common.LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$15\n 7585: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> scala.virtualization.lms.common.LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$4\n 7586: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> scala.virtualization.lms.common.LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$5\n 7587: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> scala.virtualization.lms.common.LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$canFuseIndirect$1$1\n 7588: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> scala.virtualization.lms.common.LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$scala$virtualization$lms$common$LoopFusionCore$class$$anonfun$$extendLoopWithCondition$1$1\n 7589: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> scala.virtualization.lms.common.LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$scala$virtualization$lms$common$LoopFusionCore$class$$anonfun$$iter$1$1\n 7590: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> scala.virtualization.lms.common.LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$scala$virtualization$lms$common$LoopFusionCore$class$$anonfun$$iter$1$2\n 7591: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> scala.virtualization.lms.common.LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$scala$virtualization$lms$common$LoopFusionCore$class$$anonfun$$iter$1$3\n 7592: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> scala.virtualization.lms.common.LoopFusionCore$$anonfun$fuseTopLevelLoops$5\n 7593: /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> scala.virtualization.lms.common.LoopFusionCore$$anonfun$fuseTopLevelLoops$6\n 7594  /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> scala.virtualization.lms.common.LoopFusionCore$SimpleCollect$\n 7595  /home/gabriel/workspace/lms/src/common/LoopFusionOpt.scala -> scala.virtualization.lms.common.LoopFusionCore$SimpleCollectIf$\n ....\n 10254  /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$$anonfun$8.class -> lastModified(1401795004000)\n 10255  /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$$anonfun$9.class -> lastModified(1401795004000)\n 10256: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$$anonfun$toplevel1$1.class -> lastModified(1401795004000)\n 10257: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$$anonfun$toplevel10$1.class -> lastModified(1401795004000)\n 10258: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$$anonfun$toplevel11$1.class -> lastModified(1401795004000)\n 10259: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$$anonfun$toplevel12$1.class -> lastModified(1401795004000)\n 10260: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$$anonfun$toplevel13$1.class -> lastModified(1401795004000)\n 10261: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$$anonfun$toplevel14$1.class -> lastModified(1401795004000)\n 10262: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$$anonfun$toplevel15$1.class -> lastModified(1401795004000)\n 10263: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$$anonfun$toplevel16$1.class -> lastModified(1401795004000)\n 10264: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$$anonfun$toplevel17$1.class -> lastModified(1401795004000)\n 10265: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$$anonfun$toplevel18$1.class -> lastModified(1401795004000)\n 10266: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$$anonfun$toplevel19$1.class -> lastModified(1401795004000)\n 10267: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$$anonfun$toplevel2$1.class -> lastModified(1401795004000)\n 10268: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$$anonfun$toplevel3$1.class -> lastModified(1401795004000)\n 10269: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$$anonfun$toplevel4$1.class -> lastModified(1401795004000)\n 10270: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$$anonfun$toplevel5$1.class -> lastModified(1401795004000)\n 10271: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$$anonfun$toplevel6$1.class -> lastModified(1401795004000)\n 10272: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$$anonfun$toplevel7$1.class -> lastModified(1401795004000)\n 10273: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$$anonfun$toplevel8$1.class -> lastModified(1401795004000)\n 10274: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$$anonfun$toplevel9$1.class -> lastModified(1401795004000)\n 10275: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$TopLevel.class -> lastModified(1401795004000)\n 10276: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$TopLevel1$.class -> lastModified(1401795004000)\n 10277: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$TopLevel1.class -> lastModified(1401795004000)\n 10278: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$TopLevel10$.class -> lastModified(1401795004000)\n 10279: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$TopLevel10.class -> lastModified(1401795004000)\n 10280: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$TopLevel11$.class -> lastModified(1401795004000)\n 10281: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$TopLevel11.class -> lastModified(1401795004000)\n 10282: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$TopLevel12$.class -> lastModified(1401795004000)\n 10283: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$TopLevel12.class -> lastModified(1401795004000)\n 10284: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$TopLevel13$.class -> lastModified(1401795004000)\n 10285: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$TopLevel13.class -> lastModified(1401795004000)\n 10286: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$TopLevel14$.class -> lastModified(1401795004000)\n 10287: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$TopLevel14.class -> lastModified(1401795004000)\n 10288: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$TopLevel15$.class -> lastModified(1401795004000)\n 10289: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$TopLevel15.class -> lastModified(1401795004000)\n 10290: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$TopLevel16$.class -> lastModified(1401795004000)\n 10291: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$TopLevel16.class -> lastModified(1401795004000)\n 10292: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$TopLevel17$.class -> lastModified(1401795004000)\n 10293: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$TopLevel17.class -> lastModified(1401795004000)\n 10294: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$TopLevel18$.class -> lastModified(1401795004000)\n 10295: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$TopLevel18.class -> lastModified(1401795004000)\n 10296: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$TopLevel19$.class -> lastModified(1401795004000)\n 10297: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$TopLevel19.class -> lastModified(1401795004000)\n 10298: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$TopLevel2$.class -> lastModified(1401795004000)\n 10299: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$TopLevel2.class -> lastModified(1401795004000)\n 10300: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$TopLevel3$.class -> lastModified(1401795004000)\n 10301: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$TopLevel3.class -> lastModified(1401795004000)\n 10302: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$TopLevel4$.class -> lastModified(1401795004000)\n 10303: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$TopLevel4.class -> lastModified(1401795004000)\n 10304: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$TopLevel5$.class -> lastModified(1401795004000)\n 10305: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$TopLevel5.class -> lastModified(1401795004000)\n 10306: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$TopLevel6$.class -> lastModified(1401795004000)\n 10307: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$TopLevel6.class -> lastModified(1401795004000)\n 10308: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$TopLevel7$.class -> lastModified(1401795004000)\n 10309: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$TopLevel7.class -> lastModified(1401795004000)\n 10310: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$TopLevel8$.class -> lastModified(1401795004000)\n 10311: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$TopLevel8.class -> lastModified(1401795004000)\n 10312: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$TopLevel9$.class -> lastModified(1401795004000)\n 10313: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$TopLevel9.class -> lastModified(1401795004000)\n 10314  /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase$class.class -> lastModified(1401795004000)\n 10315  /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/DSLBase.class -> lastModified(1401795004000)\n .....\n 10798  /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LivenessOpt.class -> lastModified(1401795005000)\n 10799  /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$2.class -> lastModified(1401795005000)\n 10800: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$1.class -> lastModified(1401795005000)\n 10801: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$2.class -> lastModified(1401795005000)\n 10802: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$3.class -> lastModified(1401795005000)\n 10803: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$10.class -> lastModified(1401795005000)\n 10804: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$11.class -> lastModified(1401795005000)\n 10805: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$12.class -> lastModified(1401795005000)\n 10806: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$13$$anonfun$apply$13$$anonfun$14$$anonfun$apply$14.class -> lastModified(1401795005000)\n 10807: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$13$$anonfun$apply$13$$anonfun$14.class -> lastModified(1401795005000)\n 10808: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$13$$anonfun$apply$13$$anonfun$apply$7.class -> lastModified(1401795005000)\n 10809: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$13$$anonfun$apply$13$$anonfun$apply$8$$anonfun$apply$mcV$sp$9.class -> lastModified(1401795005000)\n 10810: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$13$$anonfun$apply$13$$anonfun$apply$8.class -> lastModified(1401795005000)\n 10811: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$13$$anonfun$apply$13$$anonfun$apply$9.class -> lastModified(1401795005000)\n 10812: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$13$$anonfun$apply$13.class -> lastModified(1401795005000)\n 10813: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$13.class -> lastModified(1401795005000)\n 10814: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$15$$anonfun$apply$12.class -> lastModified(1401795005000)\n 10815: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$15.class -> lastModified(1401795005000)\n 10816: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$3.class -> lastModified(1401795005000)\n 10817: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$8$$anonfun$apply$11.class -> lastModified(1401795005000)\n 10818: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$8.class -> lastModified(1401795005000)\n 10819: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$9.class -> lastModified(1401795005000)\n 10820: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$10.class -> lastModified(1401795005000)\n 10821: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$11.class -> lastModified(1401795005000)\n 10822: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$12$$anonfun$1.class -> lastModified(1401795005000)\n 10823: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$12$$anonfun$16.class -> lastModified(1401795005000)\n 10824: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$12$$anonfun$17$$anonfun$apply$16.class -> lastModified(1401795005000)\n 10825: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$12$$anonfun$17.class -> lastModified(1401795005000)\n 10826: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$12$$anonfun$18$$anonfun$apply$10.class -> lastModified(1401795005000)\n 10827: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$12$$anonfun$18$$anonfun$apply$17$$anonfun$apply$19.class -> lastModified(1401795005000)\n 10828: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$12$$anonfun$18$$anonfun$apply$17.class -> lastModified(1401795005000)\n 10829: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$12$$anonfun$18$$anonfun$apply$18$$anonfun$apply$20.class -> lastModified(1400682744000)\n 10830: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$12$$anonfun$18$$anonfun$apply$18.class -> lastModified(1401795005000)\n 10831: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$12$$anonfun$18.class -> lastModified(1401795005000)\n 10832: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$12$$anonfun$19$$anonfun$apply$21.class -> lastModified(1401795005000)\n 10833: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$12$$anonfun$19.class -> lastModified(1401795005000)\n 10834: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$12$$anonfun$4.class -> lastModified(1401795005000)\n 10835: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$12$$anonfun$5.class -> lastModified(1401795005000)\n 10836: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$12$$anonfun$apply$15.class -> lastModified(1400682744000)\n 10837: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$12.class -> lastModified(1401795005000)\n 10838: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$13.class -> lastModified(1401795005000)\n 10839: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$14$$anonfun$apply$22$$anonfun$20.class -> lastModified(1401795005000)\n 10840: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$14$$anonfun$apply$22$$anonfun$apply$23.class -> lastModified(1401795005000)\n 10841: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$14$$anonfun$apply$22$$anonfun$apply$24.class -> lastModified(1401795005000)\n 10842: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$14$$anonfun$apply$22.class -> lastModified(1401795005000)\n 10843: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$14$$anonfun$apply$25$$anonfun$21$$anonfun$apply$26.class -> lastModified(1401795005000)\n 10844: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$14$$anonfun$apply$25$$anonfun$21.class -> lastModified(1401795005000)\n 10845: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$14$$anonfun$apply$25$$anonfun$select$1$1.class -> lastModified(1401795005000)\n 10846: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$14$$anonfun$apply$25.class -> lastModified(1401795005000)\n 10847: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$14$$anonfun$apply$27.class -> lastModified(1401795005000)\n 10848: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$14.class -> lastModified(1401795005000)\n 10849: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$15.class -> lastModified(1401795005000)\n 10850: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$4.class -> lastModified(1401795005000)\n 10851: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$apply$mcV$sp$5.class -> lastModified(1401795005000)\n 10852: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$canFuseIndirect$1$1.class -> lastModified(1401795005000)\n 10853: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$scala$virtualization$lms$common$LoopFusionCore$class$$anonfun$$extendLoopWithCondition$1$1.class -> lastModified(1401795005000)\n 10854: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$scala$virtualization$lms$common$LoopFusionCore$class$$anonfun$$iter$1$1.class -> lastModified(1401795005000)\n 10855: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$scala$virtualization$lms$common$LoopFusionCore$class$$anonfun$$iter$1$2.class -> lastModified(1401795005000)\n 10856: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4$$anonfun$scala$virtualization$lms$common$LoopFusionCore$class$$anonfun$$iter$1$3.class -> lastModified(1401795005000)\n 10857: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$4.class -> lastModified(1401795005000)\n 10858: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$5.class -> lastModified(1401795005000)\n 10859: /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$$anonfun$fuseTopLevelLoops$6.class -> lastModified(1401795005000)\n 10860  /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$SimpleCollect$.class -> lastModified(1401795005000)\n 10861  /home/gabriel/workspace/lms/target/scala-2.10/classes/scala/virtualization/lms/common/LoopFusionCore$SimpleCollectIf$.class -> lastModified(1401795005000)\n\n453 matches across 5 files\n",
+			"settings":
+			{
+				"buffer_size": 99171,
+				"line_ending": "Unix",
+				"name": "Find Results",
+				"scratch": true
+			}
+		},
+		{
+			"file": "old/test14-scratch/TestDataOp.scala",
+			"settings":
+			{
+				"buffer_size": 5595,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "package scala.virtualization.lms\npackage epfl\npackage test12\n\nimport common._\nimport internal._\nimport java.io.PrintWriter\nimport scala.reflect.SourceContext\n\n  \n\n  class Entry[K,V](val key: K, var value: V, var next: Entry[K,V] = null) {\n\n   def hasNext = next != null\n\n   override def equals(obj:Any) = {\n      obj.isInstanceOf[Entry[K,V]] &&\n        obj.asInstanceOf[Entry[K,V]].key == key && key != null &&\n        obj.asInstanceOf[Entry[K,V]].value == value && value != null\n    }\n\n    override def toString(): String = {\n      key + \"=\" + value\n    } \n  }\n\n  trait EntryOps extends Base with Variables {\n\n    object EntryO {\n      def apply[K:Manifest,V:Manifest](key: Rep[K], value: Rep[V])(implicit pos: SourceContext) =\n        entry_new[K,V](key, value)\n    }\n\n    class entryOpsCls[K:Manifest,V:Manifest](x: Rep[Entry[K,V]]) {\n      def hasNext() = entryHasNext(x)\n      def next() = entryNext(x)\n      def setNext(n: Rep[Entry[K,V]]) = entrySetNext(x, n)\n      def getKey() = entryGetKey(x)\n      def getValue() = entryGetValue(x) // Usefull for debugging but consumes all elements\n      def setValue(v: Rep[V]) = entrySetValue(x, v)\n    }\n\n    implicit def EntryToEntryOps[K:Manifest,V:Manifest](x: Entry[K,V]) = new entryOpsCls[K,V](unit(x))\n    implicit def repEntryToEntryOps[K:Manifest,V:Manifest](x: Rep[Entry[K,V]]) = new entryOpsCls[K,V](x)\n    implicit def varEntryToEntryOps[K:Manifest,V:Manifest](x: Var[Entry[K,V]]) = new entryOpsCls[K,V](readVar(x))\n\n    def entry_new[K:Manifest,V:Manifest](key: Rep[K], value: Rep[V]): Rep[Entry[K,V]]\n    def entryHasNext[K:Manifest,V:Manifest](x: Rep[Entry[K,V]]): Rep[Boolean]\n    def entryNext[K:Manifest,V:Manifest](x: Rep[Entry[K,V]]): Rep[Entry[K,V]]\n    def entrySetNext[K:Manifest,V:Manifest](x: Rep[Entry[K,V]], n: Rep[Entry[K,V]]): Rep[Unit]\n    def entryGetKey[K:Manifest,V:Manifest](x: Rep[Entry[K,V]]): Rep[K]\n    def entryGetValue[K:Manifest,V:Manifest](x: Rep[Entry[K,V]]): Rep[V]\n    def entrySetValue[K:Manifest,V:Manifest](x: Rep[Entry[K,V]], v: Rep[V]): Rep[Unit]\n  }\n\n  trait EntryOpsExp extends EntryOps with BaseExp with Effects /*with VariablesExp*/ {\n    case class EntryCreate[K:Manifest,V:Manifest](key: Rep[K], value: Rep[V]) extends Def[Entry[K,V]]\n    case class EntryHasNext[K:Manifest,V:Manifest](x: Rep[Entry[K,V]]) extends Def[Boolean]\n    case class EntryNext[K:Manifest,V:Manifest](x: Rep[Entry[K,V]]) extends Def[Entry[K,V]]\n    case class EntrySetNext[K:Manifest,V:Manifest](x: Rep[Entry[K,V]], n: Rep[Entry[K,V]]) extends Def[Unit]\n    case class EntryGetKey[K:Manifest,V:Manifest](x: Rep[Entry[K,V]]) extends Def[K]\n    case class EntryGetValue[K:Manifest,V:Manifest](x: Rep[Entry[K,V]]) extends Def[V]\n    case class EntrySetValue[K:Manifest,V:Manifest](x: Rep[Entry[K,V]], v: Rep[V]) extends Def[Unit]\n\n    def entry_new[K:Manifest,V:Manifest](key: Rep[K], value: Rep[V]) = reflectMutable(EntryCreate(key,value))\n    def entryHasNext[K:Manifest,V:Manifest](x: Rep[Entry[K,V]]) = reflectReadMutable(x)(EntryHasNext(x))\n    def entryNext[K:Manifest,V:Manifest](x: Rep[Entry[K,V]]) = reflectReadMutable(x)(EntryNext(x))\n    def entrySetNext[K:Manifest,V:Manifest](x: Rep[Entry[K,V]], n: Rep[Entry[K,V]]) = reflectWriteMutable (reflectReadMutable(x)(EntryNext(x)), reflectReadMutable(x)(EntryHasNext(x))) (n) (EntrySetNext(x,n))\n    def entryGetKey[K:Manifest,V:Manifest](x: Rep[Entry[K,V]]) = reflectReadMutable(x)(EntryGetKey(x))\n    def entryGetValue[K:Manifest,V:Manifest](x: Rep[Entry[K,V]]) = reflectReadMutable(x) (EntryGetValue(x))\n    def entrySetValue[K:Manifest,V:Manifest](x: Rep[Entry[K,V]], v: Rep[V]) = reflectWriteMutable (reflectReadMutable(x)(EntryGetValue(x))) (v) (EntrySetValue(x,v))\n  }\n\n  trait ScalaGenEntry extends ScalaGenBase {\n    val IR: EntryOpsExp\n    import IR._\n   \n    override def emitNode(sym: Sym[Any], rhs: Def[Any]) = rhs match {\n      case EntryCreate(k, v) =>\n        emitValDef(sym, \"new Entry(\" + quote(k) + \", \" + quote(v) + \")\")\n      case EntryHasNext(x) =>\n        emitValDef(sym, quote(x) + \".hasNext\")\n      case EntryNext(x) =>\n        emitValDef(sym, quote(x) + \".next\")\n      case EntrySetNext(x, n) =>\n        emitValDef(sym, quote(x) + \".next = \" + quote(n))\n      case EntryGetKey(x) =>\n        emitValDef(sym, quote(x) + \".key\")\n      case EntryGetValue(x) =>\n        emitValDef(sym, quote(x) + \".value\")\n      case EntrySetValue(x, v) =>\n        emitValDef(sym, quote(x) + \".value = \" + quote(v))\n\n      case _ => super.emitNode(sym, rhs)\n    }\n  }\n\n  trait OptionOps extends Base with Variables {\n\n    object SomeO {\n      def apply[V:Manifest](value: Rep[V])(implicit pos: SourceContext) =\n        option_new[V](value)\n    }\n\n    object NoneO {\n      def apply[V:Manifest](implicit pos: SourceContext) =\n        option_new[V]()\n    }\n\n    class optionOpsCls[V:Manifest](x: Rep[Option[V]]) {\n      def isEmpty() = optionIsEmpty(x)\n      def get() = optiponGet(x)\n    }\n\n    implicit def repOptionToOptionOps[V:Manifest](x: Rep[Option[V]]) = new optionOpsCls[V](x)\n    implicit def varOptionToOptionOps[V:Manifest](x: Var[Option[V]]) = new optionOpsCls[V](readVar(x))\n\n    def option_new[V:Manifest](): Rep[Option[V]]\n    def option_new[V:Manifest](value: Rep[V]): Rep[Option[V]]\n    def optionIsEmpty[V:Manifest](x: Rep[Option[V]]): Rep[Boolean]\n    def optiponGet[V:Manifest](x: Rep[Option[V]]): Rep[V]\n  }\n\n trait OptionOpsExp extends OptionOps with BaseExp with Effects /*with VariablesExp*/ {\n    case class OptionSome[V:Manifest](value: Rep[V]) extends Def[Option[V]]\n    case class OptionNone[V:Manifest] extends Def[Option[V]]\n    case class OptionIsEmpty[V:Manifest](x: Rep[Option[V]]) extends Def[Boolean]\n    case class OptionGet[V:Manifest](x: Rep[Option[V]]) extends Def[V]\n\n    def option_new[V:Manifest]() = OptionNone[V]\n    def option_new[V:Manifest](value: Rep[V]) = OptionSome(value)\n    def optionIsEmpty[V:Manifest](x: Rep[Option[V]]) = OptionIsEmpty(x)\n    def optiponGet[V:Manifest](x: Rep[Option[V]]) = OptionGet(x)\n  }\n\n  trait ScalaGenOption extends ScalaGenBase {\n    val IR: OptionOpsExp\n    import IR._\n\n    override def emitNode(sym: Sym[Any], rhs: Def[Any]) = rhs match {\n      case OptionSome(v) =>\n        emitValDef(sym, \"Some(\" + quote(v) + \")\")\n      case OptionNone() =>\n        emitValDef(sym, \"None\")\n      case OptionIsEmpty(x) =>\n        emitValDef(sym, quote(x) + \".isEmpty\")\n      case OptionGet(x) =>\n        emitValDef(sym, quote(x) + \".get\")\n\n      case _ => super.emitNode(sym, rhs)\n    }\n  }\n\n  trait HashMapArrOps extends Base with Variables with TupleOps {\n\n    object HashMap {\n      def apply[K:Manifest,V:Manifest](n: Rep[Int], specializedKey: String = \"\", specializedValue:String = \"\")(implicit pos: SourceContext) =\n        hashmap_new[K,V](n, specializedKey, specializedValue)\n    }\n\n    //type Entry[K,V] = List[(K,V)]\n\n    implicit def HashMapToRepHashMapOps[K:Manifest,V:Manifest](m: HashMap[K,V]) = new hashmapOpsCls[K,V](unit(m))\n    implicit def repHashMapToHashMapOps[K:Manifest,V:Manifest](m: Rep[HashMap[K,V]]) = new hashmapOpsCls[K,V](m)\n    implicit def varrepHashMapToHashMapOps[K:Manifest,V:Manifest](m: Var[HashMap[K,V]]) = new hashmapOpsCls[K,V](readVar(m))\n\n    class hashmapOpsCls[K:Manifest,V:Manifest](m: Rep[HashMap[K,V]]) {\n      def apply(k: Rep[K])(implicit pos: SourceContext) = hashmap_apply(m, k)\n      def update(k: Rep[K], v: Rep[V])(implicit pos: SourceContext) = hashmap_update(m,k,v)\n      def contains(k: Rep[K])(implicit pos: SourceContext) = hashmap_contains(m, k)\n      def size(implicit pos: SourceContext) = hashmap_size(m)\n      //added for testing nested mutability with simple data types\n      def setSize(i: Rep[Int])(implicit pos: SourceContext) = hashmap_setSize(m, i)\n      def foreach(block: Rep[Entry[K,V]] => Rep[Unit])(implicit pos: SourceContext) = hashmap_foreach(m, block)\n      def clear()(implicit pos: SourceContext) = hashmap_clear(m)\n      def -=(v: Rep[K])(implicit pos:SourceContext) = hashmap_-=(m,v)\n\n      //added for testing nested mutability with complex datatypes\n      def table(implicit pos: SourceContext) = hashmap_table(m)\n      def setTable(newTable: Rep[Array[Entry[K, V]]])(implicit pos: SourceContext) = hashmap_setTable(m, newTable)\n    }\n\n    def hashmap_new[K:Manifest,V:Manifest](n: Rep[Int], specializedKey: String = \"\", specializedValue: String = \"\")(implicit pos: SourceContext) : Rep[HashMap[K,V]]\n    def hashmap_apply[K:Manifest,V:Manifest](m: Rep[HashMap[K,V]], k: Rep[K])(implicit pos: SourceContext): Rep[Option[V]]\n    def hashmap_update[K:Manifest,V:Manifest](m: Rep[HashMap[K,V]], k: Rep[K], v: Rep[V])(implicit pos: SourceContext): Rep[Unit]\n    def hashmap_contains[K:Manifest,V:Manifest](m: Rep[HashMap[K,V]], i: Rep[K])(implicit pos: SourceContext): Rep[Boolean]\n    def hashmap_size[K:Manifest,V:Manifest](m: Rep[HashMap[K,V]])(implicit pos: SourceContext): Rep[Int]\n    //added for testing\n    def hashmap_setSize[K:Manifest,V:Manifest](m: Rep[HashMap[K,V]], i: Rep[Int])(implicit pos: SourceContext): Rep[Unit]\n    //def hashmap_map[K:Manifest,V:Manifest, A:Manifest, B:Manifest](m: Rep[HashMap[K,V]], f: Rep[Entry[K,V]]=>Rep[Entry[A,B]]): Rep[Array[Entry[A,B]]]\n    def hashmap_foreach[K:Manifest,V:Manifest](x: Rep[HashMap[K,V]], block: Rep[Entry[K,V]] => Rep[Unit])(implicit pos: SourceContext): Rep[Unit]\n    def hashmap_clear[K:Manifest,V:Manifest](m: Rep[HashMap[K,V]])(implicit pos: SourceContext): Rep[Unit]\n    def hashmap_-=[K: Manifest, V: Manifest](m: Rep[HashMap[K,V]], v: Rep[K])(implicit pos: SourceContext): Rep[Unit]\n\n    //added for testing\n    def hashmap_table[K:Manifest,V:Manifest](m: Rep[HashMap[K,V]])(implicit pos: SourceContext): Rep[Array[Entry[K, V]]]\n    def hashmap_setTable[K:Manifest,V:Manifest](m: Rep[HashMap[K,V]], newTable: Rep[Array[Entry[K, V]]])(implicit pos: SourceContext): Rep[Unit]\n\n  }\n\n  class HashMap[K,V] (capacity: Int = 16) {\n    val MAXIMUM_CAPACITY = 1 << 30\n    val DEFAULT_LOAD_FACTOR = 0.75f\n    var table: Array[Entry[K,V]] = new Array[Entry[K,V]] (capacity)\n    var loadFactor: Float = DEFAULT_LOAD_FACTOR \n    var threshold = (capacity * DEFAULT_LOAD_FACTOR).toInt\n    var size = 0\n  }\n  \n  trait HashMapArrOpsExp extends HashMapArrOps with ArrayOpsExp with EffectExp with TupleOpsExp with EntryOpsExp\n  with HashCodeOpsExp with BooleanOpsExp with PrimitiveOpsExp with ListOpsExp with FunctionsExp with VariablesExp\n  with NumericOpsExp with EqualExp with WhileExp with OrderingOpsExp with IfThenElseExp\n   with SeqOpsExp with MathOpsExp with CastingOpsExp with SetOpsExp with ObjectOpsExp\n   with Blocks with MiscOpsExp with OptionOpsExp\n   with VariablesNested\n  {\n  case class NewHashMap[K, V](mK: Manifest[K], mV: Manifest[V], size: Exp[Int]) extends Def[HashMap[K, V]]\n  //mutable\n  case class HashMapGetSize[K, V](x: Exp[HashMap[K, V]]) extends Def[Int]\n  case class HashMapSetSize[K, V](x: Exp[HashMap[K, V]], newSz: Exp[Int]) extends Def[Unit]\n  case class HashMapGetLoadFactor[K, V](x: Exp[HashMap[K, V]]) extends Def[Float]\n  case class HashMapMAXIMUM_CAPACITY[K, V](x: Exp[HashMap[K, V]]) extends Def[Int]\n  case class HashMapGetThreshold[K, V](x: Exp[HashMap[K, V]]) extends Def[Int]\n  case class HashMapSetThreshold[K: Manifest, V](x: Exp[HashMap[K, V]], newThreshold: Exp[Int]) extends Def[Unit]\n  //nested mutable\n  case class HashMapGetTable[K, V](x: Exp[HashMap[K, V]]) extends Def[Array[Entry[K, V]]]\n  case class HashMapSetTable[K, V](x: Exp[HashMap[K, V]], newTable: Exp[Array[Entry[K, V]]]) extends Def[Unit]\n\n  override def containSyms(e: Any): List[Sym[Any]] = e match {\n    case HashMapSetTable(m,t) => syms(t)\n    case HashMapGetTable(m) => Nil\n    case _ => super.containSyms(e)\n  }\n\n  override def extractSyms(e: Any): List[Sym[Any]] = e match {\n    case HashMapSetTable(m,t) => Nil\n    case HashMapGetTable(m) => syms(m)\n    case _ => super.extractSyms(e)\n  }\n\n    def hashmap_new[K:Manifest,V:Manifest](n: Exp[Int], specializedKey: String = \"\", specializedValue: String = \"\")(implicit pos: SourceContext) : Rep[HashMap[K,V]] = {\n      //NewHashMap(manifest[K], manifest[V])\n      val m = reflectMutable(NewHashMap(manifest[K], manifest[V], n))\n      //array_obj_new[Entry[K,V]](n)\n\n      reflectReadMutable(m)(HashMapGetTable(m))\n      hashmap_array_apply(reflectReadMutable(m)(HashMapGetTable(m)), unit(0))\n      reflectReadMutable(m)(HashMapGetSize(m))\n      reflectReadMutable(m)(HashMapGetLoadFactor(m))\n      reflectReadMutable(m)(HashMapMAXIMUM_CAPACITY(m))\n      reflectReadMutable(m)(HashMapGetThreshold(m))\n\n      m\n    }\n\n    def hashmap_apply[K:Manifest,V:Manifest](x: Rep[HashMap[K,V]], k: Rep[K])(implicit pos: SourceContext): Rep[Option[V]] = {\n      //tuple2_get2(ArrayApply(m, k))\n      val m: Rep[Array[Entry[K,V]]] = hashmap_table(x)//reflectReadMutable (x) ( HashMapGetTable(x) )\n\n      val h1 = int_tolong(__hashCode(k))\n      val h2 = (h1 >>> unit(20)) ^ (h1 >>> unit(12)) ^ h1\n      val h3 = h2 ^ (h2 >>> unit(7)) ^ (h2 >>> unit(4))\n      val idx = int_binaryand(long_toint(h3), m.length - unit(1))\n      val el = hashmap_array_apply(m, idx)\n      val n = var_new(el)\n        //reflectReadMutable (m) ( ArrayApply(m, idx) )\n        //array_apply(m, idx)\n      //)\n\n      if(readVar(n) == unit(null)) {\n        NoneO[V]\n        //unit(0).asInstanceOf[Rep[V]]\n        //unit(null).asInstanceOf[Rep[V]]\n      } else {\n        while(boolean_and(n.hasNext(), notequals(n.getKey(), k) )) {\n         var_assign(n, n.next())\n        }\n\n        if(n.getKey() == k) {\n          SomeO(n.getValue())\n        } else {\n          NoneO[V]\n          //unit(0).asInstanceOf[Rep[V]]\n          //unit(null).asInstanceOf[Rep[V]]\n        }\n      }\n    }\n\n    def hashmap_update[K:Manifest,V:Manifest](x: Rep[HashMap[K,V]], k: Rep[K], v: Rep[V])(implicit pos: SourceContext): Rep[Unit] = {\n      hashmap_add(x, k, v)\n      hashmap_resize(x)\n    }\n\n    def hashmap_add[K:Manifest,V:Manifest](x: Rep[HashMap[K,V]], k: Rep[K], v: Rep[V])(implicit pos: SourceContext): Rep[Unit] = {\n      val m = hashmap_table(x)//reflectReadMutable (x) { HashMapGetTable(x) }\n\n      val h1 = int_tolong(__hashCode(k))\n      val h2 = (h1 >>> unit(20)) ^ (h1 >>> unit(12)) ^ h1\n      val h3 = h2 ^ (h2 >>> unit(7)) ^ (h2 >>> unit(4))\n      val idx = int_binaryand(long_toint(h3), m.length - unit(1))\n      val el = hashmap_array_apply(m, idx)\n        //reflectReadMutable (m) ( ArrayApply(m, idx) )\n        //array_apply(m, idx)\n      val n = var_new(el)\n      \n      val size = hashmap_size(x) //map.size   //reflectNested\n\n      if(readVar(n) == unit(null)) {\n\n        //reflectWrite(el) ( ArrayUpdate(m, idx, entry_new(k,v)) )\n        //val new_entry = \n        hashmap_array_update(m, idx, entry_new(k,v))\n        //reflectWriteMutable(reflectReadMutable (m) ( ArrayApply(m, idx) )) (new_entry) ( ArrayUpdate(m, idx, new_entry) )\n        //array_update(m, idx, entry_new(k,v))\n\n        // reflectWrite(m) ==> backTracking      --> update calculate dependencies\n        //--> possible update reflectWrite(ArrayApply(x,i))\n \n        hashmap_setSize(x, numeric_plus(size, unit(1)))  //reflectWrite(HashMapGetSize(x))  --> overloaded reflectWrite,\n      } else {\n        while(n.hasNext() && n.getKey() != k) {\n          var_assign(n, n.next())\n        }\n\n        if(n.getKey() == k) {\n          n.setValue(v)\n        } else {\n          n.setNext(entry_new(k,v))\n          hashmap_setSize(x, numeric_plus(size, unit(1)))\n        }\n      }\n\n    }\n\n    def hashmap_resize[K:Manifest,V:Manifest](x: Rep[HashMap[K,V]])(implicit pos: SourceContext): Rep[Unit] = {\n      val m = hashmap_table(x)//reflectReadMutable (x) { HashMapGetTable(x) }\n      val threshold = hashmap_threshold(x)\n      val max_capacity = hashmap_maximumCapacity(x)\n      val size = hashmap_size(x) \n\n      //var_assign(size, size + 1)\n      if (ordering_gteq(size, threshold)) {\n        val oldCapacity = m.length\n        if(oldCapacity == max_capacity) {\n          hashmap_setThreshold(x, Int.MaxValue)\n          //var_assign(threshold, unit(Int.MaxValue))\n        } else {\n          val newCapacity = unit(2) * oldCapacity\n          val newTable = array_obj_new[Entry[K, V]](newCapacity)\n\n          //transfer table\n          val j: Var[Int] = var_new(unit(0))\n\n          while(j < m.length) {\n            val e: Var[Entry[K, V]] = var_new(hashmap_array_apply(m,j))\n            if(e != unit(null)) {\n              //array_update(m, j, unit(null))\n              hashmap_array_update(m, j, unit(null))\n\n              while(e != unit(null)) {\n                val ht1 = int_tolong(__hashCode(e.getKey()))\n                val ht2 = (ht1 >>> unit(20)) ^ (ht1 >>> unit(12)) ^ ht1\n                val ht3 = ht2 ^ (ht2 >>> unit(7)) ^ (ht2 >>> unit(4))\n                val z = int_binaryand(long_toint(ht3), newCapacity - unit(1))\n\n                val next = e.next\n                e.setNext(hashmap_array_apply(newTable, z))\n                //newTable.update(z, e)\n                hashmap_array_update(newTable, z, readVar(e))\n                \n                var_assign(e, next)\n              }\n            \n            }\n            var_assign(j, readVar(j) + unit(1))\n            //var_plusequals(j, unit(1))\n          }\n\n          hashmap_setTable(x, newTable)\n          val loadFactor: Rep[Float] = hashmap_loadFactor(x)\n          hashmap_setThreshold(x, (numeric_times(loadFactor, newCapacity.asInstanceOf[Rep[Float]]))\n            .AsInstanceOf[Int])\n          //var_assign(threshold, newCapacity*HashMapGetLoadFactor(x))\n        }\n      }\n    }\n\n    def hashmap_contains[K:Manifest,V:Manifest](x: Rep[HashMap[K,V]], k: Rep[K])(implicit pos: SourceContext): Rep[Boolean] = { \n      val m: Rep[Array[Entry[K,V]]] = HashMapGetTable(x)\n      val h1 = int_tolong(__hashCode(k))\n      val h2 = (h1 >>> unit(20)) ^ (h1 >>> unit(12)) ^ h1\n      val h3 = h2 ^ (h2 >>> unit(7)) ^ (h2 >>> unit(4))\n      val n = var_new(array_apply(m, int_binaryand(long_toint(h3), m.length - unit(1))))\n\n      if(readVar(n) == unit(null)) {\n        unit(false)\n      } else {\n        while(n.hasNext() && n.getKey() != k) {\n          var_assign(n, n.next())\n        }\n\n        n.getKey() == k\n      }\n    }\n\n    def hashmap_array_update[K:Manifest,V:Manifest](m: Rep[Array[Entry[K,V]]], idx: Rep[Int], new_entry: Rep[Entry[K,V]])(implicit pos: SourceContext): Rep[Unit] = {\n        reflectWriteMutable (reflectReadMutable (m) ( ArrayApply(m, idx) )) (new_entry) ( ArrayUpdate(m, idx, new_entry) )\n    }\n\n    def hashmap_array_apply[K:Manifest,V:Manifest](m: Rep[Array[Entry[K,V]]], idx: Rep[Int])(implicit pos: SourceContext): Rep[Entry[K,V]] = {\n        reflectReadMutable (m) ( ArrayApply(m, idx) )\n    }\n\n    def hashmap_loadFactor[K:Manifest,V:Manifest](m: Rep[HashMap[K,V]])(implicit pos: SourceContext): Rep[Float] = {\n      //reflectReadMutable (m) ( HashMapGetSize(m) )\n      reflectReadMutable (m) ( HashMapGetLoadFactor(m) )\n      //HashMapGetSize(m)\n    }\n\n    def hashmap_threshold[K:Manifest,V:Manifest](m: Rep[HashMap[K,V]])(implicit pos: SourceContext): Rep[Int] = {\n      //reflectReadMutable (m) ( HashMapGetSize(m) )\n      reflectReadMutable (m) ( HashMapGetThreshold(m) )\n      //HashMapGetSize(m)\n    }\n    \n    def hashmap_maximumCapacity[K:Manifest,V:Manifest](m: Rep[HashMap[K,V]])(implicit pos: SourceContext): Rep[Int] = {\n      //reflectReadMutable (m) ( HashMapGetSize(m) )\n      reflectReadMutable (m) ( HashMapMAXIMUM_CAPACITY(m) )\n      //HashMapGetSize(m)\n    }\n\n    def hashmap_setThreshold[K:Manifest,V:Manifest](m: Rep[HashMap[K,V]], i: Rep[Int])(implicit pos: SourceContext): Rep[Unit] = {\n      reflectWriteMutable (reflectReadMutable (m) ( HashMapGetThreshold(m) )) (i) ( HashMapSetThreshold(m, i) )\n    }\n\n    def hashmap_table[K:Manifest,V:Manifest](m: Rep[HashMap[K,V]])(implicit pos: SourceContext): Rep[Array[Entry[K, V]]] = {\n      reflectReadMutable (m) ( HashMapGetTable(m) )\n    }\n\n    def hashmap_setTable[K:Manifest,V:Manifest](m: Rep[HashMap[K,V]], newTable: Rep[Array[Entry[K, V]]])(implicit pos: SourceContext): Rep[Unit] = {\n      //reflectMutableWrite multiple cases:\n      //clean and add -> replace references contained (equals sym)\n      //add -> references contained (contains sym)\n      //clone -> create new representative (clone sym)\n      //extract??? => Read and Write at the same time\n      reflectWriteMutable( reflectReadMutable(m) (HashMapGetTable(m)) ) (newTable) (HashMapSetTable(m, newTable))\n    }\n\n    def hashmap_size[K:Manifest,V:Manifest](m: Rep[HashMap[K,V]])(implicit pos: SourceContext): Rep[Int] = {\n      //reflectReadMutable (m) ( HashMapGetSize(m) )\n      reflectReadMutable (m) ( HashMapGetSize(m) )\n      //HashMapGetSize(m)\n    }\n\n    def hashmap_setSize[K:Manifest,V:Manifest](m: Rep[HashMap[K,V]], i: Rep[Int])(implicit pos: SourceContext): Rep[Unit] = {\n      reflectWriteMutable(reflectReadMutable (m) ( HashMapGetSize(m) ))(i)(HashMapSetSize(m, i))\n      //reflectWrite( reflectReadMutable(m) (HashMapGetSize(m)) ) (HashMapSetSize(m, i))\n      //reflectWrite(HashMapGetSize(m)) (HashMapSetSize(m, i))\n    }\n\n    /*def hashmap_map[K:Manifest,V:Manifest, A:Manifest, B:Manifest](m: Rep[HashMap[K,V]], f: Rep[Entry[K,V]]=>Rep[Entry[A,B]]): Rep[Array[Entry[A,B]]] = {\n      var i = unit(0)\n      var n: Rep[Entry[K,V]] = unit(null)\n      val nmap = hashmap_new[A,B](m.length)\n\n      hashmap_foreach(m, {e => val n = f(e); hashmap_update(nmap, e.key, e.value)})\n      nmap\n    }*/\n\n    def hashmap_foreach[K:Manifest,V:Manifest](x: Rep[HashMap[K,V]], f: Rep[Entry[K,V]] => Rep[Unit])(implicit pos: SourceContext): Rep[Unit] = {\n      val m: Rep[Array[Entry[K,V]]] = hashmap_table(x)\n      val i = var_new(unit(0))\n      val n = var_new(unit(null).AsInstanceOf[Entry[K,V]])\n\n      while(i < m.length) {\n        val el = hashmap_array_apply(m,i)\n        if(el != unit(null)) {\n          var_assign(n, el)\n          f(el)\n          while(n.hasNext()) {\n            var_assign(n, n.next())\n            f(readVar(n))\n          }\n        }\n\n        i = i + unit(1)\n      }\n    }\n\n    def hashmap_clear[K:Manifest,V:Manifest](x: Rep[HashMap[K,V]])(implicit pos: SourceContext): Rep[Unit] = {\n      val m = hashmap_table(x)\n      val i = var_new(unit(0))\n\n      while(i < m.length) {\n        hashmap_array_update(m, i, unit(null))\n        var_assign(i, readVar(i) + unit(1))\n      }\n    }\n\n    def hashmap_-=[K: Manifest, V: Manifest](x: Rep[HashMap[K,V]], k: Rep[K])(implicit pos: SourceContext): Rep[Unit] = {\n      val m = hashmap_table(x)\n      val h1 = int_tolong(__hashCode(k))\n      val h2 = (h1 >>> unit(20)) ^ (h1 >>> unit(12)) ^ h1\n      val h3 = h2 ^ (h2 >>> unit(7)) ^ (h2 >>> unit(4))\n      val idx = int_binaryand(long_toint(h3), m.length - unit(1))\n\n      val p = var_new(unit(null).AsInstanceOf[Entry[K,V]])\n      val n = var_new(hashmap_array_apply(m, idx))\n\n      if(readVar(n) != unit(null)) {\n        while(readVar(n).hasNext() && readVar(n).getKey() != k) {\n          var_assign(p, readVar(n))\n          var_assign(n, readVar(n).next())\n        }\n\n        if(readVar(p) == unit(null))\n          hashmap_array_update(m, idx, unit(null))\n        else if(readVar(n).getKey() == k) {\n          p.setNext(readVar(n).next())\n        }\n      }\n    }\n\n    \n  }\n\ntrait ScalaGenHashMap extends ScalaGenBase with ScalaGenMiscOps {\n  val IR: HashMapArrOpsExp\n  import IR._\n\n  override def emitNode(sym: Sym[Any], rhs: Def[Any]) = rhs match {\n    case NewHashMap(mK, mV, n) => emitValDef(sym, \"new HashMap[\" + mK + \",\" + mV + \"](\" + quote(n) + \")\")\n    case HashMapGetSize(x) => emitValDef(sym, \"\" + quote(x) + \".size\")\n    case HashMapGetTable(x) => emitValDef(sym, \"\" + quote(x) + \".table\")\n    //case HashMapGetTableIndex(x, index) => emitValDef(sym, \"\" + quote(x) + \".table(\" + quote(index) + \")\")\n    case HashMapGetThreshold(x) => emitValDef(sym, \"\" + quote(x) + \".threshold\")\n    case HashMapGetLoadFactor(x) => emitValDef(sym, \"\" + quote(x) + \".loadFactor\")\n    case HashMapMAXIMUM_CAPACITY(x) => emitValDef(sym, \"\" + quote(x) + \".MAXIMUM_CAPACITY\")\n    case HashMapSetSize(x, newSz) => emitAssignment(sym, \"\" + quote(x) + \".size\", quote(newSz))\n    case HashMapSetTable(x, newTable) => emitAssignment(sym, \"\" + quote(x) + \".table\", quote(newTable))\n    //case HashMapSetTableIndex(x, tbl, index, value) => emitAssignment(\"\" + quote(x) + \".table(\" + quote(index) + \")\", quote(value))\n    case HashMapSetThreshold(x, newThreshold) => emitAssignment(sym, \"\" + quote(x) + \".threshold\", quote(newThreshold))\n    case _ => super.emitNode(sym, rhs)\n  }\n}\n",
+			"file": "src/common/HashMapArrOps.scala",
+			"file_size": 24455,
+			"file_write_time": 1401794708000000,
+			"settings":
+			{
+				"buffer_size": 24454,
 				"line_ending": "Unix"
 			}
 		},
@@ -35,7 +64,7 @@
 			"file": "src/common/ArrayOps.scala",
 			"settings":
 			{
-				"buffer_size": 18826,
+				"buffer_size": 30273,
 				"line_ending": "Unix"
 			}
 		},
@@ -43,7 +72,7 @@
 			"file": "src/internal/Effects.scala",
 			"settings":
 			{
-				"buffer_size": 32516,
+				"buffer_size": 32514,
 				"line_ending": "Unix"
 			}
 		},
@@ -51,7 +80,7 @@
 			"file": "src/common/Variables.scala",
 			"settings":
 			{
-				"buffer_size": 14608,
+				"buffer_size": 20696,
 				"line_ending": "Unix"
 			}
 		},
@@ -126,7 +155,7 @@
 	},
 	"find_in_files":
 	{
-		"height": 0.0,
+		"height": 90.0,
 		"where_history":
 		[
 			""
@@ -137,6 +166,9 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"TopLevel",
+			"ScalaGenVariablesNested",
+			"Head",
 			"AliasRep",
 			"Option",
 			"def quote",
@@ -160,7 +192,7 @@
 	"groups":
 	[
 		{
-			"selected": 3,
+			"selected": 0,
 			"sheets":
 			[
 				{
@@ -168,15 +200,15 @@
 					"file": "test-src/epfl/test12-collections/TestArrayOps.scala",
 					"settings":
 					{
-						"buffer_size": 43513,
+						"buffer_size": 19484,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								5794,
-								5794
+								5303,
+								5303
 							]
 						],
 						"settings":
@@ -186,13 +218,1920 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 4410.0,
+						"translation.y": 1140.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 1,
+					"settings":
+					{
+						"buffer_size": 99171,
+						"regions":
+						{
+							"match":
+							{
+								"flags": 112,
+								"regions":
+								[
+									[
+										304,
+										312
+									],
+									[
+										451,
+										459
+									],
+									[
+										481,
+										489
+									],
+									[
+										674,
+										682
+									],
+									[
+										847,
+										855
+									],
+									[
+										1016,
+										1024
+									],
+									[
+										1239,
+										1247
+									],
+									[
+										1399,
+										1407
+									],
+									[
+										1561,
+										1569
+									],
+									[
+										1935,
+										1943
+									],
+									[
+										2082,
+										2090
+									],
+									[
+										2112,
+										2120
+									],
+									[
+										2305,
+										2313
+									],
+									[
+										2480,
+										2488
+									],
+									[
+										2711,
+										2719
+									],
+									[
+										3022,
+										3030
+									],
+									[
+										3152,
+										3160
+									],
+									[
+										3190,
+										3198
+									],
+									[
+										3287,
+										3295
+									],
+									[
+										3319,
+										3327
+									],
+									[
+										3448,
+										3456
+									],
+									[
+										3480,
+										3488
+									],
+									[
+										3641,
+										3649
+									],
+									[
+										3673,
+										3681
+									],
+									[
+										3866,
+										3874
+									],
+									[
+										3898,
+										3906
+									],
+									[
+										4123,
+										4131
+									],
+									[
+										4155,
+										4163
+									],
+									[
+										4412,
+										4420
+									],
+									[
+										4444,
+										4452
+									],
+									[
+										4733,
+										4741
+									],
+									[
+										4765,
+										4773
+									],
+									[
+										5086,
+										5094
+									],
+									[
+										5118,
+										5126
+									],
+									[
+										5471,
+										5479
+									],
+									[
+										5503,
+										5511
+									],
+									[
+										5893,
+										5901
+									],
+									[
+										5925,
+										5933
+									],
+									[
+										6351,
+										6359
+									],
+									[
+										6383,
+										6391
+									],
+									[
+										6845,
+										6853
+									],
+									[
+										6877,
+										6885
+									],
+									[
+										7375,
+										7383
+									],
+									[
+										7407,
+										7415
+									],
+									[
+										7941,
+										7949
+									],
+									[
+										7973,
+										7981
+									],
+									[
+										8543,
+										8551
+									],
+									[
+										8575,
+										8583
+									],
+									[
+										9181,
+										9189
+									],
+									[
+										9213,
+										9221
+									],
+									[
+										9855,
+										9863
+									],
+									[
+										9887,
+										9895
+									],
+									[
+										10565,
+										10573
+									],
+									[
+										10597,
+										10605
+									],
+									[
+										11311,
+										11319
+									],
+									[
+										11353,
+										11361
+									],
+									[
+										12470,
+										12478
+									],
+									[
+										12503,
+										12511
+									],
+									[
+										12709,
+										12717
+									],
+									[
+										12793,
+										12801
+									],
+									[
+										13053,
+										13061
+									],
+									[
+										13151,
+										13159
+									],
+									[
+										13465,
+										13473
+									],
+									[
+										13577,
+										13585
+									],
+									[
+										13945,
+										13953
+									],
+									[
+										14071,
+										14079
+									],
+									[
+										14493,
+										14501
+									],
+									[
+										14633,
+										14641
+									],
+									[
+										15109,
+										15117
+									],
+									[
+										15263,
+										15271
+									],
+									[
+										15793,
+										15801
+									],
+									[
+										15961,
+										15969
+									],
+									[
+										16545,
+										16553
+									],
+									[
+										16727,
+										16735
+									],
+									[
+										17365,
+										17373
+									],
+									[
+										17561,
+										17569
+									],
+									[
+										18260,
+										18268
+									],
+									[
+										18472,
+										18480
+									],
+									[
+										19231,
+										19239
+									],
+									[
+										19458,
+										19466
+									],
+									[
+										20277,
+										20285
+									],
+									[
+										20519,
+										20527
+									],
+									[
+										21398,
+										21406
+									],
+									[
+										21655,
+										21663
+									],
+									[
+										22594,
+										22602
+									],
+									[
+										22866,
+										22874
+									],
+									[
+										23865,
+										23873
+									],
+									[
+										24152,
+										24160
+									],
+									[
+										25211,
+										25219
+									],
+									[
+										25513,
+										25521
+									],
+									[
+										26632,
+										26640
+									],
+									[
+										26949,
+										26957
+									],
+									[
+										28128,
+										28136
+									],
+									[
+										28460,
+										28468
+									],
+									[
+										29699,
+										29707
+									],
+									[
+										30340,
+										30348
+									],
+									[
+										30456,
+										30464
+									],
+									[
+										30746,
+										30754
+									],
+									[
+										30890,
+										30898
+									],
+									[
+										31694,
+										31702
+									],
+									[
+										31878,
+										31886
+									],
+									[
+										32063,
+										32071
+									],
+									[
+										32248,
+										32256
+									],
+									[
+										32433,
+										32441
+									],
+									[
+										32618,
+										32626
+									],
+									[
+										32803,
+										32811
+									],
+									[
+										32988,
+										32996
+									],
+									[
+										33173,
+										33181
+									],
+									[
+										33358,
+										33366
+									],
+									[
+										33543,
+										33551
+									],
+									[
+										33728,
+										33736
+									],
+									[
+										33912,
+										33920
+									],
+									[
+										34096,
+										34104
+									],
+									[
+										34280,
+										34288
+									],
+									[
+										34464,
+										34472
+									],
+									[
+										34648,
+										34656
+									],
+									[
+										34832,
+										34840
+									],
+									[
+										35016,
+										35024
+									],
+									[
+										35191,
+										35199
+									],
+									[
+										35363,
+										35371
+									],
+									[
+										35537,
+										35545
+									],
+									[
+										35710,
+										35718
+									],
+									[
+										35885,
+										35893
+									],
+									[
+										36059,
+										36067
+									],
+									[
+										36234,
+										36242
+									],
+									[
+										36408,
+										36416
+									],
+									[
+										36583,
+										36591
+									],
+									[
+										36757,
+										36765
+									],
+									[
+										36932,
+										36940
+									],
+									[
+										37106,
+										37114
+									],
+									[
+										37281,
+										37289
+									],
+									[
+										37455,
+										37463
+									],
+									[
+										37630,
+										37638
+									],
+									[
+										37804,
+										37812
+									],
+									[
+										37979,
+										37987
+									],
+									[
+										38153,
+										38161
+									],
+									[
+										38328,
+										38336
+									],
+									[
+										38502,
+										38510
+									],
+									[
+										38677,
+										38685
+									],
+									[
+										38851,
+										38859
+									],
+									[
+										39026,
+										39034
+									],
+									[
+										39200,
+										39208
+									],
+									[
+										39374,
+										39382
+									],
+									[
+										39547,
+										39555
+									],
+									[
+										39721,
+										39729
+									],
+									[
+										39894,
+										39902
+									],
+									[
+										40068,
+										40076
+									],
+									[
+										40241,
+										40249
+									],
+									[
+										40415,
+										40423
+									],
+									[
+										40588,
+										40596
+									],
+									[
+										40762,
+										40770
+									],
+									[
+										40935,
+										40943
+									],
+									[
+										41109,
+										41117
+									],
+									[
+										41282,
+										41290
+									],
+									[
+										41456,
+										41464
+									],
+									[
+										41629,
+										41637
+									],
+									[
+										41803,
+										41811
+									],
+									[
+										42698,
+										42706
+									],
+									[
+										42903,
+										42911
+									],
+									[
+										43108,
+										43116
+									],
+									[
+										43313,
+										43321
+									],
+									[
+										43530,
+										43538
+									],
+									[
+										43747,
+										43755
+									],
+									[
+										43964,
+										43972
+									],
+									[
+										44229,
+										44237
+									],
+									[
+										44476,
+										44484
+									],
+									[
+										44728,
+										44736
+									],
+									[
+										45004,
+										45012
+									],
+									[
+										45256,
+										45264
+									],
+									[
+										45508,
+										45516
+									],
+									[
+										45743,
+										45751
+									],
+									[
+										45960,
+										45968
+									],
+									[
+										46195,
+										46203
+									],
+									[
+										46412,
+										46420
+									],
+									[
+										46628,
+										46636
+									],
+									[
+										46862,
+										46870
+									],
+									[
+										47078,
+										47086
+									],
+									[
+										47294,
+										47302
+									],
+									[
+										47524,
+										47532
+									],
+									[
+										47754,
+										47762
+									],
+									[
+										47995,
+										48003
+									],
+									[
+										48237,
+										48245
+									],
+									[
+										48497,
+										48505
+									],
+									[
+										48739,
+										48747
+									],
+									[
+										48999,
+										49007
+									],
+									[
+										49277,
+										49285
+									],
+									[
+										49537,
+										49545
+									],
+									[
+										49815,
+										49823
+									],
+									[
+										50075,
+										50083
+									],
+									[
+										50317,
+										50325
+									],
+									[
+										50577,
+										50585
+									],
+									[
+										50819,
+										50827
+									],
+									[
+										51060,
+										51068
+									],
+									[
+										51301,
+										51309
+									],
+									[
+										51549,
+										51557
+									],
+									[
+										51779,
+										51787
+									],
+									[
+										52009,
+										52017
+									],
+									[
+										52269,
+										52277
+									],
+									[
+										52535,
+										52543
+									],
+									[
+										52801,
+										52809
+									],
+									[
+										53049,
+										53057
+									],
+									[
+										53327,
+										53335
+									],
+									[
+										53587,
+										53595
+									],
+									[
+										53855,
+										53863
+									],
+									[
+										54103,
+										54111
+									],
+									[
+										54351,
+										54359
+									],
+									[
+										54581,
+										54589
+									],
+									[
+										54811,
+										54819
+									],
+									[
+										55040,
+										55048
+									],
+									[
+										55269,
+										55277
+									],
+									[
+										55503,
+										55511
+									],
+									[
+										55808,
+										55816
+									],
+									[
+										56094,
+										56102
+									],
+									[
+										56380,
+										56388
+									],
+									[
+										56666,
+										56674
+									],
+									[
+										56871,
+										56879
+									],
+									[
+										57076,
+										57084
+									],
+									[
+										57828,
+										57836
+									],
+									[
+										57952,
+										57960
+									],
+									[
+										58077,
+										58085
+									],
+									[
+										58202,
+										58210
+									],
+									[
+										58327,
+										58335
+									],
+									[
+										58452,
+										58460
+									],
+									[
+										58577,
+										58585
+									],
+									[
+										58702,
+										58710
+									],
+									[
+										58827,
+										58835
+									],
+									[
+										58952,
+										58960
+									],
+									[
+										59077,
+										59085
+									],
+									[
+										59202,
+										59210
+									],
+									[
+										59326,
+										59334
+									],
+									[
+										59450,
+										59458
+									],
+									[
+										59574,
+										59582
+									],
+									[
+										59698,
+										59706
+									],
+									[
+										59822,
+										59830
+									],
+									[
+										59946,
+										59954
+									],
+									[
+										60070,
+										60078
+									],
+									[
+										60185,
+										60193
+									],
+									[
+										60297,
+										60305
+									],
+									[
+										60410,
+										60418
+									],
+									[
+										60524,
+										60532
+									],
+									[
+										60638,
+										60646
+									],
+									[
+										60753,
+										60761
+									],
+									[
+										60867,
+										60875
+									],
+									[
+										60982,
+										60990
+									],
+									[
+										61096,
+										61104
+									],
+									[
+										61211,
+										61219
+									],
+									[
+										61325,
+										61333
+									],
+									[
+										61440,
+										61448
+									],
+									[
+										61554,
+										61562
+									],
+									[
+										61669,
+										61677
+									],
+									[
+										61783,
+										61791
+									],
+									[
+										61898,
+										61906
+									],
+									[
+										62012,
+										62020
+									],
+									[
+										62127,
+										62135
+									],
+									[
+										62241,
+										62249
+									],
+									[
+										62356,
+										62364
+									],
+									[
+										62470,
+										62478
+									],
+									[
+										62585,
+										62593
+									],
+									[
+										62699,
+										62707
+									],
+									[
+										62814,
+										62822
+									],
+									[
+										62927,
+										62935
+									],
+									[
+										63041,
+										63049
+									],
+									[
+										63154,
+										63162
+									],
+									[
+										63268,
+										63276
+									],
+									[
+										63381,
+										63389
+									],
+									[
+										63495,
+										63503
+									],
+									[
+										63608,
+										63616
+									],
+									[
+										63722,
+										63730
+									],
+									[
+										63835,
+										63843
+									],
+									[
+										63949,
+										63957
+									],
+									[
+										64062,
+										64070
+									],
+									[
+										64176,
+										64184
+									],
+									[
+										64289,
+										64297
+									],
+									[
+										64403,
+										64411
+									],
+									[
+										64516,
+										64524
+									],
+									[
+										65122,
+										65130
+									],
+									[
+										65267,
+										65275
+									],
+									[
+										65412,
+										65420
+									],
+									[
+										65557,
+										65565
+									],
+									[
+										65702,
+										65710
+									],
+									[
+										65859,
+										65867
+									],
+									[
+										66016,
+										66024
+									],
+									[
+										66173,
+										66181
+									],
+									[
+										66330,
+										66338
+									],
+									[
+										66505,
+										66513
+									],
+									[
+										66692,
+										66700
+									],
+									[
+										66897,
+										66905
+									],
+									[
+										67089,
+										67097
+									],
+									[
+										67281,
+										67289
+									],
+									[
+										67497,
+										67505
+									],
+									[
+										67689,
+										67697
+									],
+									[
+										67846,
+										67854
+									],
+									[
+										68021,
+										68029
+									],
+									[
+										68177,
+										68185
+									],
+									[
+										68333,
+										68341
+									],
+									[
+										68507,
+										68515
+									],
+									[
+										68663,
+										68671
+									],
+									[
+										68833,
+										68841
+									],
+									[
+										69003,
+										69011
+									],
+									[
+										69173,
+										69181
+									],
+									[
+										69354,
+										69362
+									],
+									[
+										69536,
+										69544
+									],
+									[
+										69718,
+										69726
+									],
+									[
+										69918,
+										69926
+									],
+									[
+										70100,
+										70108
+									],
+									[
+										70300,
+										70308
+									],
+									[
+										70500,
+										70508
+									],
+									[
+										70718,
+										70726
+									],
+									[
+										70918,
+										70926
+									],
+									[
+										71136,
+										71144
+									],
+									[
+										71318,
+										71326
+									],
+									[
+										71518,
+										71526
+									],
+									[
+										71699,
+										71707
+									],
+									[
+										71880,
+										71888
+									],
+									[
+										72068,
+										72076
+									],
+									[
+										72238,
+										72246
+									],
+									[
+										72408,
+										72416
+									],
+									[
+										72596,
+										72604
+									],
+									[
+										72796,
+										72804
+									],
+									[
+										73002,
+										73010
+									],
+									[
+										73208,
+										73216
+									],
+									[
+										73396,
+										73404
+									],
+									[
+										73596,
+										73604
+									],
+									[
+										73814,
+										73822
+									],
+									[
+										74022,
+										74030
+									],
+									[
+										74210,
+										74218
+									],
+									[
+										74380,
+										74388
+									],
+									[
+										74549,
+										74557
+									],
+									[
+										74718,
+										74726
+									],
+									[
+										74892,
+										74900
+									],
+									[
+										75137,
+										75145
+									],
+									[
+										75363,
+										75371
+									],
+									[
+										75589,
+										75597
+									],
+									[
+										75815,
+										75823
+									],
+									[
+										75960,
+										75968
+									],
+									[
+										76657,
+										76665
+									],
+									[
+										76817,
+										76825
+									],
+									[
+										76978,
+										76986
+									],
+									[
+										77139,
+										77147
+									],
+									[
+										77300,
+										77308
+									],
+									[
+										77461,
+										77469
+									],
+									[
+										77622,
+										77630
+									],
+									[
+										77783,
+										77791
+									],
+									[
+										77944,
+										77952
+									],
+									[
+										78105,
+										78113
+									],
+									[
+										78266,
+										78274
+									],
+									[
+										78427,
+										78435
+									],
+									[
+										78587,
+										78595
+									],
+									[
+										78747,
+										78755
+									],
+									[
+										78907,
+										78915
+									],
+									[
+										79067,
+										79075
+									],
+									[
+										79227,
+										79235
+									],
+									[
+										79387,
+										79395
+									],
+									[
+										79547,
+										79555
+									],
+									[
+										79698,
+										79706
+									],
+									[
+										79846,
+										79854
+									],
+									[
+										79996,
+										80004
+									],
+									[
+										80145,
+										80153
+									],
+									[
+										80296,
+										80304
+									],
+									[
+										80446,
+										80454
+									],
+									[
+										80597,
+										80605
+									],
+									[
+										80747,
+										80755
+									],
+									[
+										80898,
+										80906
+									],
+									[
+										81048,
+										81056
+									],
+									[
+										81199,
+										81207
+									],
+									[
+										81349,
+										81357
+									],
+									[
+										81500,
+										81508
+									],
+									[
+										81650,
+										81658
+									],
+									[
+										81801,
+										81809
+									],
+									[
+										81951,
+										81959
+									],
+									[
+										82102,
+										82110
+									],
+									[
+										82252,
+										82260
+									],
+									[
+										82403,
+										82411
+									],
+									[
+										82553,
+										82561
+									],
+									[
+										82704,
+										82712
+									],
+									[
+										82854,
+										82862
+									],
+									[
+										83005,
+										83013
+									],
+									[
+										83155,
+										83163
+									],
+									[
+										83305,
+										83313
+									],
+									[
+										83454,
+										83462
+									],
+									[
+										83604,
+										83612
+									],
+									[
+										83753,
+										83761
+									],
+									[
+										83903,
+										83911
+									],
+									[
+										84052,
+										84060
+									],
+									[
+										84202,
+										84210
+									],
+									[
+										84351,
+										84359
+									],
+									[
+										84501,
+										84509
+									],
+									[
+										84650,
+										84658
+									],
+									[
+										84800,
+										84808
+									],
+									[
+										84949,
+										84957
+									],
+									[
+										85099,
+										85107
+									],
+									[
+										85248,
+										85256
+									],
+									[
+										85398,
+										85406
+									],
+									[
+										86158,
+										86166
+									],
+									[
+										86333,
+										86341
+									],
+									[
+										86508,
+										86516
+									],
+									[
+										86683,
+										86691
+									],
+									[
+										86870,
+										86878
+									],
+									[
+										87057,
+										87065
+									],
+									[
+										87244,
+										87252
+									],
+									[
+										87479,
+										87487
+									],
+									[
+										87696,
+										87704
+									],
+									[
+										87918,
+										87926
+									],
+									[
+										88164,
+										88172
+									],
+									[
+										88386,
+										88394
+									],
+									[
+										88608,
+										88616
+									],
+									[
+										88813,
+										88821
+									],
+									[
+										89000,
+										89008
+									],
+									[
+										89205,
+										89213
+									],
+									[
+										89392,
+										89400
+									],
+									[
+										89578,
+										89586
+									],
+									[
+										89782,
+										89790
+									],
+									[
+										89968,
+										89976
+									],
+									[
+										90154,
+										90162
+									],
+									[
+										90354,
+										90362
+									],
+									[
+										90554,
+										90562
+									],
+									[
+										90765,
+										90773
+									],
+									[
+										90977,
+										90985
+									],
+									[
+										91207,
+										91215
+									],
+									[
+										91419,
+										91427
+									],
+									[
+										91649,
+										91657
+									],
+									[
+										91897,
+										91905
+									],
+									[
+										92127,
+										92135
+									],
+									[
+										92375,
+										92383
+									],
+									[
+										92605,
+										92613
+									],
+									[
+										92817,
+										92825
+									],
+									[
+										93047,
+										93055
+									],
+									[
+										93259,
+										93267
+									],
+									[
+										93470,
+										93478
+									],
+									[
+										93681,
+										93689
+									],
+									[
+										93899,
+										93907
+									],
+									[
+										94099,
+										94107
+									],
+									[
+										94299,
+										94307
+									],
+									[
+										94529,
+										94537
+									],
+									[
+										94765,
+										94773
+									],
+									[
+										95001,
+										95009
+									],
+									[
+										95219,
+										95227
+									],
+									[
+										95467,
+										95475
+									],
+									[
+										95697,
+										95705
+									],
+									[
+										95935,
+										95943
+									],
+									[
+										96153,
+										96161
+									],
+									[
+										96371,
+										96379
+									],
+									[
+										96571,
+										96579
+									],
+									[
+										96771,
+										96779
+									],
+									[
+										96970,
+										96978
+									],
+									[
+										97169,
+										97177
+									],
+									[
+										97373,
+										97381
+									],
+									[
+										97648,
+										97656
+									],
+									[
+										97904,
+										97912
+									],
+									[
+										98160,
+										98168
+									],
+									[
+										98416,
+										98424
+									],
+									[
+										98591,
+										98599
+									],
+									[
+										98766,
+										98774
+									]
+								],
+								"scope": ""
+							}
+						},
+						"selection":
+						[
+							[
+								1941,
+								1941
+							]
+						],
+						"settings":
+						{
+							"detect_indentation": false,
+							"output_tag": 1,
+							"result_base_dir": "",
+							"result_file_regex": "^([A-Za-z\\\\/<].*):$",
+							"result_line_regex": "^ +([0-9]+):",
+							"scroll_past_end": true,
+							"syntax": "Packages/Default/Find Results.hidden-tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "old/test14-scratch/TestDataOp.scala",
+					"settings":
+					{
+						"buffer_size": 5595,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3293,
+								3293
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Scala/Scala.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1395.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "src/common/HashMapArrOps.scala",
+					"settings":
+					{
+						"buffer_size": 24454,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								9837,
+								9837
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Scala/Scala.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 4,
 					"file": "src/common/CastingOps.scala",
 					"settings":
 					{
@@ -220,75 +2159,19 @@
 					"type": "text"
 				},
 				{
-					"buffer": 2,
+					"buffer": 5,
 					"file": "src/common/ArrayOps.scala",
 					"settings":
 					{
-						"buffer_size": 18826,
+						"buffer_size": 30273,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Scala/Scala.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 135.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 3,
-					"file": "src/internal/Effects.scala",
-					"settings":
-					{
-						"buffer_size": 32516,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								20967,
-								20967
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Scala/Scala.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 11904.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 4,
-					"file": "src/common/Variables.scala",
-					"settings":
-					{
-						"buffer_size": 14608,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								13437,
-								13437
+								28765,
+								28765
 							]
 						],
 						"settings":
@@ -304,7 +2187,63 @@
 					"type": "text"
 				},
 				{
-					"buffer": 5,
+					"buffer": 6,
+					"file": "src/internal/Effects.scala",
+					"settings":
+					{
+						"buffer_size": 32514,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								24071,
+								24071
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Scala/Scala.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 8460.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "src/common/Variables.scala",
+					"settings":
+					{
+						"buffer_size": 20696,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								13537,
+								13537
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Scala/Scala.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 3478.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 8,
 					"file": "src/common/While.scala",
 					"settings":
 					{
@@ -326,13 +2265,13 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 585.0,
+						"translation.y": 360.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 6,
+					"buffer": 9,
 					"file": "src/common/Base.scala",
 					"settings":
 					{
@@ -360,7 +2299,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 7,
+					"buffer": 10,
 					"file": "src/internal/Expressions.scala",
 					"settings":
 					{
@@ -388,7 +2327,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 8,
+					"buffer": 11,
 					"file": "src/common/Packages.scala",
 					"settings":
 					{
@@ -424,7 +2363,7 @@
 	},
 	"input":
 	{
-		"height": 0.0
+		"height": 31.0
 	},
 	"layout":
 	{

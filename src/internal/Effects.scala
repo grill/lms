@@ -6,6 +6,10 @@ import util.GraphUtil
 import scala.collection.mutable
 import scala.annotation.unchecked.uncheckedVariance
 
+/**
+ * Blocks are nodes which contain and represent inner nodes (statements)
+ */
+
 trait Blocks extends Expressions {
 
   case class Block[+T](val res: Exp[T]) { def tp: Manifest[T @uncheckedVariance] = res.tp } // variance ...

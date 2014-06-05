@@ -11,62 +11,73 @@ class TestArrayOps extends FileDiffSuite {
 
   val prefix = "test-out/epfl/test12-"
 
-  //old
-  it("testNestedMutability") {
-    withOutFile(prefix+"hash-map-nested-mutability") {
-      val prog = new HashMapArrOps with MiscOps with HashMapArrOpsExp
-        with MiscOpsExp with ScalaOpsPkgExp {
-        def f(i : Rep[Int]): Rep[Unit] = {
-          val m = hashmap_new[Int, Int](unit(200))
-          val t1 = NewArray[Entry[Int,Int]](unit(10))//Array(unit(1), unit(2), unit(3))
-          //val t2 = m.table
+ /**
+  * Traits needed for function code generation
+  */
 
-          //val rN1 = reflectReadMutable (m.table) ( ArrayApply(m.table, unit(0)) )
-          //reflectWrite(rN1)( ArrayUpdate(t1, unit(0), entry_new(unit(0),unit(1))) )
+  trait MyCodeGen extends ScalaGenArrayOps with ScalaGenMiscOps
+      with ScalaGenEntry with ScalaGenHashCodeOps with ScalaGenOption
+      with ScalaCodeGenPkg with ScalaGenHashMap {
+    override val IR: ScalaOpsPkgExp with HashMapArrOpsExp with OptionOpsExp with EntryOpsExp
+    import IR._
 
-          //println(reflectReadMutable (m.table) ( ArrayApply(m.table, unit(0)) ))
-
-          m.setTable(t1)
-          println(reflectReadMutable (m.table) ( ArrayApply(m.table, unit(0)) ))
-
-          //TODO: find out why DCE doesn't work here --> should have no side effects
-          val rN2 = reflectReadMutable (t1) ( ArrayApply(t1, unit(0)) )
-          val entry = entry_new(unit(0),unit(1))
-          reflectWriteMutable(rN2)(entry)( ArrayUpdate(t1, unit(0), entry) )
-
-          println(reflectReadMutable (m.table) ( ArrayApply(m.table, unit(0)) ))
-        }
-        f(unit(1))
-      }
-
-      val codegen = new ScalaGenArrayOps with ScalaGenMiscOps
-      with ScalaGenEntry with ScalaCodeGenPkg with ScalaGenHashCodeOps with ScalaGenOption
-      with ScalaGenHashMap { val IR: prog.type = prog }
-      codegen.emitSource1(prog.f, "IntHashMapNestedMutability", new PrintWriter(System.out))
+    override def remap(s:String) = s match {
+      case "scala.virtualization.lms.epfl.test12.Entry" => "Entry"
+      case "scala.virtualization.lms.epfl.test12.HashMap" => "HashMap"
+      case x => super.remap(x)
     }
-    //assertFileEqualsCheck(prefix+"hash-map-creation")
   }
 
- /* it("testIntArrayCreation") {
-    withOutFile(prefix+"array-seq-creation") {
-      val prog = new ArrayOps with MiscOps with ArrayOpsExp with MiscOpsExp{
-        def f(i : Rep[Int]): Rep[Unit] = {
-          val a = Array(unit(1), unit(2), unit(3))
-          println(a(unit(0)))
-        }
+  trait MyOpsExp extends DSLBase with HashMapArrOpsExp
+        with MiscOpsExp with ScalaOpsPkgExp
 
-        def g(i : Rep[Int]): Rep[Unit] = {
-          val a = Array(unit('a'), unit('b'), unit('c'))
-          println(a(unit(0)))
+  trait Impl extends DSLBase with HashMapArrOps with MiscOps with HashMapArrOpsExp
+        with MiscOpsExp with ScalaOpsPkgExp { self =>
+    val codegen = new ScalaGenArrayOps with ScalaGenMiscOps
+      with ScalaGenEntry with ScalaCodeGenPkg with ScalaGenHashCodeOps with ScalaGenOption
+      with ScalaGenHashMap { val IR: self.type = self }
+  
+
+    def emitAll(): Unit = {
+      assert(codegen ne null) //careful about initialization order
+      val stream = new PrintWriter(System.out)
+      rec.foreach { case (k,x) =>
+        stream.println("/* FILE: " + x.name + ".c */")
+        //codegen.emitSource1(x.f, x.name, stream)(mtype(x.mA), mtype(x.mB))
+        x match {
+          case TopLevel1  (name, mA1, mB, f) => codegen.emitSource1(f, name, stream)(mtype(mA1), mtype(mB))
+          case TopLevel2  (name, mA1, mA2, mB, f) => codegen.emitSource2(f, name, stream)(mtype(mA1), mtype(mA2), mtype(mB))
+          case TopLevel3  (name, mA1, mA2, mA3, mB, f) => codegen.emitSource3(f, name, stream)(mtype(mA1), mtype(mA2), mtype(mA3), mtype(mB))
+          case TopLevel4  (name, mA1, mA2, mA3, mA4, mB, f) => codegen.emitSource4(f, name, stream)(mtype(mA1), mtype(mA2), mtype(mA3), mtype(mA4), mtype(mB))
+          case TopLevel5  (name, mA1, mA2, mA3, mA4, mA5, mB, f) => codegen.emitSource5(f, name, stream)(mtype(mA1), mtype(mA2), mtype(mA3), mtype(mA4), mtype(mA5), mtype(mB))
+          case TopLevel6  (name, mA1, mA2, mA3, mA4, mA5, mA6, mB, f) => codegen.emitSource6(f, name, stream)(mtype(mA1), mtype(mA2), mtype(mA3), mtype(mA4), mtype(mA5), mtype(mA6), mtype(mB))
+          case TopLevel7  (name, mA1, mA2, mA3, mA4, mA5, mA6, mA7, mB, f) => codegen.emitSource7(f, name, stream)(mtype(mA1), mtype(mA2), mtype(mA3), mtype(mA4), mtype(mA5), mtype(mA6), mtype(mA7), mtype(mB))
+          case TopLevel8  (name, mA1, mA2, mA3, mA4, mA5, mA6, mA7, mA8, mB, f) => codegen.emitSource8(f, name, stream)(mtype(mA1), mtype(mA2), mtype(mA3), mtype(mA4), mtype(mA5), mtype(mA6), mtype(mA7), mtype(mA8), mtype(mB))
+          case TopLevel9  (name, mA1, mA2, mA3, mA4, mA5, mA6, mA7, mA8, mA9, mB, f) => codegen.emitSource9(f, name, stream)(mtype(mA1), mtype(mA2), mtype(mA3), mtype(mA4), mtype(mA5), mtype(mA6), mtype(mA7), mtype(mA8), mtype(mA9), mtype(mB))
+          case TopLevel10 (name, mA1, mA2, mA3, mA4, mA5, mA6, mA7, mA8, mA9, mA10, mB, f) => codegen.emitSource10(f, name, stream)(mtype(mA1), mtype(mA2), mtype(mA3), mtype(mA4), mtype(mA5), mtype(mA6), mtype(mA7), mtype(mA8), mtype(mA9), mtype(mA10), mtype(mB))
         }
       }
-
-      val codegen = new ScalaGenArrayOps with ScalaGenMiscOps{ val IR: prog.type = prog }
-      codegen.emitSource1(prog.f, "IntArrayCreation", new PrintWriter(System.out))
-      codegen.emitSource1(prog.g, "CharArrayCreation", new PrintWriter(System.out))
     }
-    assertFileEqualsCheck(prefix+"array-seq-creation")
-  }*/
+    emitAll()
+  }
+
+
+ /**
+  * Tests for hash map implementation 
+  */
+
+  it("testFunMap") {
+    withOutFile(prefix+"hashmapFunMap") {
+      trait Prog extends MyOpsExp {
+        toplevel1("main") { a: Rep[HashMap[Int,Int]] =>
+          println(a.size)
+          a.setSize(unit(3))
+          println(a.size)
+        }
+      }
+      new Prog with Impl
+    }
+  }
 
     it("testGetAndSetSize") {
     withOutFile(prefix+"hash-map-get-and-set-size") {
@@ -81,9 +92,7 @@ class TestArrayOps extends FileDiffSuite {
         f(unit(1))
       }
 
-      val codegen = new ScalaGenArrayOps with ScalaGenMiscOps
-      with ScalaGenEntry with ScalaCodeGenPkg with ScalaGenHashCodeOps with ScalaGenOption
-      with ScalaGenHashMap { val IR: prog.type = prog }
+      val codegen = new MyCodeGen { val IR: prog.type = prog }
       codegen.emitSource1(prog.f, "IntHashMapGetAndSetSize", new PrintWriter(System.out))
     }
     //assertFileEqualsCheck(prefix+"hash-map-creation")
@@ -305,30 +314,9 @@ class TestArrayOps extends FileDiffSuite {
     //assertFileEqualsCheck(prefix+"hash-map-creation")
   }
 
-  /*it("testNewArray") {
-    withOutFile(prefix+"hash-map-get-and-update") {
-      val prog = new HashMapArrOps with MiscOps with HashMapArrOpsExp
-        with MiscOpsExp with ScalaOpsPkgExp {
-        def f(i : Rep[Int]): Rep[Unit] = {
-          val a = hashmap_new[Int, Int](unit(200))
-          a.update(unit(1), unit(2))
-          println(a(unit(1)))
-        }
-        f(unit(1))
-      }
-
-      val codegen = new ScalaGenArrayOps with ScalaGenMiscOps
-      with ScalaGenEntry with ScalaCodeGenPkg with ScalaGenHashCodeOps
-      with ScalaGenHashMap { val IR: prog.type = prog }
-      codegen.emitSource1(prog.f, "IntHashMapGetAndUpdate", new PrintWriter(System.out))
-    }
-    //assertFileEqualsCheck(prefix+"hash-map-creation")
-  }
-
   it("testUpdate") {
     withOutFile(prefix+"hash-map-update") {
-      val prog = new HashMapArrOps with MiscOps with HashMapArrOpsExp
-        with MiscOpsExp with ScalaOpsPkgExp {
+      val prog = new MyOpsExp {
         def f(i : Rep[Int]): Rep[Unit] = {
           val a = hashmap_new[Int, Array[Int]](unit(200))
           val c = array_obj_new[Int](unit(5))
@@ -336,17 +324,15 @@ class TestArrayOps extends FileDiffSuite {
           c.update(unit(1), unit(2))
           a.update(unit(1), c)
           //mutable can not be added to HashMap
-          val b = a(unit(1)) //variables are not removed
+          val b = a(unit(1)).get //variables are not removed
           b.update(unit(0), unit(10))
-          println(array_apply(a(unit(1)), unit(0)))
+          println(a(unit(1)).get()(unit(0)))
 
         }
         f(unit(1))
       }
 
-      val codegen = new ScalaGenArrayOps with ScalaGenMiscOps
-      with ScalaGenEntry with ScalaCodeGenPkg with ScalaGenHashCodeOps
-      with ScalaGenHashMap { val IR: prog.type = prog }
+      val codegen = new MyCodeGen { val IR: prog.type = prog }
       codegen.emitSource1(prog.f, "IntHashMapUpdate", new PrintWriter(System.out))
     }
     //assertFileEqualsCheck(prefix+"hash-map-creation")
@@ -435,7 +421,31 @@ class TestArrayOps extends FileDiffSuite {
       codegen.emitSource1(prog.f, "IntHashMapDelete", new PrintWriter(System.out))
     }
 
-  }*/
+  }
+
+ /**
+  * Tests for array implementation 
+  */
+ it("testIntArrayCreation") {
+    withOutFile(prefix+"array-seq-creation") {
+      val prog = new MyOpsExp {
+        def f(i : Rep[Int]): Rep[Unit] = {
+          val a = Array(unit(1), unit(2), unit(3))
+          println(a(unit(0)))
+        }
+
+        def g(i : Rep[Int]): Rep[Unit] = {
+          val a = Array(unit('a'), unit('b'), unit('c'))
+          println(a(unit(0)))
+        }
+      }
+
+      val codegen = new MyCodeGen { val IR: prog.type = prog }
+      codegen.emitSource1(prog.f, "IntArrayCreation", new PrintWriter(System.out))
+      codegen.emitSource1(prog.g, "CharArrayCreation", new PrintWriter(System.out))
+    }
+    assertFileEqualsCheck(prefix+"array-seq-creation")
+  }
 
 }
 
@@ -456,11 +466,3 @@ class TestArrayOps extends FileDiffSuite {
       codegen.emitSource1(prog.f, "IntHashMapGetAndUpdate", new PrintWriter(System.out))
   }
  }*/
-
- /*
- Ideas:
-
- * 
- * 
-
- */
