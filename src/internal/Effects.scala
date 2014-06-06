@@ -58,7 +58,6 @@ trait Effects extends Expressions with Blocks with Utils {
   // --- summary of a reflect node
 
   case class Summary(
-
     val maySimple: Boolean,
     val mstSimple: Boolean,
 
@@ -82,7 +81,8 @@ trait Effects extends Expressions with Blocks with Utils {
 
     //list of symbols to which is written to
     val mayWrite: List[Sym[Any]],
-    val mstWrite: List[Sym[Any]])
+    val mstWrite: List[Sym[Any]]
+  )
 
   //often used summaries
   def Pure() = new Summary(false,false,false,false,false,Nil, Nil, Nil,Nil,Nil,Nil)
@@ -91,7 +91,7 @@ trait Effects extends Expressions with Blocks with Utils {
   def Alloc() = new Summary(false,false,false,false,true,Nil, Nil, Nil,Nil,Nil,Nil)
 
   //summary constructors introduced for data structures with nested objects
-  def ReadMutable(v: List[Sym[Any]], a: List[Def[Any]], r: List[Sym[Any]]) = new Summary(false,false,false,false,false,List((v.distinct,a.distinct)),r.distinct,Nil,Nil,Nil,Nil)
+  def ReadMutable(v: List[Sym[Any]], a: List[Def[Any]], r: List[Sym[Any]]) = new Summary(false,false,false,false,false,List((v.distinct,a.distinct)),r.distinct,v.distinct,v.distinct,Nil,Nil)
   def WriteMutable(v: List[Sym[Any]], r: List[Sym[Any]]) = new Summary(false,false,false,false,false,Nil,r.distinct,Nil,Nil,v.distinct,v.distinct)
 
   //summary constructors for simple data structures containing only nested primitives
@@ -490,9 +490,10 @@ trait Effects extends Expressions with Blocks with Utils {
       }
     }
 
+    //println("ReadM: RW: " + repsW + " prevW: " + prevWrites)
     val z = reflectEffectMutableInternal(d, ReadMutable(parent, List(d), repsW), prevWrites)
 
-    /*println("ReflectReadMutable: " + (findDefinition(z.asInstanceOf[Sym[Any]]) match {
+   /* println("ReflectReadMutable: " + (findDefinition(z.asInstanceOf[Sym[Any]]) match {
       //TODO: either write to get or alloc ??
       //case Some(TP(_, Reflect(_, u, _))) if (mustOnlyAlloc(u)) => List(x)
       case Some(TP(_, Reflect(_, u, deps))) => "" + u.aliasRep + " deps: " + deps
@@ -508,7 +509,7 @@ trait Effects extends Expressions with Blocks with Utils {
     //println("Write: " + write0 + "Def: " + d)
     val write = write0.toList.asInstanceOf[List[Sym[Any]]]
 
-    //get all previous reps --> contains
+    //get all previous alias reps --> contains
     val repsW = write.flatMap { x => findDefinition(x) match {
       //TODO: either write to get or alloc ??
       //case Some(TP(_, Reflect(_, u, _))) if (mustOnlyAlloc(u)) => List(x)
@@ -518,11 +519,10 @@ trait Effects extends Expressions with Blocks with Utils {
 
     //TODO: remove the old ones when reassign happens
 
-    //get all reps from written exprs --> get alias
+    //get all alias reps from written exprs --> find unique alias
     val repsR = (read0.toList.flatMap { case x: Sym[Any] => Some(x)
                                         case _ => None
     }).flatMap { x => findDefinition(x) match {
-      //TODO: either write to get or alloc ??
       //case Some(TP(_, Reflect(_, u, _))) if (mustOnlyAlloc(u)) => List(x)
       case Some(TP(_, Reflect(_, u, _))) => u.aliasRep
       case _ => None
@@ -531,6 +531,7 @@ trait Effects extends Expressions with Blocks with Utils {
     //TODO: impl. loop problem detection:
     //if( inLoop && repsW.contains( mutable which was defined before loop ) && repsR.contains( mutable which was defined before loop ) )
 
+    //println("WriteM: RW: " + repsW + " RR: " + repsR)
     val z = reflectEffectMutableInternal(d, WriteMutable(write, repsR ++ repsW), Nil)
 
     /*println("AliasRep: " + (findDefinition(z.asInstanceOf[Sym[Any]]) match {
@@ -545,7 +546,7 @@ trait Effects extends Expressions with Blocks with Utils {
     z
   }
 
-  def reflectEffectMutableInternal[A:Manifest](x: Def[A], s: Summary, nestedDeps: List[Sym[Any]])(implicit pos: SourceContext): Exp[A] = {
+  def reflectEffectMutableInternal[A:Manifest](x: Def[A], s: Summary, prevWrites: List[Sym[Any]])(implicit pos: SourceContext): Exp[A] = {
     val mutableInputs = readMutableData(x)
     val u = s andAlso Read(mutableInputs) // will call super.toAtom if mutableInput.isEmpty
 
@@ -564,9 +565,9 @@ trait Effects extends Expressions with Blocks with Utils {
         createReflectDefinition(z, zd)
       }
 
-    } else if (mustPure(u))
+    } else if (mustPure(u)) {
       super.toAtom(x)
-    else {
+    } else {
       checkContext()
       // NOTE: reflecting mutable stuff *during mirroring* doesn't work right now.
 
@@ -588,7 +589,7 @@ trait Effects extends Expressions with Blocks with Utils {
         val globalDeps = context filter { case e@Def(Reflect(_, u, _)) => u.mayGlobal }
         // TODO: write-on-read deps should be weak
         // TODO: optimize!!
-        val allDeps = canonic(readDeps ++ softWriteDeps ++ writeDeps ++ nestedDeps ++ canonicLinear(simpleDeps) ++ canonicLinear(globalDeps))
+        val allDeps = canonic(readDeps ++ softWriteDeps ++ writeDeps ++ prevWrites ++ canonicLinear(simpleDeps) ++ canonicLinear(globalDeps))
         context filter (allDeps contains _)
       }
 

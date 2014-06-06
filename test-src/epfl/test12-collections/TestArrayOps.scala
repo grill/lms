@@ -66,7 +66,7 @@ class TestArrayOps extends FileDiffSuite {
   */
 
   it("testFunMap") {
-    withOutFile(prefix+"hashmapFunMap") {
+    withOutFile(prefix+"hash-map-fun-map") {
       trait Prog extends MyOpsExp {
         toplevel1("main") { a: Rep[HashMap[Int,Int]] =>
           println(a.size)
@@ -76,6 +76,7 @@ class TestArrayOps extends FileDiffSuite {
       }
       new Prog with Impl
     }
+    assertFileEqualsCheck(prefix+"hash-map-fun-map")
   }
 
     it("testGetAndSetSize") {
@@ -311,7 +312,7 @@ class TestArrayOps extends FileDiffSuite {
         def f(i : Rep[Int]): Rep[Unit] = {
           val a = HashMap[Int, Int](unit(200))
           a.update(unit(1), unit(2))
-          println(a.contains(i))
+          println(a.contains(unit(1)))
           println(a.contains(unit(0)))
         }
         f(unit(1))
