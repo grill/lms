@@ -25,7 +25,7 @@ val x18 = x17.toInt
 val x194 = x193 - 1
 val x195 = x18 & x194
 val x196 = x187(x195)
-var x197: scala.virtualization.lms.epfl.test12.Entry[Int, Int] = x196
+var x197: Entry[Int, Int] = x196
 val x198 = x197
 val x199 = x198 == null
 if (x199) {
@@ -82,7 +82,7 @@ x186.threshold = x63
 
 } else {
 val x240 = 2 * x236
-val x241 = new Array[scala.virtualization.lms.epfl.test12.Entry[Int, Int]](x240)
+val x241 = new Array[Entry[Int, Int]](x240)
 var x242: Int = 0
 val x269 = x240 - 1
 while ({
@@ -93,7 +93,7 @@ x245
 }) {
 val x247 = x242
 val x248 = x187(x247)
-var x249: scala.virtualization.lms.epfl.test12.Entry[Int, Int] = x248
+var x249: Entry[Int, Int] = x248
 val x250 = x249
 val x251 = x250 != null
 if (x251) {
@@ -159,7 +159,7 @@ val x305 = x304.toInt
 val x306 = x294 - 1
 val x307 = x305 & x306
 val x308 = x293(x307)
-var x309: scala.virtualization.lms.epfl.test12.Entry[Int, Int] = x308
+var x309: Entry[Int, Int] = x308
 val x310 = x309
 val x311 = x310 == null
 val x330 = if (x311) {
@@ -204,7 +204,7 @@ val x158 = x157.toInt
 val x333 = x332 - 1
 val x334 = x158 & x333
 val x335 = x293(x334)
-var x336: scala.virtualization.lms.epfl.test12.Entry[Int, Int] = x335
+var x336: Entry[Int, Int] = x335
 val x337 = x336
 val x338 = x337 == null
 val x357 = if (x338) {

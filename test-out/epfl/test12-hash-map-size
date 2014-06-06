@@ -25,7 +25,7 @@ val x18 = x17.toInt
 val x344 = x343 - 1
 val x345 = x18 & x344
 val x346 = x337(x345)
-var x347: scala.virtualization.lms.epfl.test12.Entry[Int, Int] = x346
+var x347: Entry[Int, Int] = x346
 val x348 = x347
 val x349 = x348 == null
 if (x349) {
@@ -82,7 +82,7 @@ x336.threshold = x63
 
 } else {
 val x390 = 2 * x386
-val x391 = new Array[scala.virtualization.lms.epfl.test12.Entry[Int, Int]](x390)
+val x391 = new Array[Entry[Int, Int]](x390)
 var x392: Int = 0
 val x419 = x390 - 1
 while ({
@@ -93,7 +93,7 @@ x395
 }) {
 val x397 = x392
 val x398 = x337(x397)
-var x399: scala.virtualization.lms.epfl.test12.Entry[Int, Int] = x398
+var x399: Entry[Int, Int] = x398
 val x400 = x399
 val x401 = x400 != null
 if (x401) {
@@ -148,7 +148,7 @@ val x444 = x443.length
 val x445 = x444 - 1
 val x446 = x18 & x445
 val x447 = x443(x446)
-var x448: scala.virtualization.lms.epfl.test12.Entry[Int, Int] = x447
+var x448: Entry[Int, Int] = x447
 val x449 = x448
 val x450 = x449 == null
 if (x450) {
@@ -206,7 +206,7 @@ x336.threshold = x63
 
 } else {
 val x492 = 2 * x488
-val x493 = new Array[scala.virtualization.lms.epfl.test12.Entry[Int, Int]](x492)
+val x493 = new Array[Entry[Int, Int]](x492)
 var x494: Int = 0
 val x521 = x492 - 1
 while ({
@@ -217,7 +217,7 @@ x497
 }) {
 val x499 = x494
 val x500 = x443(x499)
-var x501: scala.virtualization.lms.epfl.test12.Entry[Int, Int] = x500
+var x501: Entry[Int, Int] = x500
 val x502 = x501
 val x503 = x502 != null
 if (x503) {
@@ -283,7 +283,7 @@ val x233 = x232.toInt
 val x547 = x546 - 1
 val x548 = x233 & x547
 val x549 = x545(x548)
-var x550: scala.virtualization.lms.epfl.test12.Entry[Int, Int] = x549
+var x550: Entry[Int, Int] = x549
 val x551 = x550
 val x552 = x551 == null
 if (x552) {
@@ -341,7 +341,7 @@ x336.threshold = x63
 
 } else {
 val x594 = 2 * x590
-val x595 = new Array[scala.virtualization.lms.epfl.test12.Entry[Int, Int]](x594)
+val x595 = new Array[Entry[Int, Int]](x594)
 var x596: Int = 0
 val x623 = x594 - 1
 while ({
@@ -352,7 +352,7 @@ x599
 }) {
 val x601 = x596
 val x602 = x545(x601)
-var x603: scala.virtualization.lms.epfl.test12.Entry[Int, Int] = x602
+var x603: Entry[Int, Int] = x602
 val x604 = x603
 val x605 = x604 != null
 if (x605) {

@@ -31,8 +31,7 @@ class TestArrayOps extends FileDiffSuite {
   trait MyOpsExp extends DSLBase with HashMapArrOpsExp
         with MiscOpsExp with ScalaOpsPkgExp
 
-  trait Impl extends DSLBase with HashMapArrOps with MiscOps with HashMapArrOpsExp
-        with MiscOpsExp with ScalaOpsPkgExp { self =>
+  trait Impl extends DSLBase with MyOpsExp { self =>
     val codegen = new ScalaGenArrayOps with ScalaGenMiscOps
       with ScalaGenEntry with ScalaCodeGenPkg with ScalaGenHashCodeOps with ScalaGenOption
       with ScalaGenHashMap { val IR: self.type = self }
@@ -81,10 +80,9 @@ class TestArrayOps extends FileDiffSuite {
 
     it("testGetAndSetSize") {
     withOutFile(prefix+"hash-map-get-and-set-size") {
-      val prog = new HashMapArrOps with MiscOps with HashMapArrOpsExp
-        with MiscOpsExp with ScalaOpsPkgExp {
+      val prog = new MyOpsExp {
         def f(i : Rep[Int]): Rep[Unit] = {
-          val a = hashmap_new[Int, Int](unit(200))
+          val a = HashMap[Int, Int](unit(200))
           println(a.size)
           a.setSize(unit(3))
           println(a.size)
@@ -95,17 +93,16 @@ class TestArrayOps extends FileDiffSuite {
       val codegen = new MyCodeGen { val IR: prog.type = prog }
       codegen.emitSource1(prog.f, "IntHashMapGetAndSetSize", new PrintWriter(System.out))
     }
-    //assertFileEqualsCheck(prefix+"hash-map-creation")
+    assertFileEqualsCheck(prefix+"hash-map-get-and-set-size")
   }
 
   it("testComplexNested") {
     withOutFile(prefix+"hash-map-complex-nested") {
-      val prog = new HashMapArrOps with MiscOps with HashMapArrOpsExp
-        with MiscOpsExp with ScalaOpsPkgExp {
+      val prog = new MyOpsExp {
         def f(i : Rep[Int]): Rep[Unit] = {
-          val a = hashmap_new[Int, HashMap[Int,Int]](unit(1))
-          val a1 = hashmap_new[Int,Int](unit(1))
-          val a2 = hashmap_new[Int,Int](unit(1))
+          val a = HashMap[Int, HashMap[Int,Int]](unit(1))
+          val a1 = HashMap[Int,Int](unit(1))
+          val a2 = HashMap[Int,Int](unit(1))
 
           a.update(unit(1), a1)
           a.update(unit(2), a2)
@@ -123,20 +120,17 @@ class TestArrayOps extends FileDiffSuite {
         f(unit(1))
       }
 
-      val codegen = new ScalaGenArrayOps with ScalaGenMiscOps
-      with ScalaGenEntry with ScalaCodeGenPkg with ScalaGenHashCodeOps with ScalaGenOption
-      with ScalaGenHashMap { val IR: prog.type = prog }
+      val codegen = new MyCodeGen { val IR: prog.type = prog }
       codegen.emitSource1(prog.f, "IntHashMapComplexNested", new PrintWriter(System.out))
     }
-    //assertFileEqualsCheck(prefix+"hash-map-creation")
+    assertFileEqualsCheck(prefix+"hash-map-complex-nested")
   }
 
   it("testComplex") {
     withOutFile(prefix+"hash-map-complex") {
-      val prog = new HashMapArrOps with MiscOps with HashMapArrOpsExp
-        with MiscOpsExp with ScalaOpsPkgExp {
+      val prog = new MyOpsExp {
         def f(i : Rep[Int]): Rep[Unit] = {
-          val a = hashmap_new[Int, Int](unit(1))
+          val a = HashMap[Int, Int](unit(1))
           a.update(unit(1), unit(2))
           a.update(unit(2), unit(3))
 
@@ -153,40 +147,34 @@ class TestArrayOps extends FileDiffSuite {
         f(unit(1))
       }
 
-      val codegen = new ScalaGenArrayOps with ScalaGenMiscOps
-      with ScalaGenEntry with ScalaCodeGenPkg with ScalaGenHashCodeOps with ScalaGenOption
-      with ScalaGenHashMap { val IR: prog.type = prog }
+      val codegen = new MyCodeGen { val IR: prog.type = prog }
       codegen.emitSource1(prog.f, "IntHashMapComplex", new PrintWriter(System.out))
     }
-    //assertFileEqualsCheck(prefix+"hash-map-creation")
+    assertFileEqualsCheck(prefix+"hash-map-complex")
   }
 
   it("testGetAndUpdate") {
     withOutFile(prefix+"hash-map-get-and-update") {
-      val prog = new HashMapArrOps with MiscOps with HashMapArrOpsExp
-        with MiscOpsExp with ScalaOpsPkgExp {
+      val prog = new MyOpsExp {
         def f(i : Rep[Int]): Rep[Unit] = {
-          val a = hashmap_new[Int, Int](unit(200))
+          val a = HashMap[Int, Int](unit(200))
           a.update(unit(1), unit(2))
           println(a(unit(1)))
         }
         f(unit(1))
       }
 
-      val codegen = new ScalaGenArrayOps with ScalaGenMiscOps
-      with ScalaGenEntry with ScalaCodeGenPkg with ScalaGenHashCodeOps with ScalaGenOption
-      with ScalaGenHashMap { val IR: prog.type = prog }
+      val codegen = new MyCodeGen { val IR: prog.type = prog }
       codegen.emitSource1(prog.f, "IntHashMapGetAndUpdate", new PrintWriter(System.out))
     }
-    //assertFileEqualsCheck(prefix+"hash-map-creation")
+    assertFileEqualsCheck(prefix+"hash-map-get-and-update")
   }
 
   it("testGetAndUpdateOpt") {
     withOutFile(prefix+"hash-map-get-and-update-opt") {
-      val prog = new HashMapArrOps with MiscOps with HashMapArrOpsExp
-        with MiscOpsExp with ScalaOpsPkgExp {
+      val prog = new MyOpsExp {
         def f(i : Rep[Int]): Rep[Unit] = {
-          val a = hashmap_new[Int, Int](unit(200))
+          val a = HashMap[Int, Int](unit(200))
           a.update(unit(1), unit(2))
           a.update(unit(2), unit(3))
 
@@ -197,20 +185,17 @@ class TestArrayOps extends FileDiffSuite {
         f(unit(1))
       }
 
-      val codegen = new ScalaGenArrayOps with ScalaGenMiscOps
-      with ScalaGenEntry with ScalaCodeGenPkg with ScalaGenHashCodeOps with ScalaGenOption
-      with ScalaGenHashMap { val IR: prog.type = prog }
+      val codegen = new MyCodeGen { val IR: prog.type = prog }
       codegen.emitSource1(prog.f, "IntHashMapGetAndUpdateOpt", new PrintWriter(System.out))
     }
-    //assertFileEqualsCheck(prefix+"hash-map-creation")
+    assertFileEqualsCheck(prefix+"hash-map-get-and-update-opt")
   }
 
   it("testGetAndUpdateOptVar") {
     withOutFile(prefix+"hash-map-get-and-update-opt-var") {
-      val prog = new HashMapArrOps with MiscOps with HashMapArrOpsExp
-        with MiscOpsExp with ScalaOpsPkgExp with VariablesNested {
+      val prog = new MyOpsExp {
         def f(i : Rep[Int]): Rep[Unit] = {
-          val a = hashmap_new[Int, Int](unit(1))
+          val a = HashMap[Int, Int](unit(1))
           val n = var_new(unit(1))
           var_assign(n, unit(2))
           
@@ -221,28 +206,22 @@ class TestArrayOps extends FileDiffSuite {
           a.foreach( {x => println(x)} )
           a -= unit(2)
 
-          //a.clear()
-          //why is there a new table used each time??
           a.foreach( {x => println(x)} )
         }
         f(unit(1))
       }
 
-      val codegen = new ScalaGenArrayOps with ScalaGenMiscOps
-      with ScalaGenEntry with ScalaCodeGenPkg with ScalaGenHashCodeOps with ScalaGenOption
-      with ScalaGenHashMap { val IR: prog.type = prog }
+      val codegen = new MyCodeGen { val IR: prog.type = prog }
       codegen.emitSource1(prog.f, "IntHashMapGetAndUpdateOptVar", new PrintWriter(System.out))
     }
-    //assertFileEqualsCheck(prefix+"hash-map-creation")
+    assertFileEqualsCheck(prefix+"hash-map-get-and-update-opt-var")
   }
 
-  it("testAssignmentProblem1") {
-    withOutFile(prefix+"hash-map-assignment-problem1") {
-      val prog = new HashMapArrOps with MiscOps with HashMapArrOpsExp
-        with MiscOpsExp with ScalaOpsPkgExp
-        with VariablesNested {
+  it("testNestedObjectTrackingVar") {
+    withOutFile(prefix+"hash-map-nested-object-tracking-var") {
+      val prog = new MyOpsExp {
         def f(i : Rep[Int]): Rep[Unit] = {
-          val a = hashmap_new[Int, Int](unit(200))
+          val a = HashMap[Int, Int](unit(200))
           a.update(unit(1), unit(2))
 
           val n = var_new(a)
@@ -252,21 +231,17 @@ class TestArrayOps extends FileDiffSuite {
         f(unit(1))
       }
 
-      val codegen = new ScalaGenArrayOps with ScalaGenMiscOps
-      with ScalaGenEntry with ScalaCodeGenPkg with ScalaGenHashCodeOps with ScalaGenOption
-      with ScalaGenHashMap /*with ScalaGenVariablesNested */{ val IR: prog.type = prog }
-      codegen.emitSource1(prog.f, "IntHashMapAssignmentProblem1", new PrintWriter(System.out))
+      val codegen = new MyCodeGen { val IR: prog.type = prog }
+      codegen.emitSource1(prog.f, "IntHashMapNestedObjectTrackingVar", new PrintWriter(System.out))
     }
-    //assertFileEqualsCheck(prefix+"hash-map-creation")
+    assertFileEqualsCheck(prefix+"hash-map-nested-object-tracking-var")
   }
 
-  it("testAssignmentProblem2") {
-    withOutFile(prefix+"hash-map-assignment-problem2") {
-      val prog = new HashMapArrOps with MiscOps with HashMapArrOpsExp
-        with MiscOpsExp with ScalaOpsPkgExp
-        with VariablesNested {
+  it("testNestedReAssignment") {
+    withOutFile(prefix+"hash-map-nested-reassignment") {
+      val prog = new MyOpsExp {
         def f(i : Rep[Int]): Rep[Unit] = {
-          val a = hashmap_new[Int, Int](unit(200))
+          val a = HashMap[Int, Int](unit(200))
           a.update(unit(1), unit(2))
 
           val n = var_new(a)
@@ -277,27 +252,21 @@ class TestArrayOps extends FileDiffSuite {
         f(unit(1))
       }
 
-      val codegen = new ScalaGenArrayOps with ScalaGenMiscOps
-      with ScalaGenEntry with ScalaCodeGenPkg with ScalaGenHashCodeOps with ScalaGenOption
-      with ScalaGenHashMap /*with ScalaGenVariablesNested */ { val IR: prog.type = prog }
-      codegen.emitSource1(prog.f, "IntHashMapAssignmentProblem2", new PrintWriter(System.out))
+      val codegen = new MyCodeGen { val IR: prog.type = prog }
+      codegen.emitSource1(prog.f, "IntHashMapNestedReAssignment", new PrintWriter(System.out))
     }
-    //assertFileEqualsCheck(prefix+"hash-map-creation")
+    assertFileEqualsCheck(prefix+"hash-map-nested-reassignment")
   }
 
-  it("testAssignmentProblem3") {
-    withOutFile(prefix+"hash-map-assignment-problem3") {
-      val prog = new HashMapArrOps with MiscOps with HashMapArrOpsExp
-        with MiscOpsExp with ScalaOpsPkgExpOpt 
-        with VariablesNested {
+  it("testNestedPrimitiveReAssignment") {
+    withOutFile(prefix+"hash-map-nested-primitive-reassignment") {
+      val prog = new MyOpsExp {
         def f(i : Rep[Int]): Rep[Unit] = {
-          val a = hashmap_new[Int, Int](unit(200))
+          val a = HashMap[Int, Int](unit(200))
 
           println(a.size)
 
           val n = var_new(a)
-          //n.setSize(unit(2))
-
           val n2 = var_new(readVar(n))
           n2.setSize(unit(3))
 
@@ -306,20 +275,18 @@ class TestArrayOps extends FileDiffSuite {
         f(unit(1))
       }
 
-      val codegen = new ScalaGenArrayOps with ScalaGenMiscOps
-      with ScalaGenEntry with ScalaCodeGenPkg with ScalaGenHashCodeOps with ScalaGenOption
-      with ScalaGenHashMap /*with ScalaGenVariablesNested */ { val IR: prog.type = prog }
-      codegen.emitSource1(prog.f, "IntHashMapAssignmentProblem3", new PrintWriter(System.out))
+      val codegen = new MyCodeGen { val IR: prog.type = prog }
+      codegen.emitSource1(prog.f, "IntHashMapNestedPrimitiveReAssignment", new PrintWriter(System.out))
     }
-    //assertFileEqualsCheck(prefix+"hash-map-creation")
+    assertFileEqualsCheck(prefix+"hash-map-nested-primitive-reassignment")
   }
 
   it("testUpdate") {
     withOutFile(prefix+"hash-map-update") {
       val prog = new MyOpsExp {
         def f(i : Rep[Int]): Rep[Unit] = {
-          val a = hashmap_new[Int, Array[Int]](unit(200))
-          val c = array_obj_new[Int](unit(5))
+          val a = HashMap[Int, Array[Int]](unit(200))
+          val c = NewArray[Int](unit(5))
           c.update(unit(0), unit(1))
           c.update(unit(1), unit(2))
           a.update(unit(1), c)
@@ -335,15 +302,14 @@ class TestArrayOps extends FileDiffSuite {
       val codegen = new MyCodeGen { val IR: prog.type = prog }
       codegen.emitSource1(prog.f, "IntHashMapUpdate", new PrintWriter(System.out))
     }
-    //assertFileEqualsCheck(prefix+"hash-map-creation")
+    assertFileEqualsCheck(prefix+"hash-map-update")
   }
 
   it("testContains") {
     withOutFile(prefix+"hash-map-contains") {
-      val prog = new HashMapArrOps with MiscOps with HashMapArrOpsExp
-        with MiscOpsExp with ScalaOpsPkgExp {
+      val prog = new MyOpsExp {
         def f(i : Rep[Int]): Rep[Unit] = {
-          val a = hashmap_new[Int, Int](unit(200))
+          val a = HashMap[Int, Int](unit(200))
           a.update(unit(1), unit(2))
           println(a.contains(i))
           println(a.contains(unit(0)))
@@ -351,19 +317,17 @@ class TestArrayOps extends FileDiffSuite {
         f(unit(1))
       }
 
-      val codegen = new ScalaGenArrayOps with ScalaGenMiscOps
-      with ScalaGenEntry with ScalaCodeGenPkg with ScalaGenHashCodeOps
-      with ScalaGenHashMap { val IR: prog.type = prog }
+      val codegen = new MyCodeGen { val IR: prog.type = prog }
       codegen.emitSource1(prog.f, "IntHashMapContains", new PrintWriter(System.out))
     }
+    assertFileEqualsCheck(prefix+"hash-map-contains")
   }
 
   it("testSize") {
     withOutFile(prefix+"hash-map-size") {
-      val prog = new HashMapArrOps with MiscOps with HashMapArrOpsExp
-        with MiscOpsExp with ScalaOpsPkgExp {
+      val prog = new MyOpsExp {
         def f(i : Rep[Int]): Rep[Unit] = {
-          val a = hashmap_new[Int, Int](unit(200))
+          val a = HashMap[Int, Int](unit(200))
           a.update(unit(1), unit(2))
           a.update(unit(1), unit(2))
           a.update(unit(2), unit(3))
@@ -372,19 +336,17 @@ class TestArrayOps extends FileDiffSuite {
         f(unit(1))
       }
 
-      val codegen = new ScalaGenArrayOps with ScalaGenMiscOps
-      with ScalaGenEntry with ScalaCodeGenPkg with ScalaGenHashCodeOps
-      with ScalaGenHashMap { val IR: prog.type = prog }
+      val codegen = new MyCodeGen { val IR: prog.type = prog }
       codegen.emitSource1(prog.f, "IntHashMapSize", new PrintWriter(System.out))
     }
+    assertFileEqualsCheck(prefix+"hash-map-size")
   }
 
   it("testForEach") {
     withOutFile(prefix+"hash-map-for-each") {
-      val prog = new HashMapArrOps with MiscOps with HashMapArrOpsExp
-        with MiscOpsExp with ScalaOpsPkgExp {
+      val prog = new MyOpsExp {
         def f(i : Rep[Int]): Rep[Unit] = {
-          val a = hashmap_new[Int, Int](unit(200))
+          val a = HashMap[Int, Int](unit(200))
           a.update(unit(1), unit(2))
           a.update(unit(1), unit(2))
           a.update(unit(2), unit(3))
@@ -393,18 +355,17 @@ class TestArrayOps extends FileDiffSuite {
         f(unit(1))
       }
 
-      val codegen = new ScalaGenArrayOps with ScalaGenMiscOps
-      with ScalaGenEntry with ScalaCodeGenPkg with ScalaGenHashCodeOps
-      with ScalaGenHashMap { val IR: prog.type = prog }
+      val codegen = new MyCodeGen { val IR: prog.type = prog }
       codegen.emitSource1(prog.f, "IntHashMapForEach", new PrintWriter(System.out))
     }
+    assertFileEqualsCheck(prefix+"hash-map-for-each")
   }
 
   it("testDelete") {
     withOutFile(prefix+"hash-map-delete") {
       val prog = new MyOpsExp {
         def f(i : Rep[Int]): Rep[Unit] = {
-          val a = hashmap_new[Int, Int](unit(200))
+          val a = HashMap[Int, Int](unit(200))
           a.update(unit(1), unit(2))
           a.update(unit(2), unit(3))
           println(a.size)
