@@ -261,12 +261,8 @@ trait HashMapArrOpsExp extends HashMapArrOps with ArrayOpsExp with EffectExp wit
   }
 
   def hashmap_apply[K:Manifest,V:Manifest](x: Rep[HashMap[K,V]], k: Rep[K])(implicit pos: SourceContext): Rep[Option[V]] = {
-    val m = hashmap_table(x)
-
-    val h1 = int_tolong(__hashCode(k))
-    val h2 = (h1 >>> unit(20)) ^ (h1 >>> unit(12)) ^ h1
-    val h3 = h2 ^ (h2 >>> unit(7)) ^ (h2 >>> unit(4))
-    val idx = int_binaryand(long_toint(h3), m.length - unit(1))
+    val m = x.table
+    val idx = hashmap_index(k, m.length)
     val el = m(idx)
     val n = var_new(el)
 
@@ -274,7 +270,7 @@ trait HashMapArrOpsExp extends HashMapArrOps with ArrayOpsExp with EffectExp wit
       NoneO[V]
     } else {
       while(n.hasNext() && n.getKey() != k) {
-        var_assign(n, n.next())
+        n = n.next()
       }
 
       if(n.getKey() == k) {
@@ -291,19 +287,14 @@ trait HashMapArrOpsExp extends HashMapArrOps with ArrayOpsExp with EffectExp wit
   }
 
   def hashmap_add[K:Manifest,V:Manifest](x: Rep[HashMap[K,V]], k: Rep[K], v: Rep[V])(implicit pos: SourceContext): Rep[Unit] = {
-    val m = hashmap_table(x)//reflectReadMutable (x) { HashMapGetTable(x) }
-
-    val h1 = int_tolong(__hashCode(k))
-    val h2 = (h1 >>> unit(20)) ^ (h1 >>> unit(12)) ^ h1
-    val h3 = h2 ^ (h2 >>> unit(7)) ^ (h2 >>> unit(4))
-    val idx = int_binaryand(long_toint(h3), m.length - unit(1))
+    val m = x.table
+    val idx = hashmap_index(k, m.length)
     val el = m(idx)
     val n = var_new(el)
-    val size = x.size
 
     if(n == unit(null)) {
       m.update(idx, entry_new(k,v))
-      hashmap_setSize(x, size + unit(1))
+      x.setSize(x.size + unit(1))
     } else {
       while(n.hasNext() && n.getKey() != k) {
         var_assign(n, n.next())
@@ -313,27 +304,27 @@ trait HashMapArrOpsExp extends HashMapArrOps with ArrayOpsExp with EffectExp wit
         n.setValue(v)
       } else {
         n.setNext(entry_new(k,v))
-        hashmap_setSize(x, size + unit(1))
+        x.setSize(x.size + unit(1))
       }
     }
   }
 
   def hashmap_resize[K:Manifest,V:Manifest](x: Rep[HashMap[K,V]])(implicit pos: SourceContext): Rep[Unit] = {
-    val m = hashmap_table(x)
+    val m = x.table
     val threshold = hashmap_threshold(x)
     val max_capacity = hashmap_maximumCapacity(x)
-    val size = hashmap_size(x) 
+    val size = x.size 
 
-    if (ordering_gteq(size, threshold)) {
+    if (size >= threshold) {
       val oldCapacity = m.length
       if(oldCapacity == max_capacity) {
         hashmap_setThreshold(x, Int.MaxValue)
       } else {
         val newCapacity = unit(2) * oldCapacity
-        val newTable = array_obj_new[Entry[K, V]](newCapacity)
+        val newTable = NewArray[Entry[K, V]](newCapacity)
 
         //transfer table
-        val j: Var[Int] = var_new(unit(0))
+        val j = var_new(unit(0))
 
         while(j < m.length) {
           val e = var_new(m(j))
@@ -341,43 +332,36 @@ trait HashMapArrOpsExp extends HashMapArrOps with ArrayOpsExp with EffectExp wit
             m.update(j, unit(null))
 
             while(e != unit(null)) {
-              val ht1 = int_tolong(__hashCode(e.getKey()))
-              val ht2 = (ht1 >>> unit(20)) ^ (ht1 >>> unit(12)) ^ ht1
-              val ht3 = ht2 ^ (ht2 >>> unit(7)) ^ (ht2 >>> unit(4))
-              val z = int_binaryand(long_toint(ht3), newCapacity - unit(1))
+              val z = hashmap_index(e.getKey(), newCapacity)
 
               val next = e.next
               e.setNext(newTable(z))
               newTable.update(z, readVar(e))
                 
-              var_assign(e, next)
+              e = next
             }
             
           }
-          var_assign(j, readVar(j) + unit(1))
+          j = j + unit(1)
         }
 
-        hashmap_setTable(x, newTable)
+        x.setTable(newTable)
         val loadFactor = hashmap_loadFactor(x)
-        hashmap_setThreshold(x, (loadFactor * newCapacity.asInstanceOf[Rep[Float]])
-          .AsInstanceOf[Int])
-        //var_assign(threshold, newCapacity*HashMapGetLoadFactor(x))
+        hashmap_setThreshold(x, (loadFactor * newCapacity.asInstanceOf[Rep[Float]]).AsInstanceOf[Int])
       }
     }
   }
 
   def hashmap_contains[K:Manifest,V:Manifest](x: Rep[HashMap[K,V]], k: Rep[K])(implicit pos: SourceContext): Rep[Boolean] = { 
-    val m = hashmap_table(x)
-    val h1 = int_tolong(__hashCode(k))
-    val h2 = (h1 >>> unit(20)) ^ (h1 >>> unit(12)) ^ h1
-    val h3 = h2 ^ (h2 >>> unit(7)) ^ (h2 >>> unit(4))
-    val n = var_new(m(int_binaryand(long_toint(h3), m.length - unit(1))))
+    val m = x.table
+    val idx = hashmap_index(k, m.length)
+    val n = var_new(m(idx))
 
     if(readVar(n) == unit(null)) {
       unit(false)
     } else {
       while(n.hasNext() && n.getKey() != k) {
-        var_assign(n, n.next())
+        n = n.next()
       }
 
       n.getKey() == k
@@ -385,17 +369,17 @@ trait HashMapArrOpsExp extends HashMapArrOps with ArrayOpsExp with EffectExp wit
   }
 
   def hashmap_foreach[K:Manifest,V:Manifest](x: Rep[HashMap[K,V]], f: Rep[Entry[K,V]] => Rep[Unit])(implicit pos: SourceContext): Rep[Unit] = {
-    val m = hashmap_table(x)
+    val m = x.table
     val i = var_new(unit(0))
     val n = var_new(unit(null).AsInstanceOf[Entry[K,V]])
 
     while(i < m.length) {
       val el = m(i)
       if(el != unit(null)) {
-        var_assign(n, el)
+        n = el
         f(el)
         while(n.hasNext()) {
-          var_assign(n, n.next())
+          n = n.next()
           f(readVar(n))
         }
       }
@@ -405,49 +389,56 @@ trait HashMapArrOpsExp extends HashMapArrOps with ArrayOpsExp with EffectExp wit
   }
 
   def hashmap_map[K:Manifest,V:Manifest, A:Manifest, B:Manifest](x: Rep[HashMap[K,V]], f: Rep[Entry[K,V]]=>Rep[Entry[A,B]]): Rep[HashMap[A,B]] = {
-    val m = hashmap_table(x)
-    val new_map = hashmap_new[A,B](m.length)
+    val m = x.table
+    val new_map = HashMap[A,B](m.length)
 
     hashmap_foreach(x, {e: Rep[Entry[K,V]] =>
       val new_entry = f(e)
-      hashmap_update(new_map, new_entry.getKey(), new_entry.getValue())
+      new_map.update(new_entry.getKey(), new_entry.getValue())
     })
 
     new_map
   }
 
   def hashmap_clear[K:Manifest,V:Manifest](x: Rep[HashMap[K,V]])(implicit pos: SourceContext): Rep[Unit] = {
-    val m = hashmap_table(x)
+    val m = x.table
     val i = var_new(unit(0))
 
     while(i < m.length) {
       m.update(i, unit(null))
-      var_assign(i, readVar(i) + unit(1))
+      i = i + unit(1)
     }
   }
 
   def hashmap_-=[K: Manifest, V: Manifest](x: Rep[HashMap[K,V]], k: Rep[K])(implicit pos: SourceContext): Rep[Unit] = {
-    val m = hashmap_table(x)
-    val h1 = int_tolong(__hashCode(k))
-    val h2 = (h1 >>> unit(20)) ^ (h1 >>> unit(12)) ^ h1
-    val h3 = h2 ^ (h2 >>> unit(7)) ^ (h2 >>> unit(4))
-    val idx = int_binaryand(long_toint(h3), m.length - unit(1))
+    val m = x.table
+    val idx = hashmap_index(k, m.length)
 
     val p = var_new(unit(null).AsInstanceOf[Entry[K,V]])
     val n = var_new(m(idx))
 
-    if(readVar(n) != unit(null)) {
-      while(readVar(n).hasNext() && readVar(n).getKey() != k) {
-        var_assign(p, readVar(n))
-        var_assign(n, readVar(n).next())
+    if(n != unit(null)) {
+      while(n.hasNext() && n.getKey() != k) {
+        p = n
+        n = n.next()
       }
 
-      if(readVar(p) == unit(null))
+      if(p == unit(null)) {
         m.update(idx, unit(null))
-      else if(readVar(n).getKey() == k) {
-        p.setNext(readVar(n).next())
+        x.setSize(x.size - unit(1))
+      } else if(n.getKey() == k) {
+        p.setNext(n.next())
+        x.setSize(x.size - unit(1))
       }
     }
+  }
+
+  def hashmap_index[K: Manifest] (k: Rep[K], len: Rep[Int]): Rep[Int] = {
+    val h1 = int_tolong(__hashCode(k))
+    val h2 = (h1 >>> unit(20)) ^ (h1 >>> unit(12)) ^ h1
+    val h3 = (h2 ^ (h2 >>> unit(7)) ^ (h2 >>> unit(4))).toInt
+    val h4 = h3 & (len - unit(1))
+    h4
   }
 
   def hashmap_loadFactor[K:Manifest,V:Manifest](m: Rep[HashMap[K,V]])(implicit pos: SourceContext): Rep[Float] = {

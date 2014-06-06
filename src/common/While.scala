@@ -53,6 +53,15 @@ trait WhileExp extends While with EffectExp {
 
 }
 
+trait WhileUnrollExpOpt extends WhileExp { this: IfThenElseExp =>
+  /**
+   * Simple loop unrolling to avoid errors durring dependency calculation
+   **/
+    override def __whileDo(cond: => Exp[Boolean], body: => Rep[Unit])(implicit pos: SourceContext) = {
+    __ifThenElse(cond, {body; __whileDo(cond, body)}, ())
+  }
+}
+
 trait WhileExpOpt extends WhileExp { this: IfThenElseExp =>
 
   /** Optimization technique(s):

@@ -402,8 +402,7 @@ class TestArrayOps extends FileDiffSuite {
 
   it("testDelete") {
     withOutFile(prefix+"hash-map-delete") {
-      val prog = new HashMapArrOps with MiscOps with HashMapArrOpsExp
-        with MiscOpsExp with ScalaOpsPkgExp {
+      val prog = new MyOpsExp {
         def f(i : Rep[Int]): Rep[Unit] = {
           val a = hashmap_new[Int, Int](unit(200))
           a.update(unit(1), unit(2))
@@ -415,18 +414,16 @@ class TestArrayOps extends FileDiffSuite {
         f(unit(1))
       }
 
-      val codegen = new ScalaGenArrayOps with ScalaGenMiscOps
-      with ScalaGenEntry with ScalaCodeGenPkg with ScalaGenHashCodeOps
-      with ScalaGenHashMap { val IR: prog.type = prog }
+      val codegen = new MyCodeGen { val IR: prog.type = prog }
       codegen.emitSource1(prog.f, "IntHashMapDelete", new PrintWriter(System.out))
     }
-
+    assertFileEqualsCheck(prefix+"hash-map-delete")
   }
 
  /**
   * Tests for array implementation 
   */
- it("testIntArrayCreation") {
+ it("testIntArraySeqCreation") {
     withOutFile(prefix+"array-seq-creation") {
       val prog = new MyOpsExp {
         def f(i : Rep[Int]): Rep[Unit] = {
