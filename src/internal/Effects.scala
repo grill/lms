@@ -442,12 +442,47 @@ trait Effects extends Expressions with Blocks with Utils {
    * new effect system
    **/
 
+  class MutableStatement[A:Manifest]
+  case class MutableAtom[A:Manifest](val a: Exp[A]) extends MutableStatement[A]
+  case class MutableDef[A:Manifest](val s: Sym[A], val d: Reflect[A]) extends MutableStatement[A]
+
+  def reflectMutableWithPars[A:Manifest](write0: (Exp[Any]=>Exp[Any])*)(read0: Exp[Any]*)(d: Def[A])(implicit pos: SourceContext): Exp[A] = {
+    //println("Init: " + read0 + "Def: " + d)
+
+    //get all alias reps from written exprs --> find unique alias
+    val repsR = (read0.toList.flatMap { case x: Sym[Any] => Some(x)
+                                        case _ => None
+    }).flatMap { x => findDefinition(x) match {
+      //case Some(TP(_, Reflect(_, u, _))) if (mustOnlyAlloc(u)) => List(x)
+      case Some(TP(_, Reflect(y, u, _))) => /*println("haa: " + y + " uu: " + u);*/ u.aliasRep
+      case _ => None
+    }}
+
+    val z = reflectEffectMutableInternal(d, Alloc() andAlso WriteMutable(Nil, repsR), Nil) match {
+      case MutableAtom(a) => a
+      case MutableDef(zn, Reflect(x,u,w)) =>
+        val writes = write0.toList.map { x => x(zn) }.toList.asInstanceOf[List[Sym[Any]]]
+        //val writes = Nil
+        createReflectDefinition(zn, Reflect(x, u.copy(mayWrite=writes, mstWrite=writes), w))
+    }
+
+    /*println("ReflectInitMutable: " + (findDefinition(z.asInstanceOf[Sym[Any]]) match {
+      //TODO: either write to get or alloc ??
+      //case Some(TP(_, Reflect(_, u, _))) if (mustOnlyAlloc(u)) => List(x)
+      case Some(TP(_, Reflect(_, u, deps))) => "" + u.aliasRep + " deps: " + deps
+      case _ => ""
+    }))*/
+
+    val mutableAliases = mutableTransitiveAliases(d)
+    checkIllegalSharing(z, mutableAliases)
+    z
+  }
+
   def equalReadOperation(currentNode: List[Def[Any]], otherNode: List[Def[Any]]) =
       !currentNode.map(_.getClass).intersect(otherNode.map(_.getClass)).isEmpty
 
   def reflectReadMutable[A:Manifest](parent0: Exp[Any]*)(d: Def[A])(implicit pos: SourceContext): Exp[A] = {
     //println("reflectReadMutable: " + parent0 + " Def: " + d)
-    //println("Context: " + context)
     val parent = parent0.toList.asInstanceOf[List[Sym[Any]]]
 
 
@@ -480,7 +515,9 @@ trait Effects extends Expressions with Blocks with Utils {
     val repsW  = if(prevWrites.isEmpty) {
       //current symbol is representative
       //or check via parent aliases if anyone else is the representative
-      List()
+      
+      //List()
+      repsOther
     } else {
       findDefinition(prevWrites.last) match {
         case Some(TP(_, Reflect(_, u, _))) => u.aliasRep
@@ -490,10 +527,13 @@ trait Effects extends Expressions with Blocks with Utils {
       }
     }
 
-    //println("ReadM: RW: " + repsW + " prevW: " + prevWrites)
-    val z = reflectEffectMutableInternal(d, ReadMutable(parent, List(d), repsW), prevWrites)
+    //println("ReadMutable: RW: " + repsW + " prevW: " + prevWrites + " repsOther: " + repsOther)
+    val z = reflectEffectMutableInternal(d, ReadMutable((parent++repsOther).toSet.toList, List(d), repsW), prevWrites) match {
+      case MutableAtom(a) => a
+      case MutableDef(zn, zd) => createReflectDefinition(zn, zd)
+    }
 
-   /* println("ReflectReadMutable: " + (findDefinition(z.asInstanceOf[Sym[Any]]) match {
+   /*println("ReflectReadMutable: " + (findDefinition(z.asInstanceOf[Sym[Any]]) match {
       //TODO: either write to get or alloc ??
       //case Some(TP(_, Reflect(_, u, _))) if (mustOnlyAlloc(u)) => List(x)
       case Some(TP(_, Reflect(_, u, deps))) => "" + u.aliasRep + " deps: " + deps
@@ -531,8 +571,13 @@ trait Effects extends Expressions with Blocks with Utils {
     //TODO: impl. loop problem detection:
     //if( inLoop && repsW.contains( mutable which was defined before loop ) && repsR.contains( mutable which was defined before loop ) )
 
-    //println("WriteM: RW: " + repsW + " RR: " + repsR)
-    val z = reflectEffectMutableInternal(d, WriteMutable(write, repsR ++ repsW), Nil)
+    //println("WriteMutable: RW: " + repsW + " RR: " + repsR)
+    val z = reflectEffectMutableInternal(d, WriteMutable(write, repsR ++ repsW), Nil) match {
+      case MutableAtom(a) => a
+      case MutableDef(zn, zd) => createReflectDefinition(zn, zd)
+    }
+
+
 
     /*println("AliasRep: " + (findDefinition(z.asInstanceOf[Sym[Any]]) match {
       //TODO: either write to get or alloc ??
@@ -546,7 +591,7 @@ trait Effects extends Expressions with Blocks with Utils {
     z
   }
 
-  def reflectEffectMutableInternal[A:Manifest](x: Def[A], s: Summary, prevWrites: List[Sym[Any]])(implicit pos: SourceContext): Exp[A] = {
+  def reflectEffectMutableInternal[A:Manifest](x: Def[A], s: Summary, prevWrites: List[Sym[Any]])(implicit pos: SourceContext): MutableStatement[A] = {
     val mutableInputs = readMutableData(x)
     val u = s andAlso Read(mutableInputs) // will call super.toAtom if mutableInput.isEmpty
 
@@ -554,7 +599,7 @@ trait Effects extends Expressions with Blocks with Utils {
     if (context == null) {
       context = Nil
       if (mustPure(u))
-        super.toAtom(x)
+        MutableAtom(super.toAtom(x))
       else {
          //statement has effects
          val z = fresh[A]
@@ -562,11 +607,12 @@ trait Effects extends Expressions with Blocks with Utils {
             Reflect(x,u.copy(aliasRep=List(z)),null)
         else
             Reflect(x,u,null)
-        createReflectDefinition(z, zd)
+        MutableDef(z, zd)
+        //createReflectDefinition(z, zd)
       }
 
     } else if (mustPure(u)) {
-      super.toAtom(x)
+      MutableAtom(super.toAtom(x))
     } else {
       checkContext()
       // NOTE: reflecting mutable stuff *during mirroring* doesn't work right now.
@@ -595,11 +641,13 @@ trait Effects extends Expressions with Blocks with Utils {
 
       var zd = Reflect(x,u,deps)
 
+      //println("ref: " + mustIdempotent(u) + " dep: " + deps + " x: " + x)
+
       //CSE
       if (mustIdempotent(u)) {  
-        context find { case Def(Reflect(x1, u1, d1)) => x1 == x && deps == d1} map { _.asInstanceOf[Exp[A]] } getOrElse {
+        context find { case Def(Reflect(x1, u1, d1)) => x1 == x && deps == d1} map { x => MutableAtom(x.asInstanceOf[Exp[A]]) } getOrElse {
           val z = fresh[A]
-          zd = if(mustOnlyAlloc(u) || (mustIdempotent(u) && u.aliasRep.isEmpty))
+          val zd = if(mustOnlyAlloc(u) || u.aliasRep.isEmpty)
             Reflect(x,u.copy(aliasRep=List(z)),deps)
           else
             Reflect(x,u,deps)
@@ -609,7 +657,8 @@ trait Effects extends Expressions with Blocks with Utils {
             for (w <- u.mayRead)
               printlog("depends on  " + w)
             }
-            createReflectDefinition(z, zd)
+            MutableDef(z,zd)
+            //createReflectDefinition(z, zd)
           }
 
       //no CSE, creation of new nodes
@@ -627,7 +676,8 @@ trait Effects extends Expressions with Blocks with Utils {
             printsrc("in " + quotePos(z))
           }
         }
-        createReflectDefinition(z, zd)
+        MutableDef(z, zd)
+        //createReflectDefinition(z, zd)
       }
     }
   }

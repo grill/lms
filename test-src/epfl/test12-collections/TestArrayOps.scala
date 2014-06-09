@@ -28,10 +28,10 @@ class TestArrayOps extends FileDiffSuite {
     }
   }
 
-  trait MyOpsExp extends DSLBase with HashMapArrOpsExp
-        with MiscOpsExp with ScalaOpsPkgExp
+  trait MyOpsExp extends HashMapArrOpsExp
+        with MiscOpsExp with ScalaOpsPkgExp with DSLBase
 
-  trait Impl extends DSLBase with MyOpsExp { self =>
+  trait Impl extends MyOpsExp { self =>
     val codegen = new ScalaGenArrayOps with ScalaGenMiscOps
       with ScalaGenEntry with ScalaCodeGenPkg with ScalaGenHashCodeOps with ScalaGenOption
       with ScalaGenHashMap { val IR: self.type = self }
@@ -79,7 +79,7 @@ class TestArrayOps extends FileDiffSuite {
     assertFileEqualsCheck(prefix+"hash-map-fun-map")
   }
 
-    it("testGetAndSetSize") {
+  it("testGetAndSetSize") {
     withOutFile(prefix+"hash-map-get-and-set-size") {
       val prog = new MyOpsExp {
         def f(i : Rep[Int]): Rep[Unit] = {

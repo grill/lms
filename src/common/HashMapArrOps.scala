@@ -218,8 +218,7 @@ trait HashMapArrOpsExp extends HashMapArrOps with ArrayOpsExp with EffectExp wit
   with HashCodeOpsExp with BooleanOpsExp with PrimitiveOpsExp with ListOpsExp with FunctionsExp with VariablesExp
   with NumericOpsExp with EqualExp with WhileExp with OrderingOpsExp with IfThenElseExp
   with SeqOpsExp with MathOpsExp with CastingOpsExp with SetOpsExp with ObjectOpsExp
-  with Blocks with MiscOpsExp with OptionOpsExp
-  with VariablesNested {
+  with Blocks with MiscOpsExp with OptionOpsExp {
 
   case class NewHashMap[K, V](mK: Manifest[K], mV: Manifest[V], size: Exp[Int]) extends Def[HashMap[K, V]]
   //mutable
@@ -336,7 +335,7 @@ trait HashMapArrOpsExp extends HashMapArrOps with ArrayOpsExp with EffectExp wit
 
               val next = e.next
               e.setNext(newTable(z))
-              newTable.update(z, readVar(e))
+              newTable.update(z, e)
                 
               e = next
             }
@@ -357,7 +356,7 @@ trait HashMapArrOpsExp extends HashMapArrOps with ArrayOpsExp with EffectExp wit
     val idx = hashmap_index(k, m.length)
     val n = var_new(m(idx))
 
-    if(readVar(n) == unit(null)) {
+    if(n == unit(null)) {
       unit(false)
     } else {
       while(n.hasNext() && n.getKey() != k) {
@@ -380,7 +379,7 @@ trait HashMapArrOpsExp extends HashMapArrOps with ArrayOpsExp with EffectExp wit
         f(el)
         while(n.hasNext()) {
           n = n.next()
-          f(readVar(n))
+          f(n)
         }
       }
 

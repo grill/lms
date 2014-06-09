@@ -2,20 +2,20 @@
   Emitting Generated Code                  
 *******************************************/
 class IntHashMapUpdate extends ((Int)=>(Unit)) {
-def apply(x192:Int): Unit = {
-val x193 = new HashMap[Int,Array[Int]](200)
-val x194 = x193.table
-val x195 = x194(0)
-val x196 = x193.size
-val x197 = x193.loadFactor
-val x198 = x193.MAXIMUM_CAPACITY
-val x199 = x193.threshold
-val x200 = new Array[Int](5)
-val x201 = x200(0)
-x200(0) = 1
-val x203 = x200(1)
-x200(1) = 2
-val x205 = x194.length
+def apply(x194:Int): Unit = {
+val x195 = new HashMap[Int,Array[Int]](200)
+val x196 = x195.table
+val x197 = x196(0)
+val x198 = x195.size
+val x199 = x195.loadFactor
+val x200 = x195.MAXIMUM_CAPACITY
+val x201 = x195.threshold
+val x202 = new Array[Int](5)
+val x203 = x202(0)
+x202(0) = 1
+val x205 = x202(1)
+x202(1) = 2
+val x207 = x196.length
 val x13 = 1.hashCode
 val x14 = x13.toLong
 val x15 = x14 >>> 20
@@ -27,218 +27,218 @@ val x20 = x18 ^ x19
 val x21 = x18 >>> 4
 val x22 = x20 ^ x21
 val x23 = x22.toInt
-val x206 = x205 - 1
-val x207 = x23 & x206
-val x208 = x194(x207)
-var x209: Entry[Int, Array[Int]] = x208
-val x210 = x209
-val x211 = x210 == null
-if (x211) {
-val x212 = new Entry(1, x200)
-x194(x207) = x212
-val x214 = x196 + 1
-x193.size = x214
+val x208 = x207 - 1
+val x209 = x23 & x208
+val x210 = x196(x209)
+var x211: Entry[Int, Array[Int]] = x210
+val x213 = x211
+val x214 = x213 == null
+if (x214) {
+val x215 = new Entry(1, x202)
+x196(x209) = x215
+val x217 = x198 + 1
+x195.size = x217
 
 } else {
 while ({
-val x217 = x209
-val x218 = x217.hasNext
-val x224 = if (x218) {
-val x219 = x209
-val x220 = x219.key
-val x221 = x220 != 1
-
-x221
-} else false
+val x220 = x211
+val x221 = x220.hasNext
+val x227 = if (x221) {
+val x222 = x211
+val x223 = x222.key
+val x224 = x223 != 1
 
 x224
-}) {
-val x226 = x209
-val x227 = x226.next
-x209 = x227
-()
-}
-val x231 = x209
-val x232 = x231.key
-val x233 = x232 == 1
-if (x233) {
-val x234 = x231.value
-x231.value = x200
-
-} else {
-val x237 = new Entry(1, x200)
-val x238 = x231.next
-val x239 = x231.hasNext
-x231.next = x237
-val x214 = x196 + 1
-x193.size = x214
-
-}
-
-}
-val x246 = x193.size
-val x247 = x246 >= x199
-if (x247) {
-val x248 = x194.length
-val x249 = x248 == x198
-if (x249) {
-val x68 = scala.Int.MaxValue
-x193.threshold = x68
-
-} else {
-val x252 = 2 * x248
-val x253 = new Array[Entry[Int, Array[Int]]](x252)
-var x254: Int = 0
-val x281 = x252 - 1
-while ({
-val x255 = x254
-val x256 = x194.length
-val x257 = x255 < x256
-x257
-}) {
-val x259 = x254
-val x260 = x194(x259)
-var x261: Entry[Int, Array[Int]] = x260
-val x262 = x261
-val x263 = x262 != null
-if (x263) {
-x194(x259) = null
-while ({
-val x265 = x261
-val x266 = x265 != null
-x266
-}) {
-val x268 = x261
-val x269 = x268.key
-val x283 = x268.next
-val x270 = x269.hashCode
-val x271 = x270.toLong
-val x272 = x271 >>> 20
-val x273 = x271 >>> 12
-val x274 = x272 ^ x273
-val x275 = x274 ^ x271
-val x276 = x275 >>> 7
-val x277 = x275 ^ x276
-val x278 = x275 >>> 4
-val x279 = x277 ^ x278
-val x280 = x279.toInt
-val x282 = x280 & x281
-val x284 = x253(x282)
-val x285 = x268.hasNext
-x268.next = x284
-x253(x282) = x268
-x261 = x283
-()
-}
-
-} else {
-()
-}
-val x293 = x259 + 1
-x254 = x293
-()
-}
-x193.table = x253
-val x298 = x197 * x252
-val x299 = x298.asInstanceOf[Int]
-x193.threshold = x299
-
-}
-
-} else {
-()
-}
-val x305 = x193.table
-val x306 = x305.length
-val x307 = x306 - 1
-val x308 = x23 & x307
-val x309 = x305(x308)
-var x310: Entry[Int, Array[Int]] = x309
-val x311 = x310
-val x312 = x311 == null
-val x335 = if (x312) {
-val x132 = None
-x132
-} else {
-while ({
-val x313 = x310
-val x314 = x313.hasNext
-val x320 = if (x314) {
-val x315 = x310
-val x316 = x315.key
-val x317 = x316 != 1
-
-x317
 } else false
 
-x320
+x227
 }) {
-val x322 = x310
-val x323 = x322.next
-x310 = x323
+val x229 = x211
+val x230 = x229.next
+x211 = x230
 ()
 }
-val x327 = x310
-val x328 = x327.key
-val x329 = x328 == 1
-val x333 = if (x329) {
-val x330 = x327.value
-val x331 = Some(x330)
-x331
+val x234 = x211
+val x235 = x234.key
+val x236 = x235 == 1
+if (x236) {
+val x237 = x234.value
+x234.value = x202
+
 } else {
-val x132 = None
-x132
+val x240 = new Entry(1, x202)
+val x241 = x234.next
+val x242 = x234.hasNext
+x234.next = x240
+val x217 = x198 + 1
+x195.size = x217
+
 }
-x333
+
 }
-val x336 = x335.get
-val x337 = x336(0)
-x336(0) = 10
-val x339 = x305.length
-val x340 = x339 - 1
-val x341 = x23 & x340
-val x342 = x305(x341)
-var x343: Entry[Int, Array[Int]] = x342
-val x344 = x343
-val x345 = x344 == null
-val x368 = if (x345) {
-val x132 = None
-x132
+val x249 = x195.size
+val x250 = x249 >= x201
+if (x250) {
+val x251 = x196.length
+val x252 = x251 == x200
+if (x252) {
+val x69 = scala.Int.MaxValue
+x195.threshold = x69
+
+} else {
+val x255 = 2 * x251
+val x256 = new Array[Entry[Int, Array[Int]]](x255)
+var x257: Int = 0
+val x285 = x255 - 1
+while ({
+val x258 = x257
+val x259 = x196.length
+val x260 = x258 < x259
+x260
+}) {
+val x262 = x257
+val x263 = x196(x262)
+var x264: Entry[Int, Array[Int]] = x263
+val x266 = x264
+val x267 = x266 != null
+if (x267) {
+x196(x262) = null
+while ({
+val x269 = x264
+val x270 = x269 != null
+x270
+}) {
+val x272 = x264
+val x273 = x272.key
+val x287 = x272.next
+val x274 = x273.hashCode
+val x275 = x274.toLong
+val x276 = x275 >>> 20
+val x277 = x275 >>> 12
+val x278 = x276 ^ x277
+val x279 = x278 ^ x275
+val x280 = x279 >>> 7
+val x281 = x279 ^ x280
+val x282 = x279 >>> 4
+val x283 = x281 ^ x282
+val x284 = x283.toInt
+val x286 = x284 & x285
+val x288 = x256(x286)
+val x289 = x272.hasNext
+x272.next = x288
+x256(x286) = x272
+x264 = x287
+()
+}
+
+} else {
+()
+}
+val x297 = x262 + 1
+x257 = x297
+()
+}
+x195.table = x256
+val x302 = x199 * x255
+val x303 = x302.asInstanceOf[Int]
+x195.threshold = x303
+
+}
+
+} else {
+()
+}
+val x309 = x195.table
+val x310 = x309.length
+val x311 = x310 - 1
+val x312 = x23 & x311
+val x313 = x309(x312)
+var x314: Entry[Int, Array[Int]] = x313
+val x315 = x314
+val x316 = x315 == null
+val x339 = if (x316) {
+val x134 = None
+x134
 } else {
 while ({
-val x346 = x343
-val x347 = x346.hasNext
-val x353 = if (x347) {
-val x348 = x343
-val x349 = x348.key
-val x350 = x349 != 1
+val x317 = x314
+val x318 = x317.hasNext
+val x324 = if (x318) {
+val x319 = x314
+val x320 = x319.key
+val x321 = x320 != 1
 
-x350
+x321
 } else false
 
-x353
+x324
 }) {
-val x355 = x343
-val x356 = x355.next
-x343 = x356
+val x326 = x314
+val x327 = x326.next
+x314 = x327
 ()
 }
-val x360 = x343
-val x361 = x360.key
-val x362 = x361 == 1
-val x366 = if (x362) {
-val x363 = x360.value
-val x364 = Some(x363)
-x364
+val x331 = x314
+val x332 = x331.key
+val x333 = x332 == 1
+val x337 = if (x333) {
+val x334 = x331.value
+val x335 = Some(x334)
+x335
 } else {
-val x132 = None
-x132
+val x134 = None
+x134
 }
-x366
+x337
 }
-val x369 = x368.get
-val x370 = x369(0)
-println(x370)
+val x340 = x339.get
+val x341 = x340(0)
+x340(0) = 10
+val x343 = x309.length
+val x344 = x343 - 1
+val x345 = x23 & x344
+val x346 = x309(x345)
+var x347: Entry[Int, Array[Int]] = x346
+val x348 = x347
+val x349 = x348 == null
+val x372 = if (x349) {
+val x134 = None
+x134
+} else {
+while ({
+val x350 = x347
+val x351 = x350.hasNext
+val x357 = if (x351) {
+val x352 = x347
+val x353 = x352.key
+val x354 = x353 != 1
+
+x354
+} else false
+
+x357
+}) {
+val x359 = x347
+val x360 = x359.next
+x347 = x360
+()
+}
+val x364 = x347
+val x365 = x364.key
+val x366 = x365 == 1
+val x370 = if (x366) {
+val x367 = x364.value
+val x368 = Some(x367)
+x368
+} else {
+val x134 = None
+x134
+}
+x370
+}
+val x373 = x372.get
+val x374 = x373(0)
+println(x374)
 }
 }
 /*****************************************
