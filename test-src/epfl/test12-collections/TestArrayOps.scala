@@ -17,8 +17,8 @@ class TestArrayOps extends FileDiffSuite {
 
   trait MyCodeGen extends ScalaGenArrayOps with ScalaGenMiscOps
       with ScalaGenEntry with ScalaGenHashCodeOps with ScalaGenOption
-      with ScalaCodeGenPkg with ScalaGenHashMap {
-    override val IR: ScalaOpsPkgExp with HashMapArrOpsExp with OptionOpsExp with EntryOpsExp
+      with ScalaCodeGenPkg with ScalaGenHashMap with ScalaConciseCodegen {
+    override val IR: ScalaOpsPkgExp with HashMapArrOpsExp with OptionOpsExp with EntryOpsExp with ExtendedExpressions with Effects with LoweringTransform
     import IR._
 
     override def remap(s:String) = s match {
@@ -30,9 +30,11 @@ class TestArrayOps extends FileDiffSuite {
 
   trait MyOpsExp extends HashMapArrOpsExp
         with MiscOpsExp with ScalaOpsPkgExp with DSLBase
+        with LiftPrimitives with LiftString with LiftVariables
+        with ExtendedExpressions with Effects with LoweringTransform
 
   trait Impl extends MyOpsExp { self =>
-    val codegen = new ScalaGenArrayOps with ScalaGenMiscOps
+    val codegen = new ScalaGenArrayOps with ScalaGenMiscOps with ScalaConciseCodegen
       with ScalaGenEntry with ScalaCodeGenPkg with ScalaGenHashCodeOps with ScalaGenOption
       with ScalaGenHashMap { val IR: self.type = self }
   
@@ -70,7 +72,7 @@ class TestArrayOps extends FileDiffSuite {
       trait Prog extends MyOpsExp {
         toplevel1("main") { a: Rep[HashMap[Int,Int]] =>
           println(a.size)
-          a.setSize(unit(3))
+          a.setSize(3)
           println(a.size)
         }
       }
@@ -83,12 +85,12 @@ class TestArrayOps extends FileDiffSuite {
     withOutFile(prefix+"hash-map-get-and-set-size") {
       val prog = new MyOpsExp {
         def f(i : Rep[Int]): Rep[Unit] = {
-          val a = HashMap[Int, Int](unit(200))
+          val a = HashMap[Int, Int](200)
           println(a.size)
-          a.setSize(unit(3))
+          a.setSize(3)
           println(a.size)
         }
-        f(unit(1))
+        f(1)
       }
 
       val codegen = new MyCodeGen { val IR: prog.type = prog }
@@ -101,24 +103,24 @@ class TestArrayOps extends FileDiffSuite {
     withOutFile(prefix+"hash-map-complex-nested") {
       val prog = new MyOpsExp {
         def f(i : Rep[Int]): Rep[Unit] = {
-          val a = HashMap[Int, HashMap[Int,Int]](unit(1))
-          val a1 = HashMap[Int,Int](unit(1))
-          val a2 = HashMap[Int,Int](unit(1))
+          val a = HashMap[Int, HashMap[Int,Int]](1)
+          val a1 = HashMap[Int,Int](1)
+          val a2 = HashMap[Int,Int](1)
 
-          a.update(unit(1), a1)
-          a.update(unit(2), a2)
+          a.update(1, a1)
+          a.update(2, a2)
 
-          a1.update(unit(1), unit(1))
-          a(unit(1)).get().update(unit(1), unit(2))
+          a1.update(1, 1)
+          a(1).get().update(1, 2)
 
           a.foreach({x => println(x); x.getValue().foreach({println(_)}) })
           a.foreach({x => a.update(x.getKey(), unit(null).AsInstanceOf[HashMap[Int, Int]])  })
           a.foreach({x => println(x)})
           a.foreach({x => a -= x.getKey()})
-          a.update(unit(3), a1)
+          a.update(3, a1)
           a.foreach({x => println(x); x.getValue().foreach({println(_)}) })
         }
-        f(unit(1))
+        f(1)
       }
 
       val codegen = new MyCodeGen { val IR: prog.type = prog }
@@ -132,20 +134,20 @@ class TestArrayOps extends FileDiffSuite {
       val prog = new MyOpsExp {
         def f(i : Rep[Int]): Rep[Unit] = {
           val a = HashMap[Int, Int](unit(1))
-          a.update(unit(1), unit(2))
-          a.update(unit(2), unit(3))
+          a.update(1, 2)
+          a.update(2, 3)
 
-          val v = a(unit(1)).get() + unit(1)
-          a.update(unit(1), v)
+          val v = a(1).get() + 1
+          a.update(1, v)
 
           a.foreach({x => println(x)})
-          a.foreach({x => a.update(x.getKey(), unit(0))})
+          a.foreach({x => a.update(x.getKey(), 0)})
           a.foreach({x => println(x)})
           a.foreach({x => a -= x.getKey()})
-          a.update(unit(3), unit(4))
+          a.update(3, 4)
           a.foreach({x => println(x)})
         }
-        f(unit(1))
+        f(1)
       }
 
       val codegen = new MyCodeGen { val IR: prog.type = prog }
@@ -158,11 +160,11 @@ class TestArrayOps extends FileDiffSuite {
     withOutFile(prefix+"hash-map-get-and-update") {
       val prog = new MyOpsExp {
         def f(i : Rep[Int]): Rep[Unit] = {
-          val a = HashMap[Int, Int](unit(200))
-          a.update(unit(1), unit(2))
-          println(a(unit(1)))
+          val a = HashMap[Int, Int](200)
+          a.update(1, 2)
+          println(a(1))
         }
-        f(unit(1))
+        f(1)
       }
 
       val codegen = new MyCodeGen { val IR: prog.type = prog }
@@ -175,15 +177,15 @@ class TestArrayOps extends FileDiffSuite {
     withOutFile(prefix+"hash-map-get-and-update-opt") {
       val prog = new MyOpsExp {
         def f(i : Rep[Int]): Rep[Unit] = {
-          val a = HashMap[Int, Int](unit(200))
-          a.update(unit(1), unit(2))
-          a.update(unit(2), unit(3))
+          val a = HashMap[Int, Int](200)
+          a.update(1, 2)
+          a.update(2, 3)
 
-          val v = a(unit(1)).get() + unit(1)
-          a.update(unit(1), v)
-          println(a(unit(1)))
+          val v = a(1).get() + 1
+          a.update(1, v)
+          println(a(1))
         }
-        f(unit(1))
+        f(1)
       }
 
       val codegen = new MyCodeGen { val IR: prog.type = prog }
@@ -196,20 +198,20 @@ class TestArrayOps extends FileDiffSuite {
     withOutFile(prefix+"hash-map-get-and-update-opt-var") {
       val prog = new MyOpsExp {
         def f(i : Rep[Int]): Rep[Unit] = {
-          val a = HashMap[Int, Int](unit(1))
+          val a = HashMap[Int, Int](1)
           val n = var_new(unit(1))
-          var_assign(n, unit(2))
+          n = 2
           
-          a.update(unit(2), readVar(n))
+          a.update(2, readVar(n))
 
-          a.update(unit(3), a(readVar(n)).get() + unit(1))
+          a.update(3, a(readVar(n)).get() + 1)
 
           a.foreach( {x => println(x)} )
-          a -= unit(2)
+          a -= 2
 
           a.foreach( {x => println(x)} )
         }
-        f(unit(1))
+        f(1)
       }
 
       val codegen = new MyCodeGen { val IR: prog.type = prog }
@@ -222,14 +224,14 @@ class TestArrayOps extends FileDiffSuite {
     withOutFile(prefix+"hash-map-nested-object-tracking-var") {
       val prog = new MyOpsExp {
         def f(i : Rep[Int]): Rep[Unit] = {
-          val a = HashMap[Int, Int](unit(200))
-          a.update(unit(1), unit(2))
+          val a = HashMap[Int, Int](200)
+          a.update(1, 2)
 
           val n = var_new(a)
-          n.update(unit(1), unit(3))
-          println(n(unit(1)))
+          n.update(1, 3)
+          println(n(1))
         }
-        f(unit(1))
+        f(1)
       }
 
       val codegen = new MyCodeGen { val IR: prog.type = prog }
@@ -242,15 +244,15 @@ class TestArrayOps extends FileDiffSuite {
     withOutFile(prefix+"hash-map-nested-reassignment") {
       val prog = new MyOpsExp {
         def f(i : Rep[Int]): Rep[Unit] = {
-          val a = HashMap[Int, Int](unit(200))
-          a.update(unit(1), unit(2))
+          val a = HashMap[Int, Int](200)
+          a.update(1, 2)
 
           val n = var_new(a)
-          n.update(unit(1), unit(3))
+          n.update(1, 3)
 
-          println(a(unit(1)))
+          println(a(1))
         }
-        f(unit(1))
+        f(1)
       }
 
       val codegen = new MyCodeGen { val IR: prog.type = prog }
@@ -263,17 +265,17 @@ class TestArrayOps extends FileDiffSuite {
     withOutFile(prefix+"hash-map-nested-primitive-reassignment") {
       val prog = new MyOpsExp {
         def f(i : Rep[Int]): Rep[Unit] = {
-          val a = HashMap[Int, Int](unit(200))
+          val a = HashMap[Int, Int](200)
 
           println(a.size)
 
           val n = var_new(a)
           val n2 = var_new(readVar(n))
-          n2.setSize(unit(3))
+          n2.setSize(3)
 
           println(a.size)
         }
-        f(unit(1))
+        f(1)
       }
 
       val codegen = new MyCodeGen { val IR: prog.type = prog }
@@ -286,18 +288,18 @@ class TestArrayOps extends FileDiffSuite {
     withOutFile(prefix+"hash-map-update") {
       val prog = new MyOpsExp {
         def f(i : Rep[Int]): Rep[Unit] = {
-          val a = HashMap[Int, Array[Int]](unit(200))
-          val c = NewArray[Int](unit(5))
-          c.update(unit(0), unit(1))
-          c.update(unit(1), unit(2))
-          a.update(unit(1), c)
+          val a = HashMap[Int, Array[Int]](200)
+          val c = NewArray[Int](5)
+          c.update(0, 1)
+          c.update(1, 2)
+          a.update(1, c)
           //mutable can not be added to HashMap
-          val b = a(unit(1)).get //variables are not removed
-          b.update(unit(0), unit(10))
-          println(a(unit(1)).get()(unit(0)))
+          val b = a(1).get //variables are not removed
+          b.update(0, 10)
+          println(a(1).get()(0))
 
         }
-        f(unit(1))
+        f(1)
       }
 
       val codegen = new MyCodeGen { val IR: prog.type = prog }
@@ -310,12 +312,12 @@ class TestArrayOps extends FileDiffSuite {
     withOutFile(prefix+"hash-map-contains") {
       val prog = new MyOpsExp {
         def f(i : Rep[Int]): Rep[Unit] = {
-          val a = HashMap[Int, Int](unit(200))
-          a.update(unit(1), unit(2))
-          println(a.contains(unit(1)))
-          println(a.contains(unit(0)))
+          val a = HashMap[Int, Int](200)
+          a.update(1, 2)
+          println(a.contains(1))
+          println(a.contains(0))
         }
-        f(unit(1))
+        f(1)
       }
 
       val codegen = new MyCodeGen { val IR: prog.type = prog }
@@ -328,13 +330,13 @@ class TestArrayOps extends FileDiffSuite {
     withOutFile(prefix+"hash-map-size") {
       val prog = new MyOpsExp {
         def f(i : Rep[Int]): Rep[Unit] = {
-          val a = HashMap[Int, Int](unit(200))
-          a.update(unit(1), unit(2))
-          a.update(unit(1), unit(2))
-          a.update(unit(2), unit(3))
+          val a = HashMap[Int, Int](200)
+          a.update(1, 2)
+          a.update(1, 2)
+          a.update(2, 3)
           println(a.size)
         }
-        f(unit(1))
+        f(1)
       }
 
       val codegen = new MyCodeGen { val IR: prog.type = prog }
@@ -347,13 +349,13 @@ class TestArrayOps extends FileDiffSuite {
     withOutFile(prefix+"hash-map-for-each") {
       val prog = new MyOpsExp {
         def f(i : Rep[Int]): Rep[Unit] = {
-          val a = HashMap[Int, Int](unit(200))
-          a.update(unit(1), unit(2))
-          a.update(unit(1), unit(2))
-          a.update(unit(2), unit(3))
+          val a = HashMap[Int, Int](200)
+          a.update(1, 2)
+          a.update(1, 2)
+          a.update(2, 3)
           a.foreach({e => println(e)})
         }
-        f(unit(1))
+        f(1)
       }
 
       val codegen = new MyCodeGen { val IR: prog.type = prog }
@@ -366,14 +368,14 @@ class TestArrayOps extends FileDiffSuite {
     withOutFile(prefix+"hash-map-delete") {
       val prog = new MyOpsExp {
         def f(i : Rep[Int]): Rep[Unit] = {
-          val a = HashMap[Int, Int](unit(200))
-          a.update(unit(1), unit(2))
-          a.update(unit(2), unit(3))
+          val a = HashMap[Int, Int](200)
+          a.update(1, 2)
+          a.update(2, 3)
           println(a.size)
-          a -= unit(2)
+          a -= 2
           println(a.size)
         }
-        f(unit(1))
+        f(1)
       }
 
       val codegen = new MyCodeGen { val IR: prog.type = prog }
@@ -383,7 +385,7 @@ class TestArrayOps extends FileDiffSuite {
   }
 
  /**
-  * Tests for array implementation 
+  * Tests for array implementation (old)
   */
  it("testIntArraySeqCreation") {
     withOutFile(prefix+"array-seq-creation") {

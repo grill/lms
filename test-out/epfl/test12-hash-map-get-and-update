@@ -2,191 +2,82 @@
   Emitting Generated Code                  
 *******************************************/
 class IntHashMapGetAndUpdate extends ((Int)=>(Unit)) {
-def apply(x152:Int): Unit = {
-val x153 = new HashMap[Int,Int](200)
-val x154 = x153.table
-val x155 = x154(0)
-val x156 = x153.size
-val x157 = x153.loadFactor
-val x158 = x153.MAXIMUM_CAPACITY
-val x159 = x153.threshold
-val x160 = x154.length
-val x8 = 1.hashCode
-val x9 = x8.toLong
-val x10 = x9 >>> 20
-val x11 = x9 >>> 12
-val x12 = x10 ^ x11
-val x13 = x12 ^ x9
-val x14 = x13 >>> 7
-val x15 = x13 ^ x14
-val x16 = x13 >>> 4
-val x17 = x15 ^ x16
-val x18 = x17.toInt
-val x161 = x160 - 1
-val x162 = x18 & x161
-val x163 = x154(x162)
-var x164: Entry[Int, Int] = x163
-val x165 = x164
-val x166 = x165 == null
-if (x166) {
-val x167 = new Entry(1, 2)
-x154(x162) = x167
-val x169 = x156 + 1
-x153.size = x169
-
+def apply(x94:Int): Unit = {
+val x95 = new HashMap[Int,Int](200)
+val x96 = x95.table
+val x98 = x95.size
+val x9 = (1.hashCode).toLong
+val x13 = ((x9 >>> 20) ^ (x9 >>> 12)) ^ x9
+val x18 = ((x13 ^ (x13 >>> 7)) ^ (x13 >>> 4)).toInt
+val x104 = x18 & ((x96.length) - 1)
+var x106:Entry[Int, Int] = (x96(x104))
+if (((x106) == null)) {
+val x110 = new Entry(1, 2)
+x96(x104) = x110
+val x112 = x98 + 1
+x95.size = x112
+()
 } else {
 while ({
-val x172 = x164
-val x173 = x172.hasNext
-val x179 = if (x173) {
-val x174 = x164
-val x175 = x174.key
-val x176 = x175 != 1
+(if (((x106).hasNext)) {
 
-x176
+(((x106).key) != 1)
 } else false
-
-x179
+)
 }) {
-val x181 = x164
-val x182 = x181.next
-x164 = x182
+x106 = ((x106).next)
 ()
 }
-val x186 = x164
-val x187 = x186.key
-val x188 = x187 == 1
-if (x188) {
-val x189 = x186.value
-x186.value = 2
-
+val x129 = x106
+if (((x129.key) == 1)) {
+x129.value = 2
+()
 } else {
-val x192 = new Entry(1, 2)
-val x193 = x186.next
-val x194 = x186.hasNext
-x186.next = x192
-val x169 = x156 + 1
-x153.size = x169
-
-}
-
-}
-val x201 = x153.size
-val x202 = x201 >= x159
-if (x202) {
-val x203 = x154.length
-val x204 = x203 == x158
-if (x204) {
-val x63 = scala.Int.MaxValue
-x153.threshold = x63
-
-} else {
-val x207 = 2 * x203
-val x208 = new Array[Entry[Int, Int]](x207)
-var x209: Int = 0
-val x236 = x207 - 1
-while ({
-val x210 = x209
-val x211 = x154.length
-val x212 = x210 < x211
-x212
-}) {
-val x214 = x209
-val x215 = x154(x214)
-var x216: Entry[Int, Int] = x215
-val x217 = x216
-val x218 = x217 != null
-if (x218) {
-x154(x214) = null
-while ({
-val x220 = x216
-val x221 = x220 != null
-x221
-}) {
-val x223 = x216
-val x224 = x223.key
-val x238 = x223.next
-val x225 = x224.hashCode
-val x226 = x225.toLong
-val x227 = x226 >>> 20
-val x228 = x226 >>> 12
-val x229 = x227 ^ x228
-val x230 = x229 ^ x226
-val x231 = x230 >>> 7
-val x232 = x230 ^ x231
-val x233 = x230 >>> 4
-val x234 = x232 ^ x233
-val x235 = x234.toInt
-val x237 = x235 & x236
-val x239 = x208(x237)
-val x240 = x223.hasNext
-x223.next = x239
-x208(x237) = x223
-x216 = x238
+val x135 = new Entry(1, 2)
+x129.next = x135
+val x112 = x98 + 1
+x95.size = x112
 ()
 }
-
-} else {
 ()
 }
-val x248 = x214 + 1
-x209 = x248
-()
-}
-x153.table = x208
-val x253 = x157 * x207
-val x254 = x253.asInstanceOf[Int]
-x153.threshold = x254
-
-}
-
-} else {
-()
-}
-val x260 = x153.table
-val x261 = x260.length
-val x262 = x261 - 1
-val x263 = x18 & x262
-val x264 = x260(x263)
-var x265: Entry[Int, Int] = x264
-val x266 = x265
-val x267 = x266 == null
-val x290 = if (x267) {
-val x127 = None
-x127
+x95.resize()
+val x145 = x95.table
+var x150:Entry[Int, Int] = (x145((x18 & ((x145.length) - 1))))
+val x175 = if (((x150) == null)) {
+val x69 = None
+x69
 } else {
 while ({
-val x268 = x265
-val x269 = x268.hasNext
-val x275 = if (x269) {
-val x270 = x265
-val x271 = x270.key
-val x272 = x271 != 1
+(if (((x150).hasNext)) {
 
-x272
+(((x150).key) != 1)
 } else false
-
-x275
+)
 }) {
-val x277 = x265
-val x278 = x277.next
-x265 = x278
+x150 = ((x150).next)
 ()
 }
-val x282 = x265
-val x283 = x282.key
-val x284 = x283 == 1
-val x288 = if (x284) {
-val x285 = x282.value
-val x286 = Some(x285)
-x286
+val x167 = x150
+(if (((x167.key) == 1)) {
+while ({
+(if (((x150).hasNext)) {
+
+(((x150).key) != 1)
+} else false
+)
+}) {
+x150 = ((x150).next)
+()
+}
+val x167 = x150
+(Some((x167.value)))
 } else {
-val x127 = None
-x127
+val x69 = None
+x69
+})
 }
-x288
-}
-println(x290)
+println(x175)
 }
 }
 /*****************************************

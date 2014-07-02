@@ -231,6 +231,7 @@ trait HashMapArrOpsExp extends HashMapArrOps with ArrayOpsExp with EffectExp wit
   //nested mutable
   case class HashMapGetTable[K, V](x: Exp[HashMap[K, V]]) extends Def[Array[Entry[K, V]]]
   case class HashMapSetTable[K, V](x: Exp[HashMap[K, V]], newTable: Exp[Array[Entry[K, V]]]) extends Def[Unit]
+  case class HashMapResize[K, V](x: Exp[HashMap[K, V]]) extends Def[Unit]
 
   override def containSyms(e: Any): List[Sym[Any]] = e match {
     case HashMapSetTable(m,t) => syms(t)
@@ -282,7 +283,8 @@ trait HashMapArrOpsExp extends HashMapArrOps with ArrayOpsExp with EffectExp wit
 
   def hashmap_update[K:Manifest,V:Manifest](x: Rep[HashMap[K,V]], k: Rep[K], v: Rep[V])(implicit pos: SourceContext): Rep[Unit] = {
     hashmap_add(x, k, v)
-    hashmap_resize(x)
+    hashmap_resize_fun(x)
+    //hashmap_resize(x)
   }
 
   def hashmap_add[K:Manifest,V:Manifest](x: Rep[HashMap[K,V]], k: Rep[K], v: Rep[V])(implicit pos: SourceContext): Rep[Unit] = {
@@ -296,7 +298,7 @@ trait HashMapArrOpsExp extends HashMapArrOps with ArrayOpsExp with EffectExp wit
       x.setSize(x.size + unit(1))
     } else {
       while(n.hasNext() && n.getKey() != k) {
-        var_assign(n, n.next())
+        n = n.next()
       }
 
       if(n.getKey() == k) {
@@ -306,6 +308,10 @@ trait HashMapArrOpsExp extends HashMapArrOps with ArrayOpsExp with EffectExp wit
         x.setSize(x.size + unit(1))
       }
     }
+  }
+
+  def hashmap_resize_fun[K:Manifest,V:Manifest](x: Rep[HashMap[K,V]])(implicit pos: SourceContext): Rep[Unit] = {
+    reflectWriteMutable (hashmap_table(x), hashmap_threshold(x)) () { HashMapResize(x) }
   }
 
   def hashmap_resize[K:Manifest,V:Manifest](x: Rep[HashMap[K,V]])(implicit pos: SourceContext): Rep[Unit] = {
@@ -496,6 +502,7 @@ trait ScalaGenHashMap extends ScalaGenBase with ScalaGenMiscOps {
     case HashMapSetTable(x, newTable) => emitAssignment(sym, "" + quote(x) + ".table", quote(newTable))
     //case HashMapSetTableIndex(x, tbl, index, value) => emitAssignment("" + quote(x) + ".table(" + quote(index) + ")", quote(value))
     case HashMapSetThreshold(x, newThreshold) => emitAssignment(sym, "" + quote(x) + ".threshold", quote(newThreshold))
+    case HashMapResize(x) => emitValDef(sym, "" + quote(x) + ".resize()")
     case _ => super.emitNode(sym, rhs)
   }
 }

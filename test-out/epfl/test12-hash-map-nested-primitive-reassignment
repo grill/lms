@@ -2,22 +2,14 @@
   Emitting Generated Code                  
 *******************************************/
 class IntHashMapNestedPrimitiveReAssignment extends ((Int)=>(Unit)) {
-def apply(x15:Int): Unit = {
-val x16 = new HashMap[Int,Int](200)
-val x17 = x16.table
-val x18 = x17(0)
-val x19 = x16.size
-val x20 = x16.loadFactor
-val x21 = x16.MAXIMUM_CAPACITY
-val x22 = x16.threshold
-println(x19)
-var x24: HashMap[Int, Int] = x16
-val x25 = x24
-var x26: HashMap[Int, Int] = x25
-val x27 = x26
-val x28 = x27.size
-x27.size = 3
-println(x19)
+def apply(x17:Int): Unit = {
+val x18 = new HashMap[Int,Int](200)
+println((x18.size))
+var x26:HashMap[Int, Int] = x18
+var x29:HashMap[Int, Int] = (x26)
+val x30 = x29
+x30.size = 3
+println((x18.size))
 }
 }
 /*****************************************

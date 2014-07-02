@@ -1,10 +1,12 @@
+/* FILE: main.c */
 /*****************************************
   Emitting Generated Code                  
 *******************************************/
-class MkString extends ((scala.collection.immutable.List[Int])=>(java.lang.String)) {
-def apply(x0:scala.collection.immutable.List[Int]): java.lang.String = {
-val x1 = x0.mkString
-x1
+class main extends ((scala.virtualization.lms.epfl.test12.HashMap[Int, Int])=>(Unit)) {
+def apply(x0:scala.virtualization.lms.epfl.test12.HashMap[Int, Int]): Unit = {
+println((x0.size))
+x0.size = 3
+println((x0.size))
 }
 }
 /*****************************************

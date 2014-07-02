@@ -4,6 +4,14 @@
 		"selected_items":
 		[
 			[
+				"Mu",
+				"MutableDef"
+			],
+			[
+				"must",
+				"mustMutable"
+			],
+			[
 				"My",
 				"MyCodeGen"
 			],
@@ -23,25 +31,15 @@
 			"file": "test-src/epfl/test12-collections/TestArrayOps.scala",
 			"settings":
 			{
-				"buffer_size": 17455,
+				"buffer_size": 14592,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"contents": "Searching 602 files for \"val IR: Expressions\"\n\n/home/gabriel/workspace/lms/src/internal/BlockTraversal.scala:\n    7  \n    8  trait BlockTraversal extends GraphTraversal {\n    9:   val IR: Expressions\n   10    import IR._\n   11  \n   ..\n   33  \n   34  trait NestedBlockTraversal extends BlockTraversal with NestedGraphTraversal {\n   35:   val IR: Expressions with Effects\n   36    import IR._\n   37  \n\n/home/gabriel/workspace/lms/src/internal/CCodegen.scala:\n   10  \n   11  trait CCodegen extends CLikeCodegen {\n   12:   val IR: Expressions\n   13    import IR._\n   14  \n   ..\n  388  // TODO: do we need this for each target?\n  389  trait CNestedCodegen extends GenericNestedCodegen with CCodegen {\n  390:   val IR: Expressions with Effects with LoweringTransform\n  391    import IR._\n  392  }\n  393  \n  394  trait CFatCodegen extends GenericFatCodegen with CCodegen {\n  395:   val IR: Expressions with Effects with FatExpressions with LoweringTransform\n  396  }\n  397    \n\n/home/gabriel/workspace/lms/src/internal/CLikeCodegen.scala:\n    5  \n    6  trait CLikeCodegen extends GenericCodegen {\n    7:   val IR: Expressions\n    8    import IR._\n    9  /*\n   ..\n   73  \n   74  trait CLikeNestedCodegen extends GenericNestedCodegen with CLikeCodegen {\n   75:   val IR: Expressions with Effects with LoweringTransform\n   76    import IR._\n   77  }\n   78  \n   79  trait CLikeFatCodegen extends GenericFatCodegen with CLikeCodegen {\n   80:   val IR: Expressions with Effects with FatExpressions with LoweringTransform\n   81    import IR._\n   82  \n\n/home/gabriel/workspace/lms/src/internal/CodeMotion.scala:\n    7  \n    8  trait CodeMotion extends Scheduling {\n    9:   val IR: Expressions with Effects /* effects just for sanity check */\n   10    import IR._\n   11  \n\n/home/gabriel/workspace/lms/src/internal/CudaCodegen.scala:\n    9  \n   10  trait CudaCodegen extends GPUCodegen {\n   11:   val IR: Expressions\n   12    import IR._\n   13  \n   ..\n  175  // TODO: do we need this for each target?\n  176  trait CudaNestedCodegen extends CLikeNestedCodegen with CudaCodegen {\n  177:   val IR: Expressions with Effects with LoweringTransform\n  178    import IR._\n  179  \n  ...\n  197  \n  198  trait CudaFatCodegen extends CLikeFatCodegen with CudaCodegen {\n  199:   val IR: Expressions with Effects with FatExpressions with LoweringTransform\n  200    import IR._\n  201  \n\n/home/gabriel/workspace/lms/src/internal/FatCodegen.scala:\n    6  \n    7  trait GenericFatCodegen extends GenericNestedCodegen with FatBlockTraversal {\n    8:   val IR: Expressions with Effects with FatExpressions with LoweringTransform\n    9    import IR._  \n   10    \n\n/home/gabriel/workspace/lms/src/internal/FatTraversal.scala:\n    7  \n    8  trait FatBlockTraversal extends NestedBlockTraversal with FatScheduling {\n    9:   val IR: Expressions with Effects with FatExpressions\n   10    import IR._  \n   11  \n\n/home/gabriel/workspace/lms/src/internal/GPUCodegen.scala:\n    8  \n    9  trait GPUCodegen extends CLikeCodegen {\n   10:   val IR: Expressions\n   11    import IR._\n   12  \n\n/home/gabriel/workspace/lms/src/internal/GenericCodegen.scala:\n    8  \n    9  trait GenericCodegen extends BlockTraversal {\n   10:   val IR: Expressions\n   11    import IR._\n   12  \n   ..\n  506  \n  507  trait GenericNestedCodegen extends NestedBlockTraversal with GenericCodegen { self =>\n  508:   val IR: Expressions with Effects with LoweringTransform\n  509    import IR._\n  510  \n\n/home/gabriel/workspace/lms/src/internal/GraphVizExport.scala:\n    5  \n    6  trait GraphVizExport extends GraphTraversal {\n    7:   val IR: Expressions\n    8    import IR._\n    9  \n\n/home/gabriel/workspace/lms/src/internal/OpenCLCodegen.scala:\n    9  \n   10  trait OpenCLCodegen extends GPUCodegen {\n   11:   val IR: Expressions\n   12    import IR._\n   13  \n   ..\n  203  // TODO: do we need this for each target?\n  204  trait OpenCLNestedCodegen extends CLikeNestedCodegen with OpenCLCodegen {\n  205:   val IR: Expressions with Effects with LoweringTransform\n  206    import IR._\n  207  \n  ...\n  225  \n  226  trait OpenCLFatCodegen extends CLikeFatCodegen with OpenCLCodegen {\n  227:   val IR: Expressions with Effects with FatExpressions with LoweringTransform\n  228    import IR._\n  229    \n\n/home/gabriel/workspace/lms/src/internal/ScalaCodegen.scala:\n    7  \n    8  trait ScalaCodegen extends GenericCodegen {\n    9:   val IR: Expressions\n   10    import IR._\n   11  \n   ..\n  106  \n  107  trait ScalaNestedCodegen extends GenericNestedCodegen with ScalaCodegen {\n  108:   val IR: Expressions with Effects with LoweringTransform\n  109    import IR._\n  110  \n  ...\n  145  \n  146  trait ScalaFatCodegen extends GenericFatCodegen with ScalaCodegen {\n  147:   val IR: Expressions with Effects with FatExpressions with LoweringTransform\n  148    import IR._\n  149  \n\n/home/gabriel/workspace/lms/src/internal/Scheduling.scala:\n    8  \n    9  trait Scheduling {\n   10:   val IR: Expressions\n   11    import IR._\n   12  \n\n/home/gabriel/workspace/lms/src/internal/Transforming.scala:\n    8  \n    9  trait AbstractTransformer {\n   10:   val IR: Expressions with Blocks with OverloadHack\n   11    import IR._\n   12  \n\n/home/gabriel/workspace/lms/src/internal/Traversal.scala:\n    9  \n   10  trait GraphTraversal extends Scheduling {\n   11:   val IR: Expressions\n   12    import IR._\n   13    \n   ..\n   29  \n   30  trait NestedGraphTraversal extends GraphTraversal with CodeMotion {\n   31:   val IR: Expressions with Effects /* effects just for sanity check */\n   32    import IR._\n   33    \n\n/home/gabriel/workspace/lms/test-src/epfl/test10-transform/TestMiscTransform.scala:\n   23  \n   24  trait SimpleBlockTransformer extends internal.FatBlockTraversal {\n   25:   val IR: Expressions with Effects with FatExpressions with Transforming //with LoopsFatExp with IfThenElseFatExp\n   26    import IR._\n   27  \n   ..\n   61  \n   62  trait NestedBlockTransformer extends internal.FatBlockTraversal {\n   63:   val IR: Expressions with Effects with FatExpressions with Transforming //with LoopsFatExp with IfThenElseFatExp\n   64    import IR._\n   65  \n   ..\n  127  \n  128  trait MirrorBlockTransformer extends internal.FatBlockTraversal {\n  129:   val IR: Expressions with Effects with FatExpressions with Transforming //with LoopsFatExp with IfThenElseFatExp\n  130    import IR._\n  131  \n  ...\n  190  \n  191  trait MirrorRetainBlockTransformer extends MirrorBlockTransformer {\n  192:   val IR: Expressions with Effects with FatExpressions with Transforming //with LoopsFatExp with IfThenElseFatExp\n  193    import IR._\n  194  \n\n/home/gabriel/workspace/lms/test-src/epfl/test12-collections/TestArrayOps.scala:\n   19        with ScalaGenEntry with ScalaGenHashCodeOps with ScalaGenOption\n   20        with ScalaGenHashMap with ScalaCodeGenPkg {\n   21:     val IR: Expressions\n   22      import IR._\n   23  \n\n33 matches across 17 files\n",
+			"file": "src/common/Packages.scala",
 			"settings":
 			{
-				"buffer_size": 6848,
-				"line_ending": "Unix",
-				"name": "Find Results",
-				"scratch": true
-			}
-		},
-		{
-			"file": "src/internal/CLikeCodegen.scala",
-			"settings":
-			{
-				"buffer_size": 2781,
+				"buffer_size": 4895,
 				"line_ending": "Unix"
 			}
 		},
@@ -57,23 +55,7 @@
 			"file": "src/common/HashMapArrOps.scala",
 			"settings":
 			{
-				"buffer_size": 21229,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "src/common/ArrayOps.scala",
-			"settings":
-			{
-				"buffer_size": 30361,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "src/common/CastingOps.scala",
-			"settings":
-			{
-				"buffer_size": 2769,
+				"buffer_size": 20165,
 				"line_ending": "Unix"
 			}
 		},
@@ -81,58 +63,33 @@
 			"file": "src/internal/Effects.scala",
 			"settings":
 			{
-				"buffer_size": 32598,
+				"buffer_size": 36933,
 				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "Searching 606 files for \"def createReflectDefinition\"\n\n/home/gabriel/workspace/lms/src/internal/Effects.scala:\n  833    }\n  834  \n  835:   def createReflectDefinition[A](s: Sym[A], x: Reflect[A]): Sym[A] = {\n  836      x match {\n  837        case Reflect(Reify(_,_,_),_,_) =>\n\n1 match in 1 file\n\n\nSearching 606 files for \"def createDefinition\"\n\n/home/gabriel/workspace/lms/untitled.sublime-workspace:\n  111  		},\n  112  		{\n  113: 			\"contents\": \"package scala.virtualization.lms\\npackage internal\\n\\nimport scala.reflect.SourceContext\\nimport scala.annotation.unchecked.uncheckedVariance\\nimport scala.collection.mutable.ListBuffer\\nimport java.lang.{StackTraceElement,Thread}\\n\\n\\n/**\\n * The Expressions trait houses common AST nodes. It also manages a list of encountered Definitions which\\n * allows for common sub-expression elimination (CSE).  \\n * \\n * @since 0.1\\n */\\ntrait Expressions extends Utils {\\n\\n  abstract class Exp[+T:Manifest] { // constants/symbols (atomic)\\n    def tp: Manifest[T @uncheckedVariance] = manifest[T] //invariant position! but hey...\\n    def pos: List[SourceContext] = Nil\\n  }\\n\\n  case class Const[+T:Manifest](x: T) extends Exp[T] {\\n    /**\\n    * equals implementation in Const can not simply rely on default\\n    * implementation for a case class, because we should check the \\n    * type of Const for equality test.\\n    * Otherwise, we might end-up generating code with wrong typing,\\n    * specially upon CSE.\\n    *\\n    * For example, have a look at test1-arith/TestConstCSE:\\n    * \\n    * trait Prog extends ScalaOpsPkg {\\n    *   def test1(test_param: Rep[Boolean], acc: Rep[Long]): Rep[Long] = {\\n    *     val dblVal = if(test_param) unit(1.0) else unit(0.0)\\n    *     val lngVal = if(test_param) unit(1L) else unit(0L)\\n    *     auxMethod(acc + lngVal, dblVal)\\n    *   }\\n    *\\n    *   def auxMethod(val1: Rep[Long], val2: Rep[Double]): Rep[Long] = {\\n    *     val1 + unit(133L) + rep_asinstanceof[Double, Long](val2,manifest[Double],manifest[Long])\\n    *   }\\n    * }\\n    *\\n    * That would generate a code containing a compile error:\\n    * \\n    *       class test1 extends ((Boolean, Long)=>(Long)) {\\n    *         def apply(x0:Boolean, x1:Long): Long = {\\n    *           val x2 = if (x0) {\\n    *             1.0\\n    *           } else {\\n    *             0.0\\n    *           }\\n    *           val x3 = x1 + x2\\n    *           val x4 = x3 + 133L\\n    *           val x5 = x2.asInstanceOf[Long]\\n    *           val x6 = x4 + x5\\n    *           x6\\n    *         }\\n    *       }\\n    *\\n    *       <stdin>:15: error: type mismatch;\\n    *        found   : Double\\n    *        required: Long\\n    *       x6\\n    *       ^\\n    *       one error found\\n    *       compilation: had errors\\n    *\\n    * But, by introducing this new implementation for equals, the\\n    * correct code will be generated:\\n    *\\n    *       class test1 extends ((Boolean, Long)=>(Long)) {\\n    *         def apply(x0:Boolean, x1:Long): Long = {\\n    *           val x3 = if (x0) {\\n    *             1L\\n    *           } else {\\n    *             0L\\n    *           }\\n    *           val x4 = x1 + x3\\n    *           val x5 = x4 + 133L\\n    *           val x2 = if (x0) {\\n    *             1.0\\n    *           } else {\\n    *             0.0\\n    *           }\\n    *           val x6 = x2.asInstanceOf[Long]\\n    *           val x7 = x5 + x6\\n    *           x7\\n    *         }\\n    *       }\\n    *\\n    *       compilation: ok\\n    */\\n    override def equals(that: Any) = that match {\\n      case c@Const(y) => if(y == x) {\\n        val thisTp = tp\\n        //val thatTp = c.tp\\n        if (Const.isNumeric[T](thisTp) /*&& isNumeric(thatTp)*/)\\n          thisTp == c.tp //thatTp\\n        else\\n          true\\n      } else false\\n      case _ => false \\n    }\\n  }\\n\\n  object Const {\\n    val doubleManifest: Manifest[Double] = manifest[Double]\\n    val floatManifest: Manifest[Float] = manifest[Float]\\n    val longManifest: Manifest[Long] = manifest[Long]\\n    val intManifest: Manifest[Int] = manifest[Int]\\n    val shortManifest: Manifest[Short] = manifest[Short]\\n    val byteManifest: Manifest[Byte] = manifest[Byte]\\n\\n    def isNumeric[T:Manifest](m: Manifest[T]) = m == doubleManifest ||\\n                                                m == floatManifest ||\\n                                                m == longManifest ||\\n                                                m == intManifest ||\\n                                                m == shortManifest ||\\n                                                m == byteManifest\\n  }\\n\\n  case class Sym[+T:Manifest](val id: Int) extends Exp[T] {\\n    val attributes: scala.collection.mutable.Map[Any,Any] = scala.collection.mutable.ListMap.empty\\n    var sourceInfo = Thread.currentThread.getStackTrace // will go away\\n    var sourceContexts: List[SourceContext] = Nil\\n    override def pos = sourceContexts\\n    def withPos(pos: List[SourceContext]) = { sourceContexts :::= pos; this }\\n  }\\n\\n  case class Variable[+T](val e: Exp[Variable[T]]) {\\n     var emitted = false;\\n  } // TODO: decide whether it should stay here ... FIXME: should be invariant\\n\\n  var nVars = 0\\n  def fresh[T:Manifest]: Sym[T] = Sym[T] { \\n    nVars += 1;  \\n    //if (nVars%1000 == 0) println(\\\"nVars=\\\"+nVars);  \\n    nVars - 1 \\n  }\\n\\n  def fresh[T:Manifest](pos: List[SourceContext]): Sym[T] = fresh[T].withPos(pos)\\n\\n  def quotePos(e: Exp[Any]): String = e.pos match {\\n    case Nil => \\\"<unknown>\\\"\\n    case cs => \\n      def all(cs: SourceContext): List[SourceContext] = cs.parent match {\\n        case None => List(cs)\\n        case Some(p) => cs::all(p)\\n      }\\n    cs.map(c => all(c).reverse.map(c => c.fileName.split(\\\"/\\\").last + \\\":\\\" + c.line).mkString(\\\"//\\\")).mkString(\\\";\\\")\\n  }\\n\\n/*\\n  def fresh[T:Manifest] = {\\n    val (name, id, nameId) = nextName(\\\"x\\\")\\n    val sym = Sym[T](id)\\n    sym.name = name\\n    sym.nameId = nameId\\n    sym\\n  }\\n\\n  def fresh[T:Manifest](d: Def[T], ctx: Option[SourceContext]) = {\\n    def enclosingNamedContext(sc: SourceContext): Option[SourceContext] = sc.bindings match {\\n      case (null, _) :: _ =>\\n        if (!sc.parent.isEmpty) enclosingNamedContext(sc.parent.get)\\n        else None\\n      case (name, line) :: _ =>\\n        Some(sc)\\n    }\\n\\n    // create base name from source context\\n    val (basename, line, srcCtx) = if (!ctx.isEmpty) {\\n      enclosingNamedContext(ctx.get) match {\\n        case None =>\\n          // no enclosing context has variable assignment\\n          var outermost = ctx.get\\n          while (!outermost.parent.isEmpty) {\\n            outermost = outermost.parent.get\\n          }\\n          (\\\"x\\\", 0, Some(outermost))\\n        case Some(sc) => sc.bindings match {\\n          case (n, l) :: _ =>\\n            (n, l, Some(sc))\\n        }\\n      }\\n    } else (\\\"x\\\", 0, None)\\n    val (name, id, nameId) = nextName(basename)\\n    val sym = Sym[T](id)\\n    sym.name = name\\n    sym.nameId = nameId\\n    sym.sourceContext = srcCtx\\n    sym\\n  }\\n*/\\n\\n  abstract class Def[+T] { // operations (composite)\\n    override final lazy val hashCode = scala.runtime.ScalaRunTime._hashCode(this.asInstanceOf[Product])\\n  }\\n\\n  abstract class Stm // statement (links syms and definitions)\\n  \\n  def infix_lhs(stm: Stm): List[Sym[Any]] = stm match {\\n    case TP(sym, rhs) => sym::Nil\\n  }\\n  \\n  def infix_rhs(stm: Stm): Any = stm match { // clients use syms(e.rhs), boundSyms(e.rhs) etc.\\n    case TP(sym, rhs) => rhs\\n  }\\n\\n  def infix_defines[A](stm: Stm, sym: Sym[A]): Option[Def[A]] = stm match {\\n    case TP(`sym`, rhs: Def[A]) => Some(rhs)\\n    case _ => None\\n  }\\n\\n  def infix_defines[A](stm: Stm, rhs: Def[A]): Option[Sym[A]] = stm match {\\n    case TP(sym: Sym[A], `rhs`) => Some(sym)\\n    case _ => None\\n  }\\n  \\n  case class TP[+T](sym: Sym[T], rhs: Def[T]) extends Stm\\n\\n  // graph construction state\\n  \\n  var globalDefs: List[Stm] = Nil\\n  var localDefs: List[Stm] = Nil\\n  var globalDefsCache: Map[Sym[Any],Stm] = Map.empty\\n\\n  def reifySubGraph[T](b: =>T): (T, List[Stm]) = {\\n    val saveLocal = localDefs\\n    val saveGlobal = globalDefs\\n    val saveGlobalCache = globalDefsCache\\n    localDefs = Nil\\n    val r = b\\n    val defs = localDefs\\n    localDefs = saveLocal\\n    globalDefs = saveGlobal\\n    globalDefsCache = saveGlobalCache\\n    (r, defs)\\n  }\\n\\n  def reflectSubGraph(ds: List[Stm]): Unit = {\\n    val lhs = ds.flatMap(_.lhs)\\n    assert(lhs.length == lhs.distinct.length, \\\"multiple defs: \\\" + ds)\\n    val existing = lhs flatMap (globalDefsCache get _)//globalDefs filter (_.lhs exists (lhs contains _))\\n    assert(existing.isEmpty, \\\"already defined: \\\" + existing + \\\" for \\\" + ds)\\n    localDefs = localDefs ::: ds\\n    globalDefs = globalDefs ::: ds\\n    for (stm <- ds; s <- stm.lhs) {      \\n      globalDefsCache += (s->stm)\\n    }\\n  }\\n\\n  def findDefinition[T](s: Sym[T]): Option[Stm] =\\n    globalDefsCache.get(s)\\n    //globalDefs.find(x => x.defines(s).nonEmpty)\\n\\n  def findDefinition[T](d: Def[T]): Option[Stm] =\\n    globalDefs.find(x => x.defines(d).nonEmpty)\\n\\n  def findOrCreateDefinition[T:Manifest](d: Def[T], pos: List[SourceContext]): Stm =\\n    findDefinition[T](d) map { x => x.defines(d).foreach(_.withPos(pos)); x } getOrElse {\\n      createDefinition(fresh[T](pos), d)\\n    }\\n\\n  def findOrCreateDefinitionExp[T:Manifest](d: Def[T], pos: List[SourceContext]): Exp[T] =\\n    findOrCreateDefinition(d, pos).defines(d).get\\n\\n  def createDefinition[T](s: Sym[T], d: Def[T]): Stm = {\\n    val f = TP(s, d)\\n    reflectSubGraph(List(f))\\n    f\\n  }\\n  \\n\\n  protected implicit def toAtom[T:Manifest](d: Def[T])(implicit pos: SourceContext): Exp[T] = {\\n    findOrCreateDefinitionExp(d, List(pos)) // TBD: return Const(()) if type is Unit??\\n  }\\n\\n  object Def {\\n    def unapply[T](e: Exp[T]): Option[Def[T]] = e match { // really need to test for sym?\\n      case s @ Sym(_) =>\\n        findDefinition(s).flatMap(_.defines(s))\\n      case _ =>\\n        None\\n    }\\n  }\\n\\n\\n  // depenfindOrCreateDefinitiondencies\\n\\n  // regular data (and effect) dependencies\\n  def syms(e: Any): List[Sym[Any]] = e match {\\n    case s: Sym[Any] => List(s)\\n    case ss: Iterable[Any] => ss.toList.flatMap(syms(_))\\n    // All case classes extend Product!\\n    case p: Product => \\n      //return p.productIterator.toList.flatMap(syms(_))\\n      /* performance hotspot */\\n      val iter = p.productIterator\\n      val out = new ListBuffer[Sym[Any]]\\n      while (iter.hasNext) {\\n        val e = iter.next()\\n        out ++= syms(e)\\n      }\\n      out.result\\n    case _ => Nil\\n  }\\n\\n  // symbols which are bound in a definition\\n  def boundSyms(e: Any): List[Sym[Any]] = e match {\\n    case ss: Iterable[Any] => ss.toList.flatMap(boundSyms(_))\\n    case p: Product => p.productIterator.toList.flatMap(boundSyms(_))\\n    case _ => Nil\\n  }\\n\\n  // symbols which are bound in a definition, but also defined elsewhere\\n  def tunnelSyms(e: Any): List[Sym[Any]] = e match {\\n    case ss: Iterable[Any] => ss.toList.flatMap(tunnelSyms(_))\\n    case p: Product => p.productIterator.toList.flatMap(tunnelSyms(_))\\n    case _ => Nil\\n  }\\n\\n  // symbols of effectful components of a definition\\n  def effectSyms(x: Any): List[Sym[Any]] = x match {\\n    case ss: Iterable[Any] => ss.toList.flatMap(effectSyms(_))\\n    case p: Product => p.productIterator.toList.flatMap(effectSyms(_))\\n    case _ => Nil\\n  }\\n\\n  // soft dependencies: they are not required but if they occur, \\n  // they must be scheduled before\\n  def softSyms(e: Any): List[Sym[Any]] = e match {\\n    // empty by default\\n    //case s: Sym[Any] => List(s)\\n    case ss: Iterable[Any] => ss.toList.flatMap(softSyms(_))\\n    case p: Product => p.productIterator.toList.flatMap(softSyms(_))\\n    case _ => Nil\\n  }\\n\\n\\n  def rsyms[T](e: Any)(f: Any=>List[T]): List[T] = e match {\\n    case s: Sym[Any] => f(s)\\n    case ss: Iterable[Any] => ss.toList.flatMap(f)\\n    case p: Product => p.productIterator.toList.flatMap(f)\\n    case _ => Nil\\n  }\\n\\n  // frequency information for dependencies: used/computed\\n  // often (hot) or not often (cold). used to drive code motion.\\n  def symsFreq(e: Any): List[(Sym[Any], Double)] = e match {\\n    case s: Sym[Any] => List((s,1.0))\\n    case ss: Iterable[Any] => ss.toList.flatMap(symsFreq(_))\\n    case p: Product => p.productIterator.toList.flatMap(symsFreq(_))\\n    //case _ => rsyms(e)(symsFreq)\\n    case _ => Nil\\n  }\\n\\n  def freqNormal(e: Any) = symsFreq(e)\\n  def freqHot(e: Any) = symsFreq(e).map(p=>(p._1,p._2*1000.0))\\n  def freqCold(e: Any) = symsFreq(e).map(p=>(p._1,p._2*0.5))\\n\\n\\n\\n/*\\n  def symsFreq(e: Any): List[(Sym[Any], Double)] = e match {\\n    case s: Sym[Any] => List((s,1.0))\\n    case p: Product => p.productIterator.toList.flatMap(symsFreq(_))\\n    case _ => Nil\\n  }\\n*/\\n\\n/*\\n  def symsShare(e: Any): List[(Sym[Any], Int)] = {\\n    case s: Sym[Any] => List(s)\\n    case p: Product => p.productIterator.toList.flatMap(symsShare(_))\\n    case _ => Nil\\n  }\\n*/\\n\\n\\n\\n  // bookkeeping\\n\\n  def reset { // used by delite?\\n    nVars = 0\\n    globalDefs = Nil\\n    localDefs = Nil\\n    globalDefsCache = Map.empty\\n  }\\n\\n}\\n\",\n  114  			\"file\": \"src/internal/Expressions.scala\",\n  115  			\"file_size\": 12343,\n\n/home/gabriel/workspace/lms/src/internal/Expressions.scala:\n  269      findOrCreateDefinition(d, pos).defines(d).get\n  270  \n  271:   def createDefinition[T](s: Sym[T], d: Def[T]): Stm = {\n  272      val f = TP(s, d)\n  273      reflectSubGraph(List(f))\n\n/home/gabriel/workspace/lms/src/internal/Transforming.scala:\n  118    def onCreate[A:Manifest](s: Sym[A], d: Def[A]): Exp[A] = s\n  119    \n  120:   override def createDefinition[T](s: Sym[T], d: Def[T]): Stm = {\n  121      onCreate(s,d)(s.tp)\n  122      super.createDefinition(s,d)\n\n/home/gabriel/workspace/lms/test-src/epfl/test10-transform/TestBackward.scala:\n  112  \n  113  \n  114:   override def createDefinition[T](s: Sym[T], d: Def[T]): Stm = {\n  115      // remove previous definition and update in place. TODO: find a better way ...\n  116      globalDefs = globalDefs filterNot (_.lhs contains s)\n\n/home/gabriel/workspace/lms/test-src/epfl/test10-transform/TestWIP.scalax:\n    1  // add modular abstract interpretations (example: int ranges)\n    2  \n    3: def createDefinition(sym, def) = {\n    4    val (sym1, def1) = rewriteUntilConverged(sym, def)\n    5    globalDefs ::= (sym1,def1)\n\n/home/gabriel/workspace/lms/test-src/epfl/test10-transform/TestWorklistTransform2.scala:\n   49    // ----------\n   50  \n   51:   override def createDefinition[T](s: Sym[T], d: Def[T]): Stm = {\n   52      onCreate(s,d)(s.tp)\n   53      super.createDefinition(s,d)\n\n6 matches across 6 files\n",
+			"settings":
+			{
+				"buffer_size": 14755,
+				"line_ending": "Unix",
+				"name": "Find Results",
+				"scratch": true
 			}
 		},
 		{
 			"file": "src/common/Variables.scala",
 			"settings":
 			{
-				"buffer_size": 20696,
+				"buffer_size": 19493,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "src/common/While.scala",
+			"file": "src/common/Structs.scala",
 			"settings":
 			{
-				"buffer_size": 7188,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "src/common/Base.scala",
-			"settings":
-			{
-				"buffer_size": 3440,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"contents": "package scala.virtualization.lms\npackage internal\n\nimport scala.reflect.SourceContext\nimport scala.annotation.unchecked.uncheckedVariance\nimport scala.collection.mutable.ListBuffer\nimport java.lang.{StackTraceElement,Thread}\n\n\n/**\n * The Expressions trait houses common AST nodes. It also manages a list of encountered Definitions which\n * allows for common sub-expression elimination (CSE).  \n * \n * @since 0.1\n */\ntrait Expressions extends Utils {\n\n  abstract class Exp[+T:Manifest] { // constants/symbols (atomic)\n    def tp: Manifest[T @uncheckedVariance] = manifest[T] //invariant position! but hey...\n    def pos: List[SourceContext] = Nil\n  }\n\n  case class Const[+T:Manifest](x: T) extends Exp[T] {\n    /**\n    * equals implementation in Const can not simply rely on default\n    * implementation for a case class, because we should check the \n    * type of Const for equality test.\n    * Otherwise, we might end-up generating code with wrong typing,\n    * specially upon CSE.\n    *\n    * For example, have a look at test1-arith/TestConstCSE:\n    * \n    * trait Prog extends ScalaOpsPkg {\n    *   def test1(test_param: Rep[Boolean], acc: Rep[Long]): Rep[Long] = {\n    *     val dblVal = if(test_param) unit(1.0) else unit(0.0)\n    *     val lngVal = if(test_param) unit(1L) else unit(0L)\n    *     auxMethod(acc + lngVal, dblVal)\n    *   }\n    *\n    *   def auxMethod(val1: Rep[Long], val2: Rep[Double]): Rep[Long] = {\n    *     val1 + unit(133L) + rep_asinstanceof[Double, Long](val2,manifest[Double],manifest[Long])\n    *   }\n    * }\n    *\n    * That would generate a code containing a compile error:\n    * \n    *       class test1 extends ((Boolean, Long)=>(Long)) {\n    *         def apply(x0:Boolean, x1:Long): Long = {\n    *           val x2 = if (x0) {\n    *             1.0\n    *           } else {\n    *             0.0\n    *           }\n    *           val x3 = x1 + x2\n    *           val x4 = x3 + 133L\n    *           val x5 = x2.asInstanceOf[Long]\n    *           val x6 = x4 + x5\n    *           x6\n    *         }\n    *       }\n    *\n    *       <stdin>:15: error: type mismatch;\n    *        found   : Double\n    *        required: Long\n    *       x6\n    *       ^\n    *       one error found\n    *       compilation: had errors\n    *\n    * But, by introducing this new implementation for equals, the\n    * correct code will be generated:\n    *\n    *       class test1 extends ((Boolean, Long)=>(Long)) {\n    *         def apply(x0:Boolean, x1:Long): Long = {\n    *           val x3 = if (x0) {\n    *             1L\n    *           } else {\n    *             0L\n    *           }\n    *           val x4 = x1 + x3\n    *           val x5 = x4 + 133L\n    *           val x2 = if (x0) {\n    *             1.0\n    *           } else {\n    *             0.0\n    *           }\n    *           val x6 = x2.asInstanceOf[Long]\n    *           val x7 = x5 + x6\n    *           x7\n    *         }\n    *       }\n    *\n    *       compilation: ok\n    */\n    override def equals(that: Any) = that match {\n      case c@Const(y) => if(y == x) {\n        val thisTp = tp\n        //val thatTp = c.tp\n        if (Const.isNumeric[T](thisTp) /*&& isNumeric(thatTp)*/)\n          thisTp == c.tp //thatTp\n        else\n          true\n      } else false\n      case _ => false \n    }\n  }\n\n  object Const {\n    val doubleManifest: Manifest[Double] = manifest[Double]\n    val floatManifest: Manifest[Float] = manifest[Float]\n    val longManifest: Manifest[Long] = manifest[Long]\n    val intManifest: Manifest[Int] = manifest[Int]\n    val shortManifest: Manifest[Short] = manifest[Short]\n    val byteManifest: Manifest[Byte] = manifest[Byte]\n\n    def isNumeric[T:Manifest](m: Manifest[T]) = m == doubleManifest ||\n                                                m == floatManifest ||\n                                                m == longManifest ||\n                                                m == intManifest ||\n                                                m == shortManifest ||\n                                                m == byteManifest\n  }\n\n  case class Sym[+T:Manifest](val id: Int) extends Exp[T] {\n    val attributes: scala.collection.mutable.Map[Any,Any] = scala.collection.mutable.ListMap.empty\n    var sourceInfo = Thread.currentThread.getStackTrace // will go away\n    var sourceContexts: List[SourceContext] = Nil\n    override def pos = sourceContexts\n    def withPos(pos: List[SourceContext]) = { sourceContexts :::= pos; this }\n  }\n\n  case class Variable[+T](val e: Exp[Variable[T]]) {\n     var emitted = false;\n  } // TODO: decide whether it should stay here ... FIXME: should be invariant\n\n  var nVars = 0\n  def fresh[T:Manifest]: Sym[T] = Sym[T] { \n    nVars += 1;  \n    //if (nVars%1000 == 0) println(\"nVars=\"+nVars);  \n    nVars - 1 \n  }\n\n  def fresh[T:Manifest](pos: List[SourceContext]): Sym[T] = fresh[T].withPos(pos)\n\n  def quotePos(e: Exp[Any]): String = e.pos match {\n    case Nil => \"<unknown>\"\n    case cs => \n      def all(cs: SourceContext): List[SourceContext] = cs.parent match {\n        case None => List(cs)\n        case Some(p) => cs::all(p)\n      }\n    cs.map(c => all(c).reverse.map(c => c.fileName.split(\"/\").last + \":\" + c.line).mkString(\"//\")).mkString(\";\")\n  }\n\n/*\n  def fresh[T:Manifest] = {\n    val (name, id, nameId) = nextName(\"x\")\n    val sym = Sym[T](id)\n    sym.name = name\n    sym.nameId = nameId\n    sym\n  }\n\n  def fresh[T:Manifest](d: Def[T], ctx: Option[SourceContext]) = {\n    def enclosingNamedContext(sc: SourceContext): Option[SourceContext] = sc.bindings match {\n      case (null, _) :: _ =>\n        if (!sc.parent.isEmpty) enclosingNamedContext(sc.parent.get)\n        else None\n      case (name, line) :: _ =>\n        Some(sc)\n    }\n\n    // create base name from source context\n    val (basename, line, srcCtx) = if (!ctx.isEmpty) {\n      enclosingNamedContext(ctx.get) match {\n        case None =>\n          // no enclosing context has variable assignment\n          var outermost = ctx.get\n          while (!outermost.parent.isEmpty) {\n            outermost = outermost.parent.get\n          }\n          (\"x\", 0, Some(outermost))\n        case Some(sc) => sc.bindings match {\n          case (n, l) :: _ =>\n            (n, l, Some(sc))\n        }\n      }\n    } else (\"x\", 0, None)\n    val (name, id, nameId) = nextName(basename)\n    val sym = Sym[T](id)\n    sym.name = name\n    sym.nameId = nameId\n    sym.sourceContext = srcCtx\n    sym\n  }\n*/\n\n  abstract class Def[+T] { // operations (composite)\n    override final lazy val hashCode = scala.runtime.ScalaRunTime._hashCode(this.asInstanceOf[Product])\n  }\n\n  abstract class Stm // statement (links syms and definitions)\n  \n  def infix_lhs(stm: Stm): List[Sym[Any]] = stm match {\n    case TP(sym, rhs) => sym::Nil\n  }\n  \n  def infix_rhs(stm: Stm): Any = stm match { // clients use syms(e.rhs), boundSyms(e.rhs) etc.\n    case TP(sym, rhs) => rhs\n  }\n\n  def infix_defines[A](stm: Stm, sym: Sym[A]): Option[Def[A]] = stm match {\n    case TP(`sym`, rhs: Def[A]) => Some(rhs)\n    case _ => None\n  }\n\n  def infix_defines[A](stm: Stm, rhs: Def[A]): Option[Sym[A]] = stm match {\n    case TP(sym: Sym[A], `rhs`) => Some(sym)\n    case _ => None\n  }\n  \n  case class TP[+T](sym: Sym[T], rhs: Def[T]) extends Stm\n\n  // graph construction state\n  \n  var globalDefs: List[Stm] = Nil\n  var localDefs: List[Stm] = Nil\n  var globalDefsCache: Map[Sym[Any],Stm] = Map.empty\n\n  def reifySubGraph[T](b: =>T): (T, List[Stm]) = {\n    val saveLocal = localDefs\n    val saveGlobal = globalDefs\n    val saveGlobalCache = globalDefsCache\n    localDefs = Nil\n    val r = b\n    val defs = localDefs\n    localDefs = saveLocal\n    globalDefs = saveGlobal\n    globalDefsCache = saveGlobalCache\n    (r, defs)\n  }\n\n  def reflectSubGraph(ds: List[Stm]): Unit = {\n    val lhs = ds.flatMap(_.lhs)\n    assert(lhs.length == lhs.distinct.length, \"multiple defs: \" + ds)\n    val existing = lhs flatMap (globalDefsCache get _)//globalDefs filter (_.lhs exists (lhs contains _))\n    assert(existing.isEmpty, \"already defined: \" + existing + \" for \" + ds)\n    localDefs = localDefs ::: ds\n    globalDefs = globalDefs ::: ds\n    for (stm <- ds; s <- stm.lhs) {      \n      globalDefsCache += (s->stm)\n    }\n  }\n\n  def findDefinition[T](s: Sym[T]): Option[Stm] =\n    globalDefsCache.get(s)\n    //globalDefs.find(x => x.defines(s).nonEmpty)\n\n  def findDefinition[T](d: Def[T]): Option[Stm] =\n    globalDefs.find(x => x.defines(d).nonEmpty)\n\n  def findOrCreateDefinition[T:Manifest](d: Def[T], pos: List[SourceContext]): Stm =\n    findDefinition[T](d) map { x => x.defines(d).foreach(_.withPos(pos)); x } getOrElse {\n      createDefinition(fresh[T](pos), d)\n    }\n\n  def findOrCreateDefinitionExp[T:Manifest](d: Def[T], pos: List[SourceContext]): Exp[T] =\n    findOrCreateDefinition(d, pos).defines(d).get\n\n  def createDefinition[T](s: Sym[T], d: Def[T]): Stm = {\n    val f = TP(s, d)\n    reflectSubGraph(List(f))\n    f\n  }\n  \n\n  protected implicit def toAtom[T:Manifest](d: Def[T])(implicit pos: SourceContext): Exp[T] = {\n    findOrCreateDefinitionExp(d, List(pos)) // TBD: return Const(()) if type is Unit??\n  }\n\n  object Def {\n    def unapply[T](e: Exp[T]): Option[Def[T]] = e match { // really need to test for sym?\n      case s @ Sym(_) =>\n        findDefinition(s).flatMap(_.defines(s))\n      case _ =>\n        None\n    }\n  }\n\n\n  // depenfindOrCreateDefinitiondencies\n\n  // regular data (and effect) dependencies\n  def syms(e: Any): List[Sym[Any]] = e match {\n    case s: Sym[Any] => List(s)\n    case ss: Iterable[Any] => ss.toList.flatMap(syms(_))\n    // All case classes extend Product!\n    case p: Product => \n      //return p.productIterator.toList.flatMap(syms(_))\n      /* performance hotspot */\n      val iter = p.productIterator\n      val out = new ListBuffer[Sym[Any]]\n      while (iter.hasNext) {\n        val e = iter.next()\n        out ++= syms(e)\n      }\n      out.result\n    case _ => Nil\n  }\n\n  // symbols which are bound in a definition\n  def boundSyms(e: Any): List[Sym[Any]] = e match {\n    case ss: Iterable[Any] => ss.toList.flatMap(boundSyms(_))\n    case p: Product => p.productIterator.toList.flatMap(boundSyms(_))\n    case _ => Nil\n  }\n\n  // symbols which are bound in a definition, but also defined elsewhere\n  def tunnelSyms(e: Any): List[Sym[Any]] = e match {\n    case ss: Iterable[Any] => ss.toList.flatMap(tunnelSyms(_))\n    case p: Product => p.productIterator.toList.flatMap(tunnelSyms(_))\n    case _ => Nil\n  }\n\n  // symbols of effectful components of a definition\n  def effectSyms(x: Any): List[Sym[Any]] = x match {\n    case ss: Iterable[Any] => ss.toList.flatMap(effectSyms(_))\n    case p: Product => p.productIterator.toList.flatMap(effectSyms(_))\n    case _ => Nil\n  }\n\n  // soft dependencies: they are not required but if they occur, \n  // they must be scheduled before\n  def softSyms(e: Any): List[Sym[Any]] = e match {\n    // empty by default\n    //case s: Sym[Any] => List(s)\n    case ss: Iterable[Any] => ss.toList.flatMap(softSyms(_))\n    case p: Product => p.productIterator.toList.flatMap(softSyms(_))\n    case _ => Nil\n  }\n\n\n  def rsyms[T](e: Any)(f: Any=>List[T]): List[T] = e match {\n    case s: Sym[Any] => f(s)\n    case ss: Iterable[Any] => ss.toList.flatMap(f)\n    case p: Product => p.productIterator.toList.flatMap(f)\n    case _ => Nil\n  }\n\n  // frequency information for dependencies: used/computed\n  // often (hot) or not often (cold). used to drive code motion.\n  def symsFreq(e: Any): List[(Sym[Any], Double)] = e match {\n    case s: Sym[Any] => List((s,1.0))\n    case ss: Iterable[Any] => ss.toList.flatMap(symsFreq(_))\n    case p: Product => p.productIterator.toList.flatMap(symsFreq(_))\n    //case _ => rsyms(e)(symsFreq)\n    case _ => Nil\n  }\n\n  def freqNormal(e: Any) = symsFreq(e)\n  def freqHot(e: Any) = symsFreq(e).map(p=>(p._1,p._2*1000.0))\n  def freqCold(e: Any) = symsFreq(e).map(p=>(p._1,p._2*0.5))\n\n\n\n/*\n  def symsFreq(e: Any): List[(Sym[Any], Double)] = e match {\n    case s: Sym[Any] => List((s,1.0))\n    case p: Product => p.productIterator.toList.flatMap(symsFreq(_))\n    case _ => Nil\n  }\n*/\n\n/*\n  def symsShare(e: Any): List[(Sym[Any], Int)] = {\n    case s: Sym[Any] => List(s)\n    case p: Product => p.productIterator.toList.flatMap(symsShare(_))\n    case _ => Nil\n  }\n*/\n\n\n\n  // bookkeeping\n\n  def reset { // used by delite?\n    nVars = 0\n    globalDefs = Nil\n    localDefs = Nil\n    globalDefsCache = Map.empty\n  }\n\n}\n",
-			"file": "src/internal/Expressions.scala",
-			"file_size": 12343,
-			"file_write_time": 1398956527000000,
-			"settings":
-			{
-				"buffer_size": 12365,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "src/common/Packages.scala",
-			"settings":
-			{
-				"buffer_size": 4895,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "src/common/DSLBase.scala",
-			"settings":
-			{
-				"buffer_size": 26313,
+				"buffer_size": 35343,
 				"line_ending": "Unix"
 			}
 		}
@@ -161,10 +118,20 @@
 	},
 	"file_history":
 	[
-		"/home/gabriel/workspace/lms/src/internal/ScalaCodegen.scala",
-		"/home/gabriel/workspace/lms/src/common/MiscOps.scala",
+		"/home/gabriel/workspace/lms/src/internal/Expressions.scala",
+		"/home/gabriel/workspace/lms/src/common/ArrayOps.scala",
+		"/home/gabriel/workspace/lms/src/internal/Effects.scala",
+		"/home/gabriel/workspace/lms/src/common/Variables.scala",
+		"/home/gabriel/workspace/lms/src/common/While.scala",
+		"/home/gabriel/workspace/lms/src/common/HashCodeOps.scala",
+		"/home/gabriel/workspace/lms/src/common/PrimitiveOps.scala",
+		"/home/gabriel/workspace/lms/src/common/Base.scala",
 		"/home/gabriel/workspace/lms/src/common/Packages.scala",
-		"/home/gabriel/workspace/lms/src/common/CastingOps.scala"
+		"/home/gabriel/workspace/lms/src/common/DSLBase.scala",
+		"/home/gabriel/workspace/lms/src/common/CastingOps.scala",
+		"/home/gabriel/workspace/lms/src/internal/CLikeCodegen.scala",
+		"/home/gabriel/workspace/lms/src/internal/ScalaCodegen.scala",
+		"/home/gabriel/workspace/lms/src/common/MiscOps.scala"
 	],
 	"find":
 	{
@@ -172,7 +139,7 @@
 	},
 	"find_in_files":
 	{
-		"height": 90.0,
+		"height": 0.0,
 		"where_history":
 		[
 			""
@@ -183,6 +150,22 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"def createDefinition",
+			"def createReflectDefinition",
+			"def emitted",
+			"def fresh",
+			"trait ScalaOpsPkgExp",
+			"ScalaOpsPkgExp",
+			"nestedDeps",
+			"def findDefinition",
+			"array_obj_new",
+			"__hashCode",
+			"int_tolong",
+			"long_toint",
+			"__hashCode",
+			"def int_binaryand",
+			"__ifThenElse",
+			"readFrom",
 			"val IR: Expressions",
 			"int_tolong",
 			"TopLevel",
@@ -201,6 +184,8 @@
 		"regex": false,
 		"replace_history":
 		[
+			"prevWrites",
+			"readStmnts"
 		],
 		"reverse": false,
 		"show_context": true,
@@ -211,7 +196,6 @@
 	"groups":
 	[
 		{
-			"selected": 0,
 			"sheets":
 			[
 				{
@@ -219,21 +203,49 @@
 					"file": "test-src/epfl/test12-collections/TestArrayOps.scala",
 					"settings":
 					{
-						"buffer_size": 17455,
+						"buffer_size": 14592,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								776,
-								776
+								3787,
+								3787
 							]
 						],
 						"settings":
 						{
 							"syntax": "Packages/Scala/Scala.tmLanguage",
 							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 3555.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "src/common/Packages.scala",
+					"settings":
+					{
+						"buffer_size": 4895,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								919,
+								919
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Scala/Scala.tmLanguage",
+							"tab_size": 4,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
@@ -243,206 +255,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 1,
-					"settings":
-					{
-						"buffer_size": 6848,
-						"regions":
-						{
-							"match":
-							{
-								"flags": 112,
-								"regions":
-								[
-									[
-										180,
-										199
-									],
-									[
-										337,
-										356
-									],
-									[
-										519,
-										538
-									],
-									[
-										705,
-										724
-									],
-									[
-										875,
-										894
-									],
-									[
-										1100,
-										1119
-									],
-									[
-										1255,
-										1274
-									],
-									[
-										1433,
-										1452
-									],
-									[
-										1660,
-										1679
-									],
-									[
-										1882,
-										1901
-									],
-									[
-										2072,
-										2091
-									],
-									[
-										2251,
-										2270
-									],
-									[
-										2518,
-										2537
-									],
-									[
-										2787,
-										2806
-									],
-									[
-										2995,
-										3014
-									],
-									[
-										3178,
-										3197
-									],
-									[
-										3343,
-										3362
-									],
-									[
-										3562,
-										3581
-									],
-									[
-										3739,
-										3758
-									],
-									[
-										3933,
-										3952
-									],
-									[
-										4116,
-										4135
-									],
-									[
-										4353,
-										4372
-									],
-									[
-										4506,
-										4525
-									],
-									[
-										4689,
-										4708
-									],
-									[
-										4897,
-										4916
-									],
-									[
-										5060,
-										5079
-									],
-									[
-										5264,
-										5283
-									],
-									[
-										5413,
-										5432
-									],
-									[
-										5688,
-										5707
-									],
-									[
-										5925,
-										5944
-									],
-									[
-										6162,
-										6181
-									],
-									[
-										6401,
-										6420
-									],
-									[
-										6769,
-										6788
-									]
-								],
-								"scope": ""
-							}
-						},
-						"selection":
-						[
-							[
-								1119,
-								1119
-							]
-						],
-						"settings":
-						{
-							"detect_indentation": false,
-							"output_tag": 1,
-							"result_base_dir": "",
-							"result_file_regex": "^([A-Za-z\\\\/<].*):$",
-							"result_line_regex": "^ +([0-9]+):",
-							"scroll_past_end": true,
-							"syntax": "Packages/Default/Find Results.hidden-tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 135.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
 					"buffer": 2,
-					"file": "src/internal/CLikeCodegen.scala",
-					"settings":
-					{
-						"buffer_size": 2781,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								2421,
-								2421
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Scala/Scala.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 270.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 3,
 					"file": "old/test14-scratch/TestDataOp.scala",
 					"settings":
 					{
@@ -470,19 +283,19 @@
 					"type": "text"
 				},
 				{
-					"buffer": 4,
+					"buffer": 3,
 					"file": "src/common/HashMapArrOps.scala",
 					"settings":
 					{
-						"buffer_size": 21229,
+						"buffer_size": 20165,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								5655,
-								5655
+								6359,
+								6359
 							]
 						],
 						"settings":
@@ -492,249 +305,120 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 2295.0,
+						"translation.y": 2115.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "src/internal/Effects.scala",
+					"settings":
+					{
+						"buffer_size": 36933,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								23346,
+								23346
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Scala/Scala.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 8043.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 5,
-					"file": "src/common/ArrayOps.scala",
 					"settings":
 					{
-						"buffer_size": 30361,
+						"buffer_size": 14755,
 						"regions":
 						{
+							"match":
+							{
+								"flags": 112,
+								"regions":
+								[
+									[
+										139,
+										166
+									],
+									[
+										9512,
+										9532
+									],
+									[
+										13449,
+										13469
+									],
+									[
+										13726,
+										13746
+									],
+									[
+										13965,
+										13985
+									],
+									[
+										14334,
+										14354
+									],
+									[
+										14604,
+										14624
+									]
+								],
+								"scope": ""
+							}
 						},
 						"selection":
 						[
 							[
-								8710,
-								8710
+								13492,
+								13492
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/Scala/Scala.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
+							"detect_indentation": false,
+							"output_tag": 2,
+							"result_base_dir": "",
+							"result_file_regex": "^([A-Za-z\\\\/<].*):$",
+							"result_line_regex": "^ +([0-9]+):",
+							"scroll_past_end": true,
+							"syntax": "Packages/Default/Find Results.hidden-tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 1935.0,
+						"translation.y": 1035.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 6,
-					"file": "src/common/CastingOps.scala",
-					"settings":
-					{
-						"buffer_size": 2769,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								324,
-								324
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Scala/Scala.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 975.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 7,
-					"file": "src/internal/Effects.scala",
-					"settings":
-					{
-						"buffer_size": 32598,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								24155,
-								24155
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Scala/Scala.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 8004.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 8,
 					"file": "src/common/Variables.scala",
 					"settings":
 					{
-						"buffer_size": 20696,
+						"buffer_size": 19493,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								13537,
-								13537
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Scala/Scala.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 3478.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 9,
-					"file": "src/common/While.scala",
-					"settings":
-					{
-						"buffer_size": 7188,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								0,
-								0
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Scala/Scala.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 360.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 10,
-					"file": "src/common/Base.scala",
-					"settings":
-					{
-						"buffer_size": 3440,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								875,
-								875
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Scala/Scala.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 180.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 11,
-					"file": "src/internal/Expressions.scala",
-					"settings":
-					{
-						"buffer_size": 12365,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								2881,
-								2881
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Scala/Scala.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 1319.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 12,
-					"file": "src/common/Packages.scala",
-					"settings":
-					{
-						"buffer_size": 4895,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								2796,
-								2796
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Scala/Scala.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 45.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 13,
-					"file": "src/common/DSLBase.scala",
-					"settings":
-					{
-						"buffer_size": 26313,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								0,
-								0
+								7863,
+								7863
 							]
 						],
 						"settings":
@@ -745,6 +429,34 @@
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "src/common/Structs.scala",
+					"settings":
+					{
+						"buffer_size": 35343,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								30017,
+								30017
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Scala/Scala.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 9386.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -785,7 +497,7 @@
 	"menu_visible": true,
 	"replace":
 	{
-		"height": 0.0
+		"height": 62.0
 	},
 	"save_all_on_build": true,
 	"select_file":
