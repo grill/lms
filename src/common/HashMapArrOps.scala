@@ -23,7 +23,8 @@ class Entry[K,V](val key: K, var value: V, var next: Entry[K,V] = null) {
 
   override def toString(): String = {
     key + "=" + value
-  } 
+  }
+
 }
 
 trait EntryOps extends Base with Variables {
@@ -110,39 +111,39 @@ trait OptionOps extends Base with Variables {
 
   object NoneO {
     def apply[V:Manifest](implicit pos: SourceContext) =
-      option_new[V]()
+          option_new[V]()
   }
-
+    
   class optionOpsCls[V:Manifest](x: Rep[Option[V]]) {
     def isEmpty() = optionIsEmpty(x)
     def get() = optiponGet(x)
   }
-
+    
   implicit def repOptionToOptionOps[V:Manifest](x: Rep[Option[V]]) = new optionOpsCls[V](x)
   implicit def varOptionToOptionOps[V:Manifest](x: Var[Option[V]]) = new optionOpsCls[V](readVar(x))
-
+    
   def option_new[V:Manifest](): Rep[Option[V]]
   def option_new[V:Manifest](value: Rep[V]): Rep[Option[V]]
   def optionIsEmpty[V:Manifest](x: Rep[Option[V]]): Rep[Boolean]
   def optiponGet[V:Manifest](x: Rep[Option[V]]): Rep[V]
 }
-
-trait OptionOpsExp extends OptionOps with BaseExp with Effects /*with VariablesExp*/ {
+    
+trait OptionOpsExp extends OptionOps with BaseExp with Effects {
   case class OptionSome[V:Manifest](value: Rep[V]) extends Def[Option[V]]
   case class OptionNone[V:Manifest] extends Def[Option[V]]
   case class OptionIsEmpty[V:Manifest](x: Rep[Option[V]]) extends Def[Boolean]
   case class OptionGet[V:Manifest](x: Rep[Option[V]]) extends Def[V]
-
+    
   def option_new[V:Manifest]() = OptionNone[V]()
   def option_new[V:Manifest](value: Rep[V]) = OptionSome(value)
   def optionIsEmpty[V:Manifest](x: Rep[Option[V]]) = OptionIsEmpty(x)
   def optiponGet[V:Manifest](x: Rep[Option[V]]) = OptionGet(x)
 }
-
+    
 trait ScalaGenOption extends ScalaGenBase {
   val IR: OptionOpsExp
   import IR._
-
+    
   override def emitNode(sym: Sym[Any], rhs: Def[Any]) = rhs match {
     case OptionSome(v) =>
       emitValDef(sym, "Some(" + quote(v) + ")")
@@ -152,14 +153,14 @@ trait ScalaGenOption extends ScalaGenBase {
       emitValDef(sym, quote(x) + ".isEmpty")
     case OptionGet(x) =>
       emitValDef(sym, quote(x) + ".get")
-
+    
     case _ => super.emitNode(sym, rhs)
   }
 }
 
 /**
- * Hash map implementation
- */
+* Hash map implementation
+*/
 
 class HashMap[K,V] (capacity: Int = 16) {
   val MAXIMUM_CAPACITY = 1 << 30
@@ -168,6 +169,45 @@ class HashMap[K,V] (capacity: Int = 16) {
   var loadFactor: Float = DEFAULT_LOAD_FACTOR 
   var threshold = (capacity * DEFAULT_LOAD_FACTOR).toInt
   var size = 0
+    
+  def genIndex(k: K, len: Int) = {
+    val hCode = k.hashCode
+    val h1 = (hCode >> 20) ^ (hCode >> 12) ^ hCode
+    ((h1 >> 7) ^ (h1 >> 4) ^ h1) & (len - 1)
+  }
+
+  def resize() = {
+    if (size >= threshold) {
+      if(table.length == MAXIMUM_CAPACITY) {
+        threshold = Int.MaxValue
+      } else {
+        val newCapacity = 2 * table.length
+        val newTable = new Array[Entry[K, V]](newCapacity)
+        var j = 0
+
+        while(j < table.length) {
+          var e = table(j)
+          if(e != null) {
+            table(j) = null
+
+            while(e != null) {
+              val z = genIndex(e.key, newCapacity)
+              val next = e.next
+              e.next = newTable(z)
+              newTable(z) = e
+              e = next
+            }
+            
+          }
+          j = j + 1
+        }
+
+        table = newTable
+        threshold = (loadFactor * newCapacity).toInt
+      }
+    }
+  }
+
 }
 
 trait HashMapArrOps extends Base with Variables with TupleOps {
@@ -218,7 +258,8 @@ trait HashMapArrOpsExp extends HashMapArrOps with ArrayOpsExp with EffectExp wit
   with HashCodeOpsExp with BooleanOpsExp with PrimitiveOpsExp with ListOpsExp with FunctionsExp with VariablesExp
   with NumericOpsExp with EqualExp with WhileExp with OrderingOpsExp with IfThenElseExp
   with SeqOpsExp with MathOpsExp with CastingOpsExp with SetOpsExp with ObjectOpsExp
-  with Blocks with MiscOpsExp with OptionOpsExp {
+  with Blocks with MiscOpsExp with OptionOpsExp 
+  with LiftPrimitives with LiftString with LiftVariables {
 
   case class NewHashMap[K, V](mK: Manifest[K], mV: Manifest[V], size: Exp[Int]) extends Def[HashMap[K, V]]
   //mutable
@@ -250,8 +291,13 @@ trait HashMapArrOpsExp extends HashMapArrOps with ArrayOpsExp with EffectExp wit
     val m = reflectMutable(NewHashMap(manifest[K], manifest[V], n))
     //array_obj_new[Entry[K,V]](n)
 
+    //all readable mutable values need to be accessed once in the
+    //appropriate context to ensure accurate effect tracking
+    //this can also be done by initializing all mutable members
+    //of a struct or (as it was done here) they need to be accessed
+    //once by a read operation
     val t = reflectReadMutable(m)(HashMapGetTable(m))
-    t(unit(0)) // --> removed via dead code elimination
+    t(0) // --> removed via dead code elimination if not used
     reflectReadMutable(m)(HashMapGetSize(m))
     reflectReadMutable(m)(HashMapGetLoadFactor(m))
     reflectReadMutable(m)(HashMapMAXIMUM_CAPACITY(m))
@@ -295,7 +341,7 @@ trait HashMapArrOpsExp extends HashMapArrOps with ArrayOpsExp with EffectExp wit
 
     if(n == unit(null)) {
       m.update(idx, entry_new(k,v))
-      x.setSize(x.size + unit(1))
+      x.setSize(x.size + 1)
     } else {
       while(n.hasNext() && n.getKey() != k) {
         n = n.next()
@@ -305,7 +351,7 @@ trait HashMapArrOpsExp extends HashMapArrOps with ArrayOpsExp with EffectExp wit
         n.setValue(v)
       } else {
         n.setNext(entry_new(k,v))
-        x.setSize(x.size + unit(1))
+        x.setSize(x.size + 1)
       }
     }
   }
@@ -325,11 +371,11 @@ trait HashMapArrOpsExp extends HashMapArrOps with ArrayOpsExp with EffectExp wit
       if(oldCapacity == max_capacity) {
         hashmap_setThreshold(x, Int.MaxValue)
       } else {
-        val newCapacity = unit(2) * oldCapacity
+        val newCapacity = 2 * oldCapacity
         val newTable = NewArray[Entry[K, V]](newCapacity)
 
         //transfer table
-        val j = var_new(unit(0))
+        val j = var_new(0)
 
         while(j < m.length) {
           val e = var_new(m(j))
@@ -347,7 +393,7 @@ trait HashMapArrOpsExp extends HashMapArrOps with ArrayOpsExp with EffectExp wit
             }
             
           }
-          j = j + unit(1)
+          j = j + 1
         }
 
         x.setTable(newTable)
@@ -375,7 +421,7 @@ trait HashMapArrOpsExp extends HashMapArrOps with ArrayOpsExp with EffectExp wit
 
   def hashmap_foreach[K:Manifest,V:Manifest](x: Rep[HashMap[K,V]], f: Rep[Entry[K,V]] => Rep[Unit])(implicit pos: SourceContext): Rep[Unit] = {
     val m = x.table
-    val i = var_new(unit(0))
+    val i = var_new(0)
     val n = var_new(unit(null).AsInstanceOf[Entry[K,V]])
 
     while(i < m.length) {
@@ -389,7 +435,7 @@ trait HashMapArrOpsExp extends HashMapArrOps with ArrayOpsExp with EffectExp wit
         }
       }
 
-      i = i + unit(1)
+      i = i + 1
     }
   }
 
@@ -407,11 +453,11 @@ trait HashMapArrOpsExp extends HashMapArrOps with ArrayOpsExp with EffectExp wit
 
   def hashmap_clear[K:Manifest,V:Manifest](x: Rep[HashMap[K,V]])(implicit pos: SourceContext): Rep[Unit] = {
     val m = x.table
-    val i = var_new(unit(0))
+    val i = var_new(0)
 
     while(i < m.length) {
       m.update(i, unit(null))
-      i = i + unit(1)
+      i = i + 1
     }
   }
 
@@ -430,19 +476,19 @@ trait HashMapArrOpsExp extends HashMapArrOps with ArrayOpsExp with EffectExp wit
 
       if(p == unit(null)) {
         m.update(idx, unit(null))
-        x.setSize(x.size - unit(1))
+        x.setSize(x.size - 1)
       } else if(n.getKey() == k) {
         p.setNext(n.next())
-        x.setSize(x.size - unit(1))
+        x.setSize(x.size - 1)
       }
     }
   }
 
   def hashmap_index[K: Manifest] (k: Rep[K], len: Rep[Int]): Rep[Int] = {
     val h1 = int_tolong(__hashCode(k))
-    val h2 = (h1 >>> unit(20)) ^ (h1 >>> unit(12)) ^ h1
-    val h3 = (h2 ^ (h2 >>> unit(7)) ^ (h2 >>> unit(4))).toInt
-    val h4 = h3 & (len - unit(1))
+    val h2 = (h1 >>> 20) ^ (h1 >>> 12) ^ h1
+    val h3 = (h2 ^ (h2 >>> 7) ^ (h2 >>> 4)).toInt
+    val h4 = h3 & (len - 1)
     h4
   }
 

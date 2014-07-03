@@ -4,11 +4,9 @@
 *******************************************/
 class main extends ((scala.virtualization.lms.epfl.test12.HashMap[Int, Int])=>(Unit)) {
 def apply(x0:scala.virtualization.lms.epfl.test12.HashMap[Int, Int]): Unit = {
-val x1 = x0.size
-println(x1)
+println((x0.size))
 x0.size = 3
-val x4 = x0.size
-println(x4)
+println((x0.size))
 }
 }
 /*****************************************
